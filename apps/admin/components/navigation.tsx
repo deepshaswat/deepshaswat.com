@@ -1,0 +1,389 @@
+"use client";
+
+import React from "react";
+
+import {
+  Home,
+  Settings,
+  Users2,
+  SquarePen,
+  PencilLine,
+  CalendarCheck2,
+  BookCheck,
+  Plus,
+  Newspaper,
+  Tag,
+  Kanban,
+} from "lucide-react";
+
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui";
+import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import { User } from "@clerk/nextjs/server";
+
+export const Navigation = () => {
+  const { user } = useUser();
+  return (
+    <>
+      <div className='grid h-screen pl-[116px] lg:pl-[156px]'>
+        <aside className='inset-y fixed  left-0 z-20 flex h-full flex-col border-r'>
+          <div className='border-b p-2'>
+            <Link
+              href='/'
+              passHref
+              className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+            >
+              <Button variant='ghost' size='icon' aria-label='Home'>
+                <Home className='size-5' />
+              </Button>
+              <span className='hidden  lg:inline-block ml-2'>Home</span>
+            </Link>
+          </div>
+          <nav className='grid gap-1 p-2'>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Accordion type='single' collapsible className='w-full'>
+                  <AccordionItem value='item-1'>
+                    <AccordionTrigger>
+                      <SquarePen className='size-5 ml-2' />
+                      <span className='hidden lg:inline-block  lg:mr-2'>
+                        Posts
+                      </span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href='/new-post'
+                            passHref
+                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                          >
+                            <Button
+                              variant='ghost'
+                              size='icon'
+                              className='rounded-lg active:bg-gray-200'
+                              aria-label='New Posts'
+                            >
+                              <Plus className='size-5' />
+                            </Button>
+
+                            <span className='hidden lg:inline-block ml-2 active:bg-gray-200'>
+                              New Post
+                            </span>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side='right'
+                          sideOffset={5}
+                          className='block lg:hidden'
+                        >
+                          New Post
+                        </TooltipContent>
+                      </Tooltip>
+                    </AccordionContent>
+                    <AccordionContent>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href='/drafts'
+                            passHref
+                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                          >
+                            <Button
+                              variant='ghost'
+                              size='icon'
+                              className='rounded-lg active:bg-gray-200'
+                              aria-label='Drafts'
+                            >
+                              <PencilLine className='size-5' />
+                            </Button>
+                            <span className='hidden lg:inline-block ml-2'>
+                              Drafts
+                            </span>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side='right'
+                          sideOffset={5}
+                          className='block lg:hidden'
+                        >
+                          Drafts
+                        </TooltipContent>
+                      </Tooltip>
+                    </AccordionContent>
+                    <AccordionContent>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href='/scheduled-posts'
+                            passHref
+                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                          >
+                            <Button
+                              variant='ghost'
+                              size='icon'
+                              className='rounded-lg active:bg-gray-200'
+                              aria-label='Scheduled'
+                            >
+                              <CalendarCheck2 className='size-5' />
+                            </Button>
+                            <span className='hidden lg:inline-block ml-2'>
+                              Scheduled
+                            </span>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side='right'
+                          sideOffset={5}
+                          className='block lg:hidden'
+                        >
+                          Scheduled Posts
+                        </TooltipContent>
+                      </Tooltip>
+                    </AccordionContent>
+                    <AccordionContent>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href='/published'
+                            passHref
+                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                          >
+                            <Button
+                              variant='ghost'
+                              size='icon'
+                              className='rounded-lg active:bg-gray-200'
+                              aria-label='Published'
+                            >
+                              <BookCheck className='size-5' />
+                            </Button>
+                            <span className='hidden lg:inline-block ml-2'>
+                              Published
+                            </span>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side='right'
+                          sideOffset={5}
+                          className='block lg:hidden'
+                        >
+                          Published Posts
+                        </TooltipContent>
+                      </Tooltip>
+                    </AccordionContent>
+                    <AccordionContent>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link
+                            href='/newsletters'
+                            passHref
+                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                          >
+                            <Button
+                              variant='ghost'
+                              size='icon'
+                              className='rounded-lg active:bg-gray-200'
+                              aria-label='Newsletters'
+                            >
+                              <Newspaper className='size-5' />
+                            </Button>
+                            <span className='hidden lg:inline-block ml-2'>
+                              Newsletters
+                            </span>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side='right'
+                          sideOffset={5}
+                          className='block lg:hidden'
+                        >
+                          Newsletters
+                        </TooltipContent>
+                      </Tooltip>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </TooltipTrigger>
+              <TooltipContent
+                side='right'
+                sideOffset={5}
+                className='block lg:hidden'
+              >
+                Create Posts
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href='/tags'
+                  passHref
+                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                >
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='rounded-lg'
+                    aria-label='Tags'
+                  >
+                    <Tag className='size-5' />
+                  </Button>
+                  <span className='hidden lg:inline-block ml-2'>Tags</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side='right'
+                sideOffset={5}
+                className='block lg:hidden'
+              >
+                Tags
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href='/analytics'
+                  passHref
+                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                >
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='rounded-lg'
+                    aria-label='Analytics'
+                  >
+                    <Kanban className='size-5' />
+                  </Button>
+                  <span className='hidden lg:inline-block ml-2'>Analytics</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side='right'
+                sideOffset={5}
+                className='block lg:hidden'
+              >
+                Analytics
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href='/members'
+                  passHref
+                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                >
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='rounded-lg'
+                    aria-label='Members'
+                  >
+                    <Users2 className='size-5' />
+                  </Button>
+                  <span className='hidden lg:inline-block ml-2'>Members</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side='right'
+                sideOffset={5}
+                className='block lg:hidden'
+              >
+                Members
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href='/#'
+                  passHref
+                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                >
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='rounded-lg'
+                    aria-label='Settings'
+                  >
+                    <Settings className='size-5' />
+                  </Button>
+                  <span className='hidden lg:inline-block ml-2'>Settings</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side='right'
+                sideOffset={5}
+                className='block lg:hidden'
+              >
+                Settings
+              </TooltipContent>
+            </Tooltip>
+          </nav>
+          <nav className='mt-auto grid gap-1 p-2'>
+            {/* <Tooltip>
+              <TooltipTrigger asChild>
+                          <Link href='/new-post' passHref
+                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                          >
+                            <Button
+                  variant='ghost'
+                  size='icon'
+                  className='mt-auto rounded-lg'
+                  aria-label='Help'
+                >
+                  <LifeBuoy className='size-5' />
+                </Button>
+                          </Link>
+                        </TooltipTrigger>
+              <TooltipContent
+                          side='right'
+                          sideOffset={5}
+                          className='block lg:hidden'
+                        >
+                Help
+              </TooltipContent>
+            </Tooltip> */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href='/new-post'
+                  passHref
+                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                >
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='mt-auto rounded-lg'
+                    aria-label='Account'
+                  >
+                    <SignedIn>
+                      <UserButton />
+                    </SignedIn>
+                  </Button>
+                  <span className='hidden lg:inline-block ml-4'>
+                    {user?.firstName || "Account"}
+                  </span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side='right'
+                sideOffset={5}
+                className='block lg:hidden'
+              >
+                {user?.firstName || "Account"}
+              </TooltipContent>
+            </Tooltip>
+          </nav>
+        </aside>
+      </div>
+    </>
+  );
+};
