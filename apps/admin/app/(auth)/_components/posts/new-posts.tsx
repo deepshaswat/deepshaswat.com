@@ -35,14 +35,14 @@ const NewPosts = () => {
   };
 
   return (
-    <div className='flex'>
+    <div className="flex">
       <div className={`flex-1 ${isOpen ? " mr-[400px]" : ""}`}>
         <NavBarPost isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div className='ml-10 max-w-screen-xl'>
+        <div className="ml-10 max-w-screen-xl">
           Create new Posts
           <input
-            type='text'
-            placeholder='Title'
+            type="text"
+            placeholder="Title"
             value={mainInputValue}
             onChange={handleMainInputChange}
           />

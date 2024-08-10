@@ -8,13 +8,13 @@ import { CustomSignIn } from "@repo/ui";
 
 export default function Page() {
   return (
-    <div className='min-h-screen grid grid-cols-1'>
-      <div className='flex items-center justify-center mt-8'>
+    <div className="min-h-screen grid grid-cols-1">
+      <div className="flex items-center justify-center mt-8">
         <ClerkLoaded>
           <CustomSignIn />
         </ClerkLoaded>
         <ClerkLoading>
-          <Loader2 className='animate-spin text-muted-foreground' />
+          <Loader2 className="animate-spin text-muted-foreground" />
         </ClerkLoading>
       </div>
       {/* </div> */}
