@@ -1,6 +1,7 @@
-import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import "@repo/ui/styles.css";
+import { Providers } from "./providers";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider, TooltipProvider } from "@repo/ui";
@@ -21,14 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang='en' suppressHydrationWarning>
         <body className={inter.className}>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='dark'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <TooltipProvider>{children}</TooltipProvider>
-          </ThemeProvider>
+          <Providers>{children}</Providers>
         </body>
       </html>
     </ClerkProvider>

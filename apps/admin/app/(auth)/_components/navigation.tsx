@@ -28,15 +28,15 @@ import {
 } from "@repo/ui";
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { User } from "@clerk/nextjs/server";
 
-export const Navigation = () => {
+const Navigation = () => {
   const { user } = useUser();
+
   return (
     <>
       <div className='grid h-screen pl-[116px] lg:pl-[156px]'>
-        <aside className='inset-y fixed  left-0 z-20 flex h-full flex-col border-r'>
-          <div className='border-b p-2'>
+        <aside className='inset-y fixed  left-0 z-20 flex h-full flex-col border-r-[1px] border-neutral-700  '>
+          <div className='border-b-[1px] border-neutral-700  p-2'>
             <Link
               href='/'
               passHref
@@ -45,20 +45,32 @@ export const Navigation = () => {
               <Button variant='ghost' size='icon' aria-label='Home'>
                 <Home className='size-5' />
               </Button>
-              <span className='hidden  lg:inline-block ml-2'>Home</span>
+              <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                Home
+              </span>
             </Link>
           </div>
           <nav className='grid gap-1 p-2'>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Accordion type='single' collapsible className='w-full'>
-                  <AccordionItem value='item-1'>
-                    <AccordionTrigger>
-                      <SquarePen className='size-5 ml-2' />
-                      <span className='hidden lg:inline-block  lg:mr-2'>
-                        Posts
-                      </span>
+                <Accordion type='single' collapsible className='mb-2 '>
+                  <AccordionItem
+                    value='item-1'
+                    className='border-b-[1px] border-neutral-700 '
+                  >
+                    <AccordionTrigger className='flex flex-row  '>
+                      <Link
+                        href='/posts'
+                        passHref
+                        className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 p-1 pr-3 lg:pr-3'
+                      >
+                        <SquarePen className='size-5 ml-2' />
+                        <span className='max-w-0 lg:max-w-full overflow-hidden lg:ml-3 '>
+                          Posts
+                        </span>
+                      </Link>
                     </AccordionTrigger>
+
                     <AccordionContent>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -76,7 +88,7 @@ export const Navigation = () => {
                               <Plus className='size-5' />
                             </Button>
 
-                            <span className='hidden lg:inline-block ml-2 active:bg-gray-200'>
+                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2 active:bg-gray-200'>
                               New Post
                             </span>
                           </Link>
@@ -106,7 +118,7 @@ export const Navigation = () => {
                             >
                               <PencilLine className='size-5' />
                             </Button>
-                            <span className='hidden lg:inline-block ml-2'>
+                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
                               Drafts
                             </span>
                           </Link>
@@ -136,7 +148,7 @@ export const Navigation = () => {
                             >
                               <CalendarCheck2 className='size-5' />
                             </Button>
-                            <span className='hidden lg:inline-block ml-2'>
+                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
                               Scheduled
                             </span>
                           </Link>
@@ -166,7 +178,7 @@ export const Navigation = () => {
                             >
                               <BookCheck className='size-5' />
                             </Button>
-                            <span className='hidden lg:inline-block ml-2'>
+                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
                               Published
                             </span>
                           </Link>
@@ -196,7 +208,7 @@ export const Navigation = () => {
                             >
                               <Newspaper className='size-5' />
                             </Button>
-                            <span className='hidden lg:inline-block ml-2'>
+                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
                               Newsletters
                             </span>
                           </Link>
@@ -218,7 +230,7 @@ export const Navigation = () => {
                 sideOffset={5}
                 className='block lg:hidden'
               >
-                Create Posts
+                Posts
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -236,7 +248,9 @@ export const Navigation = () => {
                   >
                     <Tag className='size-5' />
                   </Button>
-                  <span className='hidden lg:inline-block ml-2'>Tags</span>
+                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                    Tags
+                  </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
@@ -262,7 +276,9 @@ export const Navigation = () => {
                   >
                     <Kanban className='size-5' />
                   </Button>
-                  <span className='hidden lg:inline-block ml-2'>Analytics</span>
+                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                    Analytics
+                  </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
@@ -289,7 +305,9 @@ export const Navigation = () => {
                   >
                     <Users2 className='size-5' />
                   </Button>
-                  <span className='hidden lg:inline-block ml-2'>Members</span>
+                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                    Members
+                  </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
@@ -315,7 +333,9 @@ export const Navigation = () => {
                   >
                     <Settings className='size-5' />
                   </Button>
-                  <span className='hidden lg:inline-block ml-2'>Settings</span>
+                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                    Settings
+                  </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
@@ -328,29 +348,6 @@ export const Navigation = () => {
             </Tooltip>
           </nav>
           <nav className='mt-auto grid gap-1 p-2'>
-            {/* <Tooltip>
-              <TooltipTrigger asChild>
-                          <Link href='/new-post' passHref
-                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
-                          >
-                            <Button
-                  variant='ghost'
-                  size='icon'
-                  className='mt-auto rounded-lg'
-                  aria-label='Help'
-                >
-                  <LifeBuoy className='size-5' />
-                </Button>
-                          </Link>
-                        </TooltipTrigger>
-              <TooltipContent
-                          side='right'
-                          sideOffset={5}
-                          className='block lg:hidden'
-                        >
-                Help
-              </TooltipContent>
-            </Tooltip> */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
@@ -368,7 +365,7 @@ export const Navigation = () => {
                       <UserButton />
                     </SignedIn>
                   </Button>
-                  <span className='hidden lg:inline-block ml-4'>
+                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-4'>
                     {user?.firstName || "Account"}
                   </span>
                 </Link>
@@ -387,3 +384,5 @@ export const Navigation = () => {
     </>
   );
 };
+
+export { Navigation };

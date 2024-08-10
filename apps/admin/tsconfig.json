@@ -8,7 +8,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../../packages/ui/src/components/theme-provider.tsx"
+    "../../packages/ui/src/components/theme-provider.tsx",
+    "admin/navigation.tsx"
   ],
   "exclude": ["node_modules"]
 }
