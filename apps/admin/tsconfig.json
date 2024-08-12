@@ -9,7 +9,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "../../packages/ui/src/components/theme-provider.tsx",
-    "admin/navigation.tsx"
+    "admin/navigation.tsx",
+    "../../packages/ui/src/components/single-image-dropzone.tsx"
   ],
   "exclude": ["node_modules"]
 }

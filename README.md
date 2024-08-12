@@ -65,7 +65,9 @@ This Turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-# boilerplate used
+# boilerplates used
 
 - [MultiSelect](https://github.com/sersavan/shadcn-multi-select-component) based
   on shadcn for NextJs
+- [Fusion UI](https://nyxbui.design/docs/components/accordion) Shadcn components
+  but a lot of additional components. Merged together with Magic UI
