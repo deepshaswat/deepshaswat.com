@@ -36,7 +36,6 @@ export const combinedDateTimeSchema = z
       combinedDateTime.setMinutes(minutes);
       combinedDateTime.setSeconds(0);
       combinedDateTime.setMilliseconds(0);
-      console.log("combines: " + combinedDateTime);
 
       return combinedDateTime >= new Date();
     },

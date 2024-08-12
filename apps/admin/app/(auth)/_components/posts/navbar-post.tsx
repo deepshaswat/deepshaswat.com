@@ -41,8 +41,8 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
         </div>
 
         {/* Right-aligned section */}
-        <div className='flex flex-row items-center gap-2'>
-          <div className='flex flex-row gap-4  items-center'>
+        <div className='flex flex-row items-center gap-2 mr-2'>
+          <div className='flex flex-row gap-4  items-center '>
             <Link
               href='/preview'
               passHref
@@ -63,10 +63,10 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
             size='icon'
             aria-label='SideBarMenu'
             onClick={toggleSidebar}
-            className='flex z-50'
+            className='flex z-50 items-center '
           >
-            {!isOpen && <PanelRightOpen className='size-5 mr-2' />}
-            {isOpen && <PanelRightClose className='size-5 mr-2' />}
+            {!isOpen && <PanelRightOpen className='size-5  ' />}
+            {isOpen && <PanelRightClose className='size-5 ' />}
           </Button>
         </div>
       </nav>

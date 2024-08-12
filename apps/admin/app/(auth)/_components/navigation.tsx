@@ -36,7 +36,7 @@ const Navigation = () => {
     <>
       <div className='grid h-screen pl-[116px] lg:pl-[156px]'>
         <aside className='inset-y fixed  left-0 z-20 flex h-full flex-col border-r-[1px] border-neutral-700  '>
-          <div className='border-b-[1px] border-neutral-700  p-2'>
+          <div className='border-b-[1px] border-neutral-700  p-2 items-center justify-center'>
             <Link
               href='/'
               passHref
@@ -58,14 +58,14 @@ const Navigation = () => {
                     value='item-1'
                     className='border-b-[1px] border-neutral-700 '
                   >
-                    <AccordionTrigger className='flex flex-row  '>
+                    <AccordionTrigger className='flex flex-row !no-underline'>
                       <Link
                         href='/posts'
                         passHref
-                        className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 p-1 pr-3 lg:pr-3'
+                        className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 ml-2 p-2 pr-2 lg:pr-4 !no-underline'
                       >
-                        <SquarePen className='size-5 ml-2' />
-                        <span className='max-w-0 lg:max-w-full overflow-hidden lg:ml-3 '>
+                        <SquarePen className='size-5 lg:ml-2' />
+                        <span className='max-w-0 lg:max-w-full overflow-hidden lg:ml-3 !no-underline'>
                           Posts
                         </span>
                       </Link>
@@ -82,7 +82,7 @@ const Navigation = () => {
                             <Button
                               variant='ghost'
                               size='icon'
-                              className='rounded-lg active:bg-gray-200'
+                              className='rounded-lg active:bg-gray-200 '
                               aria-label='New Posts'
                             >
                               <Plus className='size-5' />

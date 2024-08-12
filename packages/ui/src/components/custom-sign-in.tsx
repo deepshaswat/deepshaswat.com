@@ -36,34 +36,34 @@ export const CustomSignIn: React.FC = () => {
   };
 
   return (
-    <Card className='w-full max-w-sm'>
+    <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className='text-2xl'>Sign in to blog-admin</CardTitle>
+        <CardTitle className="text-2xl">Sign in to blog-admin</CardTitle>
       </CardHeader>
-      <CardContent className='grid gap-4'>
+      <CardContent className="grid gap-4">
         <form onSubmit={handleSignIn}>
-          <div className='mb-4 grid gap-2'>
-            <Label htmlFor='email'>Email address</Label>
+          <div className="mb-4 grid gap-2">
+            <Label htmlFor="email">Email address</Label>
             <Input
-              id='email'
-              type='email'
+              id="email"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className='mb-4 grid gap-2'>
-            <Label htmlFor='password'>Password</Label>
+          <div className="mb-4 grid gap-2">
+            <Label htmlFor="password">Password</Label>
             <Input
-              id='password'
-              type='password'
+              id="password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          {error && <p className='text-red-600'>User Not Allowed</p>}
-          <Button className='w-full' type='submit'>
+          {error && <p className="text-red-600">User Not Allowed</p>}
+          <Button className="w-full" type="submit">
             Sign in
           </Button>
         </form>
