@@ -54,20 +54,20 @@ const PostFilterNavbar = ({
 
   return (
     <>
-      <div className=''>
+      <div className="">
         <SelectComponent
           items={allPosts}
-          placeholder='all-posts'
+          placeholder="all-posts"
           onSelect={onSelectPostOption}
           selectedItem={postOption}
         />
       </div>
-      <div className='mr-2'>All access</div>
-      <div className='mr-2'>All authors</div>
-      <div className='mr-2'>
+      <div className="mr-2">All access</div>
+      <div className="mr-2">All authors</div>
+      <div className="mr-2">
         <SelectComponent
           items={allTags}
-          placeholder='all-tags'
+          placeholder="all-tags"
           onSelect={onSelectTagOption}
           selectedItem={tagOption}
         />
@@ -105,17 +105,17 @@ const SelectComponent = ({
             : "text-neutral-200"
         }`}
       >
-        <SelectTrigger className='ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none'>
+        <SelectTrigger className="ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none">
           {capitalizeFirstLetter(selectedItem) ||
             capitalizeFirstLetter(placeholder)}
         </SelectTrigger>{" "}
       </div>
-      <SelectContent className='pl-0 bg-neutral-800 border-transparent ring-0 outline-none focus:ring-0 focus:outline-none'>
-        <SelectGroup className='pl-0 bg-neutral-800 '>
+      <SelectContent className="pl-0 bg-neutral-800 border-transparent ring-0 outline-none focus:ring-0 focus:outline-none">
+        <SelectGroup className="pl-0 bg-neutral-800 ">
           {items.map((item) => (
             <SelectItem
               key={item}
-              className='text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-sm font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 '
+              className="text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-sm font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 "
               value={item}
               onClick={() => handleSelect(item)}
             >

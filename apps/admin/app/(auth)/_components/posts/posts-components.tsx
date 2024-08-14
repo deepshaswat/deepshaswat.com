@@ -20,14 +20,14 @@ const PostsComponent = () => {
   };
 
   return (
-    <div className='m-8 lg:ml-[156px] lg:mr-[156px] '>
-      <div className='flex flex-col lg:flex-row lg:justify-between lg:items-center '>
-        <div className='flex flex-row items-center justify-between w-full lg:w-auto mb-4 lg:mb-0 '>
-          <Label htmlFor='' className='text-3xl font-semibold'>
+    <div className="m-8 lg:ml-[156px] lg:mr-[156px] ">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center ">
+        <div className="flex flex-row items-center justify-between w-full lg:w-auto mb-4 lg:mb-0 ">
+          <Label htmlFor="" className="text-3xl font-semibold">
             Posts
           </Label>
-          <div className='flex flex-row gap-20  justify-start '>
-            <div className='flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-neutral-200 font-light text-sm'>
+          <div className="flex flex-row gap-20  justify-start ">
+            <div className="flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-neutral-200 font-light text-sm">
               <PostFilterNavbar
                 onSelectPostOption={handleSelectPostOption}
                 postOption={postOption}
@@ -35,8 +35,8 @@ const PostsComponent = () => {
                 tagOption={tagOption}
               />
             </div>
-            <Link href='/new-post' className='items-center'>
-              <Button variant='secondary' className='rounded-sm items-center'>
+            <Link href="/new-post" className="items-center">
+              <Button variant="secondary" className="rounded-sm items-center">
                 New post
               </Button>
             </Link>
@@ -58,7 +58,7 @@ const PostsComponent = () => {
         </div>
       </div>
 
-      <div className='mt-16'>List of items</div>
+      <div className="mt-16">List of items</div>
     </div>
   );
 };
