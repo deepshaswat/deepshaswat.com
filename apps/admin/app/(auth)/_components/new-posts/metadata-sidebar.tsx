@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Link as LinkIcon, Trash2, Plus } from "lucide-react";
+import { Link as LinkIcon, Trash2, Plus, Star } from "lucide-react";
 
 import Link from "next/link";
 import { useRecoilValue } from "recoil";
@@ -22,8 +22,10 @@ import {
   MultiSelectTrigger,
   MultiSelectValue,
   UploadComponent,
+  Switch,
 } from "@repo/ui";
 import { dateTimeValidation } from "../../../../actions/date-time";
+import { set } from "zod";
 
 interface MetadataSidebarProps {
   inputUrl: string;
@@ -46,6 +48,8 @@ interface MetadataSidebarProps {
   onChange: (file?: File) => void;
   isFileUploadOpen: boolean;
   toggleFileUpload: (value: boolean) => void;
+  featurePost: boolean;
+  setFeaturePost: () => void;
 }
 
 export function MetadataSidebar({
@@ -67,6 +71,8 @@ export function MetadataSidebar({
   onChange,
   isFileUploadOpen,
   toggleFileUpload,
+  featurePost,
+  setFeaturePost,
 }: MetadataSidebarProps) {
   const isEmpty = inputUrl === "";
   const [error, setError] = useState<string | null>("");
@@ -85,6 +91,7 @@ export function MetadataSidebar({
     };
     validateDate();
   }, [inputDate, inputTimeIst]);
+
   return (
     <div className='border-l-[1px] border-neutral-700  w-[400px] fixed right-0 top-0 bottom-0 z-40 shadow-lg p-6 overflow-y-auto '>
       <h2 className='text-2xl font-semibold mb-4'>Post settings</h2>
@@ -154,6 +161,21 @@ export function MetadataSidebar({
             value={inputExcerpt}
             onChange={setInputExcerpt}
             className='flex mt-4 h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50  bg-neutral-700 border-2 border-transparent focus-within:border-green-500 '
+          />
+        </div>
+        <div className='flex items-center justify-between space-x-2 bg-neutral-600 p-4 rounded-md'>
+          <div className='flex flex-row items-center gap-2'>
+            <Star
+              className='size-4 '
+              fill={featurePost ? "white" : "transparent"}
+            />
+            <Label htmlFor='feature-post'>Feature this post</Label>
+          </div>
+          <Switch
+            id='feature-post'
+            checked={featurePost}
+            onCheckedChange={setFeaturePost}
+            className='data-[state=checked]:bg-green-500'
           />
         </div>
         <div className='space-y-2'>

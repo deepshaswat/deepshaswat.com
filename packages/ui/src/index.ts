@@ -18,7 +18,7 @@ export * from "./components/ui/dialog";
 export * from "./components/ui/command";
 export * from "./components/date-picker";
 export * from "./components/spinner";
-export * from "../../../apps/admin/app/(auth)/_components/posts/editor";
+export * from "./components/ui/switch";
 export * from "./components/single-image-dropzone";
 export * from "./components/upload-image-component";
 export * from "./components/custom-sign-in";
