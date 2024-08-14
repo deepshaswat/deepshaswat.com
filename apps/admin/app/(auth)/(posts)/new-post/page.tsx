@@ -1,9 +1,9 @@
 import React from "react";
 
-import { NewPosts } from "../../_components/posts/new-posts";
+import { NewPostComponent } from "../../_components/new-posts/new-post-component";
 
 const NewPost = () => {
-  return <NewPosts />;
+  return <NewPostComponent />;
 };
 
 export default NewPost;

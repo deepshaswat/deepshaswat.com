@@ -1,6 +1,7 @@
 import React from "react";
+import PostsComponent from "../../_components/posts/posts-components";
 const Posts = () => {
-  return <div>List of Post</div>;
+  return <PostsComponent />;
 };
 
 export default Posts;

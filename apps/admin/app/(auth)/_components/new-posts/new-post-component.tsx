@@ -9,9 +9,9 @@ import { useMemo } from "react";
 import { NavBarPost } from "./navbar-post";
 import { MetadataSidebar } from "./metadata-sidebar";
 
-import { Button, Label, UploadComponent, Input } from "@repo/ui";
+import { UploadComponent } from "@repo/ui";
 
-const NewPosts = () => {
+const NewPostComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mainInputValue, setMainInputValue] = useState("");
   const [sidebarUrl, setSidebarUrl] = useState("");
@@ -27,6 +27,7 @@ const NewPosts = () => {
   const [featureImage, setFeatureImage] = useState<File | undefined>(undefined);
   const [isFeatureFileUploadOpen, setIsFeatureFileUploadOpen] = useState(false);
   const [editorContent, setEditorContent] = useState("");
+  const [featurePost, setFeaturePost] = useState(false);
 
   // const Editor = dynamic(() => import("./editor"), { ssr: false });
   const Editor = useMemo(
@@ -34,9 +35,13 @@ const NewPosts = () => {
     []
   );
 
+  const handleFeaturePost = () => {
+    setFeaturePost((prev) => !prev);
+    // setFeaturePost(!featurePost);
+  };
+
   const handleEditorContentChange = (content: string) => {
     setEditorContent(content);
-    console.log(editorContent);
   };
 
   const toggleSidebar = () => {
@@ -168,10 +173,12 @@ const NewPosts = () => {
           onChange={handleMetaDataImageChange}
           isFileUploadOpen={isFileUploadOpen}
           toggleFileUpload={toggleFileUpload}
+          featurePost={featurePost}
+          setFeaturePost={handleFeaturePost}
         />
       )}
     </div>
   );
 };
 
-export { NewPosts };
+export { NewPostComponent };
