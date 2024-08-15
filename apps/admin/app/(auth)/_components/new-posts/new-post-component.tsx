@@ -91,8 +91,11 @@ const NewPostComponent = () => {
       console.log(file?.name);
     }
     // ToDo: Handle file add to S3
-
-    onClose();
+    else {
+      onClose();
+    }
+    setIsSubmitting(false);
+    setIsFileUploadOpen(false);
   };
 
   const onClose = () => {
@@ -109,8 +112,11 @@ const NewPostComponent = () => {
       console.log(file?.name);
     }
     // ToDo: Handle file add to S3
-
-    onCloseFeatureImage();
+    else {
+      onCloseFeatureImage();
+    }
+    setIsSubmitting(false);
+    setIsFeatureFileUploadOpen(false);
   };
 
   const onCloseFeatureImage = () => {
