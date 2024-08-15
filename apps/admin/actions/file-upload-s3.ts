@@ -32,7 +32,7 @@ const s3 = new aws.S3({
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method === "POST") {
     const { name, type } = req.body;
