@@ -55,8 +55,10 @@ export default function EditTagComponent({ tag }: EditTagComponentProps) {
       console.log(file?.name);
     }
     // ToDo: Handle file add to S3
-
-    onCloseFeatureImage();
+    else {
+      onCloseFeatureImage();
+    }
+    setIsSubmitting(false);
   };
 
   const onCloseFeatureImage = () => {

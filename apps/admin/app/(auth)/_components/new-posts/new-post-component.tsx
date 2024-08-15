@@ -91,8 +91,11 @@ const NewPostComponent = () => {
       console.log(file?.name);
     }
     // ToDo: Handle file add to S3
-
-    onClose();
+    else {
+      onClose();
+    }
+    setIsSubmitting(false);
+    setIsFileUploadOpen(false);
   };
 
   const onClose = () => {
@@ -109,8 +112,11 @@ const NewPostComponent = () => {
       console.log(file?.name);
     }
     // ToDo: Handle file add to S3
-
-    onCloseFeatureImage();
+    else {
+      onCloseFeatureImage();
+    }
+    setIsSubmitting(false);
+    setIsFeatureFileUploadOpen(false);
   };
 
   const onCloseFeatureImage = () => {
@@ -120,31 +126,31 @@ const NewPostComponent = () => {
   };
 
   return (
-    <div className="flex">
+    <div className='flex'>
       <div className={`flex-1 ${isOpen ? " mr-[400px]" : ""}`}>
         <NavBarPost isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div className="lg:mx-[180px]">
-          <div className="ml-10 max-w-screen-xl">
+        <div className='lg:mx-[180px]'>
+          <div className='ml-10 max-w-screen-xl'>
             <UploadComponent
               file={featureImage}
               isSubmitting={isSubmitting}
               onChange={handleFeatureImageChange}
               isFileUploadOpen={isFeatureFileUploadOpen}
               toggleFileUpload={toggleFeatureImageUpload}
-              text="Add feature image"
-              className="text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10"
-              buttonVariant="link"
+              text='Add feature image'
+              className='text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10'
+              buttonVariant='link'
             />
           </div>
           <div>
             <input
               value={mainInputValue}
               onChange={handleMainInputChange}
-              placeholder="Post title"
-              className="w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700"
+              placeholder='Post title'
+              className='w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700'
             />
           </div>
-          <div className="mt-8">
+          <div className='mt-8'>
             <Editor
               onChange={handleEditorContentChange}
               initialContent={editorContent}
