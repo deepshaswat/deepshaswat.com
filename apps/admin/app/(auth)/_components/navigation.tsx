@@ -34,38 +34,38 @@ const Navigation = () => {
 
   return (
     <>
-      <div className='grid h-screen pl-[116px] lg:pl-[156px]'>
-        <aside className='inset-y fixed  left-0 z-20 flex h-full flex-col border-r-[1px] border-neutral-700  '>
-          <div className='border-b-[1px] border-neutral-700  p-2 items-center justify-center'>
+      <div className="grid h-screen pl-[116px] lg:pl-[156px]">
+        <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r-[1px] border-neutral-700  ">
+          <div className="border-b-[1px] border-neutral-700  p-2 items-center justify-center">
             <Link
-              href='/'
+              href="/"
               passHref
-              className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+              className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
             >
-              <Button variant='ghost' size='icon' aria-label='Home'>
-                <Home className='size-5' />
+              <Button variant="ghost" size="icon" aria-label="Home">
+                <Home className="size-5" />
               </Button>
-              <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+              <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                 Home
               </span>
             </Link>
           </div>
-          <nav className='grid gap-1 p-2'>
+          <nav className="grid gap-1 p-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Accordion type='single' collapsible className='mb-2 '>
+                <Accordion type="single" collapsible className="mb-2 ">
                   <AccordionItem
-                    value='item-1'
-                    className='border-b-[1px] border-neutral-700 '
+                    value="item-1"
+                    className="border-b-[1px] border-neutral-700 "
                   >
-                    <AccordionTrigger className='flex flex-row !no-underline'>
+                    <AccordionTrigger className="flex flex-row !no-underline">
                       <Link
-                        href='/posts'
+                        href="/posts"
                         passHref
-                        className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 ml-2 p-2 pr-2 lg:pr-4 !no-underline'
+                        className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 ml-2 p-2 pr-2 lg:pr-4 !no-underline"
                       >
-                        <SquarePen className='size-5 lg:ml-2' />
-                        <span className='max-w-0 lg:max-w-full overflow-hidden lg:ml-3 !no-underline'>
+                        <SquarePen className="size-5 lg:ml-2" />
+                        <span className="max-w-0 lg:max-w-full overflow-hidden lg:ml-3 !no-underline">
                           Posts
                         </span>
                       </Link>
@@ -75,28 +75,28 @@ const Navigation = () => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Link
-                            href='/new-post'
+                            href="/new-post"
                             passHref
-                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                            className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                           >
                             <Button
-                              variant='ghost'
-                              size='icon'
-                              className='rounded-lg active:bg-gray-200 '
-                              aria-label='New Posts'
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-lg active:bg-gray-200 "
+                              aria-label="New Posts"
                             >
-                              <Plus className='size-5' />
+                              <Plus className="size-5" />
                             </Button>
 
-                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2 active:bg-gray-200'>
+                            <span className="max-w-0 lg:max-w-full overflow-hidden ml-2 active:bg-gray-200">
                               New Post
                             </span>
                           </Link>
                         </TooltipTrigger>
                         <TooltipContent
-                          side='right'
+                          side="right"
                           sideOffset={5}
-                          className='block lg:invisible'
+                          className="block lg:hidden"
                         >
                           New Post
                         </TooltipContent>
@@ -106,27 +106,27 @@ const Navigation = () => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Link
-                            href='/drafts'
+                            href="/drafts"
                             passHref
-                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                            className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                           >
                             <Button
-                              variant='ghost'
-                              size='icon'
-                              className='rounded-lg active:bg-gray-200'
-                              aria-label='Drafts'
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-lg active:bg-gray-200"
+                              aria-label="Drafts"
                             >
-                              <PencilLine className='size-5' />
+                              <PencilLine className="size-5" />
                             </Button>
-                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                            <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                               Drafts
                             </span>
                           </Link>
                         </TooltipTrigger>
                         <TooltipContent
-                          side='right'
+                          side="right"
                           sideOffset={5}
-                          className='block lg:invisible'
+                          className="block lg:hidden"
                         >
                           Drafts
                         </TooltipContent>
@@ -136,27 +136,27 @@ const Navigation = () => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Link
-                            href='/scheduled-posts'
+                            href="/scheduled-posts"
                             passHref
-                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                            className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                           >
                             <Button
-                              variant='ghost'
-                              size='icon'
-                              className='rounded-lg active:bg-gray-200'
-                              aria-label='Scheduled'
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-lg active:bg-gray-200"
+                              aria-label="Scheduled"
                             >
-                              <CalendarCheck2 className='size-5' />
+                              <CalendarCheck2 className="size-5" />
                             </Button>
-                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                            <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                               Scheduled
                             </span>
                           </Link>
                         </TooltipTrigger>
                         <TooltipContent
-                          side='right'
+                          side="right"
                           sideOffset={5}
-                          className='block lg:invisible'
+                          className="block lg:hidden"
                         >
                           Scheduled Posts
                         </TooltipContent>
@@ -166,27 +166,27 @@ const Navigation = () => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Link
-                            href='/published'
+                            href="/published"
                             passHref
-                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                            className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                           >
                             <Button
-                              variant='ghost'
-                              size='icon'
-                              className='rounded-lg active:bg-gray-200'
-                              aria-label='Published'
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-lg active:bg-gray-200"
+                              aria-label="Published"
                             >
-                              <BookCheck className='size-5' />
+                              <BookCheck className="size-5" />
                             </Button>
-                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                            <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                               Published
                             </span>
                           </Link>
                         </TooltipTrigger>
                         <TooltipContent
-                          side='right'
+                          side="right"
                           sideOffset={5}
-                          className='block lg:invisible'
+                          className="block lg:hidden"
                         >
                           Published Posts
                         </TooltipContent>
@@ -196,27 +196,27 @@ const Navigation = () => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Link
-                            href='/newsletters'
+                            href="/newsletters"
                             passHref
-                            className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                            className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                           >
                             <Button
-                              variant='ghost'
-                              size='icon'
-                              className='rounded-lg active:bg-gray-200'
-                              aria-label='Newsletters'
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-lg active:bg-gray-200"
+                              aria-label="Newsletters"
                             >
-                              <Newspaper className='size-5' />
+                              <Newspaper className="size-5" />
                             </Button>
-                            <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                            <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                               Newsletters
                             </span>
                           </Link>
                         </TooltipTrigger>
                         <TooltipContent
-                          side='right'
+                          side="right"
                           sideOffset={5}
-                          className='block lg:invisible'
+                          className="block lg:hidden"
                         >
                           Newsletters
                         </TooltipContent>
@@ -226,9 +226,9 @@ const Navigation = () => {
                 </Accordion>
               </TooltipTrigger>
               <TooltipContent
-                side='right'
+                side="right"
                 sideOffset={5}
-                className='block lg:invisible'
+                className="block lg:hidden"
               >
                 Posts
               </TooltipContent>
@@ -236,27 +236,27 @@ const Navigation = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href='/tags'
+                  href="/tags"
                   passHref
-                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                  className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                 >
                   <Button
-                    variant='ghost'
-                    size='icon'
-                    className='rounded-lg'
-                    aria-label='Tags'
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-lg"
+                    aria-label="Tags"
                   >
-                    <Tag className='size-5' />
+                    <Tag className="size-5" />
                   </Button>
-                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                  <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                     Tags
                   </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
-                side='right'
+                side="right"
                 sideOffset={5}
-                className='block lg:invisible'
+                className="block lg:hidden"
               >
                 Tags
               </TooltipContent>
@@ -264,27 +264,27 @@ const Navigation = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href='/analytics'
+                  href="/analytics"
                   passHref
-                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                  className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                 >
                   <Button
-                    variant='ghost'
-                    size='icon'
-                    className='rounded-lg'
-                    aria-label='Analytics'
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-lg"
+                    aria-label="Analytics"
                   >
-                    <Kanban className='size-5' />
+                    <Kanban className="size-5" />
                   </Button>
-                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                  <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                     Analytics
                   </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
-                side='right'
+                side="right"
                 sideOffset={5}
-                className='block lg:invisible'
+                className="block lg:hidden"
               >
                 Analytics
               </TooltipContent>
@@ -293,27 +293,27 @@ const Navigation = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href='/members'
+                  href="/members"
                   passHref
-                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                  className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                 >
                   <Button
-                    variant='ghost'
-                    size='icon'
-                    className='rounded-lg'
-                    aria-label='Members'
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-lg"
+                    aria-label="Members"
                   >
-                    <Users2 className='size-5' />
+                    <Users2 className="size-5" />
                   </Button>
-                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                  <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                     Members
                   </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
-                side='right'
+                side="right"
                 sideOffset={5}
-                className='block lg:invisible'
+                className="block lg:hidden"
               >
                 Members
               </TooltipContent>
@@ -321,59 +321,59 @@ const Navigation = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href='/#'
+                  href="/#"
                   passHref
-                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                  className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                 >
                   <Button
-                    variant='ghost'
-                    size='icon'
-                    className='rounded-lg'
-                    aria-label='Settings'
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-lg"
+                    aria-label="Settings"
                   >
-                    <Settings className='size-5' />
+                    <Settings className="size-5" />
                   </Button>
-                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-2'>
+                  <span className="max-w-0 lg:max-w-full overflow-hidden ml-2">
                     Settings
                   </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
-                side='right'
+                side="right"
                 sideOffset={5}
-                className='block lg:invisible'
+                className="block lg:hidden"
               >
                 Settings
               </TooltipContent>
             </Tooltip>
           </nav>
-          <nav className='mt-auto grid gap-1 p-2'>
+          <nav className="mt-auto grid gap-1 p-2">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href='/new-post'
+                  href="/new-post"
                   passHref
-                  className='flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3'
+                  className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
                 >
                   <Button
-                    variant='ghost'
-                    size='icon'
-                    className='mt-auto rounded-lg'
-                    aria-label='Account'
+                    variant="ghost"
+                    size="icon"
+                    className="mt-auto rounded-lg"
+                    aria-label="Account"
                   >
                     <SignedIn>
                       <UserButton />
                     </SignedIn>
                   </Button>
-                  <span className='max-w-0 lg:max-w-full overflow-hidden ml-4'>
+                  <span className="max-w-0 lg:max-w-full overflow-hidden ml-4">
                     {user?.firstName || "Account"}
                   </span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent
-                side='right'
+                side="right"
                 sideOffset={5}
-                className='block lg:invisible'
+                className="block lg:hidden"
               >
                 {user?.firstName || "Account"}
               </TooltipContent>
