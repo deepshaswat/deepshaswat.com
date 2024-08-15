@@ -41,7 +41,7 @@ interface MetadataSidebarProps {
   setInputMetaDataTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputMetaDataDescription: string;
   setInputMetaDataDescription: (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
   file: File | undefined;
   isSubmitting: boolean;
