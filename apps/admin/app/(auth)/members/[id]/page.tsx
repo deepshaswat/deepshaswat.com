@@ -14,19 +14,20 @@ import {
   SingleImageDropzone,
   Textarea,
 } from "@repo/ui";
-import { fetchTagDetails } from "../../../../actions/fetch-tags";
+import { fetchMemberDetails } from "../../../../actions/fetch-members";
 import EditTagComponent from "../../_components/tags/edit-tag-component";
+import React from "react";
+import EditMemberComponent from "../../_components/members/edit-member-component";
 
-export default async function ({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function ({ params }: { params: { id: string } }) {
+  const { id } = params;
 
-  const tag = await fetchTagDetails(slug);
+  const member = await fetchMemberDetails(id);
 
   //Handle case where blog post is not found
-  if (!tag) {
+  if (!member) {
     notFound();
   }
-
   return (
     <div className='m-8  lg:ml-[156px] lg:mr-[156px]'>
       <div className=''>
@@ -36,16 +37,16 @@ export default async function ({ params }: { params: { slug: string } }) {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink
-                    href='/tags'
+                    href='/members'
                     className='text-neutral-200 hover:text-neutral-100'
                   >
-                    Tags
+                    Members
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbPage className='font-normal text-neutral-500'>
-                    Edit tag
+                    Edit member
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -59,7 +60,7 @@ export default async function ({ params }: { params: { slug: string } }) {
           </div>
         </div>
       </div>
-      <EditTagComponent tag={tag} />
+      <EditMemberComponent member={member} />
     </div>
   );
 }
