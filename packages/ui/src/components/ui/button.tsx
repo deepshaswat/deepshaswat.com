@@ -23,6 +23,7 @@ const buttonVariants = cva(
         date: "bg-primary text-neutral-200 hover:bg-primary/90 ",
         metadata:
           "dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-500 w-full",
+        icon: "dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-500",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -35,7 +36,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  },
+  }
 );
 
 export interface ButtonProps
@@ -54,7 +55,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  },
+  }
 );
 Button.displayName = "Button";
 

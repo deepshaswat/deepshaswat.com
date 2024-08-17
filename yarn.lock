@@ -567,10 +567,25 @@
     std-env "^3.7.0"
     swr "^2.2.0"
 
+"@clerk/themes@^2.1.20":
+  version "2.1.20"
+  resolved "https://registry.yarnpkg.com/@clerk/themes/-/themes-2.1.20.tgz#494be3131928d37ac25b487ef796e027424007ae"
+  integrity sha512-8dCVetxtFTUFDSlUIeHqFTGZf/FINSlspxZ51iOPXW6qtay73A1GmquHVfJAfBkGs8S26IO2L5wJytfRBUtkMQ==
+  dependencies:
+    "@clerk/types" "4.13.1"
+    tslib "2.4.1"
+
 "@clerk/types@4.12.1":
   version "4.12.1"
   resolved "https://registry.yarnpkg.com/@clerk/types/-/types-4.12.1.tgz#7eadeb94a44b8f8a8e0579e37fc3f50ec3cfe4a4"
   integrity sha512-0torlmJM3S3kYdaZuIrw1pf4K8aMvoFV+PE1xg7MGfZ0enD9UO3Vhw24pP/yBhI4hVGtNu95E63gpeOFIYysrA==
+  dependencies:
+    csstype "3.1.1"
+
+"@clerk/types@4.13.1":
+  version "4.13.1"
+  resolved "https://registry.yarnpkg.com/@clerk/types/-/types-4.13.1.tgz#d3368651dc6cf3f6c84f31d83dbdb7560f57589b"
+  integrity sha512-AfFTA1Du0pog62CSl23Y8NNDN+iHwXdUQAp/sQ/LbE+/wYBOMSaV5d+cS5F4HX+/uzXgKsc3BpCNI/Th3CLNHg==
   dependencies:
     csstype "3.1.1"
 
