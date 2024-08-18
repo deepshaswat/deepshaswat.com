@@ -1,67 +1,38 @@
-// try {
-//   // Step 1: Get the signed URL from your API
-//   const { data } = await axios.post("/api/upload", {
-//     name: file.name,
-//     type: file.type,
-//   });
-
-//   const { url } = data;
-
-//   // Step 2: Upload the file to S3 using the signed URL
-//   await axios.put(url, file, {
-//     headers: {
-//       "Content-Type": file.type,
-//     },
-//   });
-
-//   console.log(`${file.name} uploaded successfully.`);
-// } catch (error) {
-//   console.error(`Error uploading ${file.name}: `, error);
-// }
-
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import aws from "aws-sdk";
-// import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
-// Initialize the S3 client
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
+  signatureVersion: "v4",
 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  if (req.method === "POST") {
-    const { name, type } = req.body;
+export async function POST(request: Request) {
+  try {
+    const { fileType } = await request.json();
 
-    // Generate a unique file name using UUID
-    const fileId = ""; //uuidv4();
-    const key = `uploads/${fileId}-${name}`;
+    const key = `${uuidv4()}.${fileType.split("/")[1]}`;
 
-    // Configure the S3 pre-signed URL parameters
-    const params = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME!,
+    const s3Params = {
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: key,
-      Expires: 60, // URL expiration time in seconds
-      ContentType: type,
+      Expires: 60, // URL expires in 60 seconds
+      ContentType: fileType,
+      ACL: "public-read", // Make the file publicly readable
     };
 
-    try {
-      // Generate the pre-signed URL
-      const uploadUrl = await s3.getSignedUrlPromise("putObject", params);
+    const uploadURL = await s3.getSignedUrlPromise("putObject", s3Params);
 
-      // Return the pre-signed URL and the S3 URL for the file
-      const imageUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-
-      res.status(200).json({ uploadUrl, imageUrl });
-    } catch (error) {
-      console.error("Error generating pre-signed URL:", error);
-      res.status(500).json({ error: "Failed to generate pre-signed URL" });
-    }
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
+    return NextResponse.json({
+      uploadURL,
+      s3URL: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${key}`,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to generate upload URL" },
+      { status: 500 }
+    );
   }
 }

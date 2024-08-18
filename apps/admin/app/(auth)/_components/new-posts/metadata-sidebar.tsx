@@ -41,9 +41,9 @@ interface MetadataSidebarProps {
   setInputMetaDataTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputMetaDataDescription: string;
   setInputMetaDataDescription: (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => void;
-  file: File | undefined;
+  metadataImageUrl: string;
   isSubmitting: boolean;
   onChange: (file?: File) => void;
   isFileUploadOpen: boolean;
@@ -66,7 +66,7 @@ export function MetadataSidebar({
   setInputMetaDataTitle,
   inputMetaDataDescription,
   setInputMetaDataDescription,
-  file,
+  metadataImageUrl,
   isSubmitting,
   onChange,
   isFileUploadOpen,
@@ -93,109 +93,109 @@ export function MetadataSidebar({
   }, [inputDate, inputTimeIst]);
 
   return (
-    <div className="border-l-[1px] border-neutral-700  w-[400px] fixed right-0 top-0 bottom-0 z-40 shadow-lg p-6 overflow-y-auto ">
-      <h2 className="text-2xl font-semibold mb-4">Post settings</h2>
+    <div className='border-l-[1px] border-neutral-700  w-[400px] fixed right-0 top-0 bottom-0 z-40 shadow-lg p-6 overflow-y-auto '>
+      <h2 className='text-2xl font-semibold mb-4'>Post settings</h2>
 
-      <div className="space-y-4 mt-8">
-        <div className="space-y-2">
-          <Label htmlFor="PorlUrl" className="text-[13px] text-neutral-200">
+      <div className='space-y-4 mt-8'>
+        <div className='space-y-2'>
+          <Label htmlFor='PorlUrl' className='text-[13px] text-neutral-200'>
             Post URL
           </Label>
-          <div className="flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md">
-            <LinkIcon className="text-neutral-400 ml-2 size-4" />
+          <div className='flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md'>
+            <LinkIcon className='text-neutral-400 ml-2 size-4' />
             <input
-              id="PostUrl"
-              type="text"
-              placeholder="Post URL"
+              id='PostUrl'
+              type='text'
+              placeholder='Post URL'
               value={inputUrl}
               onChange={onInputUrlChange}
-              className="flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              className='flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
             />
           </div>
 
           {!isEmpty && (
-            <span className="text-[12px] text-neutral-500">
+            <span className='text-[12px] text-neutral-500'>
               www.deepshaswat.com/{inputUrl}/
             </span>
           )}
           {isEmpty && (
-            <span className="text-[12px]  text-neutral-500">
+            <span className='text-[12px]  text-neutral-500'>
               www.deepshaswat.com/
             </span>
           )}
         </div>
-        <div className="flex flex-col gap-2 mb-4">
-          <Label htmlFor="PublishDate" className="text-[13px] text-neutral-200">
+        <div className='flex flex-col gap-2 mb-4'>
+          <Label htmlFor='PublishDate' className='text-[13px] text-neutral-200'>
             Publish Date
           </Label>
-          <div className="flex flex-row items-center">
+          <div className='flex flex-row items-center'>
             <DatePicker />
-            <div className="flex flex-row items-center group ">
-              <div className="ml-2 flex items-center bg-neutral-700 group-hover:bg-neutral-900 border-none rounded-md">
+            <div className='flex flex-row items-center group '>
+              <div className='ml-2 flex items-center bg-neutral-700 group-hover:bg-neutral-900 border-none rounded-md'>
                 <input
-                  id="publishTime"
-                  type="text"
-                  placeholder="00:00"
+                  id='publishTime'
+                  type='text'
+                  placeholder='00:00'
                   value={inputTimeIst}
                   onChange={setInputTimeIst}
-                  className="flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  className='flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
                 />
-                <span className="text-neutral-400 items-center mr-4 text-[10px]">
+                <span className='text-neutral-400 items-center mr-4 text-[10px]'>
                   IST
                 </span>
               </div>
             </div>
           </div>
-          {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+          {error && <span className='text-red-500 text-sm mt-1'>{error}</span>}
         </div>
-        <div className="mt-4">
+        <div className='mt-4'>
           <Tags selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         </div>
         <div>
-          <Label htmlFor="Excerpt" className="text-[13px] text-neutral-200">
+          <Label htmlFor='Excerpt' className='text-[13px] text-neutral-200'>
             Excerpt
           </Label>
           <Textarea
-            id="Excerpt"
-            placeholder=""
+            id='Excerpt'
+            placeholder=''
             value={inputExcerpt}
             onChange={setInputExcerpt}
-            className="flex mt-4 h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50  bg-neutral-700 border-2 border-transparent focus-within:border-green-500 "
+            className='flex mt-4 h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50  bg-neutral-700 border-2 border-transparent focus-within:border-green-500 '
           />
         </div>
-        <div className="flex items-center justify-between space-x-2 bg-neutral-600 p-4 rounded-md">
-          <div className="flex flex-row items-center gap-2">
+        <div className='flex items-center justify-between space-x-2 bg-neutral-600 p-4 rounded-md'>
+          <div className='flex flex-row items-center gap-2'>
             <Star
-              className="size-4 "
+              className='size-4 '
               fill={featurePost ? "white" : "transparent"}
             />
-            <Label htmlFor="feature-post">Feature this post</Label>
+            <Label htmlFor='feature-post'>Feature this post</Label>
           </div>
           <Switch
-            id="feature-post"
+            id='feature-post'
             checked={featurePost}
             onCheckedChange={setFeaturePost}
-            className="data-[state=checked]:bg-green-500"
+            className='data-[state=checked]:bg-green-500'
           />
         </div>
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="MetaDataTitle"
-            className="text-[13px] text-neutral-200"
+            htmlFor='MetaDataTitle'
+            className='text-[13px] text-neutral-200'
           >
             Meta Data Title
           </Label>
-          <div className="flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md">
+          <div className='flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md'>
             <input
-              id="PostUrl"
-              type="text"
-              placeholder="Title"
+              id='PostUrl'
+              type='text'
+              placeholder='Title'
               value={inputMetaDataTitle}
               onChange={setInputMetaDataTitle}
-              className="flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              className='flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
             />
           </div>
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 60 characters. You've used{" "}
             <span
               className={
@@ -213,19 +213,19 @@ export function MetadataSidebar({
         </div>
         <div>
           <Label
-            htmlFor="MetaDataDescription"
-            className="text-[13px] text-neutral-200"
+            htmlFor='MetaDataDescription'
+            className='text-[13px] text-neutral-200'
           >
             Meta Data Description
           </Label>
           <Textarea
-            id="Excerpt"
-            placeholder=""
+            id='Excerpt'
+            placeholder=''
             value={inputMetaDataDescription}
             onChange={setInputMetaDataDescription}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50  bg-neutral-700 border-2 border-transparent focus-within:border-green-500 "
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50  bg-neutral-700 border-2 border-transparent focus-within:border-green-500 '
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 140 characters. You've used{" "}
             <span
               className={
@@ -241,25 +241,25 @@ export function MetadataSidebar({
             .
           </div>
         </div>
-        <div className="flex flex-col gap-4 ">
+        <div className='flex flex-col gap-4 '>
           <Label
-            htmlFor="MetaDataDescription"
-            className="text-[13px] text-neutral-200 mt-4"
+            htmlFor='MetaDataDescription'
+            className='text-[13px] text-neutral-200 mt-4'
           >
             Meta Data Image Upload
           </Label>
           <UploadComponent
-            file={file}
+            imageUrl={metadataImageUrl}
             isSubmitting={isSubmitting}
             onChange={onChange}
             isFileUploadOpen={isFileUploadOpen}
             toggleFileUpload={toggleFileUpload}
-            text="Add an image"
+            text='Add an image'
           />
         </div>
         <div>
-          <Button variant="destructive-outline" className="w-full mt-4">
-            <Trash2 className="mr-2 size-4" /> Delete Post
+          <Button variant='destructive-outline' className='w-full mt-4'>
+            <Trash2 className='mr-2 size-4' /> Delete Post
           </Button>
         </div>
       </div>
@@ -284,21 +284,21 @@ export const Tags: React.FC<TagsProps> = ({
   }));
 
   return (
-    <div className="gap-4 mt-4">
-      <h1 className="text-[13px]  mb-4">Tags</h1>
+    <div className='gap-4 mt-4'>
+      <h1 className='text-[13px]  mb-4'>Tags</h1>
       <MultiSelect onValueChange={setSelectedTags} defaultValue={selectedTags}>
-        <MultiSelectTrigger className="w-96 ">
-          <MultiSelectValue placeholder="Select tags" />
+        <MultiSelectTrigger className='w-96 '>
+          <MultiSelectValue placeholder='Select tags' />
         </MultiSelectTrigger>
-        <MultiSelectContent className="bg-neutral-800 text-neutral-200">
-          <MultiSelectSearch placeholder="Input to search" />
+        <MultiSelectContent className='bg-neutral-800 text-neutral-200'>
+          <MultiSelectSearch placeholder='Input to search' />
           <MultiSelectList>
-            <MultiSelectGroup className="bg-neutral-800">
+            <MultiSelectGroup className='bg-neutral-800'>
               {tags.map((tag) => (
                 <MultiSelectItem
                   key={tag.value}
                   value={tag.value}
-                  className="bg-neutral-800 text-neutral-300"
+                  className='bg-neutral-800 text-neutral-300'
                 >
                   {tag.label}
                 </MultiSelectItem>

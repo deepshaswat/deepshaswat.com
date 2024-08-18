@@ -15,7 +15,8 @@ import {
 } from "@repo/ui";
 
 interface UploadComponentProps {
-  file: File | undefined;
+  imageUrl: string;
+  
   isFileUploadOpen: boolean;
   toggleFileUpload: (value: boolean) => void;
   isSubmitting: boolean;
@@ -37,7 +38,7 @@ interface UploadComponentProps {
 }
 
 export const UploadComponent: React.FC<UploadComponentProps> = ({
-  file,
+  imageUrl,
   isFileUploadOpen,
   toggleFileUpload,
   isSubmitting,
@@ -48,23 +49,33 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
 }: UploadComponentProps) => {
   return (
     <>
-      <Button
-        variant={buttonVariant}
-        className={cn("", className)}
-        onClick={() => toggleFileUpload(true)}
-      >
-        <Plus className="mr-2 size-4" />
-        {text}
-      </Button>
+      {imageUrl ? (
+        <SingleImageDropzone
+          className={cn("w-full outline-none", className)}
+          disabled={isSubmitting}
+          value={imageUrl}
+          onChange={onChange}
+        />
+      ) : (
+        <Button
+          variant={buttonVariant}
+          className={cn("", className)}
+          onClick={() => toggleFileUpload(true)}
+        >
+          <Plus className='mr-2 size-4' />
+          {text}
+        </Button>
+      )}
+
       <Dialog open={isFileUploadOpen} onOpenChange={toggleFileUpload}>
-        <DialogContent className="dark:bg-neutral-700">
+        <DialogContent className='dark:bg-neutral-700'>
           <DialogHeader>
             <DialogTitle>Select file to upload</DialogTitle>
           </DialogHeader>
           <SingleImageDropzone
-            className="w-full outline-none"
+            className='w-full outline-none'
             disabled={isSubmitting}
-            value={file}
+            value={imageUrl}
             onChange={onChange}
           />
         </DialogContent>
