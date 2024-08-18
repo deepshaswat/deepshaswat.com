@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Button, Label, SingleImageDropzone, Textarea } from "@repo/ui";
+import axios from "axios";
 
 interface Tag {
-  //   id: string;
   name: string;
   slug: string;
   description: string;
@@ -14,6 +14,7 @@ interface Tag {
 interface EditTagComponentProps {
   tag: Tag;
 }
+
 const reverseAndHyphenate = (item: string) => {
   return item.toLowerCase().split(" ").join("-");
 };
@@ -23,8 +24,6 @@ export default function EditTagComponent({ tag }: EditTagComponentProps) {
   const [tagImageUrl, setTagImageUrl] = useState<string | undefined>(
     tag.imageUrl,
   );
-
-  const [tagImage, setTagImage] = useState<File | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [inputUrl, setInputUrl] = useState(tag.name);
   const [inputSlug, setInputSlug] = useState(tag.slug);
@@ -50,71 +49,40 @@ export default function EditTagComponent({ tag }: EditTagComponentProps) {
   const handleTagImageChange = async (file?: File) => {
     if (file) {
       setIsSubmitting(true);
-      setTagImage(file);
-      console.log("File uploaded successfully");
-      console.log(file?.name);
+      // setTagImage(file);
+      try {
+        // Request presigned URL from the API route
+        const { data } = await axios.post("/api/upload", {
+          fileType: file.type,
+        });
+
+        const { uploadURL, s3URL } = data;
+
+        // Upload file to S3 using the presigned URL
+        await axios.put(uploadURL, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        // Set the S3 URL as the image URL
+        setTagImageUrl(s3URL);
+
+        console.log("File uploaded successfully:", s3URL);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else {
+      onCloseTagImage();
     }
-    // ToDo: Handle file add to S3
-    else {
-      onCloseFeatureImage();
-    }
-    setIsSubmitting(false);
   };
 
-  const onCloseFeatureImage = () => {
-    setTagImage(undefined);
+  const onCloseTagImage = () => {
+    setTagImageUrl(undefined);
     setIsSubmitting(false);
   };
-
-  // Function to upload the image to S3
-  // const handleTagImageChange = async (file?: File) => {
-  //   if (file) {
-  //     setIsSubmitting(true);
-
-  //     try {
-  //       // Step 1: Request a pre-signed URL from the backend
-  //       const { data } = await axios.post("/api/upload-url", {
-  //         name: file.name,
-  //         type: file.type,
-  //       });
-
-  //       const { uploadUrl, imageUrl } = data; // Get the pre-signed URL and image URL
-
-  //       // Step 2: Upload the image to S3 using the pre-signed URL
-  //       await axios.put(uploadUrl, file, {
-  //         headers: {
-  //           "Content-Type": file.type,
-  //         },
-  //       });
-
-  //       // Step 3: Set the image URL to render in the drop zone
-  //       setTagImageUrl(imageUrl);
-
-  //       console.log("File uploaded successfully to S3:", imageUrl);
-  //     } catch (error) {
-  //       console.error("Error uploading file to S3:", error);
-  //     } finally {
-  //       setIsSubmitting(false);
-  //     }
-  //   }
-  // };
-
-  //   const handleSave = async () => {
-  //     setIsSubmitting(true);
-  //     try {
-  //       await fetchTagDetails(tag.id, {
-  //         name: tagName,
-  //         slug: tagSlug,
-  //         description: tagDescription,
-  //         imageUrl: tagImageUrl,
-  //       });
-  //       console.log("Tag updated successfully");
-  //     } catch (error) {
-  //       console.error("Failed to update tag:", error);
-  //     } finally {
-  //       setIsSubmitting(false);
-  //     }
-  //   };
 
   return (
     <div>
@@ -200,16 +168,9 @@ export default function EditTagComponent({ tag }: EditTagComponentProps) {
             <SingleImageDropzone
               className="outline-none mt-2"
               disabled={isSubmitting}
-              value={tagImage}
+              value={tagImageUrl}
               onChange={handleTagImageChange}
             />
-            {/* <SingleImageDropzone
-              className='outline-none mt-2'
-              disabled={isSubmitting}
-              value={tagImageUrl ? undefined : tagImage}
-              onChange={handleTagImageChange}
-              previewUrl={tagImageUrl || undefined} // Show the uploaded image
-            /> */}
           </div>
         </div>
       </div>

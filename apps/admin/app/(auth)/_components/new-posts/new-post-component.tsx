@@ -21,10 +21,12 @@ const NewPostComponent = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [inputMetaDataTitle, setInputMetaDataTitle] = useState("");
   const [inputMetaDataDescription, setInputMetaDataDescription] = useState("");
-  const [file, setFile] = useState<File | undefined>(undefined);
+  const [metadataImageUrl, setMetadataImageUrl] = useState("");
+  const [metadataImageCaption, setMetadataImageCaption] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
-  const [featureImage, setFeatureImage] = useState<File | undefined>(undefined);
+  const [featureImageCaption, setFeatureImageCaption] = useState("");
+  const [featureImageURL, setFeatureImageURL] = useState("");
   const [isFeatureFileUploadOpen, setIsFeatureFileUploadOpen] = useState(false);
   const [editorContent, setEditorContent] = useState("");
   const [featurePost, setFeaturePost] = useState(false);
@@ -83,44 +85,93 @@ const NewPostComponent = () => {
     setInputMetaDataDescription(e.target.value);
   };
 
+  // ToDo: Handle caption in image upload using text input when image is available
+  const handleMetadataImageCaptionChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setMetadataImageCaption(e.target.value);
+  };
+
   const handleMetaDataImageChange = async (file?: File) => {
     if (file) {
       setIsSubmitting(true);
-      setFile(file);
-      console.log("File uploaded successfully");
-      console.log(file?.name);
-    }
-    // ToDo: Handle file add to S3
-    else {
+      try {
+        // Request presigned URL from the API route
+        const { data } = await axios.post("/api/upload", {
+          fileType: file.type,
+        });
+
+        const { uploadURL, s3URL } = data;
+
+        // Upload file to S3 using the presigned URL
+        await axios.put(uploadURL, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        // Set the S3 URL as the image URL
+        setMetadataImageUrl(s3URL);
+
+        console.log("File uploaded successfully:", s3URL);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      } finally {
+        setIsSubmitting(false);
+        setIsFileUploadOpen(false);
+      }
+    } else {
       onClose();
     }
+  };
+
+  const onClose = () => {
+    setMetadataImageUrl("");
     setIsSubmitting(false);
     setIsFileUploadOpen(false);
   };
 
-  const onClose = () => {
-    setFile(undefined);
-    setIsSubmitting(false);
-    setIsFileUploadOpen(false);
+  const handleFeatureImageCaptionChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setFeatureImageCaption(e.target.value);
   };
 
   const handleFeatureImageChange = async (file?: File) => {
     if (file) {
       setIsSubmitting(true);
-      setFeatureImage(file);
-      console.log("File uploaded successfully");
-      console.log(file?.name);
-    }
-    // ToDo: Handle file add to S3
-    else {
+      try {
+        // Request presigned URL from the API route
+        const { data } = await axios.post("/api/upload", {
+          fileType: file.type,
+        });
+
+        const { uploadURL, s3URL } = data;
+
+        // Upload file to S3 using the presigned URL
+        await axios.put(uploadURL, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        // Set the S3 URL as the image URL
+        setFeatureImageURL(s3URL);
+
+        console.log("File uploaded successfully:", s3URL);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      } finally {
+        setIsSubmitting(false);
+        setIsFeatureFileUploadOpen(false);
+      }
+    } else {
       onCloseFeatureImage();
     }
-    setIsSubmitting(false);
-    setIsFeatureFileUploadOpen(false);
   };
 
   const onCloseFeatureImage = () => {
-    setFeatureImage(undefined);
+    setFeatureImageURL("");
     setIsSubmitting(false);
     setIsFeatureFileUploadOpen(false);
   };
@@ -130,9 +181,9 @@ const NewPostComponent = () => {
       <div className={`flex-1 ${isOpen ? " mr-[400px]" : ""}`}>
         <NavBarPost isOpen={isOpen} toggleSidebar={toggleSidebar} />
         <div className="lg:mx-[180px]">
-          <div className="ml-10 max-w-screen-xl">
+          <div className="ml-10 max-w-screen-md lg:max-w-screen-lg">
             <UploadComponent
-              file={featureImage}
+              imageUrl={featureImageURL}
               isSubmitting={isSubmitting}
               onChange={handleFeatureImageChange}
               isFileUploadOpen={isFeatureFileUploadOpen}
@@ -174,7 +225,7 @@ const NewPostComponent = () => {
           setInputMetaDataTitle={handleMetaDataTitleChange}
           inputMetaDataDescription={inputMetaDataDescription}
           setInputMetaDataDescription={handleMetaDataDescriptionChange}
-          file={file}
+          metadataImageUrl={metadataImageUrl}
           isSubmitting={isSubmitting}
           onChange={handleMetaDataImageChange}
           isFileUploadOpen={isFileUploadOpen}

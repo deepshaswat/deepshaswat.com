@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { useTheme } from "next-themes";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
@@ -15,20 +16,25 @@ const Editor = ({ onChange, initialContent }: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
   const handleUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
+    try {
+      // Request presigned URL from the API route
+      const { data } = await axios.post("/api/upload", {
+        fileType: file.type,
+      });
 
-    // ToDo: Handle file add to S3
+      const { uploadURL, s3URL } = data;
 
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    });
+      // Upload file to S3 using the presigned URL
+      await axios.put(uploadURL, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      return data.fileUrl;
-    } else {
+      // Return the S3 URL for rendering in the editor
+      return s3URL;
+    } catch (error) {
+      console.error("Error uploading file:", error);
       throw new Error("File upload failed");
     }
   };
@@ -48,7 +54,7 @@ const Editor = ({ onChange, initialContent }: EditorProps) => {
         onChange={() => {
           onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
         }}
-      />
+      ></BlockNoteView>
     </div>
   );
 };

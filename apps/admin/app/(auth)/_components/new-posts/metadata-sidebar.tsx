@@ -43,7 +43,7 @@ interface MetadataSidebarProps {
   setInputMetaDataDescription: (
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => void;
-  file: File | undefined;
+  metadataImageUrl: string;
   isSubmitting: boolean;
   onChange: (file?: File) => void;
   isFileUploadOpen: boolean;
@@ -66,7 +66,7 @@ export function MetadataSidebar({
   setInputMetaDataTitle,
   inputMetaDataDescription,
   setInputMetaDataDescription,
-  file,
+  metadataImageUrl,
   isSubmitting,
   onChange,
   isFileUploadOpen,
@@ -249,7 +249,7 @@ export function MetadataSidebar({
             Meta Data Image Upload
           </Label>
           <UploadComponent
-            file={file}
+            imageUrl={metadataImageUrl}
             isSubmitting={isSubmitting}
             onChange={onChange}
             isFileUploadOpen={isFileUploadOpen}
