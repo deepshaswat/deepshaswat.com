@@ -16,7 +16,7 @@ import {
 
 interface UploadComponentProps {
   imageUrl: string;
-  
+
   isFileUploadOpen: boolean;
   toggleFileUpload: (value: boolean) => void;
   isSubmitting: boolean;
@@ -62,18 +62,18 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
           className={cn("", className)}
           onClick={() => toggleFileUpload(true)}
         >
-          <Plus className='mr-2 size-4' />
+          <Plus className="mr-2 size-4" />
           {text}
         </Button>
       )}
 
       <Dialog open={isFileUploadOpen} onOpenChange={toggleFileUpload}>
-        <DialogContent className='dark:bg-neutral-700'>
+        <DialogContent className="dark:bg-neutral-700">
           <DialogHeader>
             <DialogTitle>Select file to upload</DialogTitle>
           </DialogHeader>
           <SingleImageDropzone
-            className='w-full outline-none'
+            className="w-full outline-none"
             disabled={isSubmitting}
             value={imageUrl}
             onChange={onChange}
