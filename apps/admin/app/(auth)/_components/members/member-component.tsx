@@ -22,9 +22,8 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Input,
 } from "@repo/ui"; // Adjust the import path as needed
-import { useState } from "react";
+
 import FilterListComponent from "./filter-list-components";
 
 const capitalizeWords = (input: string) => {
@@ -94,53 +93,53 @@ const MemberComponent = () => {
   ];
 
   return (
-    <div className="m-8 lg:ml-[156px] lg:mr-[156px]">
-      <div className="flex flex-row items-center justify-between w-full lg:w-auto mb-4 lg:mb-0">
-        <Label htmlFor="members" className="text-3xl font-semibold">
+    <div className='m-8 lg:ml-[156px] lg:mr-[156px]'>
+      <div className='flex flex-row items-center justify-between w-full lg:w-auto mb-4 lg:mb-0'>
+        <Label htmlFor='members' className='text-3xl font-semibold'>
           Members
         </Label>
-        <div className="flex flex-row gap-3">
-          <div className="max-w-0 lg:max-w-full overflow-hidden mr-8">
-            <div className="flex items-center justify-end bg-neutral-900 border-2 border-neutral-950 focus-within:border-green-500 rounded-md">
-              <Search className="text-neutral-400 ml-2 size-4" />
+        <div className='flex flex-row gap-3'>
+          <div className='max-w-0 lg:max-w-full overflow-hidden mr-8'>
+            <div className='flex items-center justify-end bg-neutral-900 border-2 border-neutral-950 focus-within:border-green-500 rounded-md'>
+              <Search className='text-neutral-400 ml-2 size-4' />
               <input
-                id="SearchMembers"
-                type="text"
-                placeholder="Search members..."
-                className="flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50"
+                id='SearchMembers'
+                type='text'
+                placeholder='Search members...'
+                className='flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50'
               />
             </div>
           </div>
-          <div className="flex gap-2 relative">
+          <div className='flex gap-2 relative'>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="icon">
-                  <ListFilter className="mr-2" /> Filter
+                <Button variant='icon'>
+                  <ListFilter className='mr-2' /> Filter
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="absolute -right-10 mt-2 w-[720px] lg:w-[820px] bg-neutral-800 border-none ">
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium leading-none text-neutral-100">
+              <PopoverContent className='absolute -right-10 mt-2 w-[720px] lg:w-[820px] bg-neutral-800 border-none '>
+                <div className='grid gap-4'>
+                  <div className='space-y-2'>
+                    <h4 className='font-medium leading-none text-neutral-100'>
                       Filter Lists
                     </h4>
                   </div>
-                  <div className="grid gap-2">
+                  <div className='grid gap-2'>
                     <FilterListComponent />
                   </div>
                 </div>
               </PopoverContent>
             </Popover>
-            <Link href="" className="items-center">
+            <Link href='' className='items-center'>
               <Button size={"icon"} variant={"icon"}>
                 <Settings />
               </Button>
             </Link>
           </div>
 
-          <div className="flex gap-2">
-            <Link href="/members/new-member" className="items-center">
-              <Button variant="secondary" className="rounded-sm items-center">
+          <div className='flex gap-2'>
+            <Link href='/members/new-member' className='items-center'>
+              <Button variant='secondary' className='rounded-sm items-center'>
                 New member
               </Button>
             </Link>
@@ -148,34 +147,34 @@ const MemberComponent = () => {
         </div>
       </div>
 
-      <div className="flex lg:invisible overflow-hidden">
-        <div className="w-2/3 "></div>
+      <div className='flex lg:invisible overflow-hidden'>
+        <div className='w-2/3 '></div>
         {/* ToDo: Add search functionality */}
-        <div className="flex w-1/3 items-center justify-end bg-neutral-900 border-2 border-neutral-950 focus-within:border-green-500 rounded-md">
-          <Search className="text-neutral-400 ml-2 size-4" />
+        <div className='flex w-1/3 items-center justify-end bg-neutral-900 border-2 border-neutral-950 focus-within:border-green-500 rounded-md'>
+          <Search className='text-neutral-400 ml-2 size-4' />
           <input
-            id="SearchMembers"
-            type="text"
-            placeholder="Search members..."
-            className="flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50"
+            id='SearchMembers'
+            type='text'
+            placeholder='Search members...'
+            className='flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50'
           />
         </div>
       </div>
 
-      <div className="mt-8 lg:mt-1">
-        <Table className="table-auto w-full">
+      <div className='mt-8 lg:mt-1'>
+        <Table className='table-auto w-full'>
           <TableHeader>
-            <TableRow className="hover:bg-transparent text-neutral-200 font-light border-b-neutral-600">
-              <TableHead className="text-[12px] text-neutral-100 font-light">
+            <TableRow className='hover:bg-transparent text-neutral-200 font-light border-b-neutral-600'>
+              <TableHead className='text-[12px] text-neutral-100 font-light'>
                 {members.length} MEMBERS
               </TableHead>
-              <TableHead className="text-[12px] text-neutral-100 font-light">
+              <TableHead className='text-[12px] text-neutral-100 font-light'>
                 OPEN RATE
               </TableHead>
-              <TableHead className="text-[12px] text-neutral-100 font-light">
+              <TableHead className='text-[12px] text-neutral-100 font-light'>
                 LOCATION
               </TableHead>
-              <TableHead className="text-[12px] text-neutral-100 font-light">
+              <TableHead className='text-[12px] text-neutral-100 font-light'>
                 CREATED
               </TableHead>
             </TableRow>
@@ -184,34 +183,34 @@ const MemberComponent = () => {
             {members.map((member) => (
               <TableRow
                 key={member.id}
-                className="hover:bg-neutral-800 cursor-pointer font-light border-b-neutral-600"
+                className='hover:bg-neutral-800 cursor-pointer font-light border-b-neutral-600'
                 onClick={() => {
                   router.push(`/members/${member.id}`);
                 }}
               >
-                <TableCell className="flex items-center gap-3">
+                <TableCell className='flex items-center gap-3'>
                   {member.image ? (
                     <Image
                       src={member.image}
                       alt={member.name || member.email.charAt(0)}
-                      className="rounded-full"
+                      className='rounded-full'
                       width={40}
                       height={40}
                     />
                   ) : (
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-pink-500 text-white font-bold">
+                    <div className='flex items-center justify-center w-10 h-10 rounded-full bg-pink-500 text-white font-bold'>
                       {member.name
                         ? getInitials(capitalizeWords(member.name))
                         : member.email.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div>
-                    <div className="font-medium text-neutral-100">
+                    <div className='font-medium text-neutral-100'>
                       {member.name
                         ? capitalizeWords(member.name)
                         : member.email}
                     </div>
-                    <div className="text-neutral-400 text-sm">
+                    <div className='text-neutral-400 text-sm'>
                       {member.name ? member.email : ""}
                     </div>
                   </div>
@@ -234,7 +233,7 @@ const MemberComponent = () => {
                 >
                   {member.location}
                 </TableCell>
-                <TableCell className="text-neutral-100">
+                <TableCell className='text-neutral-100'>
                   <div>
                     {new Date(member.created).toLocaleDateString("en-GB", {
                       day: "2-digit",
@@ -242,7 +241,7 @@ const MemberComponent = () => {
                       year: "numeric",
                     })}
                   </div>
-                  <div className="text-neutral-500 text-[12px] flex justify-start">
+                  <div className='text-neutral-500 text-[12px] flex justify-start'>
                     ({calculateTimeDifference(member.created)})
                   </div>
                 </TableCell>

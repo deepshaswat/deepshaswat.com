@@ -1,4 +1,4 @@
-export async function fetchMemberDetails(id: string) {
+async function fetchMemberDetails(id: string) {
   // ToDo: Replace with actual data fetching logic
   const members = [
     {
@@ -35,3 +35,5 @@ export async function fetchMemberDetails(id: string) {
   ];
   return members.find((member) => member.id === id) || null;
 }
+
+export { fetchMemberDetails };

@@ -58,3 +58,6 @@
     --chart-5: 340 75% 55%;
   }
 }
+.bn-container[data-theming-css-demo] .bn-block * {
+  margin-bottom: 0.75rem;
+}

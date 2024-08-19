@@ -14,7 +14,7 @@ import {
   SingleImageDropzone,
   Textarea,
 } from "@repo/ui";
-import { fetchTagDetails } from "../../../../actions/fetch-tags";
+import { fetchTagDetails } from "@repo/actions";
 import EditTagComponent from "../../_components/tags/edit-tag-component";
 
 export default async function ({ params }: { params: { slug: string } }) {
@@ -28,23 +28,23 @@ export default async function ({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="m-8  lg:ml-[156px] lg:mr-[156px]">
-      <div className="">
-        <div className="flex flex-row items-center justify-between mb-4 lg:mb-0 ">
+    <div className='m-8  lg:ml-[156px] lg:mr-[156px]'>
+      <div className=''>
+        <div className='flex flex-row items-center justify-between mb-4 lg:mb-0 '>
           <div>
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink
-                    href="/tags"
-                    className="text-neutral-200 hover:text-neutral-100"
+                    href='/tags'
+                    className='text-neutral-200 hover:text-neutral-100'
                   >
                     Tags
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="font-normal text-neutral-500">
+                  <BreadcrumbPage className='font-normal text-neutral-500'>
                     Edit tag
                   </BreadcrumbPage>
                 </BreadcrumbItem>
@@ -52,8 +52,8 @@ export default async function ({ params }: { params: { slug: string } }) {
             </Breadcrumb>
           </div>
 
-          <div className=" gap-20 justify-start">
-            <Button variant="secondary" className="rounded-sm items-center">
+          <div className=' gap-20 justify-start'>
+            <Button variant='secondary' className='rounded-sm items-center'>
               Save
             </Button>
           </div>

@@ -26,5 +26,8 @@ export * from "./components/spinner";
 export * from "./components/single-image-dropzone";
 export * from "./components/upload-image-component";
 export * from "./components/youtube-blocknote";
+export * from "./components/markdown-editor";
+export * from "./components/callout-block";
+export * from "./components/divider";
 export * from "./components/custom-sign-in";
 export * from "./components/theme-provider";

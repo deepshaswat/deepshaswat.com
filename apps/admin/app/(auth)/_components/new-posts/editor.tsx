@@ -3,13 +3,11 @@
 import axios from "axios";
 import { useTheme } from "next-themes";
 import {
-  BlockNoteEditor,
   PartialBlock,
   BlockNoteSchema,
   defaultBlockSpecs,
   insertOrUpdateBlock,
   filterSuggestionItems,
-  getDefaultSlashMenuItems,
 } from "@blocknote/core";
 import {
   DefaultReactSuggestionItem,
@@ -19,8 +17,11 @@ import {
 } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
-import { Youtube } from "@repo/ui";
-import { FaYoutube } from "react-icons/fa";
+
+import { FaYoutube, FaMarkdown, FaLightbulb } from "react-icons/fa";
+import { Minus } from "lucide-react";
+
+import { Markdown, Youtube, Callout, Divider } from "@repo/ui";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -32,6 +33,9 @@ const schema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
     youtube: Youtube,
+    markdown: Markdown,
+    callout: Callout,
+    divider: Divider,
   },
 });
 
@@ -42,39 +46,79 @@ const insertYoutube = (editor: typeof schema.BlockNoteEditor) => ({
       type: "youtube",
     });
   },
-  group: "Media",
+  group: "EMBEDS",
   icon: <FaYoutube />,
   aliases: ["youtube", "yt"],
   subtext: "Used to embed a youtube video.",
 });
 
+const insertMarkdown = (editor: typeof schema.BlockNoteEditor) => ({
+  title: "Markdown",
+  onItemClick: () => {
+    insertOrUpdateBlock(editor, {
+      type: "markdown",
+    });
+  },
+  group: "EMBEDS",
+  icon: <FaMarkdown />,
+  aliases: ["markdown", "md"],
+  subtext: "Used to add a markdown editor block.",
+});
+
+const insertCallout = (editor: typeof schema.BlockNoteEditor) => ({
+  title: "Callout",
+  onItemClick: () => {
+    insertOrUpdateBlock(editor, {
+      type: "callout",
+    });
+  },
+  group: "Media",
+  icon: <FaLightbulb />,
+  aliases: ["callout", "call"],
+  subtext: "Used to add a callout block.",
+});
+
+const insertDivider = (editor: typeof schema.BlockNoteEditor) => ({
+  title: "Divider",
+  onItemClick: () => {
+    const block = editor.getTextCursorPosition().block;
+    editor.insertBlocks([{ type: "divider" }], block, "before");
+  },
+  group: "Other",
+  icon: <Minus />,
+  aliases: ["divider", "line"],
+  subtext: "Insert a horizontal divider.",
+});
+
 const getCustomSlashMenuItems = (
-  editor: typeof schema.BlockNoteEditor,
+  editor: typeof schema.BlockNoteEditor
 ): DefaultReactSuggestionItem[] => [
   ...getDefaultReactSlashMenuItems(editor),
   insertYoutube(editor),
+  insertMarkdown(editor),
+  insertCallout(editor),
+  insertDivider(editor),
 ];
 
 const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const { resolvedTheme } = useTheme();
+  // uncomment the initialContent to avoid the error on Markdown to Blocks
+  // const [markdown, setMarkdown] = useState<string | undefined>(initialContent);
 
   const handleUpload = async (file: File) => {
     try {
-      // Request presigned URL from the API route
       const { data } = await axios.post("/api/upload", {
         fileType: file.type,
       });
 
       const { uploadURL, s3URL } = data;
 
-      // Upload file to S3 using the presigned URL
       await axios.put(uploadURL, file, {
         headers: {
           "Content-Type": file.type,
         },
       });
 
-      // Return the S3 URL for rendering in the editor
       return s3URL;
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -83,12 +127,31 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   };
 
   const editor = useCreateBlockNote({
+    // comment the initialContent to avoid the error on Markdown to Blocks
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
+
     uploadFile: handleUpload,
     schema,
   });
+
+  // To Convert Markdown to Blocks
+  // const blocksFromMarkdown = editor.tryParseMarkdownToBlocks(markdown || "");
+
+  // useEffect(() => {
+  //   async function loadInitialHTML() {
+  //     const blocks = await blocksFromMarkdown;
+  //     editor.replaceBlocks(editor.document, blocks);
+  //   }
+  //   loadInitialHTML();
+  // }, [editor]);
+
+  // const onChangeMarkdown = async () => {
+  //   const markdown = await editor.blocksToMarkdownLossy(editor.document);
+  //   setMarkdown(markdown);
+  //   onChange(markdown);
+  // };
 
   return (
     <div>
@@ -99,17 +162,15 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         onChange={() => {
           onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
         }}
-        slashMenu={false} // Disable default slash menu to use custom menu controller
+        // uncomment the onChange to avoid the error on Markdown to Blocks
+        // onChange={onChangeMarkdown}
+        slashMenu={false}
+        data-theming-css-demo
       >
         <SuggestionMenuController
-          triggerCharacter="/"
-          // Extending default items with the custom YouTube item
+          triggerCharacter='/'
           getItems={async (query) =>
-            filterSuggestionItems(
-              // [...getDefaultSlashMenuItems(editor), insertYoutube(editor)],
-              getCustomSlashMenuItems(editor),
-              query,
-            )
+            filterSuggestionItems(getCustomSlashMenuItems(editor), query)
           }
         />
       </BlockNoteView>
