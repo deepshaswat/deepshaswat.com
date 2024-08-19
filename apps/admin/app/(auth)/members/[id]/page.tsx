@@ -14,8 +14,7 @@ import {
   SingleImageDropzone,
   Textarea,
 } from "@repo/ui";
-import { fetchMemberDetails } from "../../../../actions/fetch-members";
-import EditTagComponent from "../../_components/tags/edit-tag-component";
+import { fetchMemberDetails } from "@repo/actions";
 import React from "react";
 import EditMemberComponent from "../../_components/members/edit-member-component";
 

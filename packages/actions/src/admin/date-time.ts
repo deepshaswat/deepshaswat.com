@@ -1,6 +1,6 @@
-import { combinedDateTimeSchema, timeSchema } from "../schema/index";
+import { combinedDateTimeSchema, timeSchema } from "@repo/schema";
 
-export async function dateTimeValidation(
+async function dateTimeValidation(
   datePickerValue: Date,
   timePickerValue: string,
 ) {
@@ -36,7 +36,7 @@ export async function dateTimeValidation(
   };
 }
 
-export async function timeValidation(timePicker: String) {
+async function timeValidation(timePicker: String) {
   const validationResult = timeSchema.safeParse(timePicker);
 
   if (!validationResult.success) {
@@ -48,3 +48,5 @@ export async function timeValidation(timePicker: String) {
     error: null,
   };
 }
+
+export { dateTimeValidation, timeValidation };

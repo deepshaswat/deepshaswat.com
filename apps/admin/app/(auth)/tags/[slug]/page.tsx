@@ -14,7 +14,7 @@ import {
   SingleImageDropzone,
   Textarea,
 } from "@repo/ui";
-import { fetchTagDetails } from "../../../../actions/fetch-tags";
+import { fetchTagDetails } from "@repo/actions";
 import EditTagComponent from "../../_components/tags/edit-tag-component";
 
 export default async function ({ params }: { params: { slug: string } }) {

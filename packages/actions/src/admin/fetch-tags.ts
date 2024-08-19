@@ -1,4 +1,4 @@
-export async function fetchTagDetails(slug: string) {
+async function fetchTagDetails(slug: string) {
   // ToDo: Replace with actual data fetching logic
   const tags = [
     {
@@ -18,3 +18,5 @@ export async function fetchTagDetails(slug: string) {
   ];
   return tags.find((tag) => tag.slug === slug) || null;
 }
+
+export { fetchTagDetails };

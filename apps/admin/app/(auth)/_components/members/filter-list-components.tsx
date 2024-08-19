@@ -1,16 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Button,
-  Select,
-  Input,
-  Label,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui"; // Adjust the import path as needed
-import { Plus, X, ChevronDown } from "lucide-react";
+import { Button } from "@repo/ui"; // Adjust the import path as needed
+import { Plus, X } from "lucide-react";
 
 const filterCategories = [
   "Name",

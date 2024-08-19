@@ -22,9 +22,8 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Input,
 } from "@repo/ui"; // Adjust the import path as needed
-import { useState } from "react";
+
 import FilterListComponent from "./filter-list-components";
 
 const capitalizeWords = (input: string) => {

@@ -39,7 +39,6 @@ const NewPostComponent = () => {
 
   const handleFeaturePost = () => {
     setFeaturePost((prev) => !prev);
-    // setFeaturePost(!featurePost);
   };
 
   const handleEditorContentChange = (content: string) => {
@@ -205,6 +204,7 @@ const NewPostComponent = () => {
             <Editor
               onChange={handleEditorContentChange}
               initialContent={editorContent}
+              editable={true}
             />
           </div>
         </div>

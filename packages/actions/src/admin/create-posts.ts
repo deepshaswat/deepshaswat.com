@@ -1,6 +1,6 @@
 import prisma from "@repo/db/client";
 
-export async function createPost(data: FormData) {
+async function createPost(data: FormData) {
   const title = data.get("title")?.toString() || "";
   const content = data.get("content")?.toString() || "";
   const postUrl = data.get("postUrl")?.toString() || "";
@@ -27,3 +27,5 @@ export async function createPost(data: FormData) {
     },
   });
 }
+
+export { createPost };

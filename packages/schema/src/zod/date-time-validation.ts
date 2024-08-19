@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const ContactSchema = z.object({
+const ContactSchema = z.object({
   email: z.string().email({
     message: "Email is required",
   }),
@@ -12,7 +12,7 @@ export const ContactSchema = z.object({
   }),
 });
 
-export const timeSchema = z.string().refine(
+const timeSchema = z.string().refine(
   (value) => {
     const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
     return regex.test(value);
@@ -22,7 +22,7 @@ export const timeSchema = z.string().refine(
   },
 );
 
-export const combinedDateTimeSchema = z
+const combinedDateTimeSchema = z
   .object({
     date: z.date(),
     time: timeSchema,
@@ -43,3 +43,5 @@ export const combinedDateTimeSchema = z
       message: "Selected date and time cannot be in the past.",
     },
   );
+
+export { ContactSchema, timeSchema, combinedDateTimeSchema };
