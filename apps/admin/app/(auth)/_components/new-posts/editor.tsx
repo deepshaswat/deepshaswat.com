@@ -2,17 +2,60 @@
 
 import axios from "axios";
 import { useTheme } from "next-themes";
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { useCreateBlockNote } from "@blocknote/react";
+import {
+  BlockNoteEditor,
+  PartialBlock,
+  BlockNoteSchema,
+  defaultBlockSpecs,
+  insertOrUpdateBlock,
+  filterSuggestionItems,
+  getDefaultSlashMenuItems,
+} from "@blocknote/core";
+import {
+  DefaultReactSuggestionItem,
+  getDefaultReactSlashMenuItems,
+  SuggestionMenuController,
+  useCreateBlockNote,
+} from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
+import { Youtube } from "@repo/ui";
+import { FaYoutube } from "react-icons/fa";
 
 interface EditorProps {
   onChange: (value: string) => void;
   initialContent?: string;
+  editable?: boolean;
 }
 
-const Editor = ({ onChange, initialContent }: EditorProps) => {
+const schema = BlockNoteSchema.create({
+  blockSpecs: {
+    ...defaultBlockSpecs,
+    youtube: Youtube,
+  },
+});
+
+const insertYoutube = (editor: typeof schema.BlockNoteEditor) => ({
+  title: "Youtube",
+  onItemClick: () => {
+    insertOrUpdateBlock(editor, {
+      type: "youtube",
+    });
+  },
+  group: "Media",
+  icon: <FaYoutube />,
+  aliases: ["youtube", "yt"],
+  subtext: "Used to embed a youtube video.",
+});
+
+const getCustomSlashMenuItems = (
+  editor: typeof schema.BlockNoteEditor
+): DefaultReactSuggestionItem[] => [
+  ...getDefaultReactSlashMenuItems(editor),
+  insertYoutube(editor),
+];
+
+const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
   const handleUpload = async (file: File) => {
@@ -39,22 +82,37 @@ const Editor = ({ onChange, initialContent }: EditorProps) => {
     }
   };
 
-  const editor: BlockNoteEditor = useCreateBlockNote({
+  const editor = useCreateBlockNote({
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
     uploadFile: handleUpload,
+    schema,
   });
 
   return (
     <div>
       <BlockNoteView
         editor={editor}
+        editable={editable}
         theme={resolvedTheme === "dark" ? "dark" : "light"}
         onChange={() => {
           onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
         }}
-      ></BlockNoteView>
+        slashMenu={false} // Disable default slash menu to use custom menu controller
+      >
+        <SuggestionMenuController
+          triggerCharacter='/'
+          // Extending default items with the custom YouTube item
+          getItems={async (query) =>
+            filterSuggestionItems(
+              // [...getDefaultSlashMenuItems(editor), insertYoutube(editor)],
+              getCustomSlashMenuItems(editor),
+              query
+            )
+          }
+        />
+      </BlockNoteView>
     </div>
   );
 };
