@@ -19,7 +19,7 @@ const ColorButton = ({
   <button
     className={cn(
       "w-6 h-6 rounded-full",
-      isSelected ? "ring-2 ring-white" : ""
+      isSelected ? "ring-2 ring-white" : "",
     )}
     style={{ backgroundColor: color }}
     onClick={() => onClick(color)}
@@ -76,7 +76,7 @@ export const Callout = createReactBlockSpec(
             props: { ...block.props, ...updates },
           });
         },
-        [editor, block]
+        [editor, block],
       );
 
       const handleEmojiClick = useCallback(
@@ -85,41 +85,41 @@ export const Callout = createReactBlockSpec(
           setEmoji(newEmoji);
           updateCallout({ emoji: newEmoji });
         },
-        [updateCallout]
+        [updateCallout],
       );
 
       return (
         <div
-          className='flex items-start px-4 py-3 rounded-md w-full relative'
+          className="flex items-start px-4 py-3 rounded-md w-full relative"
           style={{ backgroundColor: bgColor, color: textColor }}
           onMouseEnter={() => setIsEditing(true)}
           onMouseLeave={() => setIsEditing(false)}
         >
-          {showEmoji && <span className='mr-2 text-2xl'>{emoji}</span>}
+          {showEmoji && <span className="mr-2 text-2xl">{emoji}</span>}
           {isEditing ? (
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}
               onBlur={() => updateCallout({ text })}
-              className='bg-transparent border-none w-full text-lg font-semibold focus:outline-none'
+              className="bg-transparent border-none w-full text-lg font-semibold focus:outline-none"
               style={{ color: textColor }}
               autoFocus
             />
           ) : (
-            <span className='w-full text-lg font-semibold'>{text}</span>
+            <span className="w-full text-lg font-semibold">{text}</span>
           )}
           {isEditing && (
-            <div className='absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2'>
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
               <Popover>
                 <PopoverTrigger asChild>
-                  <button className='focus:outline-none hover:text-white'>
+                  <button className="focus:outline-none hover:text-white">
                     <FaSmile />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className='w-80 p-0 bg-neutral-800 border-neutral-700'>
-                  <div className='flex flex-col space-y-4 p-4'>
-                    <div className='flex items-center justify-between'>
-                      <span className='text-sm font-medium text-neutral-300'>
+                <PopoverContent className="w-80 p-0 bg-neutral-800 border-neutral-700">
+                  <div className="flex flex-col space-y-4 p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-neutral-300">
                         Emoji
                       </span>
                       <Switch
@@ -130,14 +130,14 @@ export const Callout = createReactBlockSpec(
                         }}
                         className={cn(
                           "peer inline-flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-50",
-                          showEmoji ? "bg-green-500" : "bg-neutral-200"
+                          showEmoji ? "bg-green-500" : "bg-neutral-200",
                         )}
                       />
                     </div>
                     <EmojiPicker
                       onEmojiClick={handleEmojiClick}
                       theme={Theme.DARK}
-                      width='100%'
+                      width="100%"
                       height={400}
                     />
                   </div>
@@ -145,16 +145,16 @@ export const Callout = createReactBlockSpec(
               </Popover>
               <Popover>
                 <PopoverTrigger asChild>
-                  <button className='focus:outline-none hover:text-white'>
+                  <button className="focus:outline-none hover:text-white">
                     <FaPalette />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className='w-60 p-4 bg-neutral-800 border-neutral-700'>
-                  <div className='flex flex-col space-y-3'>
-                    <span className='text-neutral-300 text-sm font-medium'>
+                <PopoverContent className="w-60 p-4 bg-neutral-800 border-neutral-700">
+                  <div className="flex flex-col space-y-3">
+                    <span className="text-neutral-300 text-sm font-medium">
                       Background color
                     </span>
-                    <div className='grid grid-cols-5 gap-2'>
+                    <div className="grid grid-cols-5 gap-2">
                       {predefinedColors.map((color) => (
                         <ColorButton
                           key={color}
@@ -172,16 +172,16 @@ export const Callout = createReactBlockSpec(
               </Popover>
               <Popover>
                 <PopoverTrigger asChild>
-                  <button className='focus:outline-none hover:text-white'>
+                  <button className="focus:outline-none hover:text-white">
                     <FaFont />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className='w-60 p-4 bg-neutral-800 border-neutral-700'>
-                  <div className='flex flex-col space-y-3'>
-                    <span className='text-neutral-300 text-sm font-medium'>
+                <PopoverContent className="w-60 p-4 bg-neutral-800 border-neutral-700">
+                  <div className="flex flex-col space-y-3">
+                    <span className="text-neutral-300 text-sm font-medium">
                       Text color
                     </span>
-                    <div className='grid grid-cols-5 gap-2'>
+                    <div className="grid grid-cols-5 gap-2">
                       {predefinedColors.map((color) => (
                         <ColorButton
                           key={color}
@@ -202,5 +202,5 @@ export const Callout = createReactBlockSpec(
         </div>
       );
     },
-  }
+  },
 );

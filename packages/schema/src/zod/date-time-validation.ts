@@ -19,7 +19,7 @@ const timeSchema = z.string().refine(
   },
   {
     message: "Invalid time format. Please use 24-hour format (HH:MM).",
-  }
+  },
 );
 
 const combinedDateTimeSchema = z
@@ -41,7 +41,7 @@ const combinedDateTimeSchema = z
     },
     {
       message: "Selected date and time cannot be in the past.",
-    }
+    },
   );
 
 export { ContactSchema, timeSchema, combinedDateTimeSchema };

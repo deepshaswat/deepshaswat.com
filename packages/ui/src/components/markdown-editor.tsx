@@ -29,13 +29,13 @@ export const Markdown = createReactBlockSpec(
   {
     render: (props) => {
       const [markdownContent, setMarkdownContent] = useState(
-        props.block.props.content
+        props.block.props.content,
       );
       const [isEditing, setIsEditing] = useState(!props.block.props.content);
       const editorRef = useRef<HTMLDivElement>(null);
       const textareaRef = useRef<HTMLTextAreaElement>(null);
       const [activeListSymbol, setActiveListSymbol] = useState<string | null>(
-        null
+        null,
       );
       const [currentHeader, setCurrentHeader] = useState<string>("");
 
@@ -93,7 +93,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             start + symbol.length,
-            end + symbol.length
+            end + symbol.length,
           );
         }
         // Handle links
@@ -103,7 +103,7 @@ export const Markdown = createReactBlockSpec(
             setMarkdownContent(newText);
             textarea.setSelectionRange(
               start + selectedText.length + 3,
-              start + selectedText.length + 3
+              start + selectedText.length + 3,
             );
           } else {
             newText = before + "[]()" + after;
@@ -154,7 +154,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             lineStartIndex + symbol.length,
-            lineStartIndex + symbol.length
+            lineStartIndex + symbol.length,
           );
         }
         // Handle lists and blockquote
@@ -192,7 +192,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             lineStartIndex + symbol.length,
-            lineStartIndex + symbol.length
+            lineStartIndex + symbol.length,
           );
         }
 
@@ -216,7 +216,7 @@ export const Markdown = createReactBlockSpec(
           // Move the cursor after the inserted list symbol
           textarea.setSelectionRange(
             start + activeListSymbol.length + 1,
-            start + activeListSymbol.length + 1
+            start + activeListSymbol.length + 1,
           );
         }
       };
@@ -228,35 +228,35 @@ export const Markdown = createReactBlockSpec(
             "w-full bg-transparent",
             isEditing
               ? "border-0 outline-none ring-0 focus:ring-0 focus:outline-none focus:border-0 rounded-md !m-0 !p-0"
-              : ""
+              : "",
           )}
         >
           {isEditing ? (
-            <div className='border-2 border-green-500 rounded-md p-0 m-0'>
+            <div className="border-2 border-green-500 rounded-md p-0 m-0">
               <Textarea
                 ref={textareaRef}
                 value={markdownContent}
                 onChange={(e) => setMarkdownContent(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className='w-full bg-neutral-900 text-neutral-300 border-0 focus:ring-0 focus:outline-none focus:border-transparent focus-within:outline-none focus-within:ring-0 focus-within:border-transparent p-4 rounded-t-md whitespace-pre-wrap' // preserve newlines
+                className="w-full bg-neutral-900 text-neutral-300 border-0 focus:ring-0 focus:outline-none focus:border-transparent focus-within:outline-none focus-within:ring-0 focus-within:border-transparent p-4 rounded-t-md whitespace-pre-wrap" // preserve newlines
                 rows={10}
-                placeholder='Enter your markdown...'
+                placeholder="Enter your markdown..."
               />
-              <div className='flex items-center justify-between bg-neutral-800 p-2'>
-                <div className='flex space-x-2'>
+              <div className="flex items-center justify-between bg-neutral-800 p-2">
+                <div className="flex space-x-2">
                   <Button
                     onClick={() => insertMarkdownSymbol("**")}
-                    className='text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none'
-                    variant='ghost'
-                    size='icon'
+                    className="text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none"
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaBold />
                   </Button>
                   <Button
                     onClick={() => insertMarkdownSymbol("*")}
-                    className='text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none'
-                    variant='ghost'
-                    size='icon'
+                    className="text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none"
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaItalic />
                   </Button>
@@ -265,16 +265,16 @@ export const Markdown = createReactBlockSpec(
                     className={`text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none ${
                       currentHeader ? "bg-neutral-700" : ""
                     }`}
-                    variant='ghost'
-                    size='icon'
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaHeading />
                   </Button>
                   <Button
                     onClick={() => insertMarkdownSymbol("> ")}
                     className={`text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none`}
-                    variant='ghost'
-                    size='icon'
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaQuoteRight />
                   </Button>
@@ -283,8 +283,8 @@ export const Markdown = createReactBlockSpec(
                     className={`text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none ${
                       activeListSymbol === "- " ? "bg-neutral-700" : ""
                     }`}
-                    variant='ghost'
-                    size='icon'
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaListUl />
                   </Button>
@@ -293,24 +293,24 @@ export const Markdown = createReactBlockSpec(
                     className={`text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none ${
                       activeListSymbol === "1. " ? "bg-neutral-700" : ""
                     }`}
-                    variant='ghost'
-                    size='icon'
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaListOl />
                   </Button>
                   <Button
                     onClick={() => insertMarkdownSymbol("[]()")}
-                    className='text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none'
-                    variant='ghost'
-                    size='icon'
+                    className="text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none"
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaLink />
                   </Button>
                   <Button
                     onClick={() => insertMarkdownSymbol("![]()")}
-                    className='text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none'
-                    variant='ghost'
-                    size='icon'
+                    className="text-neutral-300 hover:bg-neutral-700 focus:ring-0 focus:outline-none"
+                    variant="ghost"
+                    size="icon"
                   >
                     <FaImage />
                   </Button>
@@ -319,38 +319,38 @@ export const Markdown = createReactBlockSpec(
             </div>
           ) : (
             <div
-              className='markdown-content text-neutral-300 cursor-pointer'
+              className="markdown-content text-neutral-300 cursor-pointer"
               onClick={() => setIsEditing(true)}
             >
               <ReactMarkdown
                 components={{
                   h1: ({ node, ...props }) => (
-                    <h1 className='text-2xl font-bold mb-2' {...props} />
+                    <h1 className="text-2xl font-bold mb-2" {...props} />
                   ),
                   h2: ({ node, ...props }) => (
-                    <h2 className='text-xl font-bold mb-2' {...props} />
+                    <h2 className="text-xl font-bold mb-2" {...props} />
                   ),
                   h3: ({ node, ...props }) => (
-                    <h3 className='text-lg font-bold mb-2' {...props} />
+                    <h3 className="text-lg font-bold mb-2" {...props} />
                   ),
-                  p: ({ node, ...props }) => <p className='mb-2' {...props} />,
+                  p: ({ node, ...props }) => <p className="mb-2" {...props} />,
                   ul: ({ node, ...props }) => (
-                    <ul className='list-disc list-inside mb-2' {...props} />
+                    <ul className="list-disc list-inside mb-2" {...props} />
                   ),
                   ol: ({ node, ...props }) => (
-                    <ol className='list-decimal list-inside mb-2' {...props} />
+                    <ol className="list-decimal list-inside mb-2" {...props} />
                   ),
                   blockquote: ({ node, ...props }) => (
                     <blockquote
-                      className='border-l-[2px] border-green-700 pl-4 p-1 italic text-neutral-200 mb-2'
+                      className="border-l-[2px] border-green-700 pl-4 p-1 italic text-neutral-200 mb-2"
                       {...props}
                     />
                   ),
                   a: ({ node, ...props }) => (
-                    <a className='text-blue-500 hover:underline' {...props} />
+                    <a className="text-blue-500 hover:underline" {...props} />
                   ),
                   img: ({ node, ...props }) => (
-                    <img className='max-w-full h-auto mb-2' {...props} />
+                    <img className="max-w-full h-auto mb-2" {...props} />
                   ),
                 }}
               >
@@ -361,5 +361,5 @@ export const Markdown = createReactBlockSpec(
         </div>
       );
     },
-  }
+  },
 );
