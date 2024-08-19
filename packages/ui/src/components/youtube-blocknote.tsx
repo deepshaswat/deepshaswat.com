@@ -34,41 +34,41 @@ export const Youtube = createReactBlockSpec(
           className={cn(
             !props.block.props.url
               ? "w-full rounded-md bg-neutral-800 px-4 py-3 text-neutral-300"
-              : "flex w-full justify-center"
+              : "flex w-full justify-center",
           )}
         >
           {props.block.props.url ? (
             <iframe
-              width='560'
-              height='315'
+              width="560"
+              height="315"
               src={props.block.props.url}
-              title='YouTube video player'
-              className='rounded-md shadow-md'
-              allow='accelerometer; clipboard-write; encrypted-media; gyroscope;'
+              title="YouTube video player"
+              className="rounded-md shadow-md"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope;"
               allowFullScreen
             />
           ) : (
             <AlertDialog>
-              <AlertDialogTrigger className='w-full'>
+              <AlertDialogTrigger className="w-full">
                 <Button
-                  variant='secondary'
-                  size='lg'
-                  className='w-full justify-start gap-x-2 bg-neutral-700 hover:bg-neutral-950 text-neutral-300'
+                  variant="secondary"
+                  size="lg"
+                  className="w-full justify-start gap-x-2 bg-neutral-700 hover:bg-neutral-950 text-neutral-300"
                 >
                   <FaYoutube />
                   Add Video
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent className='bg-neutral-900 text-neutral-300'>
+              <AlertDialogContent className="bg-neutral-900 text-neutral-300">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     Place YouTube video URL here:
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     <Input
-                      type='text'
-                      placeholder='URL'
-                      className='bg-neutral-800 border-neutral-700 text-neutral-300 placeholder-neutral-500 focus:border-green-500 focus:ring-0'
+                      type="text"
+                      placeholder="URL"
+                      className="bg-neutral-800 border-neutral-700 text-neutral-300 placeholder-neutral-500 focus:border-green-500 focus:ring-0"
                       onChange={(e) => {
                         url = e.currentTarget.value;
                       }}
@@ -76,7 +76,7 @@ export const Youtube = createReactBlockSpec(
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel className='text-neutral-950 hover:bg-neutral-300'>
+                  <AlertDialogCancel className="text-neutral-950 hover:bg-neutral-300">
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
@@ -88,7 +88,7 @@ export const Youtube = createReactBlockSpec(
                         },
                       })
                     }
-                    className='hover:bg-neutral-800 bg-neutral-950'
+                    className="hover:bg-neutral-800 bg-neutral-950"
                   >
                     Embed
                   </AlertDialogAction>
@@ -99,5 +99,5 @@ export const Youtube = createReactBlockSpec(
         </div>
       );
     },
-  }
+  },
 );

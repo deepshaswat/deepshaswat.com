@@ -49,7 +49,7 @@ const insertYoutube = (editor: typeof schema.BlockNoteEditor) => ({
 });
 
 const getCustomSlashMenuItems = (
-  editor: typeof schema.BlockNoteEditor
+  editor: typeof schema.BlockNoteEditor,
 ): DefaultReactSuggestionItem[] => [
   ...getDefaultReactSlashMenuItems(editor),
   insertYoutube(editor),
@@ -102,13 +102,13 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         slashMenu={false} // Disable default slash menu to use custom menu controller
       >
         <SuggestionMenuController
-          triggerCharacter='/'
+          triggerCharacter="/"
           // Extending default items with the custom YouTube item
           getItems={async (query) =>
             filterSuggestionItems(
               // [...getDefaultSlashMenuItems(editor), insertYoutube(editor)],
               getCustomSlashMenuItems(editor),
-              query
+              query,
             )
           }
         />
