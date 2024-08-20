@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import axios from "axios";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 import {
   Button,
@@ -18,31 +17,31 @@ import {
   Textarea,
 } from "@repo/ui";
 
+import { createTagAction } from "@repo/actions";
+import { useRouter } from "next/navigation";
+
 const reverseAndHyphenate = (item: string) => {
   return item.toLowerCase().split(" ").join("-");
 };
 
 const NewTag = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [tagName, setTagName] = useState("");
   const [inputSlug, setInputSlug] = useState("");
   const [tagImageUrl, setTagImageUrl] = useState("");
   const [tagDescription, setTagDescription] = useState("");
-  const isEmpty = tagName === "";
-
-  const handleTagNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagName(e.target.value);
-    if (inputSlug === "") {
-      setInputSlug(reverseAndHyphenate(e.target.value));
-    }
-  };
+  const isEmpty = inputSlug === "";
+  const [slugError, setSlugError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [saveButtonColor, setSaveButtonColor] = useState("secondary");
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const handleSlugNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSlug(reverseAndHyphenate(e.target.value));
   };
 
   const handleTagDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setTagDescription(e.target.value);
   };
@@ -84,101 +83,113 @@ const NewTag = () => {
     setIsSubmitting(false);
   };
 
-  return (
-    <div className="m-8  lg:ml-[156px] lg:mr-[156px]">
-      <div className="">
-        <div className="flex flex-row items-center justify-between mb-4 lg:mb-0 ">
-          <div>
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    href="/tags"
-                    className="text-neutral-200 hover:text-neutral-100"
-                  >
-                    Tags
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="font-normal text-neutral-500">
-                    New tag
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
+  const handleSave = async () => {
+    setIsSubmitting(true);
+    setSlugError("");
+    setDescriptionError("");
 
-          <div className=" gap-20 justify-start">
-            <Button variant="secondary" className="rounded-sm items-center">
-              Save
-            </Button>
-          </div>
+    startTransition(async () => {
+      const result = await createTagAction({
+        slug: inputSlug,
+        description: tagDescription,
+        imageUrl: tagImageUrl,
+      });
+
+      if (result.success) {
+        console.log("Tag created successfully:", result);
+        router.push(`/tags/${inputSlug}`);
+        setSaveButtonColor("green");
+      } else {
+        setSaveButtonColor("red");
+        // if (result.error?.slug) {
+        //   setSlugError(result.error.slug || "");
+        // }
+        // if (result.error?.description) {
+        //   setDescriptionError(result.error.description);
+        // }
+      }
+
+      setIsSubmitting(false);
+      setTimeout(() => setSaveButtonColor("secondary"), 3000);
+    });
+  };
+
+  return (
+    <div className='m-4 md:m-8 lg:mx-auto lg:max-w-5xl'>
+      <div className='mb-5'>
+        <div className='flex flex-row items-center justify-between mb-4'>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  href='/tags'
+                  className='text-neutral-200 hover:text-neutral-100'
+                >
+                  Tags
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage className='font-normal text-neutral-500'>
+                  New tag
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+
+          <Button
+            variant={"secondary"}
+            className='rounded-sm'
+            onClick={handleSave}
+            disabled={isSubmitting}
+          >
+            {/* {isSubmitting ? "Saving..." : "Save"} */}
+            Save
+          </Button>
         </div>
-        <Label htmlFor="" className="text-3xl font-semibold">
-          New tag
-        </Label>
+        <h1 className='text-3xl font-semibold'>New tag</h1>
       </div>
-      <div className=" bg-neutral-900 p-5 rounded-lg mt-5 ">
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-1/2">
-            <div className="mb-4 space-y-2">
-              <Label htmlFor="TagName" className="text-[13px] text-neutral-200">
-                Name
-              </Label>
-              <div className=" items-center bg-neutral-800 border-2 border-transparent focus-within:border-green-500 rounded-md">
-                <input
-                  id="TagName"
-                  type="text"
-                  value={tagName}
-                  onChange={handleTagNameChange}
-                  className=" h-8 pl-10  rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                />
-              </div>
-            </div>
-            <div className="mb-4 space-y-2">
-              <Label
-                htmlFor="SlugName"
-                className="text-[13px] text-neutral-200"
-              >
+
+      <div className='bg-neutral-900 rounded-lg p-4 lg:p-6 '>
+        <div className='flex flex-col lg:flex-row!important lg:overflow-hidden gap-6'>
+          <div className='space-y-4'>
+            <div className='space-y-2'>
+              <Label htmlFor='SlugName' className='text-sm text-neutral-200'>
                 Slug
               </Label>
-              <div className=" items-center bg-neutral-800 border-2 border-transparent focus-within:border-green-500 rounded-md">
-                <input
-                  id="SlugName"
-                  type="text"
-                  value={inputSlug}
-                  onChange={handleSlugNameChange}
-                  className=" h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                />
-              </div>
-
-              {!isEmpty && (
-                <span className="text-[12px] text-neutral-500">
-                  www.deepshaswat.com/tags/{inputSlug}/
-                </span>
-              )}
-              {isEmpty && (
-                <span className="text-[12px] text-neutral-500">
-                  www.deepshaswat.com/tags/
-                </span>
+              <input
+                id='SlugName'
+                type='text'
+                value={inputSlug}
+                onChange={handleSlugNameChange}
+                className={`w-full h-10 rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm border-2 ${
+                  slugError ? "border-red-500" : "border-transparent"
+                } focus:border-green-500 focus:outline-none`}
+              />
+              <span className='text-xs text-neutral-500'>
+                www.deepshaswat.com/tags/{inputSlug || ""}
+              </span>
+              {slugError && (
+                <div className='text-red-500 text-sm mt-1'>{slugError}</div>
               )}
             </div>
 
-            <div className="mt-4 space-y-2">
+            <div className='space-y-2'>
               <Label
-                htmlFor="TagDescription"
-                className="text-[13px] text-neutral-200"
+                htmlFor='TagDescription'
+                className='text-sm text-neutral-200'
               >
                 Description
               </Label>
               <Textarea
-                id="TagDescription"
+                id='TagDescription'
                 value={tagDescription}
                 onChange={handleTagDescriptionChange}
-                className=" mt-4 h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-800 border-2 border-transparent focus-within:border-green-500"
+                className={`w-full min-h-[100px] rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm border-2 ${
+                  descriptionError ? "border-red-500" : "border-transparent"
+                } focus:border-green-500 focus:outline-none`}
               />
-              <div className="text-neutral-500 text-[12px]">
+              <div className='text-xs text-neutral-500'>
                 Maximum: 500 characters. You've used{" "}
                 <span
                   className={
@@ -189,14 +200,23 @@ const NewTag = () => {
                 </span>
                 .
               </div>
+              {descriptionError && (
+                <div className='text-red-500 text-sm mt-1'>
+                  {descriptionError}
+                </div>
+              )}
             </div>
           </div>
-          <div className="w-full lg:w-1/2">
-            <Label htmlFor="TagImage" className="text-sm text-neutral-200">
+
+          <div className=''>
+            <Label
+              htmlFor='TagImage'
+              className='text-sm text-neutral-200 mb-2 block'
+            >
               Tag image
             </Label>
             <SingleImageDropzone
-              className="outline-none mt-2"
+              className='w-full h-[200px] outline-none'
               disabled={isSubmitting}
               value={tagImageUrl}
               onChange={handleTagImageChange}

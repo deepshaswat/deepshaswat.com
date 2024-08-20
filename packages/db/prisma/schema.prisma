@@ -24,74 +24,69 @@ model ContactForm {
 
 
 model Post {
-  id          String   @id @default(cuid()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid()) @map("_id") 
   title       String
   content     String
   featureImage String?
   postUrl     String   @unique
-  publishDate DateTime @default(now())
+  publishDate DateTime?
   tags        TagOnPost[]
   excerpt     String?
   authors     AuthorOnPost[]
   featured    Boolean  @default(false)
   metaData    MetaData?
-  facebookCard FacebookCard?
-  xCard       XCard?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Tag {
-  id    String @id @default(cuid()) @map("_id") @db.ObjectId
-  name  String
+  id    String @id @default(cuid()) @map("_id") 
+  slug  String @unique
+  description String?
+  imageUrl String?
   posts TagOnPost[]
 }
 
 model Author {
-  id    String @id @default(cuid()) @map("_id") @db.ObjectId
+  id    String @id @default(cuid()) @map("_id") 
   name  String
+  email String @unique
+  imageUrl String?
   posts AuthorOnPost[]
 }
 
+model Member {
+  id        String   @id @default(cuid()) @map("_id") 
+  name      String?
+  email     String  @unique
+  note      String?
+  subscribed Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model MetaData {
-  id         String  @id @default(cuid()) @map("_id") @db.ObjectId
-  postId     String  @unique @db.ObjectId
-  post       Post    @relation(fields: [postId], references: [id])
-  description String?
-  keywords    String[]
-  ogImageUrl  String?
+  id           String  @id @default(cuid()) @map("_id") 
+  postId       String  @unique 
+  post         Post    @relation(fields: [postId], references: [id])
+  title        String?
+  description  String?
+  imageUrl     String?
 }
 
-model FacebookCard {
-  id       String  @id @default(cuid()) @map("_id") @db.ObjectId
-  postId   String  @unique @db.ObjectId
-  post     Post    @relation(fields: [postId], references: [id])
-  title    String?
-  imageUrl String?
-  description String?
-}
-
-model XCard {
-  id       String  @id @default(cuid()) @map("_id") @db.ObjectId
-  postId   String  @unique @db.ObjectId
-  post     Post    @relation(fields: [postId], references: [id])
-  title    String?
-  imageUrl String?
-  description String?
-}
 
 model TagOnPost {
-  id     String @id @default(cuid()) @map("_id") @db.ObjectId
+  id     String @id @default(cuid()) @map("_id") 
   post   Post   @relation(fields: [postId], references: [id])
-  postId String @db.ObjectId
+  postId String 
   tag    Tag    @relation(fields: [tagId], references: [id])
-  tagId  String @db.ObjectId
+  tagId  String 
 }
 
 model AuthorOnPost {
-  id       String @id @default(cuid()) @map("_id") @db.ObjectId
+  id       String @id @default(cuid()) @map("_id") 
   post     Post   @relation(fields: [postId], references: [id])
-  postId   String @db.ObjectId
+  postId   String 
   author   Author @relation(fields: [authorId], references: [id])
-  authorId String @db.ObjectId
+  authorId String 
 }
