@@ -45,7 +45,7 @@ const FilterListComponent = () => {
 
   const updateFilter = (index: number, key: string, value: string) => {
     const updatedFilters = filters.map((filter, i) =>
-      i === index ? { ...filter, [key]: value } : filter,
+      i === index ? { ...filter, [key]: value } : filter
     );
     setFilters(updatedFilters);
   };

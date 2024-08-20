@@ -41,7 +41,7 @@ interface MetadataSidebarProps {
   setInputMetaDataTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputMetaDataDescription: string;
   setInputMetaDataDescription: (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => void;
   metadataImageUrl: string;
   isSubmitting: boolean;
@@ -202,8 +202,8 @@ export function MetadataSidebar({
                 inputMetaDataTitle.length === 0
                   ? ""
                   : inputMetaDataTitle.length <= 60
-                    ? "text-green-500"
-                    : "text-red-500"
+                  ? "text-green-500"
+                  : "text-red-500"
               }
             >
               {inputMetaDataTitle.length}
@@ -232,8 +232,8 @@ export function MetadataSidebar({
                 inputMetaDataDescription.length === 0
                   ? ""
                   : inputMetaDataDescription.length <= 140
-                    ? "text-green-500"
-                    : "text-red-500"
+                  ? "text-green-500"
+                  : "text-red-500"
               }
             >
               {inputMetaDataDescription.length}
