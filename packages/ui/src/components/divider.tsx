@@ -18,5 +18,5 @@ export const Divider = createReactBlockSpec(
         </div>
       );
     },
-  },
+  }
 );

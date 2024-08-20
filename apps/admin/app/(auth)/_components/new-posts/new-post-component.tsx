@@ -34,7 +34,7 @@ const NewPostComponent = () => {
   // const Editor = dynamic(() => import("./editor"), { ssr: false });
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),
-    [],
+    []
   );
 
   const handleFeaturePost = () => {
@@ -73,20 +73,20 @@ const NewPostComponent = () => {
   };
 
   const handleMetaDataTitleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setInputMetaDataTitle(e.target.value);
   };
 
   const handleMetaDataDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setInputMetaDataDescription(e.target.value);
   };
 
   // ToDo: Handle caption in image upload using text input when image is available
   const handleMetadataImageCaptionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setMetadataImageCaption(e.target.value);
   };
@@ -131,7 +131,7 @@ const NewPostComponent = () => {
   };
 
   const handleFeatureImageCaptionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFeatureImageCaption(e.target.value);
   };

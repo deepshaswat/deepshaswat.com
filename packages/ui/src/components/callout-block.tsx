@@ -19,7 +19,7 @@ const ColorButton = ({
   <button
     className={cn(
       "w-6 h-6 rounded-full",
-      isSelected ? "ring-2 ring-white" : "",
+      isSelected ? "ring-2 ring-white" : ""
     )}
     style={{ backgroundColor: color }}
     onClick={() => onClick(color)}
@@ -76,7 +76,7 @@ export const Callout = createReactBlockSpec(
             props: { ...block.props, ...updates },
           });
         },
-        [editor, block],
+        [editor, block]
       );
 
       const handleEmojiClick = useCallback(
@@ -85,7 +85,7 @@ export const Callout = createReactBlockSpec(
           setEmoji(newEmoji);
           updateCallout({ emoji: newEmoji });
         },
-        [updateCallout],
+        [updateCallout]
       );
 
       return (
@@ -130,7 +130,7 @@ export const Callout = createReactBlockSpec(
                         }}
                         className={cn(
                           "peer inline-flex h-5 w-10 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:cursor-not-allowed disabled:opacity-50",
-                          showEmoji ? "bg-green-500" : "bg-neutral-200",
+                          showEmoji ? "bg-green-500" : "bg-neutral-200"
                         )}
                       />
                     </div>
@@ -202,5 +202,5 @@ export const Callout = createReactBlockSpec(
         </div>
       );
     },
-  },
+  }
 );
