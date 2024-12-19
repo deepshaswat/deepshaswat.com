@@ -24,19 +24,27 @@ model ContactForm {
 
 
 model Post {
-  id          String   @id @default(cuid()) @map("_id") 
-  title       String
-  content     String
-  featureImage String?
-  postUrl     String   @unique
-  publishDate DateTime?
-  tags        TagOnPost[]
-  excerpt     String?
-  authors     AuthorOnPost[]
-  featured    Boolean  @default(false)
-  metaData    MetaData?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid()) @map("_id") 
+  title         String
+  content       String
+  featureImage  String?
+  postUrl       String   @unique
+  publishDate   DateTime?
+  tags          TagOnPost[]
+  excerpt       String?
+  authors       AuthorOnPost[]
+  featured      Boolean  @default(false)
+  metaData      MetaData?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  status        PostStatus @default(DRAFT)
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
 }
 
 model Tag {
@@ -72,6 +80,16 @@ model MetaData {
   title        String?
   description  String?
   imageUrl     String?
+  keywords     String?
+  authorName   String?
+  canonicalUrl String?
+  ogTitle      String?
+  ogDescription String?
+  ogImage      String?
+  twitterCard  String?
+  twitterTitle String?
+  twitterDescription String?
+  twitterImage String?
 }
 
 

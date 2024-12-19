@@ -5,7 +5,6 @@ import "@repo/ui/styles.css";
 import { Providers } from "./providers";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider, TooltipProvider } from "@repo/ui";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +24,7 @@ export default function RootLayout({
         baseTheme: dark,
       }}
     >
-      <html lang="en" suppressHydrationWarning>
+      <html lang='en' suppressHydrationWarning>
         <body className={inter.className}>
           <Providers>{children}</Providers>
         </body>

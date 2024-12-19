@@ -35,7 +35,7 @@ export const Youtube = createReactBlockSpec(
           className={cn(
             !props.block.props.url
               ? " rounded-md w-full justify-center bg-neutral-800 text-neutral-300"
-              : "flex  justify-center"
+              : "flex  justify-center",
           )}
         >
           {props.block.props.url ? (
@@ -100,5 +100,5 @@ export const Youtube = createReactBlockSpec(
         </div>
       );
     },
-  }
+  },
 );

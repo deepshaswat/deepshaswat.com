@@ -12,16 +12,6 @@ async function dateTimeValidation(
     };
   }
 
-  const validationResult = combinedDateTimeSchema.safeParse({
-    date: datePickerValue,
-    time: timePickerValue,
-  });
-
-  if (!validationResult.success) {
-    return {
-      error: "Selected date and time cannot be in the past.",
-    };
-  }
   const [hours, minutes] = timePickerValue.split(":").map(Number);
 
   // Update the Date object with the provided time
@@ -31,12 +21,23 @@ async function dateTimeValidation(
   combinedDateTime.setSeconds(0);
   combinedDateTime.setMilliseconds(0);
 
+  const validationResult = combinedDateTimeSchema.safeParse({
+    date: combinedDateTime,
+    time: timePickerValue,
+  });
+
+  if (!validationResult.success) {
+    return {
+      error: "Selected date and time cannot be in the past.",
+    };
+  }
+
   return {
     combinedDate: combinedDateTime,
   };
 }
 
-async function timeValidation(timePicker: String) {
+async function timeValidation(timePicker: string) {
   const validationResult = timeSchema.safeParse(timePicker);
 
   if (!validationResult.success) {

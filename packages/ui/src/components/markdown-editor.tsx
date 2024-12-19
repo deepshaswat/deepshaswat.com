@@ -29,13 +29,13 @@ export const Markdown = createReactBlockSpec(
   {
     render: (props) => {
       const [markdownContent, setMarkdownContent] = useState(
-        props.block.props.content
+        props.block.props.content,
       );
       const [isEditing, setIsEditing] = useState(!props.block.props.content);
       const editorRef = useRef<HTMLDivElement>(null);
       const textareaRef = useRef<HTMLTextAreaElement>(null);
       const [activeListSymbol, setActiveListSymbol] = useState<string | null>(
-        null
+        null,
       );
       const [currentHeader, setCurrentHeader] = useState<string>("");
 
@@ -93,7 +93,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             start + symbol.length,
-            end + symbol.length
+            end + symbol.length,
           );
         }
         // Handle links
@@ -103,7 +103,7 @@ export const Markdown = createReactBlockSpec(
             setMarkdownContent(newText);
             textarea.setSelectionRange(
               start + selectedText.length + 3,
-              start + selectedText.length + 3
+              start + selectedText.length + 3,
             );
           } else {
             newText = before + "[]()" + after;
@@ -154,7 +154,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             lineStartIndex + symbol.length,
-            lineStartIndex + symbol.length
+            lineStartIndex + symbol.length,
           );
         }
         // Handle lists and blockquote
@@ -192,7 +192,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             lineStartIndex + symbol.length,
-            lineStartIndex + symbol.length
+            lineStartIndex + symbol.length,
           );
         }
 
@@ -216,7 +216,7 @@ export const Markdown = createReactBlockSpec(
           // Move the cursor after the inserted list symbol
           textarea.setSelectionRange(
             start + activeListSymbol.length + 1,
-            start + activeListSymbol.length + 1
+            start + activeListSymbol.length + 1,
           );
         }
       };
@@ -228,7 +228,7 @@ export const Markdown = createReactBlockSpec(
             "w-full bg-transparent",
             isEditing
               ? "border-0 outline-none ring-0 focus:ring-0 focus:outline-none focus:border-0 rounded-md !m-0 !p-0"
-              : ""
+              : "",
           )}
         >
           {isEditing ? (
@@ -361,5 +361,5 @@ export const Markdown = createReactBlockSpec(
         </div>
       );
     },
-  }
+  },
 );

@@ -41,8 +41,8 @@ const NewMember = () => {
   const bgColorClass = memberName
     ? "bg-pink-500"
     : memberEmail
-    ? "bg-green-500"
-    : "bg-neutral-500";
+      ? "bg-green-500"
+      : "bg-neutral-500";
 
   const handleMemberNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberName(e.target.value);
@@ -53,7 +53,7 @@ const NewMember = () => {
   };
 
   const handleMemberDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMemberDescription(e.target.value);
   };
@@ -102,8 +102,8 @@ const NewMember = () => {
               {memberName
                 ? getInitials(capitalizeWords(memberName))
                 : memberEmail
-                ? memberEmail.charAt(0).toUpperCase()
-                : "N"}
+                  ? memberEmail.charAt(0).toUpperCase()
+                  : "N"}
             </div>
             <span className="text-neutral-400">
               {isEmpty ? "New member" : memberName}
