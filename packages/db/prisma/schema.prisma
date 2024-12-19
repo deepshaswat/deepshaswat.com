@@ -14,17 +14,20 @@ datasource db {
 }
 
 model ContactForm {
-  id        String   @id @default(cuid()) @map("_id")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String
   message   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([name])
+  @@index([createdAt])
 }
 
-
 model Post {
-  id            String   @id @default(cuid()) @map("_id") 
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   content       String
   featureImage  String?
@@ -32,12 +35,20 @@ model Post {
   publishDate   DateTime?
   tags          TagOnPost[]
   excerpt       String?
-  authors       AuthorOnPost[]
+  authorId      String   @db.ObjectId
+  author        Author   @relation(fields: [authorId], references: [id])
   featured      Boolean  @default(false)
   metaData      MetaData?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   status        PostStatus @default(DRAFT)
+
+  @@index([featured])
+  @@index([publishDate])
+  @@index([status])
+  @@index([title])
+  @@index([createdAt])
+  @@index([updatedAt])
 }
 
 enum PostStatus {
@@ -45,37 +56,12 @@ enum PostStatus {
   PUBLISHED
   SCHEDULED
   ARCHIVED
-}
-
-model Tag {
-  id    String @id @default(cuid()) @map("_id") 
-  slug  String @unique
-  description String?
-  imageUrl String?
-  posts TagOnPost[]
-}
-
-model Author {
-  id    String @id @default(cuid()) @map("_id") 
-  name  String
-  email String @unique
-  imageUrl String?
-  posts AuthorOnPost[]
-}
-
-model Member {
-  id        String   @id @default(cuid()) @map("_id") 
-  name      String?
-  email     String  @unique
-  note      String?
-  subscribed Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  DELETED
 }
 
 model MetaData {
-  id           String  @id @default(cuid()) @map("_id") 
-  postId       String  @unique 
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  postId       String  @unique @db.ObjectId
   post         Post    @relation(fields: [postId], references: [id])
   title        String?
   description  String?
@@ -92,19 +78,55 @@ model MetaData {
   twitterImage String?
 }
 
+model Tag {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  slug  String @unique
+  description String?
+  imageUrl String?
+  posts TagOnPost[]
+}
 
 model TagOnPost {
-  id     String @id @default(cuid()) @map("_id") 
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
   post   Post   @relation(fields: [postId], references: [id])
-  postId String 
+  postId String @db.ObjectId
   tag    Tag    @relation(fields: [tagId], references: [id])
-  tagId  String 
+  tagId  String @db.ObjectId
+
+  @@index([postId])
+  @@index([tagId])
 }
 
-model AuthorOnPost {
-  id       String @id @default(cuid()) @map("_id") 
-  post     Post   @relation(fields: [postId], references: [id])
-  postId   String 
-  author   Author @relation(fields: [authorId], references: [id])
-  authorId String 
+model Author {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId String @unique
+  name    String
+  email   String @unique
+  imageUrl String?
+  posts   Post[]
+  role    Role
+
+  @@index([name])
+  @@index([role])
 }
+
+enum Role {
+  ADMIN
+  OWNER
+  WRITER
+}
+
+model Member {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  email     String  @unique
+  note      String?
+  subscribed Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+

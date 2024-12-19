@@ -1,32 +1,58 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import { useResetRecoilState, useRecoilState } from "recoil";
 import { useMemo } from "react";
-
 import { NavBarPost } from "./navbar-post";
 import { MetadataSidebar } from "./metadata-sidebar";
-
 import { UploadComponent } from "@repo/ui";
+import {
+  selectDate,
+  postMetadataState,
+  postState,
+  selectedTimeIst,
+} from "@repo/store";
 
 const NewPostComponent = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [mainInputValue, setMainInputValue] = useState("");
+  const [post, setPost] = useRecoilState(postState);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [featureImageCaption, setFeatureImageCaption] = useState("");
-  const [featureImageURL, setFeatureImageURL] = useState("");
   const [isFeatureFileUploadOpen, setIsFeatureFileUploadOpen] = useState(false);
-  const [editorContent, setEditorContent] = useState("");
+  const [abortController, setAbortController] =
+    useState<AbortController | null>(null);
 
-  // const Editor = dynamic(() => import("./editor"), { ssr: false });
+  // reset state of metadata sidebar using recoil
+  const resetMetadata = useResetRecoilState(postMetadataState);
+  const resetPost = useResetRecoilState(postState);
+  const resetSelectedTimeIst = useResetRecoilState(selectedTimeIst);
+  const resetSelectDate = useResetRecoilState(selectDate);
+
+  // reset state of all fields and uploaders of this page
+  const resetState = () => {
+    setIsSubmitting(false);
+    setIsFeatureFileUploadOpen(false);
+    setAbortController(null);
+
+    // reset metadata sidebar state
+    resetMetadata();
+    resetPost();
+    resetSelectedTimeIst();
+    resetSelectDate();
+  };
+
+  useEffect(() => {
+    resetState();
+  }, []);
+
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),
-    [],
+    []
   );
 
   const handleEditorContentChange = (content: string) => {
-    setEditorContent(content);
+    setPost((prev) => ({ ...prev, content }));
   };
 
   const toggleSidebar = () => {
@@ -38,43 +64,26 @@ const NewPostComponent = () => {
   };
 
   const handleMainInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMainInputValue(e.target.value);
-  };
-
-  // ToDo: Handle caption in image upload using text input when image is available
-
-  const handleFeatureImageCaptionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setFeatureImageCaption(e.target.value);
+    setPost((prev) => ({ ...prev, title: e.target.value }));
   };
 
   const handleFeatureImageChange = async (file?: File) => {
     if (file) {
       setIsSubmitting(true);
       try {
-        // Request presigned URL from the API route
         const { data } = await axios.post("/api/upload", {
           fileType: file.type,
         });
-
         const { uploadURL, s3URL } = data;
-
-        // Upload file to S3 using the presigned URL
         await axios.put(uploadURL, file, {
-          headers: {
-            "Content-Type": file.type,
-          },
+          headers: { "Content-Type": file.type },
         });
-
-        // Set the S3 URL as the image URL
-        setFeatureImageURL(s3URL);
-
-        console.log("File uploaded successfully:", s3URL);
+        setPost((prev) => ({ ...prev, featureImage: s3URL }));
       } catch (error) {
         console.error("Error uploading file:", error);
       } finally {
         setIsSubmitting(false);
+        setAbortController(null);
         setIsFeatureFileUploadOpen(false);
       }
     } else {
@@ -82,41 +91,50 @@ const NewPostComponent = () => {
     }
   };
 
+  const handleCancelUpload = () => {
+    if (abortController) {
+      abortController.abort();
+      setIsSubmitting(false);
+      setAbortController(null);
+    }
+  };
+
   const onCloseFeatureImage = () => {
-    setFeatureImageURL("");
+    setPost((prev) => ({ ...prev, featureImage: "" }));
     setIsSubmitting(false);
     setIsFeatureFileUploadOpen(false);
   };
 
   return (
-    <div className="flex">
+    <div className='flex'>
       <div className={`flex-1 ${isOpen ? " mr-[400px]" : ""}`}>
         <NavBarPost isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div className="lg:mx-[180px]">
-          <div className="ml-10 max-w-screen-md lg:max-w-screen-lg">
+        <div className='lg:mx-[180px]'>
+          <div className='ml-10 max-w-screen-md lg:max-w-screen-lg'>
             <UploadComponent
-              imageUrl={featureImageURL}
+              imageUrl={post.featureImage}
               isSubmitting={isSubmitting}
               onChange={handleFeatureImageChange}
               isFileUploadOpen={isFeatureFileUploadOpen}
               toggleFileUpload={toggleFeatureImageUpload}
-              text="Add feature image"
-              className="text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10"
-              buttonVariant="link"
+              text='Add feature image'
+              className='text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10'
+              buttonVariant='link'
+              onCancel={handleCancelUpload}
             />
           </div>
           <div>
             <input
-              value={mainInputValue}
+              value={post.title}
               onChange={handleMainInputChange}
-              placeholder="Post title"
-              className="w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700"
+              placeholder='Post title'
+              className='w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700'
             />
           </div>
-          <div className="mt-8">
+          <div className='mt-8'>
             <Editor
               onChange={handleEditorContentChange}
-              initialContent={editorContent}
+              initialContent={post.content}
               editable={true}
             />
           </div>

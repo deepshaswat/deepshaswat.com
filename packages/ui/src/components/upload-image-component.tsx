@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Plus } from "lucide-react";
+import { Plus, X } from "lucide-react";
 
 import { cn } from "@repo/ui/utils";
 
@@ -21,6 +21,7 @@ interface UploadComponentProps {
   toggleFileUpload: (value: boolean) => void;
   isSubmitting: boolean;
   onChange: (file?: File) => void;
+
   buttonVariant?:
     | "metadata"
     | "default"
@@ -35,6 +36,7 @@ interface UploadComponentProps {
     | undefined;
   text: string;
   className?: string;
+  onCancel: () => void;
 }
 
 export const UploadComponent: React.FC<UploadComponentProps> = ({
@@ -46,6 +48,7 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
   buttonVariant = "metadata",
   text,
   className,
+  onCancel,
 }: UploadComponentProps) => {
   return (
     <>
@@ -62,22 +65,28 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
           className={cn("", className)}
           onClick={() => toggleFileUpload(true)}
         >
-          <Plus className="mr-2 size-4" />
+          <Plus className='mr-2 size-4' />
           {text}
         </Button>
       )}
 
       <Dialog open={isFileUploadOpen} onOpenChange={toggleFileUpload}>
-        <DialogContent className="dark:bg-neutral-700">
+        <DialogContent className='dark:bg-neutral-700'>
           <DialogHeader>
             <DialogTitle>Select file to upload</DialogTitle>
           </DialogHeader>
           <SingleImageDropzone
-            className="w-full outline-none"
+            className='w-full outline-none'
             disabled={isSubmitting}
             value={imageUrl}
             onChange={onChange}
           />
+          {isSubmitting && (
+            <Button variant='destructive' onClick={onCancel} className='mt-2'>
+              <X className='mr-2 size-4' />
+              Cancel Upload
+            </Button>
+          )}
         </DialogContent>
       </Dialog>
     </>

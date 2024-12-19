@@ -34,18 +34,17 @@ export const postState = atom({
     publishDate: null as Date | null,
     excerpt: "",
     featured: false,
-    seoTitle: "",
-    seoDescription: "",
-    socialImage: "",
+    tags: [] as string[],
+    authors: "",
   },
-});
-
-export const selectedTagsState = atom<string[]>({
-  key: "selectedTagsState",
-  default: [],
 });
 
 export const selectedTimeIst = atom<string>({
   key: "selectedTimeIst",
   default: "23:00",
+});
+
+export const postIdState = atom<string | null>({
+  key: "postIdState",
+  default: null,
 });
