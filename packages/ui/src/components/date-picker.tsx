@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { format } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { useRecoilState } from "recoil";
@@ -17,8 +17,19 @@ import {
   PopoverTrigger,
 } from "@repo/ui";
 
-export function DatePicker() {
-  const [date, setDate] = useRecoilState(selectDate);
+export function DatePicker({
+  date,
+  setDate,
+}: {
+  date: Date;
+  setDate: (date: Date) => void;
+}) {
+  // const [date, setDate] = useRecoilState(selectDate);
+
+  // Disable dates before today
+  const disabledDays = {
+    before: startOfDay(new Date()),
+  };
 
   return (
     <Popover>
@@ -27,7 +38,7 @@ export function DatePicker() {
           variant={"date"}
           className={cn(
             "w-[280px] justify-start text-left font-normal bg-neutral-700",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
           )}
         >
           {date ? format(date, "PPP") : <span>Pick a date</span>}
@@ -38,7 +49,12 @@ export function DatePicker() {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={(day) => setDate(day as Date)}
+          onSelect={(day) => {
+            if (day && !isBefore(day, startOfDay(new Date()))) {
+              setDate(day);
+            }
+          }}
+          disabled={disabledDays}
           initialFocus
         />
       </PopoverContent>

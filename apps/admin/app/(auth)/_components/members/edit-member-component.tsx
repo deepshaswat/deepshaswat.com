@@ -39,20 +39,20 @@ export default function EditMemberComponent({
   member,
 }: EditMemberComponentProps) {
   const [memberDescription, setMemberDescription] = useState(
-    member.description || ""
+    member.description || "",
   );
   const [memberName, setMemberName] = useState(member.name);
   const [memberEmail, setMemberEmail] = useState(member.email);
   const [newsletterSubscription, setNewsletterSubscription] = useState(
-    member.subscribed
+    member.subscribed,
   );
   const isEmpty = memberName === "";
 
   const bgColorClass = memberName
     ? "bg-pink-500"
     : memberEmail
-    ? "bg-green-500"
-    : "bg-neutral-500";
+      ? "bg-green-500"
+      : "bg-neutral-500";
 
   const handleMemberNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberName(e.target.value);
@@ -66,7 +66,7 @@ export default function EditMemberComponent({
   };
 
   const handleMemberDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMemberDescription(e.target.value);
   };
@@ -82,8 +82,8 @@ export default function EditMemberComponent({
             {memberName
               ? getInitials(capitalizeWords(memberName))
               : memberEmail
-              ? memberEmail.charAt(0).toUpperCase()
-              : "N"}
+                ? memberEmail.charAt(0).toUpperCase()
+                : "N"}
           </div>
           <span className="text-neutral-400">
             {isEmpty ? (

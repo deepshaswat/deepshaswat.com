@@ -28,9 +28,19 @@ import {
 } from "@repo/ui";
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-
+import { useNavigationGuard } from "@repo/ui";
 const Navigation = () => {
   const { user } = useUser();
+  const userButtonRef = React.useRef<HTMLDivElement>(null);
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const buttonElement =
+      userButtonRef.current?.querySelector<HTMLButtonElement>("button");
+    if (buttonElement) {
+      buttonElement.click();
+    }
+  };
 
   return (
     <>
@@ -351,9 +361,10 @@ const Navigation = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/new-post"
+                  href=""
                   passHref
-                  className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground active:bg-gray-200 lg:pr-3"
+                  className="flex flex-row items-center rounded-lg hover:bg-accent hover:text-accent-foreground lg:pr-3"
+                  onClick={handleClick}
                 >
                   <Button
                     variant="ghost"
@@ -362,9 +373,15 @@ const Navigation = () => {
                     aria-label="Account"
                   >
                     <SignedIn>
-                      <UserButton />
+                      <div
+                        ref={userButtonRef}
+                        className="flex items-center overflow-hidden"
+                      >
+                        <UserButton />
+                      </div>
                     </SignedIn>
                   </Button>
+                  {/* <UserButton /> */}
                   <span className="max-w-0 lg:max-w-full overflow-hidden ml-4">
                     {user?.firstName || "Account"}
                   </span>

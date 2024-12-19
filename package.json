@@ -13,7 +13,10 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish",
-    "prisma-generate": " npx dotenv -e .env -- npx prisma generate --schema=packages/db/prisma/schema.prisma"
+    "prisma-generate": " npx dotenv -e .env -- npx prisma generate --schema=packages/db/prisma/schema.prisma",
+    "npm-clean": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +",
+    "dist-clean": "find . -name \"dist\" -type d -prune -exec rm -rf '{}' +",
+    "full-clean": "yarn npm-clean && yarn dist-clean"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
