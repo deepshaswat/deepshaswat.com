@@ -38,16 +38,16 @@ export function DatePicker({
           variant={"date"}
           className={cn(
             "w-[280px] justify-start text-left font-normal bg-neutral-700",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
           )}
         >
           {date ? format(date, "PPP") : <span>Pick a date</span>}
-          <CalendarIcon className='ml-auto h-4 w-4' />
+          <CalendarIcon className="ml-auto h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-auto p-0 bg-neutral-800 text-neutral-200'>
+      <PopoverContent className="w-auto p-0 bg-neutral-800 text-neutral-200">
         <Calendar
-          mode='single'
+          mode="single"
           selected={date}
           onSelect={(day) => {
             if (day && !isBefore(day, startOfDay(new Date()))) {
