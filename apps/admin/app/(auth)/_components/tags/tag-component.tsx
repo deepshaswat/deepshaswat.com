@@ -4,7 +4,6 @@ import TagComponentRendering from "../../_components/tags/tag-component-renderin
 const TagComponent = async () => {
   // const router = useRouter();
 
-  // ToDo: Add backend logic to fetch all tags
   const tags = await fetchAllTagsWithPostCount();
 
   return <TagComponentRendering tags={tags} />;

@@ -1,9 +1,5 @@
 import { atom } from "recoil";
-
-export const selectDate = atom<Date>({
-  key: "selectDate",
-  default: new Date(),
-});
+import { PostListType } from "@repo/actions";
 
 export const postMetadataState = atom({
   key: "postMetadataState",
@@ -39,6 +35,11 @@ export const postState = atom({
   },
 });
 
+export const selectDate = atom<Date>({
+  key: "selectDate",
+  default: new Date(),
+});
+
 export const selectedTimeIst = atom<string>({
   key: "selectedTimeIst",
   default: "23:00",
@@ -46,5 +47,15 @@ export const selectedTimeIst = atom<string>({
 
 export const postIdState = atom<string | null>({
   key: "postIdState",
+  default: null,
+});
+
+export const postDataState = atom<PostListType | null>({
+  key: "postDataState",
+  default: null,
+});
+
+export const errorDuplicateUrlState = atom<string | null>({
+  key: "errorDuplicateUrlState",
   default: null,
 });

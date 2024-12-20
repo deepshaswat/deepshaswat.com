@@ -1,7 +1,5 @@
 "use server";
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { z } from "zod";
 import prisma from "@repo/db/client";
 import { SignedIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -9,6 +7,12 @@ import { redirect } from "next/navigation";
 // Import your validation schema
 import { tagSchema, updateTagSchema } from "@repo/schema";
 
+async function authenticateUser() {
+  const sign = await SignedIn;
+  if (!sign) {
+    redirect("/sign-in");
+  }
+}
 interface TagWithPostCount {
   id: string;
   slug: string;
@@ -17,10 +21,25 @@ interface TagWithPostCount {
   postCount: string;
 }
 
-async function authenticateUser() {
-  const sign = await SignedIn;
-  if (!sign) {
-    redirect("/sign-in");
+async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
+  await authenticateUser();
+  try {
+    const tags = await prisma.tagOnPost.findMany({
+      where: {
+        postId,
+      },
+      select: {
+        tag: {
+          select: {
+            slug: true,
+          },
+        },
+      },
+    });
+    return tags.map((tag) => tag.tag.slug);
+  } catch (error) {
+    console.error("Failed to fetch tags:", error);
+    throw new Error("Failed to fetch tags");
   }
 }
 
@@ -190,4 +209,5 @@ export {
   fetchAllTagsWithPostCount,
   updateTagAction,
   deleteTagAction,
+  fetchTagsFromTagOnPost,
 };

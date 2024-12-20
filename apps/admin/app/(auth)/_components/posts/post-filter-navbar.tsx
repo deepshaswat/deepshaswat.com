@@ -7,7 +7,6 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@repo/ui";
-import { all } from "axios";
 
 const capitalizeFirstLetter = (item: string) => {
   return item
@@ -25,6 +24,8 @@ interface PostFilterNavbarProps {
   onSelectPostOption: (item: string) => void;
   tagOption: string;
   onSelectTagOption: (item: string) => void;
+  tags: string[];
+  postFilter: string[];
 }
 
 const PostFilterNavbar = ({
@@ -32,41 +33,24 @@ const PostFilterNavbar = ({
   onSelectPostOption,
   tagOption,
   onSelectTagOption,
+  tags,
+  postFilter,
 }: PostFilterNavbarProps) => {
-  //ToDo: Add backend logic to fetch all posts
-  const allPosts = [
-    "all-posts",
-    "drafts-posts",
-    "published-posts",
-    "scheduled-posts",
-    "featured-posts",
-    "newsletters",
-  ];
-
-  const allTags = [
-    "all-tags",
-    "articles",
-    "book-notes",
-    "scheduled-posts",
-    "featured-posts",
-    "newsletters",
-  ];
-
   return (
     <>
       <div className="">
         <SelectComponent
-          items={allPosts}
+          items={postFilter}
           placeholder="all-posts"
           onSelect={onSelectPostOption}
           selectedItem={postOption}
         />
       </div>
-      <div className="mr-2">All access</div>
-      <div className="mr-2">All authors</div>
-      <div className="mr-2">
+      <div className="mr-1 text-[11px] md:text-[12px]">All access</div>
+      <div className="mr-1 text-[11px] md:text-[12px] ">All authors</div>
+      <div className="mr-1">
         <SelectComponent
-          items={allTags}
+          items={tags}
           placeholder="all-tags"
           onSelect={onSelectTagOption}
           selectedItem={tagOption}
@@ -105,7 +89,7 @@ const SelectComponent = ({
             : "text-neutral-200"
         }`}
       >
-        <SelectTrigger className="ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none">
+        <SelectTrigger className="ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none  text-[11px] md:text-[12px]">
           {capitalizeFirstLetter(selectedItem) ||
             capitalizeFirstLetter(placeholder)}
         </SelectTrigger>{" "}
@@ -115,7 +99,7 @@ const SelectComponent = ({
           {items.map((item) => (
             <SelectItem
               key={item}
-              className="text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-sm font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 "
+              className="text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-[11px] md:text-[12px] font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 "
               value={item}
               onClick={() => handleSelect(item)}
             >

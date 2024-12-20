@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 
@@ -11,11 +11,26 @@ import {
   Save,
 } from "lucide-react";
 
-import { Button, Input, Label } from "@repo/ui";
-import { postState, postMetadataState, postIdState } from "@repo/store";
+import {
+  Button,
+  Input,
+  Label,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui";
+import {
+  postState,
+  postMetadataState,
+  postIdState,
+  postDataState,
+  errorDuplicateUrlState,
+} from "@repo/store";
 import { createAuthor, createPost, updatePost } from "@repo/actions";
 import { PostType } from "@repo/actions";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { useRouter } from "next/navigation";
 
 interface NavBarPostProps {
   isOpen: boolean;
@@ -34,13 +49,30 @@ interface NavBarPostProps {
 export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
   const metadata = useRecoilValue(postMetadataState);
   const post = useRecoilValue(postState);
-  const isDisabled = post.postUrl === "";
   const [postId, setPostId] = useRecoilState(postIdState);
+  const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
+    errorDuplicateUrlState,
+  );
+
+  const isDisabled = post.title === "" || post.postUrl === "";
+  const postFull = useRecoilValue(postDataState);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (postFull) {
+      setPostId(postFull?.id ?? null);
+    }
+  }, [postFull, setPostId]);
+
+  useEffect(() => {
+    if (errorDuplicateUrl) {
+      console.log("Error state updated:", errorDuplicateUrl);
+    }
+  }, [errorDuplicateUrl]);
 
   const handleSave = async () => {
-    console.log("Save");
-    //check if post or metadata is not empty
     if (isDisabled) return;
+    setErrorDuplicateUrl(null);
 
     const user = await createAuthor();
 
@@ -55,13 +87,19 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
 
     if (postId) {
       const result = await updatePost(data, postId);
-      console.log(result);
+      if (result && "error" in result) {
+        setErrorDuplicateUrl(result.error);
+      } else {
+        router.push(`/editor/${postId}`);
+      }
     } else {
       const result = await createPost(data);
-      if (result && "id" in result) {
+      if (result && "error" in result) {
+        setErrorDuplicateUrl(result.error);
+      } else if (result && "id" in result) {
         setPostId(result.id);
+        router.push(`/editor/${result.id}`);
       }
-      console.log(result);
     }
   };
 
@@ -78,7 +116,7 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
             Posts
           </Link>
           <Label className="flex flex-row items-center text-sm font-light text-neutral-400 rounded-sm hover:bg-neutral-700  p-2">
-            Drafts
+            {postId ? "Drafts" : "New Post"}
           </Label>
         </div>
 
@@ -99,17 +137,28 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
             >
               Publish
             </Link>
-            <Button
-              variant="ghost"
-              // size='icon'
-              aria-label="SideBarMenu"
-              onClick={handleSave}
-              className="flex z-50 items-center "
-              disabled={isDisabled}
-            >
-              <Save className="size-4 mr-1" />
-              Save
-            </Button>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="ghost"
+                    // size='icon'
+                    aria-label="SideBarMenu"
+                    onClick={handleSave}
+                    className="flex z-50 items-center "
+                    disabled={isDisabled}
+                  >
+                    <Save className="size-4 mr-1" />
+                    Save
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {isDisabled && <p>Title and URL are required</p>}
+                  {!isDisabled && <p>Click to save</p>}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           <Button
             variant="ghost"

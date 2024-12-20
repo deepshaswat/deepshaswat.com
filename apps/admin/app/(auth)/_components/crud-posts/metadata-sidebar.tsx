@@ -11,6 +11,7 @@ import {
   postMetadataState,
   postState,
   selectedTimeIst,
+  errorDuplicateUrlState,
 } from "@repo/store";
 
 import {
@@ -38,6 +39,9 @@ export function MetadataSidebar() {
   const [post, setPost] = useRecoilState(postState);
   const [metadata, setMetadata] = useRecoilState(postMetadataState);
   const [error, setError] = useState<string | null>("");
+  const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
+    errorDuplicateUrlState,
+  );
   const [inputDate, setInputDate] = useRecoilState(selectDate);
   const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -227,7 +231,7 @@ export function MetadataSidebar() {
   const reverseAndHyphenate = (item: string) => {
     const url = item.toLowerCase().split(" ").join("-");
     const trimmedItem = url.trim();
-    return url;
+    return trimmedItem;
   };
 
   return (
@@ -256,9 +260,14 @@ export function MetadataSidebar() {
               www.deepshaswat.com/
             </span>
           )}
-          {post.postUrl && (
+          {!errorDuplicateUrl && post.postUrl && (
             <span className="text-[12px] text-neutral-500">
               www.deepshaswat.com/{post.postUrl}/
+            </span>
+          )}
+          {errorDuplicateUrl && (
+            <span className="text-red-500 text-sm mt-1">
+              {errorDuplicateUrl}
             </span>
           )}
         </div>
@@ -651,13 +660,11 @@ export const Tags: React.FC<TagsProps> = ({
     const fetchTags = async () => {
       try {
         const tagOptions = await fetchAllTagsWithPostCount();
-        console.log("Fetched tags:", tagOptions);
-
         const formattedTags = tagOptions.map((tagOption) => ({
           value: tagOption.id,
           label: capitalizeFirstLetter(tagOption.slug),
         }));
-        console.log("Formatted tags:", formattedTags);
+        // console.log("Formatted tags:", formattedTags);
         setTags(formattedTags);
       } catch (error) {
         console.error("Error fetching tags:", error);
@@ -668,9 +675,6 @@ export const Tags: React.FC<TagsProps> = ({
   }, []);
 
   const handleTagChange = (values: string[]) => {
-    console.log("Selected tag values:", values);
-    console.log("Tag type:", typeof values[0]);
-    console.log("All available tags:", tags);
     setSelectedTags(values);
   };
 
