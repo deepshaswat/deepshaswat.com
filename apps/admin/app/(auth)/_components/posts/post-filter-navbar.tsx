@@ -14,7 +14,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase()
+        : word.toLowerCase(),
     )
     .join(" ");
 };
@@ -38,20 +38,20 @@ const PostFilterNavbar = ({
 }: PostFilterNavbarProps) => {
   return (
     <>
-      <div className=''>
+      <div className="">
         <SelectComponent
           items={postFilter}
-          placeholder='all-posts'
+          placeholder="all-posts"
           onSelect={onSelectPostOption}
           selectedItem={postOption}
         />
       </div>
-      <div className='mr-1 text-[11px] md:text-[12px]'>All access</div>
-      <div className='mr-1 text-[11px] md:text-[12px] '>All authors</div>
-      <div className='mr-1'>
+      <div className="mr-1 text-[11px] md:text-[12px]">All access</div>
+      <div className="mr-1 text-[11px] md:text-[12px] ">All authors</div>
+      <div className="mr-1">
         <SelectComponent
           items={tags}
-          placeholder='all-tags'
+          placeholder="all-tags"
           onSelect={onSelectTagOption}
           selectedItem={tagOption}
         />
@@ -89,17 +89,17 @@ const SelectComponent = ({
             : "text-neutral-200"
         }`}
       >
-        <SelectTrigger className='ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none  text-[11px] md:text-[12px]'>
+        <SelectTrigger className="ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none  text-[11px] md:text-[12px]">
           {capitalizeFirstLetter(selectedItem) ||
             capitalizeFirstLetter(placeholder)}
         </SelectTrigger>{" "}
       </div>
-      <SelectContent className='pl-0 bg-neutral-800 border-transparent ring-0 outline-none focus:ring-0 focus:outline-none'>
-        <SelectGroup className='pl-0 bg-neutral-800 '>
+      <SelectContent className="pl-0 bg-neutral-800 border-transparent ring-0 outline-none focus:ring-0 focus:outline-none">
+        <SelectGroup className="pl-0 bg-neutral-800 ">
           {items.map((item) => (
             <SelectItem
               key={item}
-              className='text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-[11px] md:text-[12px] font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 '
+              className="text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-[11px] md:text-[12px] font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 "
               value={item}
               onClick={() => handleSelect(item)}
             >
