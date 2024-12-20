@@ -1,7 +1,5 @@
 "use server";
 
-import { NextApiRequest, NextApiResponse } from "next";
-import { z } from "zod";
 import prisma from "@repo/db/client";
 import { SignedIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -9,19 +7,18 @@ import { redirect } from "next/navigation";
 // Import your validation schema
 import { tagSchema, updateTagSchema } from "@repo/schema";
 
+async function authenticateUser() {
+  const sign = await SignedIn;
+  if (!sign) {
+    redirect("/sign-in");
+  }
+}
 interface TagWithPostCount {
   id: string;
   slug: string;
   description?: string;
   imageUrl?: string;
   postCount: string;
-}
-
-async function authenticateUser() {
-  const sign = await SignedIn;
-  if (!sign) {
-    redirect("/sign-in");
-  }
 }
 
 async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {

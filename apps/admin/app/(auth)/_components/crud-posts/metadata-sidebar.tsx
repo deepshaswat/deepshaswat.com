@@ -40,7 +40,7 @@ export function MetadataSidebar() {
   const [metadata, setMetadata] = useRecoilState(postMetadataState);
   const [error, setError] = useState<string | null>("");
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
-    errorDuplicateUrlState,
+    errorDuplicateUrlState
   );
   const [inputDate, setInputDate] = useRecoilState(selectDate);
   const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
@@ -72,7 +72,7 @@ export function MetadataSidebar() {
   };
 
   const handleMetaDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setMetadata({ ...metadata, description: e.target.value });
   };
@@ -82,7 +82,7 @@ export function MetadataSidebar() {
   };
 
   const handleOgDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setMetadata({ ...metadata, ogDescription: e.target.value });
   };
@@ -92,7 +92,7 @@ export function MetadataSidebar() {
   };
 
   const handleTwitterDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setMetadata({ ...metadata, twitterDescription: e.target.value });
   };
@@ -115,7 +115,7 @@ export function MetadataSidebar() {
           },
           {
             signal: controller.signal,
-          },
+          }
         );
 
         const { uploadURL, s3URL } = data;
@@ -221,12 +221,6 @@ export function MetadataSidebar() {
     validateDate();
   }, [inputDate, inputTimeIst]);
 
-  useEffect(() => {
-    if (errorDuplicateUrl) {
-      setErrorDuplicateUrl(null);
-    }
-  }, [post.postUrl, errorDuplicateUrl]);
-
   const keywordCount = metadata.keywords
     ? metadata.keywords
         .split(",")
@@ -241,79 +235,79 @@ export function MetadataSidebar() {
   };
 
   return (
-    <div className="border-l-[1px] border-neutral-700 w-[400px] fixed right-0 top-0 bottom-0 z-40 shadow-lg p-6 overflow-y-auto">
-      <h2 className="text-2xl font-semibold mb-4">Post settings</h2>
+    <div className='border-l-[1px] border-neutral-700 w-[400px] fixed right-0 top-0 bottom-0 z-40 shadow-lg p-6 overflow-y-auto'>
+      <h2 className='text-2xl font-semibold mb-4'>Post settings</h2>
 
-      <div className="space-y-4 mt-8">
-        <div className="space-y-2">
-          <Label htmlFor="PostUrl" className="text-[13px] text-neutral-200">
+      <div className='space-y-4 mt-8'>
+        <div className='space-y-2'>
+          <Label htmlFor='PostUrl' className='text-[13px] text-neutral-200'>
             Post URL
           </Label>
-          <div className="flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md">
-            <LinkIcon className="text-neutral-400 ml-2 size-4" />
+          <div className='flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md'>
+            <LinkIcon className='text-neutral-400 ml-2 size-4' />
             <input
-              id="PostUrl"
-              type="text"
-              placeholder="Post URL"
+              id='PostUrl'
+              type='text'
+              placeholder='Post URL'
               value={post.postUrl}
               onChange={handleUrlChange}
-              className="flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              className='flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
             />
           </div>
 
           {!post.postUrl && (
-            <span className="text-[12px] text-neutral-500">
+            <span className='text-[12px] text-neutral-500'>
               www.deepshaswat.com/
             </span>
           )}
           {!errorDuplicateUrl && post.postUrl && (
-            <span className="text-[12px] text-neutral-500">
+            <span className='text-[12px] text-neutral-500'>
               www.deepshaswat.com/{post.postUrl}/
             </span>
           )}
           {errorDuplicateUrl && (
-            <span className="text-red-500 text-sm mt-1">
+            <span className='text-red-500 text-sm mt-1'>
               {errorDuplicateUrl}
             </span>
           )}
         </div>
-        <div className="flex flex-col gap-2 mb-4">
-          <Label htmlFor="PublishDate" className="text-[13px] text-neutral-200">
+        <div className='flex flex-col gap-2 mb-4'>
+          <Label htmlFor='PublishDate' className='text-[13px] text-neutral-200'>
             Publish Date
           </Label>
-          <div className="flex flex-row items-center">
+          <div className='flex flex-row items-center'>
             <DatePicker date={inputDate} setDate={setInputDate} />
-            <div className="flex flex-row items-center group">
-              <div className="ml-2 flex items-center bg-neutral-700 group-hover:bg-neutral-900 border-none rounded-md">
+            <div className='flex flex-row items-center group'>
+              <div className='ml-2 flex items-center bg-neutral-700 group-hover:bg-neutral-900 border-none rounded-md'>
                 <input
-                  id="publishTime"
-                  type="text"
-                  placeholder="17:00"
+                  id='publishTime'
+                  type='text'
+                  placeholder='17:00'
                   value={inputTimeIst}
                   onChange={handleTimeIstChange}
-                  className="flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  className='flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50'
                 />
-                <span className="text-neutral-400 items-center mr-4 text-[10px]">
+                <span className='text-neutral-400 items-center mr-4 text-[10px]'>
                   IST
                 </span>
               </div>
             </div>
           </div>
-          {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+          {error && <span className='text-red-500 text-sm mt-1'>{error}</span>}
         </div>
 
         <div>
-          <Label htmlFor="Excerpt" className="text-[13px] text-neutral-200">
+          <Label htmlFor='Excerpt' className='text-[13px] text-neutral-200'>
             Excerpt
           </Label>
           <Textarea
-            id="Excerpt"
-            placeholder="Write a short description of your post"
+            id='Excerpt'
+            placeholder='Write a short description of your post'
             value={post.excerpt}
             onChange={handleExcerptChange}
-            className="flex mt-4 h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 150 characters. You've used{" "}
             <span
               className={
@@ -329,7 +323,7 @@ export function MetadataSidebar() {
             .
           </div>
         </div>
-        <div className="mt-4">
+        <div className='mt-4'>
           <Tags
             selectedTags={post.tags}
             setSelectedTags={(value) =>
@@ -337,42 +331,42 @@ export function MetadataSidebar() {
             }
           />
         </div>
-        <div className="flex items-center justify-between space-x-2 bg-neutral-700 p-4 rounded-md ">
-          <div className="flex flex-row items-center gap-2">
+        <div className='flex items-center justify-between space-x-2 bg-neutral-700 p-4 rounded-md '>
+          <div className='flex flex-row items-center gap-2'>
             <Star
-              className="size-5"
+              className='size-5'
               fill={post.featured ? "green" : "transparent"}
               stroke={post.featured ? "green" : "white"}
             />
-            <Label htmlFor="feature-post">Feature this post</Label>
+            <Label htmlFor='feature-post'>Feature this post</Label>
           </div>
           <Switch
-            id="feature-post"
+            id='feature-post'
             checked={post.featured}
             onCheckedChange={toggleFeaturePost}
-            className="data-[state=checked]:bg-green-500"
+            className='data-[state=checked]:bg-green-500'
           />
         </div>
-        <div className="mt-4">
-          <Label className="text-2xl font-semibold text-neutral-200 ">
+        <div className='mt-4'>
+          <Label className='text-2xl font-semibold text-neutral-200 '>
             SEO & Social
           </Label>
         </div>
         <Separator />
         <div>
-          <Label htmlFor="SEOKeywords" className="text-[13px] text-neutral-200">
+          <Label htmlFor='SEOKeywords' className='text-[13px] text-neutral-200'>
             SEO Keywords
           </Label>
           <Textarea
-            id="SEOKeywords"
-            placeholder="SEO Keywords"
+            id='SEOKeywords'
+            placeholder='SEO Keywords'
             value={metadata.keywords}
             onChange={(e) =>
               setMetadata((prev) => ({ ...prev, keywords: e.target.value }))
             }
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 10 words (Max: 500 characters). <br /> You've used{" "}
             <span
               className={
@@ -388,22 +382,22 @@ export function MetadataSidebar() {
             .
           </div>
         </div>
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="MetaDataTitle"
-            className="text-[13px] text-neutral-200"
+            htmlFor='MetaDataTitle'
+            className='text-[13px] text-neutral-200'
           >
             Meta Data Title
           </Label>
           <input
-            id="MetaDataTitle"
-            type="text"
-            placeholder="Meta Data Title"
+            id='MetaDataTitle'
+            type='text'
+            placeholder='Meta Data Title'
             value={metadata.title}
             onChange={handleMetaTitleChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 50 characters. You've used{" "}
             <span
               className={
@@ -421,19 +415,19 @@ export function MetadataSidebar() {
         </div>
         <div>
           <Label
-            htmlFor="MetaDataDescription"
-            className="text-[13px] text-neutral-200"
+            htmlFor='MetaDataDescription'
+            className='text-[13px] text-neutral-200'
           >
             Meta Data Description
           </Label>
           <Textarea
-            id="MetaDataDescription"
-            placeholder="Meta Data Description"
+            id='MetaDataDescription'
+            placeholder='Meta Data Description'
             value={metadata.description}
             onChange={handleMetaDescriptionChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 160 characters. You've used{" "}
             <span
               className={
@@ -449,10 +443,10 @@ export function MetadataSidebar() {
             .
           </div>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className='flex flex-col gap-4'>
           <Label
-            htmlFor="MetaDataImage"
-            className="text-[13px] text-neutral-200 mt-4"
+            htmlFor='MetaDataImage'
+            className='text-[13px] text-neutral-200 mt-4'
           >
             Meta Data Image Upload
           </Label>
@@ -463,24 +457,24 @@ export function MetadataSidebar() {
             isFileUploadOpen={isMetaImageUploadOpen}
             toggleFileUpload={() => setIsMetaImageUploadOpen((prev) => !prev)}
             onCancel={handleCancelUpload}
-            text="Add an image"
-            buttonVariant="metadata"
+            text='Add an image'
+            buttonVariant='metadata'
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="OgTitle" className="text-[13px] text-neutral-200">
+        <div className='space-y-2'>
+          <Label htmlFor='OgTitle' className='text-[13px] text-neutral-200'>
             OG Title
           </Label>
           <input
-            id="OgTitle"
-            type="text"
-            placeholder="OG Title"
+            id='OgTitle'
+            type='text'
+            placeholder='OG Title'
             value={metadata.ogTitle}
             onChange={handleOgTitleChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 50 characters. You've used{" "}
             <span
               className={
@@ -497,21 +491,21 @@ export function MetadataSidebar() {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="OgDescription"
-            className="text-[13px] text-neutral-200"
+            htmlFor='OgDescription'
+            className='text-[13px] text-neutral-200'
           >
             OG Description
           </Label>
           <Textarea
-            id="OgDescription"
-            placeholder="OG Description"
+            id='OgDescription'
+            placeholder='OG Description'
             value={metadata.ogDescription}
             onChange={handleOgDescriptionChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 160 characters. You've used{" "}
             <span
               className={
@@ -528,10 +522,10 @@ export function MetadataSidebar() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className='flex flex-col gap-4'>
           <Label
-            htmlFor="OgImage"
-            className="text-[13px] text-neutral-200 mt-4"
+            htmlFor='OgImage'
+            className='text-[13px] text-neutral-200 mt-4'
           >
             OG Image URL
           </Label>
@@ -542,27 +536,27 @@ export function MetadataSidebar() {
             isFileUploadOpen={isOgImageUploadOpen}
             toggleFileUpload={() => setIsOgImageUploadOpen((prev) => !prev)}
             onCancel={handleCancelUpload}
-            text="Add an image"
-            buttonVariant="metadata"
+            text='Add an image'
+            buttonVariant='metadata'
           />
         </div>
 
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="TwitterTitle"
-            className="text-[13px] text-neutral-200"
+            htmlFor='TwitterTitle'
+            className='text-[13px] text-neutral-200'
           >
             Twitter Title
           </Label>
           <input
-            id="TwitterTitle"
-            type="text"
-            placeholder="Twitter Title"
+            id='TwitterTitle'
+            type='text'
+            placeholder='Twitter Title'
             value={metadata.twitterTitle}
             onChange={handleTwitterTitleChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 50 characters. You've used{" "}
             <span
               className={
@@ -579,21 +573,21 @@ export function MetadataSidebar() {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="TwitterDescription"
-            className="text-[13px] text-neutral-200"
+            htmlFor='TwitterDescription'
+            className='text-[13px] text-neutral-200'
           >
             Twitter Description
           </Label>
           <Textarea
-            id="TwitterDescription"
-            placeholder="Twitter Description"
+            id='TwitterDescription'
+            placeholder='Twitter Description'
             value={metadata.twitterDescription}
             onChange={handleTwitterDescriptionChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className='flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500'
           />
-          <div className="text-neutral-500 text-[12px]">
+          <div className='text-neutral-500 text-[12px]'>
             Recommended: 160 characters. You've used{" "}
             <span
               className={
@@ -610,10 +604,10 @@ export function MetadataSidebar() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className='flex flex-col gap-4'>
           <Label
-            htmlFor="TwitterImage"
-            className="text-[13px] text-neutral-200 mt-4"
+            htmlFor='TwitterImage'
+            className='text-[13px] text-neutral-200 mt-4'
           >
             Twitter Image URL
           </Label>
@@ -626,14 +620,14 @@ export function MetadataSidebar() {
               setIsTwitterImageUploadOpen((prev) => !prev)
             }
             onCancel={handleCancelUpload}
-            text="Add an image"
-            buttonVariant="metadata"
+            text='Add an image'
+            buttonVariant='metadata'
           />
         </div>
 
         <div>
-          <Button variant="destructive-outline" className="w-full mt-4">
-            <Trash2 className="mr-2 size-4" /> Delete Post
+          <Button variant='destructive-outline' className='w-full mt-4'>
+            <Trash2 className='mr-2 size-4' /> Delete Post
           </Button>
         </div>
       </div>
@@ -651,7 +645,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase(),
+        : word.toLowerCase()
     )
     .join(" ");
 };
@@ -685,21 +679,21 @@ export const Tags: React.FC<TagsProps> = ({
   };
 
   return (
-    <div className="gap-4 mt-4">
-      <h1 className="text-[13px] mb-4">Tags</h1>
+    <div className='gap-4 mt-4'>
+      <h1 className='text-[13px] mb-4'>Tags</h1>
       <MultiSelect onValueChange={handleTagChange} defaultValue={selectedTags}>
-        <MultiSelectTrigger className="w-96">
-          <MultiSelectValue placeholder="Select tags" />
+        <MultiSelectTrigger className='w-96'>
+          <MultiSelectValue placeholder='Select tags' />
         </MultiSelectTrigger>
-        <MultiSelectContent className="bg-neutral-800 text-neutral-200">
-          <MultiSelectSearch placeholder="Input to search" />
+        <MultiSelectContent className='bg-neutral-800 text-neutral-200'>
+          <MultiSelectSearch placeholder='Input to search' />
           <MultiSelectList>
-            <MultiSelectGroup className="bg-neutral-800">
+            <MultiSelectGroup className='bg-neutral-800'>
               {tags.map((tag) => (
                 <MultiSelectItem
                   key={tag.value}
                   value={tag.value}
-                  className="bg-neutral-800 text-neutral-300"
+                  className='bg-neutral-800 text-neutral-300'
                 >
                   {tag.label}
                 </MultiSelectItem>

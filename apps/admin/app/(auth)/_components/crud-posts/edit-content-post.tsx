@@ -15,6 +15,7 @@ import {
   postState,
   selectedTimeIst,
 } from "@repo/store";
+import { usePathname } from "next/navigation";
 
 const capitalizeFirstLetter = (item: string) => {
   return item
@@ -22,7 +23,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase(),
+        : word.toLowerCase()
     )
     .join(" ");
 };
@@ -37,31 +38,19 @@ export const EditContentPost = ({
   const [post, setPost] = useRecoilState(postState); // add value of initialPost to post
   const [metadata, setMetadata] = useRecoilState(postMetadataState);
   const [postId, setPostId] = useRecoilState(postIdState);
-  const [isOpen, setIsOpen] = useState(false);
+  const [inputDate, setInputDate] = useRecoilState(selectDate);
+  const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
+  const [isOpen, setIsOpen] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFeatureFileUploadOpen, setIsFeatureFileUploadOpen] = useState(false);
   const [abortController, setAbortController] =
     useState<AbortController | null>(null);
   const [tags, setTags] = useState<string[]>([]);
 
-  // reset state of metadata sidebar using recoil
-  const resetMetadata = useResetRecoilState(postMetadataState);
-  const resetPost = useResetRecoilState(postState);
-  const resetSelectedTimeIst = useResetRecoilState(selectedTimeIst);
-  const resetSelectDate = useResetRecoilState(selectDate);
-  const resetPostId = useResetRecoilState(postIdState);
-
-  // reset state of all fields and uploaders of this page
   const resetState = () => {
     setIsSubmitting(false);
     setIsFeatureFileUploadOpen(false);
     setAbortController(null);
-
-    // reset metadata sidebar state
-    resetMetadata();
-    resetPost();
-    resetSelectedTimeIst();
-    resetSelectDate();
   };
 
   useEffect(() => {
@@ -86,6 +75,17 @@ export const EditContentPost = ({
 
   useEffect(() => {
     setPostFull(initialPost);
+
+    const initializeDateAndTime = (publishDate: Date) => {
+      // Extract the date portion
+      setInputDate(publishDate);
+
+      // Extract the time portion in HH:mm format
+      const formattedTime = publishDate.toISOString().slice(11, 16); // e.g., "14:30"
+      setInputTimeIst(formattedTime);
+    };
+
+    initializeDateAndTime(initialPost.publishDate || new Date());
 
     setPost({
       title: initialPost.title,
@@ -120,7 +120,7 @@ export const EditContentPost = ({
 
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),
-    [],
+    []
   );
 
   const handleEditorContentChange = (content: string) => {
@@ -178,20 +178,20 @@ export const EditContentPost = ({
   };
 
   return (
-    <div className="flex">
+    <div className='flex'>
       <div className={`flex-1 ${isOpen ? " mr-[400px]" : ""}`}>
         <NavBarPost isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div className="lg:mx-[180px]">
-          <div className="ml-10 max-w-screen-md lg:max-w-screen-lg">
+        <div className='lg:mx-[180px]'>
+          <div className='ml-10 max-w-screen-md lg:max-w-screen-lg'>
             <UploadComponent
               imageUrl={post.featureImage}
               isSubmitting={isSubmitting}
               onChange={handleFeatureImageChange}
               isFileUploadOpen={isFeatureFileUploadOpen}
               toggleFileUpload={toggleFeatureImageUpload}
-              text="Add feature image"
-              className="text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10"
-              buttonVariant="link"
+              text='Add feature image'
+              className='text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10'
+              buttonVariant='link'
               onCancel={handleCancelUpload}
             />
           </div>
@@ -199,11 +199,11 @@ export const EditContentPost = ({
             <input
               value={post.title}
               onChange={handleMainInputChange}
-              placeholder="Post title"
-              className="w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700"
+              placeholder='Post title'
+              className='w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700'
             />
           </div>
-          <div className="mt-8">
+          <div className='mt-8'>
             <Editor
               onChange={handleEditorContentChange}
               initialContent={post.content}

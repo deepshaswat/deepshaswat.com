@@ -1,16 +1,29 @@
 "use server";
 
+import { SignedIn } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+
 import prisma from "@repo/db/client";
 import { PostType } from "./post-types";
 
+async function authenticateUser() {
+  const sign = await SignedIn;
+  if (!sign) {
+    redirect("/sign-in");
+  }
+}
+
 async function createPost(data: PostType) {
+  await authenticateUser();
   try {
     // 1. Create the new post along with its metadata
     // add a check to see if the postUrl is already taken
     const existingPost = await prisma.post.findUnique({
       where: { postUrl: data.postUrl },
     });
+    // console.log("existingPost", existingPost);
     if (existingPost) {
+      console.log("Post URL already exists");
       return { error: "Post URL already exists" };
     }
     const newPost = await prisma.post.create({
@@ -75,6 +88,7 @@ async function createPost(data: PostType) {
 }
 
 async function updatePost(data: PostType, postId: string) {
+  await authenticateUser();
   // Construct the post object
   const post: PostType = {
     title: data.title,

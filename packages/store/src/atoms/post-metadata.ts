@@ -1,9 +1,5 @@
 import { atom } from "recoil";
 import { PostListType } from "@repo/actions";
-export const selectDate = atom<Date>({
-  key: "selectDate",
-  default: new Date(),
-});
 
 export const postMetadataState = atom({
   key: "postMetadataState",
@@ -37,6 +33,11 @@ export const postState = atom({
     tags: [] as string[],
     authors: "",
   },
+});
+
+export const selectDate = atom<Date>({
+  key: "selectDate",
+  default: new Date(),
 });
 
 export const selectedTimeIst = atom<string>({
