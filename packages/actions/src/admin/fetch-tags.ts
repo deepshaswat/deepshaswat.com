@@ -24,6 +24,28 @@ async function authenticateUser() {
   }
 }
 
+async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
+  await authenticateUser();
+  try {
+    const tags = await prisma.tagOnPost.findMany({
+      where: {
+        postId,
+      },
+      select: {
+        tag: {
+          select: {
+            slug: true,
+          },
+        },
+      },
+    });
+    return tags.map((tag) => tag.tag.slug);
+  } catch (error) {
+    console.error("Failed to fetch tags:", error);
+    throw new Error("Failed to fetch tags");
+  }
+}
+
 async function fetchAllTagsWithPostCount(): Promise<TagWithPostCount[]> {
   await authenticateUser();
   try {
@@ -190,4 +212,5 @@ export {
   fetchAllTagsWithPostCount,
   updateTagAction,
   deleteTagAction,
+  fetchTagsFromTagOnPost,
 };

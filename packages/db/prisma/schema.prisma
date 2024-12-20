@@ -38,10 +38,23 @@ model Post {
   authorId      String   @db.ObjectId
   author        Author   @relation(fields: [authorId], references: [id])
   featured      Boolean  @default(false)
-  metaData      MetaData?
+  metadataTitle        String?
+  metadataDescription  String?
+  metadataImageUrl     String?
+  metadataKeywords     String?
+  metadataAuthorName   String?
+  metadataCanonicalUrl String?
+  metadataOgTitle      String?
+  metadataOgDescription String?
+  metadataOgImage      String?
+  metadataTwitterCard  String?
+  metadataTwitterTitle String?
+  metadataTwitterDescription String?
+  metadataTwitterImage String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   status        PostStatus @default(DRAFT)
+  isNewsletter  Boolean @default(false)
 
   @@index([featured])
   @@index([publishDate])
@@ -59,24 +72,6 @@ enum PostStatus {
   DELETED
 }
 
-model MetaData {
-  id           String  @id @default(auto()) @map("_id") @db.ObjectId
-  postId       String  @unique @db.ObjectId
-  post         Post    @relation(fields: [postId], references: [id])
-  title        String?
-  description  String?
-  imageUrl     String?
-  keywords     String?
-  authorName   String?
-  canonicalUrl String?
-  ogTitle      String?
-  ogDescription String?
-  ogImage      String?
-  twitterCard  String?
-  twitterTitle String?
-  twitterDescription String?
-  twitterImage String?
-}
 
 model Tag {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
