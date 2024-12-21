@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@repo/ui";
 import { useRouter } from "next/navigation";
+import { Tags } from "@repo/actions";
 
 const capitalizeFirstLetter = (item: string) => {
   return item
@@ -28,13 +29,8 @@ const capitalizeFirstLetter = (item: string) => {
     .join(" ");
 };
 
-interface TagInterface {
-  slug: string;
-  postCount: string;
-}
-
 interface TagListInterface {
-  tags: TagInterface[];
+  tags: Tags[];
 }
 
 const TagComponentRendering = ({ tags }: TagListInterface) => {
@@ -86,19 +82,24 @@ const TagComponentRendering = ({ tags }: TagListInterface) => {
                 </TableCell>
                 <TableCell className="text-neutral-200">{tag.slug}</TableCell>
                 <TableCell className=" text-neutral-500">
-                  {tag.postCount !== "0" ? (
+                  {tag.posts.length !== 0 ? (
                     <Link href={`/posts?tags=${tag.slug}`}>
                       <Button
                         variant="link"
                         className="rounded-sm font-light text-neutral-200 hover:text-green-500 hover:no-underline"
                       >
-                        {tag.postCount}{" "}
-                        {tag.postCount === "1" ? "post" : "posts"}
+                        {tag.posts.length}{" "}
+                        {tag.posts.length === 1 ? "post" : "posts"}
                       </Button>
                     </Link>
                   ) : (
                     <span className="ml-4">
-                      {tag.postCount} {tag.postCount === "0" ? "post" : "posts"}
+                      {tag.posts.length}{" "}
+                      {tag.posts.length === 0
+                        ? "posts"
+                        : tag.posts.length === 1
+                          ? "post"
+                          : "posts"}
                     </span>
                   )}
                 </TableCell>

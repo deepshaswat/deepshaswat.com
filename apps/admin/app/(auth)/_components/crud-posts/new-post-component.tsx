@@ -15,15 +15,18 @@ import {
   selectedTimeIst,
   postIdState,
   postDataState,
+  tagsState,
+  selectedTagsState,
 } from "@repo/store";
 
 const NewPostComponent = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [post, setPost] = useRecoilState(postState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFeatureFileUploadOpen, setIsFeatureFileUploadOpen] = useState(false);
   const [abortController, setAbortController] =
     useState<AbortController | null>(null);
+
+  const [post, setPost] = useRecoilState(postState);
 
   const resetMetadata = useResetRecoilState(postMetadataState);
   const resetPost = useResetRecoilState(postState);
@@ -31,6 +34,8 @@ const NewPostComponent = () => {
   const resetSelectDate = useResetRecoilState(selectDate);
   const resetPostFull = useResetRecoilState(postDataState);
   const resetPostId = useResetRecoilState(postIdState);
+  const resetTags = useResetRecoilState(tagsState);
+  const resetSelectedTags = useResetRecoilState(selectedTagsState);
 
   // reset state of all fields and uploaders of this page
   const resetState = () => {
@@ -38,17 +43,27 @@ const NewPostComponent = () => {
     setIsFeatureFileUploadOpen(false);
     setAbortController(null);
 
+    resetPostFull();
     resetMetadata();
     resetPost();
-
-    resetPostFull();
+    resetSelectedTimeIst();
+    resetSelectDate();
     resetPostId();
-    console.log("State has been reset");
+    resetTags();
+    resetSelectedTags();
   };
   useEffect(() => {
     resetState();
-    console.log("Resetting state");
-  }, []);
+  }, [
+    resetPost,
+    resetPostFull,
+    resetPostId,
+    resetSelectedTimeIst,
+    resetSelectDate,
+    resetMetadata,
+    resetTags,
+    resetSelectedTags,
+  ]);
 
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),

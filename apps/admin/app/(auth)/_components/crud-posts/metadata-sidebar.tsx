@@ -12,6 +12,9 @@ import {
   postState,
   selectedTimeIst,
   errorDuplicateUrlState,
+  tagsState,
+  selectedTagsState,
+  savePostErrorState,
 } from "@repo/store";
 
 import {
@@ -32,18 +35,23 @@ import {
   Separator,
 } from "@repo/ui";
 
-import { dateTimeValidation, fetchAllTagsWithPostCount } from "@repo/actions";
+import {
+  dateTimeValidation,
+  fetchAllTagsWithPostCount,
+  Tags,
+} from "@repo/actions";
 import axios from "axios";
 
 export function MetadataSidebar() {
   const [post, setPost] = useRecoilState(postState);
   const [metadata, setMetadata] = useRecoilState(postMetadataState);
-  const [error, setError] = useState<string | null>("");
+  const [error, setError] = useRecoilState(savePostErrorState);
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
     errorDuplicateUrlState,
   );
   const [inputDate, setInputDate] = useRecoilState(selectDate);
   const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
+  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMetaImageUploadOpen, setIsMetaImageUploadOpen] = useState(false);
   const [isOgImageUploadOpen, setIsOgImageUploadOpen] = useState(false);
@@ -221,6 +229,14 @@ export function MetadataSidebar() {
     validateDate();
   }, [inputDate, inputTimeIst]);
 
+  useEffect(() => {
+    if (errorDuplicateUrl) {
+      setTimeout(() => {
+        setErrorDuplicateUrl(null);
+      }, 5000);
+    }
+  }, [errorDuplicateUrl]);
+
   const keywordCount = metadata.keywords
     ? metadata.keywords
         .split(",")
@@ -232,6 +248,17 @@ export function MetadataSidebar() {
     const url = item.toLowerCase().split(" ").join("-");
     const trimmedItem = url.trim();
     return trimmedItem;
+  };
+
+  const handleTagsChange = (tags: Tags[]) => {
+    // First update selectedTags state
+    setSelectedTags(tags);
+
+    // Then update post.tags state
+    setPost((prevPost) => ({
+      ...prevPost,
+      tags: tags, // Directly set the new tags instead of appending
+    }));
   };
 
   return (
@@ -323,14 +350,12 @@ export function MetadataSidebar() {
             .
           </div>
         </div>
-        <div className="mt-4">
-          <Tags
-            selectedTags={post.tags}
-            setSelectedTags={(value) =>
-              setPost((prev) => ({ ...prev, tags: value }))
-            }
-          />
-        </div>
+        {/* <div className='mt-4'> */}
+        <TagsComponent
+          oldSelectedTags={selectedTags}
+          newSelectedTags={handleTagsChange}
+        />
+        {/* </div> */}
         <div className="flex items-center justify-between space-x-2 bg-neutral-700 p-4 rounded-md ">
           <div className="flex flex-row items-center gap-2">
             <Star
@@ -635,8 +660,8 @@ export function MetadataSidebar() {
   );
 }
 interface TagsProps {
-  selectedTags: string[];
-  setSelectedTags: (value: string[]) => void;
+  oldSelectedTags: Tags[];
+  newSelectedTags: (value: Tags[]) => void;
 }
 
 const capitalizeFirstLetter = (item: string) => {
@@ -650,52 +675,74 @@ const capitalizeFirstLetter = (item: string) => {
     .join(" ");
 };
 
-export const Tags: React.FC<TagsProps> = ({
-  selectedTags,
-  setSelectedTags,
+// TagsComponent
+export const TagsComponent: React.FC<TagsProps> = ({
+  oldSelectedTags,
+  newSelectedTags,
 }) => {
-  const [tags, setTags] = useState<{ value: string; label: string }[]>([]);
+  const [tags, setTags] = useRecoilState(tagsState);
+  const [currentSelectedTags, setCurrentSelectedTags] =
+    useState<Tags[]>(oldSelectedTags);
 
   useEffect(() => {
     const fetchTags = async () => {
       try {
         const tagOptions = await fetchAllTagsWithPostCount();
-        const formattedTags = tagOptions.map((tagOption) => ({
-          value: tagOption.id,
-          label: capitalizeFirstLetter(tagOption.slug),
-        }));
-        // console.log("Formatted tags:", formattedTags);
-        setTags(formattedTags);
+        setTags(tagOptions);
       } catch (error) {
         console.error("Error fetching tags:", error);
       }
     };
 
     fetchTags();
-  }, []);
+  }, [setTags]);
+
+  useEffect(() => {
+    setCurrentSelectedTags(oldSelectedTags);
+  }, [oldSelectedTags]);
 
   const handleTagChange = (values: string[]) => {
-    setSelectedTags(values);
+    const updatedTags = values
+      .map((tagId) => {
+        const tag = tags.find((t) => t.id === tagId);
+        if (!tag) return null;
+        return {
+          id: tag.id,
+          slug: tag.slug,
+          description: tag.description,
+          imageUrl: tag.imageUrl,
+          posts: tag.posts,
+        };
+      })
+      .filter((tag): tag is Tags => tag !== null);
+
+    setCurrentSelectedTags(updatedTags);
+    newSelectedTags(updatedTags);
   };
 
+  const selectedTagIds = currentSelectedTags.map((tag) => tag.id);
+
   return (
-    <div className="gap-4 mt-4">
-      <h1 className="text-[13px] mb-4">Tags</h1>
-      <MultiSelect onValueChange={handleTagChange} defaultValue={selectedTags}>
-        <MultiSelectTrigger className="w-96">
+    <div className="space-y-4">
+      <Label className="text-[13px] mb-4 block">Tags</Label>
+      <MultiSelect value={selectedTagIds} onValueChange={handleTagChange}>
+        <MultiSelectTrigger className="bg-neutral-700 border-2 border-transparent focus:border-green-500">
           <MultiSelectValue placeholder="Select tags" />
         </MultiSelectTrigger>
-        <MultiSelectContent className="bg-neutral-800 text-neutral-200">
-          <MultiSelectSearch placeholder="Input to search" />
+        <MultiSelectContent className="bg-neutral-800">
+          <MultiSelectSearch
+            placeholder="Search tags..."
+            className="border-neutral-700"
+          />
           <MultiSelectList>
-            <MultiSelectGroup className="bg-neutral-800">
+            <MultiSelectGroup>
               {tags.map((tag) => (
                 <MultiSelectItem
-                  key={tag.value}
-                  value={tag.value}
-                  className="bg-neutral-800 text-neutral-300"
+                  key={tag.id}
+                  value={tag.id}
+                  className="bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
                 >
-                  {tag.label}
+                  {capitalizeFirstLetter(tag.slug)}
                 </MultiSelectItem>
               ))}
             </MultiSelectGroup>

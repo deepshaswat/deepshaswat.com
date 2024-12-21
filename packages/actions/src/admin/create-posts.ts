@@ -16,16 +16,16 @@ async function authenticateUser() {
 async function createPost(data: PostType) {
   await authenticateUser();
   try {
-    // 1. Create the new post along with its metadata
-    // add a check to see if the postUrl is already taken
     const existingPost = await prisma.post.findUnique({
       where: { postUrl: data.postUrl },
     });
-    // console.log("existingPost", existingPost);
+
     if (existingPost) {
       console.log("Post URL already exists");
       return { error: "Post URL already exists" };
     }
+
+    // console.log("Creating post:", data);
     const newPost = await prisma.post.create({
       data: {
         title: data.title,
@@ -57,9 +57,9 @@ async function createPost(data: PostType) {
     // 2. Insert tag connections if there are any tags
     if (data.tags && data.tags.length > 0) {
       await prisma.tagOnPost.createMany({
-        data: data.tags.map((tagId) => ({
+        data: data.tags.map((tag) => ({
           postId: newPost.id,
-          tagId: tagId,
+          tagId: tag.id,
         })),
       });
     }
@@ -69,7 +69,7 @@ async function createPost(data: PostType) {
     await prisma.tagOnPost.findMany({
       where: {
         postId: newPost.id,
-        tagId: { in: data.tags },
+        tagId: { in: data.tags.map((tag) => tag.id) },
       },
     });
 
@@ -80,7 +80,7 @@ async function createPost(data: PostType) {
     });
 
     // console.log("Created post with tags:", updatedPost);
-    return updatedPost;
+    return { post: updatedPost, success: true };
   } catch (error) {
     console.error("Error creating post:", error);
     return { error: "Error creating post" };
@@ -121,6 +121,19 @@ async function updatePost(data: PostType, postId: string) {
   };
 
   try {
+    const existingPost = await prisma.post.findUnique({
+      where: {
+        postUrl: post.postUrl,
+        NOT: {
+          id: postId,
+        },
+      },
+    });
+
+    if (existingPost) {
+      console.log("Post URL already exists");
+      return { error: "Post URL already exists" };
+    }
     // 1. Delete existing tag connections
     await prisma.tagOnPost.deleteMany({
       where: { postId },
@@ -159,9 +172,9 @@ async function updatePost(data: PostType, postId: string) {
     // 3. Insert new tag connections
     if (post.tags && post.tags.length > 0) {
       await prisma.tagOnPost.createMany({
-        data: post.tags.map((tagId) => ({
+        data: post.tags.map((tag) => ({
           postId: updatedPost.id,
-          tagId: tagId,
+          tagId: tag.id,
         })),
       });
     }
@@ -171,7 +184,7 @@ async function updatePost(data: PostType, postId: string) {
     await prisma.tagOnPost.findMany({
       where: {
         postId: updatedPost.id,
-        tagId: { in: post.tags },
+        tagId: { in: post.tags.map((tag) => tag.id) },
       },
     });
 
@@ -181,7 +194,7 @@ async function updatePost(data: PostType, postId: string) {
     });
 
     // console.log("Updated post with tags:", finalUpdatedPost);
-    return finalUpdatedPost;
+    return { post: finalUpdatedPost, success: true };
   } catch (error) {
     console.error("Error updating post:", error);
     return { error: "Error updating post" };

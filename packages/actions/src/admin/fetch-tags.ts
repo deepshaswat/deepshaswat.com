@@ -6,19 +6,13 @@ import { redirect } from "next/navigation";
 
 // Import your validation schema
 import { tagSchema, updateTagSchema } from "@repo/schema";
+import { Tags } from "./post-types";
 
 async function authenticateUser() {
   const sign = await SignedIn;
   if (!sign) {
     redirect("/sign-in");
   }
-}
-interface TagWithPostCount {
-  id: string;
-  slug: string;
-  description?: string;
-  imageUrl?: string;
-  postCount: string;
 }
 
 async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
@@ -31,41 +25,37 @@ async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
       select: {
         tag: {
           select: {
+            id: true,
             slug: true,
+            description: true,
+            imageUrl: true,
+            posts: true,
           },
         },
       },
     });
-    return tags.map((tag) => tag.tag.slug);
+    return tags;
   } catch (error) {
     console.error("Failed to fetch tags:", error);
     throw new Error("Failed to fetch tags");
   }
 }
 
-async function fetchAllTagsWithPostCount(): Promise<TagWithPostCount[]> {
+async function fetchAllTagsWithPostCount(): Promise<Tags[]> {
   await authenticateUser();
   try {
     const tags = await prisma.tag.findMany({
-      select: {
-        id: true, // Include the ID field
-        slug: true, // Include the slug field
-        description: true, // Include the description field
-        imageUrl: true, // Include the imageUrl field
-        posts: {
-          select: {
-            id: true, // Select IDs of posts to calculate the post count
-          },
-        },
+      include: {
+        posts: true,
       },
     });
 
     return tags.map((tag) => ({
       id: tag.id,
       slug: tag.slug,
-      description: tag.description ?? undefined,
-      imageUrl: tag.imageUrl ?? undefined,
-      postCount: tag.posts.length.toString(),
+      description: tag.description ?? "",
+      imageUrl: tag.imageUrl ?? "",
+      posts: tag.posts,
     }));
   } catch (error) {
     console.error("Failed to fetch tags with post count:", error);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Link from "next/link";
 
@@ -9,6 +9,9 @@ import {
   PanelRightOpen,
   PanelRightClose,
   Save,
+  Check,
+  Loader2,
+  AlertTriangle,
 } from "lucide-react";
 
 import {
@@ -26,6 +29,7 @@ import {
   postIdState,
   postDataState,
   errorDuplicateUrlState,
+  savePostErrorState,
 } from "@repo/store";
 import { createAuthor, createPost, updatePost } from "@repo/actions";
 import { PostType } from "@repo/actions";
@@ -45,7 +49,6 @@ interface NavBarPostProps {
  * 3. Clicking on the "Publish" link should navigate to the Pre-publish page.
  *
  */
-
 export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
   const metadata = useRecoilValue(postMetadataState);
   const post = useRecoilValue(postState);
@@ -53,6 +56,9 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
     errorDuplicateUrlState,
   );
+  const savePostError = useRecoilValue(savePostErrorState);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSavingSuccess, setIsSavingSuccess] = useState(false);
 
   const isDisabled = post.title === "" || post.postUrl === "";
   const postFull = useRecoilValue(postDataState);
@@ -73,7 +79,7 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
   const handleSave = async () => {
     if (isDisabled) return;
     setErrorDuplicateUrl(null);
-
+    setIsSaving(true);
     const user = await createAuthor();
 
     const data: PostType = {
@@ -83,30 +89,40 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
         authorName: user?.name ?? "",
       },
       authorId: user?.id ?? "",
+      tags: post.tags,
     };
 
     if (postId) {
       const result = await updatePost(data, postId);
+      setIsSaving(false);
       if (result && "error" in result) {
-        setErrorDuplicateUrl(result.error);
+        setErrorDuplicateUrl(result.error ?? "Duplicate URL");
       } else {
-        router.push(`/editor/${postId}`);
+        setIsSavingSuccess(true);
+        setTimeout(() => {
+          setIsSavingSuccess(false);
+        }, 3000);
       }
     } else {
       const result = await createPost(data);
+      setIsSaving(false);
       if (result && "error" in result) {
-        setErrorDuplicateUrl(result.error);
-      } else if (result && "id" in result) {
-        setPostId(result.id);
-        router.push(`/editor/${result.id}`);
+        setErrorDuplicateUrl(result.error ?? "Duplicate URL");
+      } else if (result && "post" in result && result.post) {
+        setPostId(result.post.id);
+        setIsSavingSuccess(true);
+        setTimeout(() => {
+          setIsSavingSuccess(false);
+        }, 3000);
+        router.push(`/editor/${result.post.id}`);
       }
     }
   };
 
   return (
-    <div className="ml-auto mt-5 mr-2 lg:m-5 ">
+    <div className="ml-auto mt-5 mr-2 lg:m-5">
       <nav className="w-full flex flex-row justify-between ml-2">
-        <div className="flex flex-row gap-2 lg:gap-10  items-center">
+        <div className="flex flex-row gap-2 lg:gap-10 items-center">
           <Link
             href="/posts"
             passHref
@@ -115,14 +131,14 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
             <ChevronLeft className="size-4 mr-3" />
             Posts
           </Link>
-          <Label className="flex flex-row items-center text-sm font-light text-neutral-400 rounded-sm hover:bg-neutral-700  p-2">
+          <Label className="flex flex-row items-center text-sm font-light text-neutral-400 rounded-sm hover:bg-neutral-700 p-2">
             {postId ? "Drafts" : "New Post"}
           </Label>
         </div>
 
         {/* Right-aligned section */}
         <div className="flex flex-row items-center gap-2 mr-2">
-          <div className="flex flex-row gap-4  items-center ">
+          <div className="flex flex-row gap-4 items-center">
             <Link
               href="/preview"
               passHref
@@ -140,19 +156,41 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
 
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    variant="ghost"
-                    // size='icon'
-                    aria-label="SideBarMenu"
-                    onClick={handleSave}
-                    className="flex z-50 items-center "
-                    disabled={isDisabled}
-                  >
-                    <Save className="size-4 mr-1" />
-                    Save
-                  </Button>
-                </TooltipTrigger>
+                <div className="inline-block">
+                  {" "}
+                  {/* Wrapper div to prevent button nesting */}
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      aria-label="Save post"
+                      onClick={handleSave}
+                      className="flex z-50 items-center"
+                      disabled={isDisabled}
+                    >
+                      {isSaving && !isSavingSuccess ? (
+                        <>
+                          <Loader2 className="size-4 mr-1 animate-spin" />
+                          Saving...
+                        </>
+                      ) : savePostError ? (
+                        <span className="flex flex-row items-center text-red-500">
+                          <AlertTriangle className="size-4 mr-1" />
+                          Error
+                        </span>
+                      ) : !isSaving && !isSavingSuccess && !savePostError ? (
+                        <>
+                          <Save className="size-4 mr-1" />
+                          Save
+                        </>
+                      ) : (
+                        <span className="flex flex-row items-center text-green-500">
+                          <Check className="size-4 mr-1" />
+                          Saved
+                        </span>
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                </div>
                 <TooltipContent>
                   {isDisabled && <p>Title and URL are required</p>}
                   {!isDisabled && <p>Click to save</p>}
@@ -163,12 +201,12 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
           <Button
             variant="ghost"
             size="icon"
-            aria-label="SideBarMenu"
+            aria-label="Toggle sidebar"
             onClick={toggleSidebar}
-            className="flex z-50 items-center "
+            className="flex z-50 items-center"
           >
-            {!isOpen && <PanelRightOpen className="size-5  " />}
-            {isOpen && <PanelRightClose className="size-5 " />}
+            {!isOpen && <PanelRightOpen className="size-5" />}
+            {isOpen && <PanelRightClose className="size-5" />}
           </Button>
         </div>
       </nav>

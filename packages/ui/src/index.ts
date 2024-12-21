@@ -33,5 +33,7 @@ export * from "./components/custom-sign-in";
 export * from "./components/theme-provider";
 export * from "./components/ui/alert";
 export * from "./components/ui/alert-dialog";
+export * from "./components/ui/pagination";
+
 export * from "./hooks/use-mobile";
 export * from "./hooks/use-navguard";
