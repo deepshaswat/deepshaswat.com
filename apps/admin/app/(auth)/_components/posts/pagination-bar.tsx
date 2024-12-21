@@ -32,11 +32,11 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
 
   return (
     <>
-      <Pagination className='mt-4'>
+      <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              href='#'
+              href="#"
               onClick={() => currentPage > 0 && onPageChange(currentPage - 1)}
               className={
                 currentPage === 0
@@ -48,7 +48,7 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
 
           {displayPage > 2 && (
             <PaginationItem>
-              <PaginationLink href='#' onClick={() => handlePageClick(0)}>
+              <PaginationLink href="#" onClick={() => handlePageClick(0)}>
                 1
               </PaginationLink>
             </PaginationItem>
@@ -63,7 +63,7 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
           {displayPage > 1 && (
             <PaginationItem>
               <PaginationLink
-                href='#'
+                href="#"
                 onClick={() => handlePageClick(displayPage - 2)}
               >
                 {displayPage - 1}
@@ -73,10 +73,10 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
 
           <PaginationItem>
             <PaginationLink
-              href='#'
+              href="#"
               isActive
               onClick={() => handlePageClick(displayPage - 1)}
-              className='bg-neutral-600'
+              className="bg-neutral-600"
             >
               {displayPage}
             </PaginationLink>
@@ -85,7 +85,7 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
           {displayPage < maxPage + 1 && (
             <PaginationItem>
               <PaginationLink
-                href='#'
+                href="#"
                 onClick={() => handlePageClick(displayPage)}
               >
                 {displayPage + 1}
@@ -101,7 +101,7 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
 
           {displayPage < maxPage && (
             <PaginationItem>
-              <PaginationLink href='#' onClick={() => handlePageClick(maxPage)}>
+              <PaginationLink href="#" onClick={() => handlePageClick(maxPage)}>
                 {maxPage + 1}
               </PaginationLink>
             </PaginationItem>
@@ -109,7 +109,7 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
 
           <PaginationItem>
             <PaginationNext
-              href='#'
+              href="#"
               onClick={() =>
                 currentPage < maxPage && onPageChange(currentPage + 1)
               }
