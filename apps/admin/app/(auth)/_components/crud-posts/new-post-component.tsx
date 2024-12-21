@@ -15,15 +15,18 @@ import {
   selectedTimeIst,
   postIdState,
   postDataState,
+  tagsState,
+  selectedTagsState,
 } from "@repo/store";
 
 const NewPostComponent = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [post, setPost] = useRecoilState(postState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFeatureFileUploadOpen, setIsFeatureFileUploadOpen] = useState(false);
   const [abortController, setAbortController] =
     useState<AbortController | null>(null);
+
+  const [post, setPost] = useRecoilState(postState);
 
   const resetMetadata = useResetRecoilState(postMetadataState);
   const resetPost = useResetRecoilState(postState);
@@ -31,6 +34,8 @@ const NewPostComponent = () => {
   const resetSelectDate = useResetRecoilState(selectDate);
   const resetPostFull = useResetRecoilState(postDataState);
   const resetPostId = useResetRecoilState(postIdState);
+  const resetTags = useResetRecoilState(tagsState);
+  const resetSelectedTags = useResetRecoilState(selectedTagsState);
 
   // reset state of all fields and uploaders of this page
   const resetState = () => {
@@ -38,21 +43,31 @@ const NewPostComponent = () => {
     setIsFeatureFileUploadOpen(false);
     setAbortController(null);
 
+    resetPostFull();
     resetMetadata();
     resetPost();
-
-    resetPostFull();
+    resetSelectedTimeIst();
+    resetSelectDate();
     resetPostId();
-    console.log("State has been reset");
+    resetTags();
+    resetSelectedTags();
   };
   useEffect(() => {
     resetState();
-    console.log("Resetting state");
-  }, []);
+  }, [
+    resetPost,
+    resetPostFull,
+    resetPostId,
+    resetSelectedTimeIst,
+    resetSelectDate,
+    resetMetadata,
+    resetTags,
+    resetSelectedTags,
+  ]);
 
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),
-    [],
+    []
   );
 
   const handleEditorContentChange = (content: string) => {
@@ -110,20 +125,20 @@ const NewPostComponent = () => {
   };
 
   return (
-    <div className="flex">
+    <div className='flex'>
       <div className={`flex-1 ${isOpen ? " mr-[400px]" : ""}`}>
         <NavBarPost isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div className="lg:mx-[180px]">
-          <div className="ml-10 max-w-screen-md lg:max-w-screen-lg">
+        <div className='lg:mx-[180px]'>
+          <div className='ml-10 max-w-screen-md lg:max-w-screen-lg'>
             <UploadComponent
               imageUrl={post.featureImage}
               isSubmitting={isSubmitting}
               onChange={handleFeatureImageChange}
               isFileUploadOpen={isFeatureFileUploadOpen}
               toggleFileUpload={toggleFeatureImageUpload}
-              text="Add feature image"
-              className="text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10"
-              buttonVariant="link"
+              text='Add feature image'
+              className='text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10'
+              buttonVariant='link'
               onCancel={handleCancelUpload}
             />
           </div>
@@ -131,11 +146,11 @@ const NewPostComponent = () => {
             <input
               value={post.title}
               onChange={handleMainInputChange}
-              placeholder="Post title"
-              className="w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700"
+              placeholder='Post title'
+              className='w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700'
             />
           </div>
-          <div className="mt-8">
+          <div className='mt-8'>
             <Editor
               onChange={handleEditorContentChange}
               initialContent={post.content}

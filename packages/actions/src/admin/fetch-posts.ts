@@ -17,17 +17,52 @@ async function authenticateUser() {
   }
 }
 
-export async function fetchAllPosts(postOption: string, tagOption: string) {
+export async function fetchAllPostsCount(
+  postOption: string,
+  tagOption: string
+) {
   await authenticateUser();
+  // modify for based on postOption and tagOption
+  if (postOption === "all-posts") {
+    const posts = await prisma.post.count();
+    return posts;
+  } else if (postOption === "featured-posts") {
+    const posts = await prisma.post.count({
+      where: {
+        featured: true,
+      },
+    });
+    return posts;
+  } else if (postOption === "newsletters") {
+    const posts = await prisma.post.count({
+      where: {
+        isNewsletter: true,
+      },
+    });
+    return posts;
+  } else {
+    const posts = await prisma.post.count({
+      where: {
+        status: splitAndCapitalize(postOption) as PostStatus,
+      },
+    });
+    return posts;
+  }
+}
+
+export async function fetchAllPosts(
+  postOption: string,
+  tagOption: string,
+  pageNumber: number
+) {
+  await authenticateUser();
+  const pageSize = 10;
+  const offset = pageNumber * pageSize;
+
   if (postOption === "all-posts") {
     const posts = await prisma.post.findMany({
-      //   where: {
-      //     tags: {
-      //       some: {
-      //         tagId: tagOption,
-      //       },
-      //     },
-      //   },
+      skip: offset,
+      take: pageSize,
       include: {
         tags: true,
         author: true,
@@ -39,12 +74,9 @@ export async function fetchAllPosts(postOption: string, tagOption: string) {
     const posts = await prisma.post.findMany({
       where: {
         featured: true,
-        // tags: {
-        //   some: {
-        //     tagId: tagOption,
-        //   },
-        // },
       },
+      skip: offset,
+      take: pageSize,
       include: {
         tags: true,
         author: true,
@@ -56,12 +88,9 @@ export async function fetchAllPosts(postOption: string, tagOption: string) {
     const posts = await prisma.post.findMany({
       where: {
         isNewsletter: true,
-        // tags: {
-        //   some: {
-        //     tagId: tagOption,
-        //   },
-        // },
       },
+      skip: offset,
+      take: pageSize,
       include: {
         tags: true,
         author: true,
@@ -74,12 +103,9 @@ export async function fetchAllPosts(postOption: string, tagOption: string) {
     const posts = await prisma.post.findMany({
       where: {
         status: splitAndCapitalize(postOption) as PostStatus,
-        // tags: {
-        //   some: {
-        //     tagId: tagOption || undefined,
-        //   },
-        // },
       },
+      skip: offset,
+      take: pageSize,
       include: {
         tags: true,
         author: true,

@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { PostListType } from "@repo/actions";
+import { PostListType, Tags } from "@repo/actions";
 
 export const postMetadataState = atom({
   key: "postMetadataState",
@@ -30,7 +30,7 @@ export const postState = atom({
     publishDate: null as Date | null,
     excerpt: "",
     featured: false,
-    tags: [] as string[],
+    tags: [] as Tags[],
     authors: "",
   },
 });
@@ -57,5 +57,25 @@ export const postDataState = atom<PostListType | null>({
 
 export const errorDuplicateUrlState = atom<string | null>({
   key: "errorDuplicateUrlState",
+  default: null,
+});
+
+export const tagsState = atom<Tags[]>({
+  key: "tagsState",
+  default: [],
+});
+
+export const selectedTagsState = atom<Tags[]>({
+  key: "selectedTagsState",
+  default: [],
+});
+
+export const pageNumberState = atom<number>({
+  key: "pageNumberState",
+  default: 0,
+});
+
+export const savePostErrorState = atom<string | null>({
+  key: "savePostErrorState",
   default: null,
 });

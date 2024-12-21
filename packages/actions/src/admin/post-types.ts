@@ -6,7 +6,7 @@ export interface PostType {
   publishDate: Date | null;
   excerpt: string;
   featured: boolean;
-  tags: string[];
+  tags: Tags[];
   authorId: string;
   metaData: MetadataType;
 }
@@ -69,6 +69,13 @@ export interface TagOnPost {
   postId: string;
   tagId: string;
 }
+
+// export interface TagsOnSinglePost {
+//   id: string;
+//   slug: string;
+//   description: string;
+//   imageUrl: string;
+// }
 
 export interface Tags {
   id: string;
