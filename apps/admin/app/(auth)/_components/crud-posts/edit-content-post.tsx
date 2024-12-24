@@ -24,7 +24,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase(),
+        : word.toLowerCase()
     )
     .join(" ");
 };
@@ -77,7 +77,7 @@ export const EditContentPost = ({
             imageUrl: tag.tag.imageUrl ?? "",
             slug: tag.tag.slug,
             posts: tag.tag.posts,
-          })),
+          }))
         );
       } catch (error) {
         console.error("Error fetching tags:", error);
@@ -94,10 +94,16 @@ export const EditContentPost = ({
       const initializeDateAndTime = (publishDate: Date) => {
         // Extract the date portion
         setInputDate(publishDate);
+        console.log("publishDate", publishDate);
 
         // Extract the time portion in HH:mm format
-        const formattedTime = publishDate.toISOString().slice(11, 16); // e.g., "14:30"
+
+        const istTime = new Date(publishDate.getTime() + 5.5 * 60 * 60 * 1000);
+        const hours = istTime.getUTCHours().toString().padStart(2, "0");
+        const minutes = istTime.getUTCMinutes().toString().padStart(2, "0");
+        const formattedTime = `${hours}:${minutes}`;
         setInputTimeIst(formattedTime);
+        // console.log("formattedTime", formattedTime);
       };
 
       initializeDateAndTime(initialPost.publishDate || new Date());
@@ -144,11 +150,14 @@ export const EditContentPost = ({
     setTags,
     pathname,
     setSelectedTags,
+
+    setInputDate,
+    setInputTimeIst,
   ]);
 
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),
-    [],
+    []
   );
 
   const handleEditorContentChange = (content: string) => {
@@ -206,20 +215,20 @@ export const EditContentPost = ({
   };
 
   return (
-    <div className="flex">
+    <div className='flex'>
       <div className={`flex-1 ${isOpen ? " mr-[400px]" : ""}`}>
         <NavBarPost isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <div className="lg:mx-[180px]">
-          <div className="ml-10 max-w-screen-md lg:max-w-screen-lg">
+        <div className='lg:mx-[180px]'>
+          <div className='ml-10 max-w-screen-md lg:max-w-screen-lg'>
             <UploadComponent
               imageUrl={post.featureImage}
               isSubmitting={isSubmitting}
               onChange={handleFeatureImageChange}
               isFileUploadOpen={isFeatureFileUploadOpen}
               toggleFileUpload={toggleFeatureImageUpload}
-              text="Add feature image"
-              className="text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10"
-              buttonVariant="link"
+              text='Add feature image'
+              className='text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10'
+              buttonVariant='link'
               onCancel={handleCancelUpload}
             />
           </div>
@@ -227,11 +236,11 @@ export const EditContentPost = ({
             <input
               value={post.title}
               onChange={handleMainInputChange}
-              placeholder="Post title"
-              className="w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700"
+              placeholder='Post title'
+              className='w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700'
             />
           </div>
-          <div className="mt-8">
+          <div className='mt-8'>
             <Editor
               onChange={handleEditorContentChange}
               initialContent={post.content}
