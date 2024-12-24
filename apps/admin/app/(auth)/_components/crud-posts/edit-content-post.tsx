@@ -96,8 +96,13 @@ export const EditContentPost = ({
         setInputDate(publishDate);
 
         // Extract the time portion in HH:mm format
-        const formattedTime = publishDate.toISOString().slice(11, 16); // e.g., "14:30"
+
+        const istTime = new Date(publishDate.getTime() + 5.5 * 60 * 60 * 1000);
+        const hours = istTime.getUTCHours().toString().padStart(2, "0");
+        const minutes = istTime.getUTCMinutes().toString().padStart(2, "0");
+        const formattedTime = `${hours}:${minutes}`;
         setInputTimeIst(formattedTime);
+        // console.log("formattedTime", formattedTime);
       };
 
       initializeDateAndTime(initialPost.publishDate || new Date());
@@ -144,6 +149,9 @@ export const EditContentPost = ({
     setTags,
     pathname,
     setSelectedTags,
+
+    setInputDate,
+    setInputTimeIst,
   ]);
 
   const Editor = useMemo(

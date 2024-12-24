@@ -308,7 +308,7 @@ export function MetadataSidebar() {
               <div className="ml-2 flex items-center bg-neutral-700 group-hover:bg-neutral-900 border-none rounded-md">
                 <input
                   id="publishTime"
-                  type="text"
+                  type="time"
                   placeholder="17:00"
                   value={inputTimeIst}
                   onChange={handleTimeIstChange}
