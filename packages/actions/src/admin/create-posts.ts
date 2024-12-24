@@ -200,4 +200,52 @@ async function updatePost(data: PostType, postId: string) {
     return { error: "Error updating post" };
   }
 }
-export { createPost, updatePost };
+
+async function publishPost(
+  postId: string,
+  publishDate: Date,
+  scheduleType: string,
+  publishType: string
+) {
+  await authenticateUser();
+
+  let data = {};
+  if (publishType === "newsletter" && scheduleType === "now") {
+    data = {
+      status: "PUBLISHED",
+      isNewsletter: true,
+      publishDate: new Date(),
+    };
+  } else if (publishType === "newsletter" && scheduleType === "later") {
+    data = {
+      status: "SCHEDULED",
+      publishDate: publishDate,
+      isNewsletter: true,
+    };
+  } else if (publishType === "blog" && scheduleType === "now") {
+    data = {
+      status: "PUBLISHED",
+      publishDate: new Date(),
+    };
+  } else if (publishType === "blog" && scheduleType === "later") {
+    data = {
+      status: "SCHEDULED",
+      publishDate: publishDate,
+    };
+  }
+
+  console.log("Data:", data);
+
+  try {
+    await prisma.post.update({
+      where: { id: postId },
+      data: data,
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error publishing post:", error);
+    return { error: "Error publishing post" };
+  }
+}
+
+export { createPost, updatePost, publishPost };
