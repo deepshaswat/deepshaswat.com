@@ -205,7 +205,7 @@ async function publishPost(
   postId: string,
   publishDate: Date,
   scheduleType: string,
-  publishType: string
+  publishType: string,
 ) {
   await authenticateUser();
 
