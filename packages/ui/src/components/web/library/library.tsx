@@ -13,30 +13,30 @@ const pageConfig = {
 export function Library() {
   function renderAll() {
     return books.map((category, index) => (
-      <div key={index} className='mb-2'>
-        <h2 className='text-primary font-bold text-2xl'>{category.name}</h2>
-        <ul className='list-disc mb-12'>
+      <div key={index} className="mb-2">
+        <h2 className="text-primary font-bold text-2xl">{category.name}</h2>
+        <ul className="list-disc mb-12">
           {category.items.map((item, iIndex) => (
-            <li key={iIndex} className='ml-10'>
+            <li key={iIndex} className="ml-10">
               <a
                 href={item.url}
-                target='_blank'
-                className='text-neutral-200 hover:text-neutral-300 text-sm underline underline-offset-4'
+                target="_blank"
+                className="text-neutral-200 hover:text-neutral-300 text-sm underline underline-offset-4"
               >
                 {item.title}
               </a>
               <span> - </span>
               <span
-                className='text-sm underline-links italic'
+                className="text-sm underline-links italic"
                 dangerouslySetInnerHTML={{ __html: item.author }}
               />
-              <p className='text-sm'>
+              <p className="text-sm">
                 {item.language}
                 {item.description !== "" && (
                   <>
                     <span> - </span>
                     <span
-                      className='text-sm underline-links italic'
+                      className="text-sm underline-links italic"
                       dangerouslySetInnerHTML={{ __html: item.description }}
                     />
                   </>
@@ -51,8 +51,8 @@ export function Library() {
 
   return (
     <Base
-      title='Library // Shaswat Deep'
-      description=''
+      title="Library // Shaswat Deep"
+      description=""
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}

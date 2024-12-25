@@ -18,8 +18,8 @@ function ClientProviders({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider
-      attribute='class'
-      defaultTheme='dark'
+      attribute="class"
+      defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
     >

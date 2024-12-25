@@ -79,15 +79,15 @@ export const ArticlesListPage = () => {
 
   return (
     <Base
-      title='Articles // Shaswat Deep'
-      description=''
+      title="Articles // Shaswat Deep"
+      description=""
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
-      <p className='text-neutral-500'>
+      <p className="text-neutral-500">
         Here you can find all the{" "}
-        <span className='text-neutral-200'>{postsCount} articles or poems</span>{" "}
+        <span className="text-neutral-200">{postsCount} articles or poems</span>{" "}
         I wrote. You can read about web development, tech career, personal
         finance, and more in English.
       </p>
@@ -106,8 +106,8 @@ export const ArticlesListPage = () => {
           /> */}
         </>
       ) : (
-        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
-          <p className='text-3xl text-red-700'>No posts found</p>
+        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
+          <p className="text-3xl text-red-700">No posts found</p>
         </div>
       )}
     </Base>
