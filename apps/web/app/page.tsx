@@ -1,9 +1,7 @@
-import { Button } from "@repo/ui";
+"use client";
 
-export default function Page(): JSX.Element {
-  return (
-    <div className="bg-green-300">
-      <Button variant="destructive">Click me</Button>
-    </div>
-  );
+import { Landing } from "@repo/ui/web";
+
+export default function Home() {
+  return <Landing />;
 }
