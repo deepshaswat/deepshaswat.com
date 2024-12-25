@@ -34,8 +34,8 @@ export const ShortcutErrorHome = () => {
       </span>
     );
     return (
-      <Button variant={"ghost"} onClick={onClick} className='font-normal mb-10'>
-        <div className='grid grid-flow-col gap-1 mx-[0] text-lg '>
+      <Button variant={"ghost"} onClick={onClick} className="font-normal mb-10">
+        <div className="grid grid-flow-col gap-1 mx-[0] text-lg ">
           {message}
         </div>
       </Button>

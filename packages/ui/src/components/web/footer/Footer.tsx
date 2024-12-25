@@ -55,7 +55,7 @@ export function Footer() {
   const renderAnchor = (link: LinkProps, index: number) => {
     return (
       <Link
-        className='group flex items-center ml-5 text-[16px]  text-neutral-500 border-0 no-underline  transition-color duration-200 ease-in-out hover:text-neutral-100 focus:text-primary'
+        className="group flex items-center ml-5 text-[16px]  text-neutral-500 border-0 no-underline  transition-color duration-200 ease-in-out hover:text-neutral-100 focus:text-primary"
         key={index}
         href={link.url}
         passHref
@@ -63,24 +63,24 @@ export function Footer() {
       >
         {!isMobile ? (
           <>
-            <span className='hidden md:block text-sm  '>{link.title}</span>
-            <span className='block md:hidden opacity-100 ml-2'>
+            <span className="hidden md:block text-sm  ">{link.title}</span>
+            <span className="block md:hidden opacity-100 ml-2">
               {link.icon}
             </span>
-            <span className='hidden md:group-hover:block opacity-0 group-hover:opacity-100 ml-1 transition-opacity duration-300 ease-in-out'>
+            <span className="hidden md:group-hover:block opacity-0 group-hover:opacity-100 ml-1 transition-opacity duration-300 ease-in-out">
               {link.icon}
             </span>
           </>
         ) : (
-          <span className='block opacity-100 ml-2'>{link.icon}</span>
+          <span className="block opacity-100 ml-2">{link.icon}</span>
         )}
       </Link>
     );
   };
 
   return (
-    <div className='max-w-screen-4xl mx-auto mb-5'>
-      <div className='w-full flex items-center justify-center'>
+    <div className="max-w-screen-4xl mx-auto mb-5">
+      <div className="w-full flex items-center justify-center">
         {links.map(renderAnchor)}
       </div>
     </div>

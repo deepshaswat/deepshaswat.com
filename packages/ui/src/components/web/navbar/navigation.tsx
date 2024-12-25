@@ -31,7 +31,7 @@ const routes = [
 
 export const Navigation = () => {
   return (
-    <nav className='hidden md:flex items-center gap-x-2 overflow-x-auto'>
+    <nav className="hidden md:flex items-center gap-x-2 overflow-x-auto">
       {routes.map((route) => (
         <NavButton key={route.href} href={route.href} path={route.href} />
       ))}

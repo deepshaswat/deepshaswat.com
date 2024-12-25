@@ -17,19 +17,19 @@ export function Appbar() {
   };
 
   return (
-    <header className=' px-4 py-2 '>
-      <div className='max-w-screen-4xl mx-auto'>
-        <div className='w-full flex items-center justify-between '>
-          <Link href='/' passHref>
+    <header className=" px-4 py-2 ">
+      <div className="max-w-screen-4xl mx-auto">
+        <div className="w-full flex items-center justify-between ">
+          <Link href="/" passHref>
             <Button
-              className='font-bold text-3xl no-underline font-heading'
+              className="font-bold text-3xl no-underline font-heading"
               variant={"ghost"}
               onClick={onClick}
             >
               S
             </Button>
           </Link>
-          <div className='flex items-center md:gap-x-12 lg:gap-x-16'>
+          <div className="flex items-center md:gap-x-12 lg:gap-x-16">
             <Navigation />
           </div>
           <Button variant={"ghost"} onClick={() => query.toggle()}>

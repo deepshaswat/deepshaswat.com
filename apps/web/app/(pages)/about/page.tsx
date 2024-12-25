@@ -6,7 +6,7 @@ export const metadata: Metadata = generateSiteConfig(
   "About // Shaswat Deep",
   "Shaswat Deep is an Indian software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",
   "/about",
-  "/static/images/reminder-bw.jpg"
+  "/static/images/reminder-bw.jpg",
 );
 
 const AboutPage = () => {

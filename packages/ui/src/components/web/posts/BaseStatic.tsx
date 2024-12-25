@@ -31,7 +31,7 @@ const Base: React.FC<BaseProps> = ({
           webkitbackgroundclip: "text";
         }
       `}</style>
-        <PostContent className=''>
+        <PostContent className="">
           <PostContainer>
             <GradientText startColor={primaryColor} endColor={secondaryColor}>
               {tagline ? tagline : title}
@@ -39,7 +39,7 @@ const Base: React.FC<BaseProps> = ({
 
             <p
               dangerouslySetInnerHTML={{ __html: description || "" }}
-              className='text-md mb-12 mt-12 font-thin text-decoration'
+              className="text-md mb-12 mt-12 font-thin text-decoration"
             />
             {children}
           </PostContainer>
