@@ -27,7 +27,7 @@ const NewPostComponent = () => {
     useState<AbortController | null>(null);
 
   const [post, setPost] = useRecoilState(postState);
-
+  const [postMetadata, setPostMetadata] = useRecoilState(postMetadataState);
   const resetMetadata = useResetRecoilState(postMetadataState);
   const resetPost = useResetRecoilState(postState);
   const resetSelectedTimeIst = useResetRecoilState(selectedTimeIst);
@@ -98,6 +98,9 @@ const NewPostComponent = () => {
           headers: { "Content-Type": file.type },
         });
         setPost((prev) => ({ ...prev, featureImage: s3URL }));
+        setPostMetadata((prev) => ({ ...prev, imageUrl: s3URL }));
+        setPostMetadata((prev) => ({ ...prev, twitterImage: s3URL }));
+        setPostMetadata((prev) => ({ ...prev, ogImage: s3URL }));
       } catch (error) {
         console.error("Error uploading file:", error);
       } finally {

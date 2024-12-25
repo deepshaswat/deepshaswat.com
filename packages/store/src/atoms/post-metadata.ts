@@ -79,3 +79,8 @@ export const savePostErrorState = atom<string | null>({
   key: "savePostErrorState",
   default: null,
 });
+
+export const blogPageNumberState = atom<number>({
+  key: "blogPageNumberState",
+  default: 0,
+});

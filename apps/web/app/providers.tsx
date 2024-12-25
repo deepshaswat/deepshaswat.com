@@ -1,11 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "@repo/ui";
-import { CommandBar } from "@repo/ui/web";
+import { CommandBar, CSPostHogProvider } from "@repo/ui/web";
 import { RecoilRoot } from "recoil";
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
+function ClientProviders({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <>{children}</>;
+  }
+
   return (
     <ThemeProvider
       attribute="class"
@@ -13,9 +23,17 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       enableSystem
       disableTransitionOnChange
     >
-      <RecoilRoot>
-        <CommandBar>{children}</CommandBar>
-      </RecoilRoot>
+      <CommandBar>{children}</CommandBar>
     </ThemeProvider>
+  );
+}
+
+export const Providers = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <CSPostHogProvider>
+      <RecoilRoot>
+        <ClientProviders>{children}</ClientProviders>
+      </RecoilRoot>
+    </CSPostHogProvider>
   );
 };

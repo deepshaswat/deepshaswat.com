@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ShortcutHome } from "@repo/ui/web";
 
-export function Landing() {
+export const Landing = () => {
   return (
     <div className="min-h-[calc(100vh-20vh)] sm:min-h-[calc(100vh-12vh)] flex items-center justify-start max-w-screen-sm md:max-w-screen-md  ">
       <div className="flex flex-col justify-center items-start ml-6 md:mx-auto">
@@ -40,4 +40,4 @@ export function Landing() {
       </div>
     </div>
   );
-}
+};
