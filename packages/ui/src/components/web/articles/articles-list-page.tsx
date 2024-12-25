@@ -14,6 +14,7 @@ import {
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { PaginationBar } from "./pagination-bar";
 import { BlogWithSearch } from "./all-blogs-list";
+import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 
 const pageConfig = {
   tagline: "Failures. Guides. Paths.",
@@ -79,24 +80,26 @@ export const ArticlesListPage = () => {
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
-      description=""
+      title='Articles // Shaswat Deep'
+      description=''
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
-      <p className="text-neutral-500">
+      <p className='text-neutral-500'>
         Here you can find all the{" "}
-        <span className="text-neutral-200">{postsCount} articles or poems</span>{" "}
+        <span className='text-neutral-200'>
+          {postsCount} articles and poems
+        </span>{" "}
         I wrote. You can read about web development, tech career, personal
         finance, and more in English.
       </p>
-      {/* {renderAll()} */}
-      Featured Post <br />
+
       {loading ? (
         <> </>
       ) : postsCount > 0 ? (
         <>
+          <SimpleBlogWithGrid blogs={featuredPosts} />
           <BlogWithSearch blogs={posts} />
           {/* ToDo: Enable pagination when a lot of blogs are added and algolia search is added */}
           {/* <PaginationBar
@@ -106,8 +109,8 @@ export const ArticlesListPage = () => {
           /> */}
         </>
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </Base>

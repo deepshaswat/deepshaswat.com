@@ -4,6 +4,6 @@ module.exports = {
   reactStrictMode: true,
   transpilePackages: ["@repo/ui"],
   images: {
-    domains: ["img.clerk.com"],
+    domains: ["img.clerk.com", "blog-deepshaswat-readonly.s3.amazonaws.com"],
   },
 };

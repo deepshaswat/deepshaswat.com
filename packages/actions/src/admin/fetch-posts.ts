@@ -19,7 +19,7 @@ async function authenticateUser() {
 
 export async function fetchAllPostsCount(
   postOption: string,
-  tagOption: string,
+  tagOption: string
 ) {
   await authenticateUser();
   // modify for based on postOption and tagOption
@@ -95,7 +95,7 @@ export async function fetchPublishedPostsCount(postOption: string) {
 export async function fetchAllPosts(
   postOption: string,
   tagOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
   await authenticateUser();
   const pageSize = 10;
@@ -194,6 +194,7 @@ export async function fetchPublishedPosts(postOption: string) {
       where: {
         featured: true,
         status: "PUBLISHED",
+        isNewsletter: false,
       },
       include: {
         tags: true,
@@ -242,7 +243,7 @@ export async function fetchPublishedPosts(postOption: string) {
 }
 export async function fetchPublishedPostsPaginated(
   postOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
   await authenticateUser();
   const pageSize = 10;
