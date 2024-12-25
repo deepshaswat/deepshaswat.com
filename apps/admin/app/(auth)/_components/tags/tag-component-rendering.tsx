@@ -45,7 +45,7 @@ const TagComponentRendering = ({ tags }: TagListInterface) => {
 
         <div className="flex gap-2">
           <Link href="/tags/new-tag" className="items-center">
-            <Button variant="secondary" className="rounded-sm items-center">
+            <Button variant="default" className="rounded-sm items-center">
               New tag
             </Button>
           </Link>

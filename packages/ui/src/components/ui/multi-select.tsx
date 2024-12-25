@@ -280,7 +280,7 @@ const MultiSelectValue = React.forwardRef<
               <Badge
                 variant="outline"
                 key={value}
-                className="group/multi-select-badge cursor-pointer text-muted rounded-lg pr-1.5"
+                className="group/multi-select-badge cursor-pointer text-neutral-200 rounded-lg pr-1.5"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -288,7 +288,7 @@ const MultiSelectValue = React.forwardRef<
                 }}
               >
                 <span>{child}</span>
-                <X className="text-muted group-hover/multi-select-badge:text-foreground ml-1 size-3" />
+                <X className="text-neutral-200 group-hover/multi-select-badge:text-foreground ml-1 size-3" />
               </Badge>
             );
 

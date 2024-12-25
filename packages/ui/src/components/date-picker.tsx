@@ -33,7 +33,7 @@ export function DatePicker({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className="z-50">
         <Button
           variant={"date"}
           className={cn(

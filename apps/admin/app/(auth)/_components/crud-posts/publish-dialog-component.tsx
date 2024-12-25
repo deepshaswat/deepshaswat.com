@@ -122,7 +122,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
   //     };
 
   //     validateDate();
-  //   }, [setInputDate, setInputTimeIst]);
+  //   }, [inputDate, inputTimeIst]);
 
   useEffect(() => {
     setFirstDialogOpen(value);
@@ -182,11 +182,11 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
             2) items-center + justify-center to center content
             (If you'd rather keep it top-aligned but centered horizontally, remove justify-center.)
           */}
-          <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center p-8 -mt-12">
+          <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center p-8 ">
             {/* You can also wrap this in a narrower container if desired */}
             <div className="w-full max-w-xl">
               <DialogHeader className="mb-10 text-left sm:text-center">
-                <DialogTitle>
+                <DialogTitle className="-mt-12">
                   <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-green-500 mb-2">
                     Ready, set, publish.
                   </div>
@@ -333,7 +333,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
       >
         <DialogContent className="fixed w-full h-full border-none bg-gray-900 flex flex-col !max-w-none !max-h-none overflow-hidden">
           {/* Top Navigation Area */}
-          <div className="flex items-center justify-between px-4 py-2 flex-shrink-0">
+          <div className="flex items-center justify-between px-4 py-2 flex-shrink-0 ">
             <div className="flex items-center space-x-2">
               <Button
                 variant="ghost"
@@ -362,7 +362,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
           <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center p-8">
             <div className="w-full max-w-xl">
               <DialogHeader className="mb-8 text-left sm:text-center">
-                <DialogTitle>
+                <DialogTitle className="-mt-12">
                   <div className="text-3xl sm:text-4xl md:text-6xl font-bold text-green-500 mb-3">
                     Ready, set, publish.
                   </div>

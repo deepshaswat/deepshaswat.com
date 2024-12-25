@@ -15,6 +15,7 @@ import {
   tagsState,
   selectedTagsState,
   savePostErrorState,
+  postDataState,
 } from "@repo/store";
 
 import {
@@ -38,12 +39,14 @@ import {
 import {
   dateTimeValidation,
   fetchAllTagsWithPostCount,
+  PostStatus,
   Tags,
 } from "@repo/actions";
 import axios from "axios";
 
 export function MetadataSidebar() {
   const [post, setPost] = useRecoilState(postState);
+  const [postFull, setPostFull] = useRecoilState(postDataState);
   const [metadata, setMetadata] = useRecoilState(postMetadataState);
   const [error, setError] = useRecoilState(savePostErrorState);
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
@@ -217,7 +220,11 @@ export function MetadataSidebar() {
     const validateDate = async () => {
       const result = await dateTimeValidation(inputDate, inputTimeIst);
 
-      if (result.error) {
+      if (
+        (postFull?.status === PostStatus.DRAFT ||
+          postFull?.status === PostStatus.SCHEDULED) &&
+        result.error
+      ) {
         setError(result.error);
       } else {
         setError(null);
@@ -278,7 +285,7 @@ export function MetadataSidebar() {
               placeholder="Post URL"
               value={post.postUrl}
               onChange={handleUrlChange}
-              className="flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-8 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
             />
           </div>
 
@@ -312,7 +319,7 @@ export function MetadataSidebar() {
                   placeholder="17:00"
                   value={inputTimeIst}
                   onChange={handleTimeIstChange}
-                  className="flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                 />
                 <span className="text-neutral-400 items-center mr-4 text-[10px]">
                   IST
@@ -332,7 +339,7 @@ export function MetadataSidebar() {
             placeholder="Write a short description of your post"
             value={post.excerpt}
             onChange={handleExcerptChange}
-            className="flex mt-4 h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-8 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 150 characters. You've used{" "}
@@ -369,7 +376,7 @@ export function MetadataSidebar() {
             id="feature-post"
             checked={post.featured}
             onCheckedChange={toggleFeaturePost}
-            className="data-[state=checked]:bg-green-500"
+            className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500 data-[state=unchecked]:bg-neutral-200 data-[state=unchecked]:border-neutral-200"
           />
         </div>
         <div className="mt-4">
@@ -389,7 +396,7 @@ export function MetadataSidebar() {
             onChange={(e) =>
               setMetadata((prev) => ({ ...prev, keywords: e.target.value }))
             }
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 10 words (Max: 500 characters). <br /> You've used{" "}
@@ -420,7 +427,7 @@ export function MetadataSidebar() {
             placeholder="Meta Data Title"
             value={metadata.title}
             onChange={handleMetaTitleChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 50 characters. You've used{" "}
@@ -450,7 +457,7 @@ export function MetadataSidebar() {
             placeholder="Meta Data Description"
             value={metadata.description}
             onChange={handleMetaDescriptionChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 160 characters. You've used{" "}
@@ -497,7 +504,7 @@ export function MetadataSidebar() {
             placeholder="OG Title"
             value={metadata.ogTitle}
             onChange={handleOgTitleChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 50 characters. You've used{" "}
@@ -528,7 +535,7 @@ export function MetadataSidebar() {
             placeholder="OG Description"
             value={metadata.ogDescription}
             onChange={handleOgDescriptionChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 160 characters. You've used{" "}
@@ -579,7 +586,7 @@ export function MetadataSidebar() {
             placeholder="Twitter Title"
             value={metadata.twitterTitle}
             onChange={handleTwitterTitleChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 50 characters. You've used{" "}
@@ -610,7 +617,7 @@ export function MetadataSidebar() {
             placeholder="Twitter Description"
             value={metadata.twitterDescription}
             onChange={handleTwitterDescriptionChange}
-            className="flex mt-4 h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
             Recommended: 160 characters. You've used{" "}
@@ -726,10 +733,15 @@ export const TagsComponent: React.FC<TagsProps> = ({
     <div className="space-y-4">
       <Label className="text-[13px] mb-4 block">Tags</Label>
       <MultiSelect value={selectedTagIds} onValueChange={handleTagChange}>
-        <MultiSelectTrigger className="bg-neutral-700 border-2 border-transparent focus:border-green-500">
-          <MultiSelectValue placeholder="Select tags" />
+        <MultiSelectTrigger className="bg-neutral-700 border-2 border-transparent text-neutral-200">
+          <MultiSelectValue
+            className="text-neutral-200"
+            placeholder="Select tags"
+            maxDisplay={2}
+          />
         </MultiSelectTrigger>
-        <MultiSelectContent className="bg-neutral-800">
+
+        <MultiSelectContent className="">
           <MultiSelectSearch
             placeholder="Search tags..."
             className="border-neutral-700"
@@ -737,11 +749,7 @@ export const TagsComponent: React.FC<TagsProps> = ({
           <MultiSelectList>
             <MultiSelectGroup>
               {tags.map((tag) => (
-                <MultiSelectItem
-                  key={tag.id}
-                  value={tag.id}
-                  className="bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-                >
+                <MultiSelectItem key={tag.id} value={tag.id} className="">
                   {capitalizeFirstLetter(tag.slug)}
                 </MultiSelectItem>
               ))}

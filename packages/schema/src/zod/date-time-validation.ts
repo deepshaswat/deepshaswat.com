@@ -1,17 +1,5 @@
 import * as z from "zod";
 
-const ContactSchema = z.object({
-  email: z.string().email({
-    message: "Email is required",
-  }),
-  name: z.string().min(6, {
-    message: "Name is required",
-  }),
-  message: z.string().min(20, {
-    message: "Minimum of length 20 is required",
-  }),
-});
-
 const timeSchema = z.string().refine(
   (value) => {
     const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -44,4 +32,4 @@ const combinedDateTimeSchema = z
     },
   );
 
-export { ContactSchema, timeSchema, combinedDateTimeSchema };
+export { timeSchema, combinedDateTimeSchema };

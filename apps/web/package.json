@@ -1,19 +1,23 @@
 {
-  "name": "web",
+  "name": "@repo/web",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3010",
+    "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@clerk/nextjs": "^5.2.14",
+    "@repo/ui": "*",
+    "@repo/schema": "*",
+    "@repo/db": "*",
+    "@repo/actions": "*",
     "next": "^14.1.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@repo/ui": "*"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.1",

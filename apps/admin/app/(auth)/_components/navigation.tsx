@@ -28,7 +28,7 @@ import {
 } from "@repo/ui";
 import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { useNavigationGuard } from "@repo/ui";
+
 const Navigation = () => {
   const { user } = useUser();
   const userButtonRef = React.useRef<HTMLDivElement>(null);

@@ -177,7 +177,7 @@ const EditComponent = ({
 
           <div className=" gap-20 justify-start">
             <Button
-              variant="secondary"
+              variant="default"
               className="rounded-sm items-center"
               onClick={handleSubmit}
             >
@@ -206,7 +206,7 @@ const EditComponent = ({
                     type="text"
                     value={inputSlug}
                     onChange={handleSlugNameChange}
-                    className=" h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                    className=" h-8  w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
 

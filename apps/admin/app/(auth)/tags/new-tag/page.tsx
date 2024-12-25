@@ -138,7 +138,7 @@ const NewTag = () => {
           </Breadcrumb>
 
           <Button
-            variant={"secondary"}
+            variant={"default"}
             className="rounded-sm"
             onClick={handleSave}
             disabled={isSubmitting}
