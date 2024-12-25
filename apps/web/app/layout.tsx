@@ -2,13 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-// import { GoogleAnalytics } from "@repo/ui/web";
-import {
-  Appbar,
-  Footer,
-  generateSiteConfig,
-  CSPostHogProvider,
-} from "@repo/ui/web";
+import { Appbar, Footer, generateSiteConfig } from "@repo/ui/web";
 import { Toaster } from "@repo/ui";
 
 const inter = Nunito({ subsets: ["latin"] });
@@ -20,31 +14,29 @@ export const viewport: Viewport = {
 export const metadata: Metadata = generateSiteConfig(
   "Shaswat Deep",
   "deepshaswat.com",
-  "/",
+  "/"
 );
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <CSPostHogProvider>
-        <body className={inter.className}>
-          {/* <GoogleAnalytics /> */}
-          <Providers>
+    <html lang='en' suppressHydrationWarning>
+      <head />
+      <body className={inter.className} suppressHydrationWarning>
+        <Providers>
+          <main className='flex min-h-screen flex-col'>
             <Appbar />
-            {/* bg-gradient-to-t from-red-50 via-slate-200 to-neutral-400
-          dark:from-slate-700 from-10% dark:via-slate-950 via-30% dark:to-black
-          to-90% */}
-            <div className="min-h-[calc(100vh-12vh)] max-w-screen-lg lg:mx-auto ">
+            <div className='flex-1 w-full max-w-screen-lg mx-auto px-4'>
               {children}
               <Toaster />
             </div>
             <Footer />
-          </Providers>
-        </body>
-      </CSPostHogProvider>
+          </main>
+        </Providers>
+      </body>
     </html>
   );
 }

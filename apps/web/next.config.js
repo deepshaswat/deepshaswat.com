@@ -3,4 +3,7 @@ require("dotenv").config({ path: "../../.env" });
 module.exports = {
   reactStrictMode: true,
   transpilePackages: ["@repo/ui"],
+  images: {
+    domains: ["img.clerk.com"],
+  },
 };

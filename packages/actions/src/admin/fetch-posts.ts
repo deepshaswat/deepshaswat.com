@@ -19,7 +19,7 @@ async function authenticateUser() {
 
 export async function fetchAllPostsCount(
   postOption: string,
-  tagOption: string,
+  tagOption: string
 ) {
   await authenticateUser();
   // modify for based on postOption and tagOption
@@ -40,6 +40,14 @@ export async function fetchAllPostsCount(
       },
     });
     return posts;
+  } else if (postOption === "articles") {
+    const posts = await prisma.post.count({
+      where: {
+        status: "PUBLISHED",
+        isNewsletter: false,
+      },
+    });
+    return posts;
   } else {
     const posts = await prisma.post.count({
       where: {
@@ -50,10 +58,44 @@ export async function fetchAllPostsCount(
   }
 }
 
+export async function fetchPublishedPostsCount(postOption: string) {
+  await authenticateUser();
+  // modify for based on postOption and tagOption
+  if (postOption === "all-posts") {
+    const posts = await prisma.post.count();
+    return posts;
+  } else if (postOption === "featured-posts") {
+    const posts = await prisma.post.count({
+      where: {
+        featured: true,
+        status: "PUBLISHED",
+      },
+    });
+    return posts;
+  } else if (postOption === "newsletters") {
+    const posts = await prisma.post.count({
+      where: {
+        isNewsletter: true,
+        status: "PUBLISHED",
+      },
+    });
+    return posts;
+  } else if (postOption === "articles") {
+    const posts = await prisma.post.count({
+      where: {
+        status: "PUBLISHED",
+        isNewsletter: false,
+      },
+    });
+    return posts;
+  }
+  return 0;
+}
+
 export async function fetchAllPosts(
   postOption: string,
   tagOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
   await authenticateUser();
   const pageSize = 10;
@@ -66,6 +108,9 @@ export async function fetchAllPosts(
       include: {
         tags: true,
         author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
       },
     });
 
@@ -81,6 +126,9 @@ export async function fetchAllPosts(
         tags: true,
         author: true,
       },
+      orderBy: {
+        publishDate: "desc",
+      },
     });
 
     return posts as PostListType[];
@@ -95,11 +143,30 @@ export async function fetchAllPosts(
         tags: true,
         author: true,
       },
+      orderBy: {
+        publishDate: "desc",
+      },
     });
 
     return posts as PostListType[];
+  } else if (postOption === "articles") {
+    const posts = await prisma.post.findMany({
+      where: {
+        status: "PUBLISHED",
+        isNewsletter: false,
+      },
+      skip: offset,
+      take: pageSize,
+      include: {
+        tags: true,
+        author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+    return posts as PostListType[];
   } else {
-    console.log("Fetching posts for", postOption, tagOption);
     const posts = await prisma.post.findMany({
       where: {
         status: splitAndCapitalize(postOption) as PostStatus,
@@ -110,10 +177,133 @@ export async function fetchAllPosts(
         tags: true,
         author: true,
       },
+      orderBy: {
+        publishDate: "desc",
+      },
     });
 
     return posts as PostListType[];
   }
+}
+
+export async function fetchPublishedPosts(postOption: string) {
+  await authenticateUser();
+
+  if (postOption === "featured-posts") {
+    const posts = await prisma.post.findMany({
+      where: {
+        featured: true,
+        status: "PUBLISHED",
+      },
+      include: {
+        tags: true,
+        author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+
+    return posts as PostListType[];
+  } else if (postOption === "newsletters") {
+    const posts = await prisma.post.findMany({
+      where: {
+        isNewsletter: true,
+        status: "PUBLISHED",
+      },
+      include: {
+        tags: true,
+        author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+
+    return posts as PostListType[];
+  } else if (postOption === "articles") {
+    const posts = await prisma.post.findMany({
+      where: {
+        status: "PUBLISHED",
+        isNewsletter: false,
+      },
+      include: {
+        tags: true,
+        author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+    console.log(posts.length);
+    return posts as PostListType[];
+  }
+  return [];
+}
+export async function fetchPublishedPostsPaginated(
+  postOption: string,
+  pageNumber: number
+) {
+  await authenticateUser();
+  const pageSize = 10;
+  const offset = pageNumber * pageSize;
+
+  if (postOption === "featured-posts") {
+    const posts = await prisma.post.findMany({
+      where: {
+        featured: true,
+        status: "PUBLISHED",
+      },
+      skip: offset,
+      take: pageSize,
+      include: {
+        tags: true,
+        author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+
+    return posts as PostListType[];
+  } else if (postOption === "newsletters") {
+    const posts = await prisma.post.findMany({
+      where: {
+        isNewsletter: true,
+        status: "PUBLISHED",
+      },
+      skip: offset,
+      take: pageSize,
+      include: {
+        tags: true,
+        author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+
+    return posts as PostListType[];
+  } else if (postOption === "articles") {
+    const posts = await prisma.post.findMany({
+      where: {
+        status: "PUBLISHED",
+        isNewsletter: false,
+      },
+      skip: offset,
+      take: pageSize,
+      include: {
+        tags: true,
+        author: true,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+    console.log(posts.length);
+    return posts as PostListType[];
+  }
+  return [];
 }
 
 export async function fetchPostById(id: string) {

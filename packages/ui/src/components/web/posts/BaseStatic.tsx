@@ -1,7 +1,5 @@
-"use client";
-
-import { GradientText } from "./GradientText";
-import { PostContainer, PostContent, PostMain } from "./Post";
+// Server component wrapper
+import { BaseClient } from "./base-client";
 
 interface BaseProps {
   title: string;
@@ -12,41 +10,8 @@ interface BaseProps {
   children: React.ReactNode;
 }
 
-const Base: React.FC<BaseProps> = ({
-  title,
-  description,
-  tagline,
-  primaryColor,
-  secondaryColor,
-  children,
-}) => {
-  return (
-    <>
-      <PostMain>
-        <style>{`
-         ::selection {
-          background: ${primaryColor};
-          color: #000;
-          webkittextfillcolor: "#000";
-          webkitbackgroundclip: "text";
-        }
-      `}</style>
-        <PostContent className="">
-          <PostContainer>
-            <GradientText startColor={primaryColor} endColor={secondaryColor}>
-              {tagline ? tagline : title}
-            </GradientText>
-
-            <p
-              dangerouslySetInnerHTML={{ __html: description || "" }}
-              className="text-md mb-12 mt-12 font-thin text-decoration"
-            />
-            {children}
-          </PostContainer>
-        </PostContent>
-      </PostMain>
-    </>
-  );
+const Base: React.FC<BaseProps> = (props) => {
+  return <BaseClient {...props} />;
 };
 
 export { Base };
