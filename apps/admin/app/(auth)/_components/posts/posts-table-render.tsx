@@ -13,7 +13,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase(),
+        : word.toLowerCase()
     )
     .join(" ");
 };
@@ -30,9 +30,9 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
     switch (status.toLowerCase()) {
       case "draft":
         return (
-          <div className="flex flex-row gap-x-2">
+          <div className='flex flex-row gap-x-2'>
             <span className={`${baseClasses} text-pink-600`}>Draft</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className='text-[10px] text-neutral-400'>
               {" "}
               - Last saved at{" "}
               {new Date(post.updatedAt).toLocaleDateString("en-US", {
@@ -45,9 +45,9 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
         );
       case "newsletter":
         return (
-          <div className="flex items-center gap-2">
+          <div className='flex items-center gap-2'>
             <span className={`${baseClasses} text-green-600`}>Sent</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className='text-[10px] text-neutral-400'>
               {" "}
               - Sent at{" "}
               {post.publishDate
@@ -58,7 +58,7 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
                   })
                 : ""}
             </span>
-            <div className="flex items-center text-xs text-neutral-400">
+            <div className='flex items-center text-xs text-neutral-400'>
               {/* <span className='mr-4'>{post.openRate || "71"}% opened</span>
               <span>{post.clickRate || "4"}% clicked</span> */}
             </div>
@@ -66,9 +66,9 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
         );
       case "published":
         return (
-          <div className="flex flex-row gap-x-2">
+          <div className='flex flex-row gap-x-2'>
             <span className={`${baseClasses} text-green-600`}>Published</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className='text-[10px] text-neutral-400'>
               {" "}
               - Published at{" "}
               {post.publishDate
@@ -83,9 +83,9 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
         );
       case "scheduled":
         return (
-          <div className="flex flex-row gap-x-2">
+          <div className='flex flex-row gap-x-2'>
             <span className={`${baseClasses} text-blue-600`}>Scheduled</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className='text-[10px] text-neutral-400'>
               {" "}
               - Scheduled at{" "}
               {post.publishDate
@@ -100,9 +100,9 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
         );
       case "archived":
         return (
-          <div className="flex flex-row gap-x-2">
+          <div className='flex flex-row gap-x-2'>
             <span className={`${baseClasses} text-orange-600`}>Archived</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className='text-[10px] text-neutral-400'>
               {" "}
               - Archived at{" "}
               {new Date(post.updatedAt).toLocaleDateString("en-US", {
@@ -115,9 +115,9 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
         );
       case "deleted":
         return (
-          <div className="flex flex-row gap-x-2">
+          <div className='flex flex-row gap-x-2'>
             <span className={`${baseClasses} text-red-600`}>Deleted</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className='text-[10px] text-neutral-400'>
               {" "}
               - Deleted at{" "}
               {new Date(post.updatedAt).toLocaleDateString("en-US", {
@@ -134,33 +134,33 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
   };
 
   return (
-    <div className="">
-      <Table className="w-full">
+    <div className='ml-16'>
+      <Table className='w-full'>
         <TableBody>
           {posts.map((post) => (
             <TableRow
               key={post.id}
-              className="hover:bg-neutral-700/50 cursor-pointer border-b border-neutral-600"
+              className='hover:bg-neutral-700/50 cursor-pointer border-b border-neutral-600'
               onClick={() => router.push(`/editor/${post.id}`)}
             >
               <TableCell>
-                <div className="flex flex-row items-center justify-between">
-                  <div className="flex flex-col gap-y-2">
-                    <div className="font-medium text-neutral-200">
+                <div className='flex flex-row items-center justify-between'>
+                  <div className='flex flex-col gap-y-2'>
+                    <div className='font-medium text-neutral-200'>
                       {capitalizeFirstLetter(post.title)}
                     </div>
-                    <div className="text-sm text-neutral-600 mt-2">
+                    <div className='text-sm text-neutral-600 mt-2'>
                       By {post.metadataAuthorName}
                     </div>
-                    <div className="">{getStatusBadge(post.status, post)}</div>
+                    <div className=''>{getStatusBadge(post.status, post)}</div>
                   </div>
 
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-neutral-600"
+                    variant='ghost'
+                    size='icon'
+                    className='text-neutral-600'
                   >
-                    <Pencil className="h-4 w-4" />
+                    <Pencil className='h-4 w-4' />
                   </Button>
                 </div>
               </TableCell>

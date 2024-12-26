@@ -19,7 +19,7 @@ async function authenticateUser() {
 
 export async function fetchAllPostsCount(
   postOption: string,
-  tagOption: string,
+  tagOption: string
 ) {
   await authenticateUser();
   // modify for based on postOption and tagOption
@@ -95,7 +95,7 @@ export async function fetchPublishedPostsCount(postOption: string) {
 export async function fetchAllPosts(
   postOption: string,
   tagOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
   await authenticateUser();
   const pageSize = 10;
@@ -236,14 +236,13 @@ export async function fetchPublishedPosts(postOption: string) {
         publishDate: "desc",
       },
     });
-    console.log(posts.length);
     return posts as PostListType[];
   }
   return [];
 }
 export async function fetchPublishedPostsPaginated(
   postOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
   await authenticateUser();
   const pageSize = 10;
@@ -301,7 +300,6 @@ export async function fetchPublishedPostsPaginated(
         publishDate: "desc",
       },
     });
-    console.log(posts.length);
     return posts as PostListType[];
   }
   return [];
@@ -311,6 +309,19 @@ export async function fetchPostById(id: string) {
   await authenticateUser();
   const post = await prisma.post.findUnique({
     where: { id },
+    include: {
+      tags: true,
+      author: true,
+    },
+  });
+
+  return post;
+}
+
+export async function fetchPostByPostUrl(postUrl: string) {
+  await authenticateUser();
+  const post = await prisma.post.findUnique({
+    where: { postUrl },
     include: {
       tags: true,
       author: true,

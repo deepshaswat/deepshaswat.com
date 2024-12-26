@@ -60,7 +60,7 @@ const PostsComponent = () => {
       const fetchedPosts = await fetchAllPosts(
         postOption,
         tagOption,
-        currentPage,
+        currentPage
       );
       setPosts(fetchedPosts as PostListType[]);
     } catch (error) {
@@ -98,15 +98,18 @@ const PostsComponent = () => {
   };
 
   return (
-    <div className="m-8 ml-0 lg:ml-[156px] lg:mr-[156px] ">
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center ">
-        <div className="flex items-center justify-between w-full mb-4 lg:mb-0">
-          <Label htmlFor="" className="text-3xl lg:text-4xl font-semibold">
+    <div className='m-8 ml-10 lg:ml-[156px] lg:mr-[156px]'>
+      <div className='flex flex-col lg:flex-row lg:justify-between lg:items-center  '>
+        <div className='flex items-center justify-between w-full mb-4 lg:mb-0 '>
+          <Label
+            htmlFor=''
+            className='text-3xl lg:text-4xl font-semibold lg:ml-10'
+          >
             Posts
           </Label>
 
-          <div className="flex flex-row gap-20 justify-end items-center ">
-            <div className="flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-neutral-200 font-light text-[10px] md:text-[12px] ">
+          <div className='flex flex-row gap-20 justify-end items-center '>
+            <div className='flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-neutral-200 font-light text-[10px] md:text-[12px] '>
               <PostFilterNavbar
                 onSelectPostOption={handleSelectPostOption}
                 postOption={postOption}
@@ -116,10 +119,10 @@ const PostsComponent = () => {
                 tagOption={tagOption}
               />
             </div>
-            <Link href="/new-post" className="items-center">
+            <Link href='/new-post' className='items-center'>
               <Button
-                variant="default"
-                className="rounded-sm items-center"
+                variant='default'
+                className='rounded-sm items-center'
                 size={"sm"}
               >
                 New post
@@ -128,7 +131,7 @@ const PostsComponent = () => {
           </div>
         </div>
 
-        <div className="mt-4 ml-0 md:ml-14 mr-4 flex flex-row items-center justify-end space-x-8 overflow-hidden max-w-full lg:invisible font-light text-[11px] md:text-[12px] text-neutral-200 ">
+        <div className='mt-4 ml-0 md:ml-14 mr-4 flex flex-row items-center justify-end space-x-8 overflow-hidden max-w-full lg:invisible font-light text-[11px] md:text-[12px] text-neutral-200 '>
           <PostFilterNavbar
             onSelectPostOption={handleSelectPostOption}
             postOption={postOption}
@@ -140,10 +143,10 @@ const PostsComponent = () => {
         </div>
       </div>
 
-      <Separator className="bg-neutral-600 h-[1px]" />
+      <Separator className='bg-neutral-600 h-[1px] mb-4' />
       {loading ? (
-        <div className="flex flex-row items-center justify-center h-screen-1/2">
-          <Loader2 className="size-10 animate-spin" />
+        <div className='flex flex-row items-center justify-center h-screen-1/2'>
+          <Loader2 className='size-10 animate-spin' />
         </div>
       ) : (
         <PostsTableRender posts={posts} />
@@ -157,8 +160,8 @@ const PostsComponent = () => {
           onPageChange={handlePageChange}
         />
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </div>
