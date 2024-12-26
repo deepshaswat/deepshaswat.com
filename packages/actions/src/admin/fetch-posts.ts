@@ -236,7 +236,6 @@ export async function fetchPublishedPosts(postOption: string) {
         publishDate: "desc",
       },
     });
-    console.log(posts.length);
     return posts as PostListType[];
   }
   return [];
@@ -301,7 +300,6 @@ export async function fetchPublishedPostsPaginated(
         publishDate: "desc",
       },
     });
-    console.log(posts.length);
     return posts as PostListType[];
   }
   return [];
@@ -311,6 +309,19 @@ export async function fetchPostById(id: string) {
   await authenticateUser();
   const post = await prisma.post.findUnique({
     where: { id },
+    include: {
+      tags: true,
+      author: true,
+    },
+  });
+
+  return post;
+}
+
+export async function fetchPostByPostUrl(postUrl: string) {
+  await authenticateUser();
+  const post = await prisma.post.findUnique({
+    where: { postUrl },
     include: {
       tags: true,
       author: true,

@@ -1,9 +1,6 @@
-import { fetchAllPosts } from "@repo/actions";
 import { ArticlesListPage } from "@repo/ui/web";
 import { generateSiteConfig } from "@repo/ui/web";
 import { Metadata } from "next";
-
-// const
 
 export const metadata: Metadata = generateSiteConfig(
   "Articles // Shaswat Deep",

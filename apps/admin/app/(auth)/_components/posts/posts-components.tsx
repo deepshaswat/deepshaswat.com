@@ -98,10 +98,13 @@ const PostsComponent = () => {
   };
 
   return (
-    <div className="m-8 ml-0 lg:ml-[156px] lg:mr-[156px] ">
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center ">
-        <div className="flex items-center justify-between w-full mb-4 lg:mb-0">
-          <Label htmlFor="" className="text-3xl lg:text-4xl font-semibold">
+    <div className="m-8 ml-10 lg:ml-[156px] lg:mr-[156px]">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center  ">
+        <div className="flex items-center justify-between w-full mb-4 lg:mb-0 ">
+          <Label
+            htmlFor=""
+            className="text-3xl lg:text-4xl font-semibold lg:ml-10"
+          >
             Posts
           </Label>
 
@@ -140,7 +143,7 @@ const PostsComponent = () => {
         </div>
       </div>
 
-      <Separator className="bg-neutral-600 h-[1px]" />
+      <Separator className="bg-neutral-600 h-[1px] mb-4" />
       {loading ? (
         <div className="flex flex-row items-center justify-center h-screen-1/2">
           <Loader2 className="size-10 animate-spin" />

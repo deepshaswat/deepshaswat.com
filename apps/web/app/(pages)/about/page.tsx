@@ -4,7 +4,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = generateSiteConfig(
   "About // Shaswat Deep",
-  "Shaswat Deep is an Indian software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",
+  "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",
   "/about",
   "/static/images/headShot.svg",
 );

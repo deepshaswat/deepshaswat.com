@@ -48,9 +48,10 @@ export function BaseClient({
           </GradientText>
 
           {description && (
-            <p className="text-md mb-12 mt-12 font-thin text-decoration">
-              {description}
-            </p>
+            <p
+              dangerouslySetInnerHTML={{ __html: description || "" }}
+              className="text-md mb-12 mt-12 font-thin text-neutral-300"
+            />
           )}
           {children}
         </PostContainer>

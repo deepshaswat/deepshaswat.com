@@ -4,6 +4,8 @@ import { items } from "@repo/store";
 import { parseISO, format, intervalToDuration } from "date-fns";
 import { Base } from "@repo/ui/web";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const pageConfig = {
   tagline: "Learn. Build. Repeat.",
@@ -25,21 +27,27 @@ function renderIntro() {
         />
       </div>
       <div className="flex-1 md:pl-12  text-lg md:text-sm">
-        <p className="p-4 leading-relaxed tracking-wide">
-          <strong className="text-primary">Hey, I&apos;m Shaswat Deep</strong> I
-          started as a software engineer back in 2013, working with automation
+        <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
+          <span className="text-neutral-200 font-bold">
+            Hey, I&apos;m Shaswat Deep
+          </span>{" "}
+          I started as a software engineer back in 2013, working with automation
           testing.
         </p>
-        <p className="p-4 leading-relaxed tracking-wide">
-          I&apos;m the <strong className="text-primary">Founder & CEO</strong>{" "}
-          at Orbizza. Before that, I was Senior Staff Engineer at Harness and
-          Senior Engineer at AppDynamics.
+        <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
+          Now as a <strong className="text-neutral-200">Founder & CEO</strong>{" "}
+          of Orbizza, I&apos;m building a platform to find and review{" "}
+          <strong className="text-neutral-200">Content Creators</strong>.
+          {/* I&apos;m from India and now living
+            with my family in a small town. */}
         </p>
-        <p className="p-4 leading-relaxed tracking-wide">
-          <strong className="text-primary">I love dark mode</strong>,
-          researching stocks, and side projects. When I&apos;m not working, I
-          like reading books, watching animes, and{" "}
-          <strong className="text-primary">cooking</strong>.
+        <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
+          Outside of work, I love{" "}
+          <strong className="text-neutral-200">dark mode</strong>, the stock
+          market, and ideating side projects. I like{" "}
+          <strong className="text-neutral-200">cooking</strong>, reading books,
+          watching animes, and thinking about{" "}
+          <strong className="text-neutral-200">What If </strong> scenarios.
         </p>
       </div>
     </div>
@@ -73,9 +81,9 @@ function getDuration(startDate: string, endDate: string): string {
 function renderCareer() {
   return items.map((item, index) => {
     return (
-      <div key={index} className="mb-12">
+      <div key={index} className="mb-12 gap-y-2">
         <h3 className="text-primary font-bold text-xl">{item.jobTitle}</h3>
-        <p style={{ margin: 0 }}>
+        <p style={{ margin: 0 }} className=" text-neutral-400">
           <a
             href={item.companyUrl}
             target="_blank"
@@ -85,7 +93,7 @@ function renderCareer() {
           </a>
           <span className={`text-sm `}> • {item.location}</span>
         </p>
-        <p>
+        <p className=" text-neutral-400">
           <span className={`text-sm `}>
             {format(parseISO(item.startDate), "LLL yyyy")}
           </span>
@@ -106,7 +114,19 @@ function renderCareer() {
 }
 
 export const About = () => {
-  return (
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1);
+  }, []);
+
+  return isLoading ? (
+    <div className="flex flex-row mt-10 items-center justify-center h-screen">
+      <Loader2 className="size-16 animate-spin" />
+    </div>
+  ) : (
     <Base
       title="About // Shaswat Deep"
       description=""

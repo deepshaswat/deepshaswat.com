@@ -34,17 +34,15 @@ export const Youtube = createReactBlockSpec(
         <div
           className={cn(
             !props.block.props.url
-              ? " rounded-md w-full justify-center bg-neutral-800 text-neutral-300"
-              : "flex  justify-center",
+              ? "rounded-md w-full justify-center bg-neutral-800 text-neutral-300"
+              : "relative w-full aspect-video",
           )}
         >
           {props.block.props.url ? (
             <iframe
-              width="560"
-              height="315"
               src={props.block.props.url}
               title="YouTube video player"
-              className="rounded-md shadow-md "
+              className="absolute top-0 left-0 w-full h-full rounded-md shadow-md"
               allow="accelerometer; clipboard-write; encrypted-media; gyroscope;"
               allowFullScreen
             />

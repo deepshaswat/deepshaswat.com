@@ -61,6 +61,9 @@ export const Callout = createReactBlockSpec(
       const [text, setText] = useState(block.props.text);
       const [showEmoji, setShowEmoji] = useState(block.props.showEmoji);
 
+      // Only allow editing if the editor is editable
+      const canEdit = editor.isEditable;
+
       useEffect(() => {
         setEmoji(block.props.emoji);
         setBgColor(block.props.bgColor);
@@ -71,12 +74,13 @@ export const Callout = createReactBlockSpec(
 
       const updateCallout = useCallback(
         (updates = {}) => {
+          if (!canEdit) return;
           editor.updateBlock(block, {
             type: "callout",
             props: { ...block.props, ...updates },
           });
         },
-        [editor, block],
+        [editor, block, canEdit],
       );
 
       const handleEmojiClick = useCallback(
@@ -92,11 +96,11 @@ export const Callout = createReactBlockSpec(
         <div
           className="flex items-start px-4 py-3 rounded-md w-full relative"
           style={{ backgroundColor: bgColor, color: textColor }}
-          onMouseEnter={() => setIsEditing(true)}
-          onMouseLeave={() => setIsEditing(false)}
+          onMouseEnter={() => canEdit && setIsEditing(true)}
+          onMouseLeave={() => canEdit && setIsEditing(false)}
         >
           {showEmoji && <span className="mr-2 text-2xl">{emoji}</span>}
-          {isEditing ? (
+          {isEditing && canEdit ? (
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -108,7 +112,7 @@ export const Callout = createReactBlockSpec(
           ) : (
             <span className="w-full text-lg font-semibold">{text}</span>
           )}
-          {isEditing && (
+          {isEditing && canEdit && (
             <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">
               <Popover>
                 <PopoverTrigger asChild>

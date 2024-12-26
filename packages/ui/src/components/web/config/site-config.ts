@@ -1,33 +1,50 @@
 import { Metadata } from "next";
 
 const ALT_TITLE = "deepshaswat.com";
-const BASE_URL = "https://test.deepshaswat.com";
+const BASE_URL = "https://deepshaswat.com";
+
+interface ExtendedMetadata {
+  metadataTitle?: string;
+  metadataDescription?: string;
+  metadataImageUrl?: string;
+  metadataKeywords?: string;
+  metadataAuthorName?: string;
+  metadataCanonicalUrl?: string;
+  metadataOgTitle?: string;
+  metadataOgDescription?: string;
+  metadataOgImage?: string;
+  metadataTwitterCard?: "summary_large_image" | "summary" | "player" | "app";
+  metadataTwitterTitle?: string;
+  metadataTwitterDescription?: string;
+  metadataTwitterImage?: string;
+}
 
 // Function to generate site configuration dynamically with default values and optional URL suffix
 export function generateSiteConfig(
   title: string = "Shaswat Deep",
-  description: string = "deepshaswat.com",
+  description: string = "Shaswat Deep is software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",
   urlSuffix: string = "",
-  image_url: string = "/static/images/reminder-bw.jpg",
+  image_url: string = "/static/images/headShot.svg",
+  extendedMetadata?: ExtendedMetadata,
 ): Metadata {
   const fullUrl = `${BASE_URL}${urlSuffix}`;
 
   return {
-    title: title,
-    description: description,
+    title: extendedMetadata?.metadataTitle || title,
+    description: extendedMetadata?.metadataDescription || description,
     icons: {
       icon: "/favicon.ico",
     },
     applicationName: "deepshaswat.com",
-    creator: "Shaswat Deep",
+    creator: extendedMetadata?.metadataAuthorName || "Shaswat Deep",
     twitter: {
       creator: "@shaswat_X",
-      title: title,
-      description: description,
-      card: "summary_large_image",
+      title: extendedMetadata?.metadataTwitterTitle || title,
+      description: extendedMetadata?.metadataTwitterDescription || description,
+      card: extendedMetadata?.metadataTwitterCard || "summary_large_image",
       images: [
         {
-          url: image_url,
+          url: extendedMetadata?.metadataTwitterImage || image_url,
           width: 1200,
           height: 630,
           alt: ALT_TITLE,
@@ -35,26 +52,31 @@ export function generateSiteConfig(
       ],
     },
     openGraph: {
-      title: title,
-      description: description,
+      title: extendedMetadata?.metadataOgTitle || title,
+      description: extendedMetadata?.metadataOgDescription || description,
       siteName: "deepshaswat.com",
       url: fullUrl,
       locale: "en_US",
       type: "website",
       images: [
         {
-          url: image_url,
+          url: extendedMetadata?.metadataOgImage || image_url,
           width: 1200,
           height: 630,
           alt: ALT_TITLE,
         },
       ],
     },
-    category: "Technology",
+    category:
+      extendedMetadata?.metadataKeywords?.split(",")[0] || "Entrepreneurship",
     alternates: {
-      canonical: fullUrl,
+      canonical: extendedMetadata?.metadataCanonicalUrl || fullUrl,
     },
-    keywords: ["Technology", "Blogging"],
+    keywords: extendedMetadata?.metadataKeywords?.split(",") || [
+      "Technology",
+      "Blogging",
+      "Entrepreneurship",
+    ],
     metadataBase: new URL(fullUrl),
     robots: {
       index: false,

@@ -136,23 +136,6 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     schema,
   });
 
-  // To Convert Markdown to Blocks
-  // const blocksFromMarkdown = editor.tryParseMarkdownToBlocks(markdown || "");
-
-  // useEffect(() => {
-  //   async function loadInitialHTML() {
-  //     const blocks = await blocksFromMarkdown;
-  //     editor.replaceBlocks(editor.document, blocks);
-  //   }
-  //   loadInitialHTML();
-  // }, [editor]);
-
-  // const onChangeMarkdown = async () => {
-  //   const markdown = await editor.blocksToMarkdownLossy(editor.document);
-  //   setMarkdown(markdown);
-  //   onChange(markdown);
-  // };
-
   return (
     <div>
       <BlockNoteView

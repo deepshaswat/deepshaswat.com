@@ -134,7 +134,7 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
   };
 
   return (
-    <div className="">
+    <div className="ml-16">
       <Table className="w-full">
         <TableBody>
           {posts.map((post) => (

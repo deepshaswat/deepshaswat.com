@@ -27,11 +27,11 @@ export const Markdown = createReactBlockSpec(
     content: "none",
   },
   {
-    render: (props) => {
+    render: ({ block, editor }) => {
       const [markdownContent, setMarkdownContent] = useState(
-        props.block.props.content,
+        block.props.content,
       );
-      const [isEditing, setIsEditing] = useState(!props.block.props.content);
+      const [isEditing, setIsEditing] = useState(!block.props.content);
       const editorRef = useRef<HTMLDivElement>(null);
       const textareaRef = useRef<HTMLTextAreaElement>(null);
       const [activeListSymbol, setActiveListSymbol] = useState<string | null>(
@@ -39,11 +39,14 @@ export const Markdown = createReactBlockSpec(
       );
       const [currentHeader, setCurrentHeader] = useState<string>("");
 
+      // Only allow editing if the editor is editable
+      const canEdit = editor.isEditable;
+
       useEffect(() => {
-        if (isEditing && textareaRef.current) {
+        if (isEditing && textareaRef.current && canEdit) {
           textareaRef.current.focus();
         }
-      }, [isEditing]);
+      }, [isEditing, canEdit]);
 
       useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -62,8 +65,8 @@ export const Markdown = createReactBlockSpec(
       }, [markdownContent]);
 
       const handleSave = () => {
-        if (isEditing) {
-          props.editor.updateBlock(props.block, {
+        if (isEditing && canEdit) {
+          editor.updateBlock(block, {
             type: "markdown",
             props: {
               content: markdownContent,
@@ -75,7 +78,7 @@ export const Markdown = createReactBlockSpec(
 
       const insertMarkdownSymbol = (symbol: string) => {
         const textarea = textareaRef.current;
-        if (!textarea) return;
+        if (!textarea || !canEdit) return;
 
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
@@ -201,7 +204,7 @@ export const Markdown = createReactBlockSpec(
 
       // Handle pressing Enter key to continue the list
       const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === "Enter" && activeListSymbol) {
+        if (e.key === "Enter" && activeListSymbol && canEdit) {
           e.preventDefault(); // Prevent default newline insertion
           const textarea = textareaRef.current;
           if (!textarea) return;
@@ -226,12 +229,12 @@ export const Markdown = createReactBlockSpec(
           ref={editorRef}
           className={cn(
             "w-full bg-transparent",
-            isEditing
+            isEditing && canEdit
               ? "border-0 outline-none ring-0 focus:ring-0 focus:outline-none focus:border-0 rounded-md !m-0 !p-0"
               : "",
           )}
         >
-          {isEditing ? (
+          {isEditing && canEdit ? (
             <div className="border-2 border-green-500 rounded-md p-0 m-0">
               <Textarea
                 ref={textareaRef}
@@ -319,42 +322,105 @@ export const Markdown = createReactBlockSpec(
             </div>
           ) : (
             <div
-              className="markdown-content text-neutral-300 cursor-pointer"
-              onClick={() => setIsEditing(true)}
+              className={cn(
+                "markdown-content text-neutral-300",
+                !canEdit && "border-none select-none",
+              )}
+              onClick={() => canEdit && setIsEditing(true)}
+              style={{ cursor: canEdit ? "pointer" : "default" }}
             >
               <ReactMarkdown
                 components={{
                   h1: ({ node, ...props }) => (
-                    <h1 className="text-2xl font-bold mb-2" {...props} />
+                    <h1
+                      className={cn(
+                        "text-2xl font-bold mb-2",
+                        !canEdit && "select-none",
+                      )}
+                      {...props}
+                    />
                   ),
                   h2: ({ node, ...props }) => (
-                    <h2 className="text-xl font-bold mb-2" {...props} />
+                    <h2
+                      className={cn(
+                        "text-xl font-bold mb-2",
+                        !canEdit && "select-none",
+                      )}
+                      {...props}
+                    />
                   ),
                   h3: ({ node, ...props }) => (
-                    <h3 className="text-lg font-bold mb-2" {...props} />
+                    <h3
+                      className={cn(
+                        "text-lg font-bold mb-2",
+                        !canEdit && "select-none",
+                      )}
+                      {...props}
+                    />
                   ),
-                  p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+                  p: ({ node, ...props }) => (
+                    <p
+                      className={cn("mb-2", !canEdit && "select-none")}
+                      {...props}
+                    />
+                  ),
                   ul: ({ node, ...props }) => (
-                    <ul className="list-disc list-inside mb-2" {...props} />
+                    <ul
+                      className={cn(
+                        "list-disc ml-6 mb-2",
+                        !canEdit && "border-none select-none",
+                      )}
+                      {...props}
+                    />
                   ),
                   ol: ({ node, ...props }) => (
-                    <ol className="list-decimal list-inside mb-2" {...props} />
+                    <ol
+                      className={cn(
+                        "list-decimal ml-6 mb-2",
+                        !canEdit && "border-none select-none",
+                      )}
+                      {...props}
+                    />
+                  ),
+                  li: ({ node, ...props }) => (
+                    <li
+                      className={cn(
+                        "mb-1",
+                        !canEdit && "border-none select-none",
+                      )}
+                      {...props}
+                    />
                   ),
                   blockquote: ({ node, ...props }) => (
                     <blockquote
-                      className="border-l-[2px] border-green-700 pl-4 p-1 italic text-neutral-200 mb-2"
+                      className={cn(
+                        "border-l-[2px] border-green-700 pl-4 p-1 italic text-neutral-200 mb-2",
+                        !canEdit && "border-none select-none",
+                      )}
                       {...props}
                     />
                   ),
                   a: ({ node, ...props }) => (
-                    <a className="text-blue-500 hover:underline" {...props} />
+                    <a
+                      className={cn(
+                        "text-blue-500 hover:underline",
+                        !canEdit && "select-none",
+                      )}
+                      {...props}
+                    />
                   ),
                   img: ({ node, ...props }) => (
-                    <img className="max-w-full h-auto mb-2" {...props} />
+                    <img
+                      className={cn(
+                        "max-w-full h-auto mb-2",
+                        !canEdit && "select-none",
+                      )}
+                      {...props}
+                    />
                   ),
                 }}
               >
-                {props.block.props.content}
+                {block.props.content}
               </ReactMarkdown>
             </div>
           )}

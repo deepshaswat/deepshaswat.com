@@ -35,7 +35,7 @@ export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
     <div className="w-full py-20">
       {/* <p className='text-3xl font-bold mb-10'>All Articles</p> */}
       <div className="flex md:flex-row flex-col justify-between gap-4 md:items-center mb-4">
-        <p className="text-3xl font-bold w-1/3">All Articles</p>
+        <p className="text-3xl font-bold sm:w-1/3">All Articles</p>
         <input
           type="text"
           value={search}
@@ -119,23 +119,27 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
           <p className="text-neutral-100 text-lg font-medium transition duration-200">
             {blog.title}
           </p>
-          <p className="text-neutral-400 text-sm mt-2 max-w-xl transition duration-200">
-            {truncate(blog.excerpt, 80)}
-          </p>
+          {blog.excerpt && (
+            <p className="text-neutral-400 text-sm mt-2 max-w-xl transition duration-200">
+              {truncate(blog.excerpt, 80)}
+            </p>
+          )}
 
           <div className="flex flex-col sm:flex-row-reverse gap-2 justify-between">
-            <div className="flex flex-wrap gap-2 my-4">
-              {tags.map((tag) => (
-                <span
-                  key={tag.slug}
-                  className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
-                >
-                  {capitalizeFirstLetter(tag.slug)}
-                </span>
-              ))}
-            </div>
+            {
+              <div className="flex flex-wrap gap-2 my-2 sm:my-4">
+                {tags.map((tag) => (
+                  <span
+                    key={tag.slug}
+                    className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
+                  >
+                    {capitalizeFirstLetter(tag.slug)}
+                  </span>
+                ))}
+              </div>
+            }
 
-            <div className="flex gap-2 items-center my-4">
+            <div className="flex gap-2 items-center my-2 sm:my-4">
               <p className="text-neutral-400 text-xs max-w-xl transition duration-200">
                 {blog.publishDate
                   ? format(new Date(blog.publishDate), "MMMM dd, yyyy")
@@ -149,7 +153,7 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
           alt={blog.author.name}
           width={40}
           height={40}
-          className="rounded-full md:h-10 md:w-10 h-6 w-6 mt-4 md:mt-0 object-cover"
+          className="rounded-full md:h-10 md:w-10 h-6 w-6 mt-2 md:mt-0 object-cover"
         />
       </div>
     </Link>

@@ -4,15 +4,16 @@ import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@repo/ui/utils";
 import { PostListType } from "@repo/actions";
+import { Loader2 } from "lucide-react";
 
 export function SimpleBlogWithGrid({ blogs }: { blogs: PostListType[] }) {
   return (
-    <div className="relative overflow-hidden py-20 md:py-0">
+    <div className="relative overflow-hidden">
       <div className=" overflow-hidden relative ">
-        <div className="relative z-20  mt-20">
+        <div className="relative z-20 sm:mt-20">
           <h1
             className={cn(
-              "scroll-m-20 text-3xl font-bold text-center md:text-left tracking-tight text-black dark:text-white mb-6",
+              "scroll-m-20 text-3xl font-bold text-left tracking-tight text-black dark:text-white mb-6",
             )}
           >
             Featured Articles
@@ -21,9 +22,17 @@ export function SimpleBlogWithGrid({ blogs }: { blogs: PostListType[] }) {
       </div>
       <div className="flex flex-col items-center justify-between pb-10 max-w-7xl mx-auto ">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full relative z-20">
-          {blogs.slice(0, 4).map((blog, index) => (
-            <BlogCard blog={blog} key={blog.postUrl + index} />
-          ))}
+          {blogs.length > 0 ? (
+            blogs
+              .slice(0, 4)
+              .map((blog, index) => (
+                <BlogCard blog={blog} key={blog.postUrl + index} />
+              ))
+          ) : (
+            <div className="flex flex-row items-center justify-center text-red-500">
+              No Featured Articles
+            </div>
+          )}
         </div>
       </div>
     </div>
