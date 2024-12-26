@@ -25,7 +25,7 @@ export function generateSiteConfig(
   description: string = "Shaswat Deep is software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",
   urlSuffix: string = "",
   image_url: string = "/static/images/headShot.svg",
-  extendedMetadata?: ExtendedMetadata
+  extendedMetadata?: ExtendedMetadata,
 ): Metadata {
   const fullUrl = `${BASE_URL}${urlSuffix}`;
 

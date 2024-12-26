@@ -41,7 +41,7 @@ export function BaseClient({
          webkitbackgroundclip: "text";
        }
      `}</style>
-      <PostContent className=''>
+      <PostContent className="">
         <PostContainer>
           <GradientText startColor={primaryColor} endColor={secondaryColor}>
             {tagline ? tagline : title}
@@ -50,7 +50,7 @@ export function BaseClient({
           {description && (
             <p
               dangerouslySetInnerHTML={{ __html: description || "" }}
-              className='text-md mb-12 mt-12 font-thin text-neutral-300'
+              className="text-md mb-12 mt-12 font-thin text-neutral-300"
             />
           )}
           {children}
