@@ -25,6 +25,7 @@ const PostsComponent = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [posts, setPosts] = useState<PostListType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isNewsletter, setIsNewsletter] = useState(false);
 
   const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
   const resetPageNumber = useResetRecoilState(pageNumberState);
@@ -62,6 +63,7 @@ const PostsComponent = () => {
         tagOption,
         currentPage,
       );
+
       setPosts(fetchedPosts as PostListType[]);
     } catch (error) {
       console.error("Error fetching posts:", error);

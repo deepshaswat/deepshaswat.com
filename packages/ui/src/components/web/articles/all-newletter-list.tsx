@@ -9,17 +9,26 @@ import FuzzySearch from "fuzzy-search";
 import { fetchTagsFromTagOnPost, PostListType, Tags } from "@repo/actions";
 import { AnimatePresence, motion } from "framer-motion";
 
-export function BlogWithSearch({ blogs }: { blogs: PostListType[] }) {
+export function NewsletterWithSearch({ blogs }: { blogs: PostListType[] }) {
   return (
     <div className="relative overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col items-center justify-between pb-20">
-        <BlogPostRows blogs={blogs} />
+        <div className="relative z-20 py-10 ">
+          <h1 className="mt-4 text-xl  font-bold md:text-3xl lg:text-5xl text-black dark:text-white tracking-tight">
+            Most Recent
+          </h1>
+        </div>
+
+        {blogs.slice(0, 1).map((blog, index) => (
+          <NewsletterCard blog={blog} key={blog.title + index} />
+        ))}
+        <NewsletterPostRows blogs={blogs} />
       </div>
     </div>
   );
 }
 
-export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
+export const NewsletterPostRows = ({ blogs }: { blogs: PostListType[] }) => {
   const [search, setSearch] = useState("");
 
   const searcher = new FuzzySearch(blogs, ["title", "excerpt", "keywords"], {
@@ -33,15 +42,14 @@ export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
   }, [search]);
   return (
     <div className="w-full py-20">
-      {/* <p className='text-3xl font-bold mb-10'>All Articles</p> */}
       <div className="flex md:flex-row flex-col justify-between gap-4 md:items-center mb-4">
-        <p className="text-3xl font-bold sm:w-1/3">All Articles</p>
+        <p className="text-3xl font-bold md:w-2/5">More Newsletters</p>
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search articles"
-          className="text-sm w-full sm:min-w-96 border dark:border-transparent border-yellow-200 p-2 rounded-md dark:bg-neutral-800 bg-white shadow-sm focus:border-yellow-400 focus:ring-0 focus:outline-none outline-none text-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400 placeholder:neutral-700"
+          placeholder="Search newsletters"
+          className="text-sm w-full md:w-3/5 border dark:border-transparent border-yellow-200 p-2 rounded-md dark:bg-neutral-800 bg-white shadow-sm focus:border-yellow-400 focus:ring-0 focus:outline-none outline-none text-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400 placeholder:neutral-700"
         />
       </div>
 
@@ -50,7 +58,7 @@ export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
           <p className="text-neutral-400 text-center p-4">No results found</p>
         ) : (
           results.map((blog, index) => (
-            <BlogPostRow blog={blog} key={blog.postUrl + index} />
+            <NewsletterPostRow blog={blog} key={blog.postUrl + index} />
           ))
         )}
       </div>
@@ -58,7 +66,7 @@ export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
   );
 };
 
-export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
+export const NewsletterPostRow = ({ blog }: { blog: PostListType }) => {
   const [tags, setTags] = useState<Tags[]>([]);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -157,6 +165,116 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
         />
       </div>
     </Link>
+  );
+};
+
+const Logo = () => {
+  return (
+    <Link
+      href="/"
+      className="font-normal flex space-x-2 items-center text-sm mr-4  text-black px-2 py-1  relative z-20"
+    >
+      <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm" />
+      <span className="font-medium text-black dark:text-white">
+        Shaswat Deep
+      </span>
+    </Link>
+  );
+};
+
+export const NewsletterCard = ({ blog }: { blog: PostListType }) => {
+  return (
+    <Link
+      className="shadow-derek grid grid-cols-1 md:grid-cols-2  rounded-3xl group/blog border border-transparent dark:hover:border-neutral-800 w-full dark:hover:bg-neutral-900 hover:border-neutral-200 hover:bg-neutral-100  overflow-hidden  hover:scale-[1.02] transition duration-200"
+      href={`/${blog.postUrl}`}
+    >
+      <div className="">
+        {blog.featureImage ? (
+          <BlurImage
+            src={blog.featureImage || ""}
+            alt={blog.title}
+            height="800"
+            width="800"
+            className="h-full max-h-96 object-cover object-top w-full rounded-3xl"
+          />
+        ) : (
+          <div className="h-full flex items-center justify-center dark:group-hover/blog:bg-neutral-900 group-hover/blog:bg-neutral-100">
+            <Logo />
+          </div>
+        )}
+      </div>
+      <div className="p-4 md:p-8 dark:group-hover/blog:bg-neutral-900 group-hover/blog:bg-neutral-100 flex flex-col justify-between">
+        <div>
+          <p className="text-lg md:text-4xl font-bold mb-4 text-neutral-800 dark:text-neutral-100">
+            {blog.title}
+          </p>
+          <p className="text-left text-base md:text-xl mt-2 text-neutral-600 dark:text-neutral-400">
+            {truncate(blog.excerpt, 500)}
+          </p>
+        </div>
+        <div className="flex space-x-2 items-center  mt-6">
+          <Image
+            src={blog.author.imageUrl}
+            alt={blog.author.name}
+            width={20}
+            height={20}
+            className="rounded-full h-5 w-5"
+          />
+          <p className="text-sm font-normal text-black dark:text-white">
+            {blog.author.name}
+          </p>
+          <div className="h-1 w-1 bg-neutral-300 rounded-full"></div>
+          <p className="text-neutral-600 dark:text-neutral-300 text-sm  max-w-xl  transition duration-200">
+            {blog.publishDate
+              ? format(new Date(blog.publishDate), "MMMM dd, yyyy")
+              : ""}
+          </p>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+interface IBlurImage {
+  height?: any;
+  width?: any;
+  src?: string | any;
+  objectFit?: any;
+  className?: string | any;
+  alt?: string | undefined;
+  layout?: any;
+  [x: string]: any;
+}
+
+export const BlurImage = ({
+  height,
+  width,
+  src,
+  className,
+  objectFit,
+  alt,
+  layout,
+  ...rest
+}: IBlurImage) => {
+  const [isLoading, setLoading] = useState(true);
+  return (
+    <Image
+      className={cn(
+        "transition duration-300",
+        isLoading ? "blur-sm" : "blur-0",
+        className,
+      )}
+      onLoad={() => setLoading(false)}
+      src={src}
+      width={width}
+      height={height}
+      loading="lazy"
+      decoding="async"
+      blurDataURL={src}
+      layout={layout}
+      alt={alt ? alt : "Avatar"}
+      {...rest}
+    />
   );
 };
 

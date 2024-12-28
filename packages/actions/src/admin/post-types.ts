@@ -52,6 +52,7 @@ export interface PostListType {
   metadataTwitterDescription: string;
   metadataTwitterImage: string;
   status: PostStatus;
+  isNewsletter: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

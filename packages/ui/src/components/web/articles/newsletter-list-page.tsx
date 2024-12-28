@@ -14,16 +14,16 @@ import { PaginationBar } from "./pagination-bar";
 import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import { Loader2 } from "lucide-react";
+import { NewsletterWithSearch } from "./all-newletter-list";
 
 const pageConfig = {
-  tagline: "Failures. Guides. Paths.",
-  primaryColor: "cyan" as const,
-  secondaryColor: "lime" as const,
+  tagline: "Knock Knock. Who's there?",
+  primaryColor: "pink" as const,
+  secondaryColor: "orange" as const,
 };
 
-export const ArticlesListPage = () => {
+export const NewsletterListPage = () => {
   const [posts, setPosts] = useState<PostListType[]>([]);
-  const [featuredPosts, setFeaturedPosts] = useState<PostListType[]>([]);
   const [loading, setLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
@@ -34,16 +34,11 @@ export const ArticlesListPage = () => {
   //     resetPageNumber();
   //   }, [resetPageNumber]);
 
-  const fetchPosts = async ({
-    option,
-    setPosts,
-  }: {
-    option: string;
-    setPosts: (posts: PostListType[]) => void;
-  }) => {
+  const fetchPosts = async () => {
     try {
       // const fetchedPosts = await fetchPublishedPostsPaginated(option, currentPage);
-      const fetchedPosts = await fetchPublishedPosts(option);
+      const fetchedPosts = await fetchPublishedPosts("newsletters");
+
       setPosts(fetchedPosts as PostListType[]);
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -55,7 +50,7 @@ export const ArticlesListPage = () => {
   const fetchPostsCount = async () => {
     try {
       setLoading(true);
-      const fetchedPostsCount = await fetchPublishedPostsCount("articles");
+      const fetchedPostsCount = await fetchPublishedPostsCount("newsletters");
       setPostsCount(fetchedPostsCount);
     } catch (error) {
       console.error("Error fetching posts count:", error);
@@ -69,8 +64,7 @@ export const ArticlesListPage = () => {
 
   useEffect(() => {
     fetchPostsCount();
-    fetchPosts({ option: "articles", setPosts: setPosts });
-    fetchPosts({ option: "featured-posts", setPosts: setFeaturedPosts });
+    fetchPosts();
   }, []);
 
   const handlePageChange = (page: number) => {
@@ -93,14 +87,12 @@ export const ArticlesListPage = () => {
         <>
           <p className="text-neutral-500">
             Here you can find all the{" "}
-            <span className="text-neutral-200">
-              {postsCount} articles and poems
-            </span>{" "}
-            I wrote. You can read about web development, tech career, personal
-            finance, and more in English.
+            <span className="text-neutral-200">{postsCount} newsletters</span> I
+            send out. I usually write about my entrepreneurship journey,
+            personal finance, tech career, and more in English.
           </p>
-          <SimpleBlogWithGrid blogs={featuredPosts} />
-          <BlogWithSearch blogs={posts} />
+          {/* <SimpleBlogWithGrid blogs={featuredPosts} /> */}
+          <NewsletterWithSearch blogs={posts} />
           {/* ToDo: Enable pagination when a lot of blogs are added and algolia search is added */}
           {/* <PaginationBar
             currentPage={currentPage}

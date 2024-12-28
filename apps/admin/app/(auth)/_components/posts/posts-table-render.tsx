@@ -27,6 +27,52 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
 
   const getStatusBadge = (status: string, post: PostListType) => {
     const baseClasses = "text-sm font-medium";
+    if (post.isNewsletter && post.status === "PUBLISHED") {
+      return (
+        <div className="flex items-center gap-2">
+          <span className={`${baseClasses} text-green-600`}>
+            Published and Sent
+          </span>
+          <span className="text-[10px] text-neutral-400">
+            at{" "}
+            {post.publishDate
+              ? new Date(post.publishDate).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : ""}
+          </span>
+          <div className="flex items-center text-xs text-neutral-400">
+            {/* <span className='mr-4'>{post.openRate || "71"}% opened</span>
+              <span>{post.clickRate || "4"}% clicked</span> */}
+          </div>
+        </div>
+      );
+    } else if (post.isNewsletter && post.status === "SCHEDULED") {
+      return (
+        <div className="flex items-center gap-2">
+          <span className={`${baseClasses} text-blue-600`}>
+            Scheduled to be sent
+          </span>
+          <span className="text-[10px] text-neutral-400">
+            at{" "}
+            {post.publishDate
+              ? new Date(post.publishDate).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })
+              : ""}
+          </span>
+          <div className="flex items-center text-xs text-neutral-400">
+            {/* <span className='mr-4'>{post.openRate || "71"}% opened</span>
+              <span>{post.clickRate || "4"}% clicked</span> */}
+          </div>
+        </div>
+      );
+    }
+
     switch (status.toLowerCase()) {
       case "draft":
         return (
@@ -70,7 +116,7 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
             <span className={`${baseClasses} text-green-600`}>Published</span>
             <span className="text-[10px] text-neutral-400">
               {" "}
-              - Published at{" "}
+              at{" "}
               {post.publishDate
                 ? new Date(post.publishDate).toLocaleDateString("en-US", {
                     day: "numeric",
@@ -87,7 +133,7 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
             <span className={`${baseClasses} text-blue-600`}>Scheduled</span>
             <span className="text-[10px] text-neutral-400">
               {" "}
-              - Scheduled at{" "}
+              at{" "}
               {post.publishDate
                 ? new Date(post.publishDate).toLocaleDateString("en-US", {
                     day: "numeric",

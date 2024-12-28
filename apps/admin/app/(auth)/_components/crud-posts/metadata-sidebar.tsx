@@ -71,7 +71,7 @@ export function MetadataSidebar() {
   };
 
   const handleExcerptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPost({ ...post, excerpt: e.target.value });
+    setPost((prev) => ({ ...prev, excerpt: e.target.value }));
   };
 
   const handleTimeIstChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,33 +79,55 @@ export function MetadataSidebar() {
   };
 
   const handleMetaTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMetadata({ ...metadata, title: e.target.value });
+    setMetadata((prev) => ({
+      ...prev,
+      title: e.target.value,
+      ogTitle: e.target.value,
+      twitterTitle: e.target.value,
+    }));
   };
 
   const handleMetaDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    setMetadata({ ...metadata, description: e.target.value });
+    setMetadata((prev) => ({
+      ...prev,
+      description: e.target.value,
+      ogDescription: e.target.value,
+      twitterDescription: e.target.value,
+    }));
   };
 
   const handleOgTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMetadata({ ...metadata, ogTitle: e.target.value });
+    setMetadata((prev) => ({
+      ...prev,
+      ogTitle: e.target.value,
+    }));
   };
 
   const handleOgDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    setMetadata({ ...metadata, ogDescription: e.target.value });
+    setMetadata((prev) => ({
+      ...prev,
+      ogDescription: e.target.value,
+    }));
   };
 
   const handleTwitterTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMetadata({ ...metadata, twitterTitle: e.target.value });
+    setMetadata((prev) => ({
+      ...prev,
+      twitterTitle: e.target.value,
+    }));
   };
 
   const handleTwitterDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    setMetadata({ ...metadata, twitterDescription: e.target.value });
+    setMetadata((prev) => ({
+      ...prev,
+      twitterDescription: e.target.value,
+    }));
   };
 
   const toggleFeaturePost = () => {
@@ -165,19 +187,19 @@ export function MetadataSidebar() {
   const closeMetaImageUpload = () => {
     setIsMetaImageUploadOpen(false);
     setIsSubmitting(false);
-    setMetadata({ ...metadata, imageUrl: "" });
+    setMetadata((prev) => ({ ...prev, imageUrl: "" }));
   };
 
   const closeOgImageUpload = () => {
     setIsOgImageUploadOpen(false);
     setIsSubmitting(false);
-    setMetadata({ ...metadata, ogImage: "" });
+    setMetadata((prev) => ({ ...prev, ogImage: "" }));
   };
 
   const closeTwitterImageUpload = () => {
     setIsTwitterImageUploadOpen(false);
     setIsSubmitting(false);
-    setMetadata({ ...metadata, twitterImage: "" });
+    setMetadata((prev) => ({ ...prev, twitterImage: "" }));
   };
 
   // Helper function to close all uploaders
@@ -195,7 +217,7 @@ export function MetadataSidebar() {
       return;
     }
     const url = await handleFileUpload(file);
-    setMetadata({ ...metadata, imageUrl: url });
+    setMetadata((prev) => ({ ...prev, imageUrl: url }));
   };
 
   const handleOgImageChange = async (file?: File) => {
@@ -204,7 +226,7 @@ export function MetadataSidebar() {
       return;
     }
     const url = await handleFileUpload(file);
-    setMetadata({ ...metadata, ogImage: url });
+    setMetadata((prev) => ({ ...prev, ogImage: url }));
   };
 
   const handleTwitterImageChange = async (file?: File) => {
@@ -213,7 +235,7 @@ export function MetadataSidebar() {
       return;
     }
     const url = await handleFileUpload(file);
-    setMetadata({ ...metadata, twitterImage: url });
+    setMetadata((prev) => ({ ...prev, twitterImage: url }));
   };
 
   useEffect(() => {

@@ -187,6 +187,9 @@ export const EditContentPost = ({
           headers: { "Content-Type": file.type },
         });
         setPost((prev) => ({ ...prev, featureImage: s3URL }));
+        setMetadata((prev) => ({ ...prev, imageUrl: s3URL }));
+        setMetadata((prev) => ({ ...prev, twitterImage: s3URL }));
+        setMetadata((prev) => ({ ...prev, ogImage: s3URL }));
       } catch (error) {
         console.error("Error uploading file:", error);
       } finally {
