@@ -24,7 +24,7 @@ const pageConfig = {
 export const ArticlesListPage = () => {
   const [posts, setPosts] = useState<PostListType[]>([]);
   const [featuredPosts, setFeaturedPosts] = useState<PostListType[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
   const resetPageNumber = useResetRecoilState(pageNumberState);

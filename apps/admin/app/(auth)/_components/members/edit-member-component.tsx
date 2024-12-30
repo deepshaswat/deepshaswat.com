@@ -31,17 +31,17 @@ export default function EditMemberComponent() {
   const bgColorClass = memberData.firstName
     ? "bg-pink-500"
     : memberData.email
-      ? "bg-green-500"
-      : "bg-neutral-500";
+    ? "bg-green-500"
+    : "bg-neutral-500";
 
   const handleMemberFirstNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setMemberData({ ...memberData, firstName: e.target.value });
   };
 
   const handleMemberLastNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setMemberData({ ...memberData, lastName: e.target.value });
   };
@@ -51,7 +51,7 @@ export default function EditMemberComponent() {
   };
 
   const handleMemberDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setMemberData({ ...memberData, note: e.target.value });
   };
@@ -71,12 +71,12 @@ export default function EditMemberComponent() {
             {memberData.firstName
               ? getInitials(
                   capitalizeWords(
-                    memberData.firstName + " " + memberData.lastName,
-                  ),
+                    memberData.firstName + " " + memberData.lastName
+                  )
                 )
               : memberData.email
-                ? memberData.email.charAt(0).toUpperCase()
-                : "N"}
+              ? memberData.email.charAt(0).toUpperCase()
+              : "N"}
           </div>
           <span className="text-neutral-400">
             {memberData.firstName + " " + memberData.lastName}
@@ -101,7 +101,7 @@ export default function EditMemberComponent() {
                   <input
                     id="MemberFirstName"
                     type="text"
-                    value={memberData.firstName}
+                    value={memberData?.firstName}
                     onChange={handleMemberFirstNameChange}
                     className="h-10 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                   />
@@ -118,7 +118,7 @@ export default function EditMemberComponent() {
                   <input
                     id="MemberLastName"
                     type="text"
-                    value={memberData.lastName}
+                    value={memberData?.lastName}
                     onChange={handleMemberLastNameChange}
                     className="h-10 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                   />
@@ -153,7 +153,7 @@ export default function EditMemberComponent() {
             </Label>
             <Textarea
               id="MemberDescription"
-              value={memberData.note}
+              value={memberData?.note}
               onChange={handleMemberDescriptionChange}
               maxLength={500}
               className="mt-2 h-28 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 border-2 border-transparent focus-within:border-green-500"
@@ -161,9 +161,11 @@ export default function EditMemberComponent() {
             <div className="text-neutral-500 text-[12px]">
               Maximum: 500 characters. You've used{" "}
               <span
-                className={memberData.note.length === 0 ? "" : "text-green-500"}
+                className={
+                  memberData.note?.length === 0 ? "" : "text-green-500"
+                }
               >
-                {memberData.note.length}
+                {memberData?.note?.length}
               </span>
               .
             </div>

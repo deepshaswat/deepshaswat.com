@@ -16,7 +16,7 @@ const audienceId = "83dee91f-fdd3-4cbe-8ed2-11f597f1ad0f";
 export const sendEmail = async (
   name: string,
   email: string,
-  message: string,
+  message: string
 ) => {
   const { data, error } = await resend.emails.send({
     from: "Shaswat Deep <contact@mail.deepshaswat.com>",
@@ -215,9 +215,9 @@ export const updateContactAudience = async ({
   unsubscribed,
 }: {
   id: string;
-  firstName: string;
-  lastName: string;
-  unsubscribed: boolean;
+  firstName?: string;
+  lastName?: string;
+  unsubscribed?: boolean;
 }) => {
   try {
     await resend.contacts.update({
@@ -229,6 +229,31 @@ export const updateContactAudience = async ({
     });
   } catch (error) {
     console.error("Error updating contact audience:", error);
-    throw error;
+    return {
+      error: "Failed to update contact audience",
+    };
+  }
+};
+
+export const deleteContactAudience = async (id: string) => {
+  try {
+    const { data, error } = await resend.contacts.get({
+      id,
+      audienceId,
+    });
+    if (data) {
+      await resend.contacts.remove({
+        id,
+        audienceId,
+      });
+    }
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error deleting contact audience:", error);
+    return {
+      error: "Failed to delete contact audience",
+    };
   }
 };

@@ -93,7 +93,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   ...popoverProps
 }) => {
   const itemCache = React.useRef(
-    new Map<string, MultiSelectOptionItem>(),
+    new Map<string, MultiSelectOptionItem>()
   ).current;
 
   const handleValueChange = React.useCallback(
@@ -104,7 +104,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         onValueChangeProp(state, items);
       }
     },
-    [onValueChangeProp],
+    [onValueChangeProp]
   );
 
   const [value, setValue] = useControllableState({
@@ -129,7 +129,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         return prev ? [...prev, value] : [value];
       });
     },
-    [onSelectProp, setValue],
+    [onSelectProp, setValue]
   );
 
   const handleDeselect = React.useCallback(
@@ -142,7 +142,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         return prev.filter((v) => v !== value);
       });
     },
-    [onDeselectProp, setValue],
+    [onDeselectProp, setValue]
   );
 
   const contextValue = React.useMemo(() => {
@@ -206,7 +206,7 @@ const MultiSelectTrigger = React.forwardRef<
         className={ny(
           "border-input ring-offset-background focus:ring-ring flex size-full min-h-10 items-center justify-between whitespace-nowrap rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 [&>span]:line-clamp-1",
           disabled ? "cursor-not-allowed opacity-50" : "cursor-text",
-          className,
+          className
         )}
         onClick={disabled ? PreventClick : props.onClick}
         onTouchStart={disabled ? PreventClick : props.onTouchStart}
@@ -233,7 +233,7 @@ const MultiSelectValue = React.forwardRef<
 >(
   (
     { className, placeholder, maxDisplay, maxItemLength, ...props },
-    forwardRef,
+    forwardRef
   ) => {
     const { value, itemCache, onDeselect } = useMultiSelect();
     const [firstRendered, setFirstRendered] = React.useState(false);
@@ -259,7 +259,7 @@ const MultiSelectValue = React.forwardRef<
         <div
           className={ny(
             "flex flex-1 flex-wrap items-center gap-1.5 overflow-x-hidden",
-            className,
+            className
           )}
           {...props}
           ref={forwardRef}
@@ -317,7 +317,7 @@ const MultiSelectValue = React.forwardRef<
         </div>
       </TooltipProvider>
     );
-  },
+  }
 );
 
 const MultiSelectSearch = React.forwardRef<
@@ -374,7 +374,7 @@ const MultiSelectContent = React.forwardRef<
         sideOffset={4}
         collisionPadding={10}
         className={ny(
-          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-full rounded-md border p-0 shadow-md outline-none",
+          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-full rounded-md border p-0 shadow-md outline-none"
         )}
         style={
           {
@@ -394,7 +394,7 @@ const MultiSelectContent = React.forwardRef<
         <Command
           className={ny(
             "max-h-96 w-full min-w-[var(--radix-select-trigger-width)] px-1",
-            className,
+            className
           )}
           shouldFilter={!context.onSearch}
         >
@@ -426,7 +426,7 @@ const MultiSelectItem = React.forwardRef<
       className,
       ...props
     },
-    forwardedRef,
+    forwardedRef
   ) => {
     const {
       value: contextValue,
@@ -453,8 +453,7 @@ const MultiSelectItem = React.forwardRef<
     }, [selected, value, item]);
 
     const disabled = Boolean(
-      disabledProp ||
-        (!selected && maxCount && contextValue.length >= maxCount),
+      disabledProp || (!selected && maxCount && contextValue.length >= maxCount)
     );
 
     const handleClick = () => {
@@ -474,7 +473,7 @@ const MultiSelectItem = React.forwardRef<
         value={value}
         className={ny(
           disabled && "text-muted-foreground cursor-not-allowed",
-          className,
+          className
         )}
         disabled={disabled}
         onSelect={!disabled && value ? handleClick : undefined}
@@ -484,7 +483,7 @@ const MultiSelectItem = React.forwardRef<
         {selected ? <Check className="ml-auto size-4 shrink-0" /> : null}
       </CommandItem>
     );
-  },
+  }
 );
 
 const MultiSelectGroup = React.forwardRef<

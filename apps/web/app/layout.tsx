@@ -2,7 +2,12 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Appbar, Footer, generateSiteConfig } from "@repo/ui/web";
+import {
+  Appbar,
+  Footer,
+  generateSiteConfig,
+  NewsletterButton,
+} from "@repo/ui/web";
 import { Toaster } from "@repo/ui";
 
 const inter = Nunito({ subsets: ["latin"] });
@@ -14,7 +19,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = generateSiteConfig(
   "Shaswat Deep",
   "deepshaswat.com",
-  "/",
+  "/"
 );
 
 export default function RootLayout({
@@ -32,6 +37,7 @@ export default function RootLayout({
             <div className="flex-1 w-full max-w-screen-lg mx-auto px-4">
               {children}
               <Toaster />
+              <NewsletterButton />
             </div>
             <Footer />
           </main>

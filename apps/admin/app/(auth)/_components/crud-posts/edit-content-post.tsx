@@ -24,7 +24,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase(),
+        : word.toLowerCase()
     )
     .join(" ");
 };
@@ -77,7 +77,7 @@ export const EditContentPost = ({
             imageUrl: tag.tag.imageUrl ?? "",
             slug: tag.tag.slug,
             posts: tag.tag.posts,
-          })),
+          }))
         );
       } catch (error) {
         console.error("Error fetching tags:", error);
@@ -155,7 +155,7 @@ export const EditContentPost = ({
 
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),
-    [],
+    []
   );
 
   const handleEditorContentChange = (content: string) => {

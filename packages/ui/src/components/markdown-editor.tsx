@@ -29,13 +29,13 @@ export const Markdown = createReactBlockSpec(
   {
     render: ({ block, editor }) => {
       const [markdownContent, setMarkdownContent] = useState(
-        block.props.content,
+        block.props.content
       );
       const [isEditing, setIsEditing] = useState(!block.props.content);
       const editorRef = useRef<HTMLDivElement>(null);
       const textareaRef = useRef<HTMLTextAreaElement>(null);
       const [activeListSymbol, setActiveListSymbol] = useState<string | null>(
-        null,
+        null
       );
       const [currentHeader, setCurrentHeader] = useState<string>("");
 
@@ -96,7 +96,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             start + symbol.length,
-            end + symbol.length,
+            end + symbol.length
           );
         }
         // Handle links
@@ -106,7 +106,7 @@ export const Markdown = createReactBlockSpec(
             setMarkdownContent(newText);
             textarea.setSelectionRange(
               start + selectedText.length + 3,
-              start + selectedText.length + 3,
+              start + selectedText.length + 3
             );
           } else {
             newText = before + "[]()" + after;
@@ -157,7 +157,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             lineStartIndex + symbol.length,
-            lineStartIndex + symbol.length,
+            lineStartIndex + symbol.length
           );
         }
         // Handle lists and blockquote
@@ -195,7 +195,7 @@ export const Markdown = createReactBlockSpec(
           setMarkdownContent(newText);
           textarea.setSelectionRange(
             lineStartIndex + symbol.length,
-            lineStartIndex + symbol.length,
+            lineStartIndex + symbol.length
           );
         }
 
@@ -219,7 +219,7 @@ export const Markdown = createReactBlockSpec(
           // Move the cursor after the inserted list symbol
           textarea.setSelectionRange(
             start + activeListSymbol.length + 1,
-            start + activeListSymbol.length + 1,
+            start + activeListSymbol.length + 1
           );
         }
       };
@@ -231,7 +231,7 @@ export const Markdown = createReactBlockSpec(
             "w-full bg-transparent",
             isEditing && canEdit
               ? "border-0 outline-none ring-0 focus:ring-0 focus:outline-none focus:border-0 rounded-md !m-0 !p-0"
-              : "",
+              : ""
           )}
         >
           {isEditing && canEdit ? (
@@ -324,7 +324,7 @@ export const Markdown = createReactBlockSpec(
             <div
               className={cn(
                 "markdown-content text-neutral-300",
-                !canEdit && "border-none select-none",
+                !canEdit && "border-none select-none"
               )}
               onClick={() => canEdit && setIsEditing(true)}
               style={{ cursor: canEdit ? "pointer" : "default" }}
@@ -335,7 +335,7 @@ export const Markdown = createReactBlockSpec(
                     <h1
                       className={cn(
                         "text-2xl font-bold mb-2",
-                        !canEdit && "select-none",
+                        !canEdit && "select-none"
                       )}
                       {...props}
                     />
@@ -344,7 +344,7 @@ export const Markdown = createReactBlockSpec(
                     <h2
                       className={cn(
                         "text-xl font-bold mb-2",
-                        !canEdit && "select-none",
+                        !canEdit && "select-none"
                       )}
                       {...props}
                     />
@@ -353,7 +353,7 @@ export const Markdown = createReactBlockSpec(
                     <h3
                       className={cn(
                         "text-lg font-bold mb-2",
-                        !canEdit && "select-none",
+                        !canEdit && "select-none"
                       )}
                       {...props}
                     />
@@ -368,7 +368,7 @@ export const Markdown = createReactBlockSpec(
                     <ul
                       className={cn(
                         "list-disc ml-6 mb-2",
-                        !canEdit && "border-none select-none",
+                        !canEdit && "border-none select-none"
                       )}
                       {...props}
                     />
@@ -377,7 +377,7 @@ export const Markdown = createReactBlockSpec(
                     <ol
                       className={cn(
                         "list-decimal ml-6 mb-2",
-                        !canEdit && "border-none select-none",
+                        !canEdit && "border-none select-none"
                       )}
                       {...props}
                     />
@@ -386,7 +386,7 @@ export const Markdown = createReactBlockSpec(
                     <li
                       className={cn(
                         "mb-1",
-                        !canEdit && "border-none select-none",
+                        !canEdit && "border-none select-none"
                       )}
                       {...props}
                     />
@@ -395,7 +395,7 @@ export const Markdown = createReactBlockSpec(
                     <blockquote
                       className={cn(
                         "border-l-[2px] border-green-700 pl-4 p-1 italic text-neutral-200 mb-2",
-                        !canEdit && "border-none select-none",
+                        !canEdit && "border-none select-none"
                       )}
                       {...props}
                     />
@@ -404,7 +404,7 @@ export const Markdown = createReactBlockSpec(
                     <a
                       className={cn(
                         "text-blue-500 hover:underline",
-                        !canEdit && "select-none",
+                        !canEdit && "select-none"
                       )}
                       {...props}
                     />
@@ -413,7 +413,7 @@ export const Markdown = createReactBlockSpec(
                     <img
                       className={cn(
                         "max-w-full h-auto mb-2",
-                        !canEdit && "select-none",
+                        !canEdit && "select-none"
                       )}
                       {...props}
                     />
@@ -427,5 +427,5 @@ export const Markdown = createReactBlockSpec(
         </div>
       );
     },
-  },
+  }
 );

@@ -214,8 +214,8 @@ const MemberComponent = () => {
                         {member.firstName
                           ? getInitials(
                               capitalizeWords(
-                                member.firstName + " " + member.lastName,
-                              ),
+                                member.firstName + " " + member.lastName
+                              )
                             )
                           : member.email.charAt(0).toUpperCase()}
                       </div>
@@ -224,7 +224,7 @@ const MemberComponent = () => {
                       <div className="font-medium text-neutral-100">
                         {member.firstName
                           ? capitalizeWords(
-                              member.firstName + " " + member.lastName,
+                              member.firstName + " " + member.lastName
                             )
                           : member.email}
                       </div>
