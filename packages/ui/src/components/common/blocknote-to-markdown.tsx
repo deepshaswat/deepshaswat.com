@@ -128,7 +128,7 @@ export function NewsletterMarkdown({
                 .split("\n")
                 .filter(
                   (row) =>
-                    row.trim() && !row.includes("---") && !row.includes("---")
+                    row.trim() && !row.includes("---") && !row.includes("---"),
                 ) // Remove empty rows and separator rows
                 .map((row) => row.trim());
 
@@ -196,7 +196,7 @@ export function NewsletterMarkdown({
               else if (defaultMarkdown.includes("```")) {
                 processedMarkdown = defaultMarkdown.replace(
                   /```(.*?)\n([\s\S]*?)```/g,
-                  `<pre style="background-color: ${bgColor || "#111111"}; padding: 16px; border-radius: 8px; overflow-x: auto; color: ${textColor || "#d4d4d4"}; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$2</pre>`
+                  `<pre style="background-color: ${bgColor || "#111111"}; padding: 16px; border-radius: 8px; overflow-x: auto; color: ${textColor || "#d4d4d4"}; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$2</pre>`,
                 );
               }
 
