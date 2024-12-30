@@ -94,7 +94,7 @@ export function NewsletterMarkdown({
             <div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
               <div style="width: 72px; height: 72px; background-color: rgba(0, 0, 0, 0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255, 255, 255, 0.8);">
                 <div style="width: 0; height: 0; border-left: 24px solid white; border-top: 16px solid transparent; border-bottom: 16px solid transparent; margin-left: 6px;"></div>
-              </div>
+              </div>OR
             </div>
           </div>
           <p style="margin: 12px 0 4px; color: #ffffff; text-align: center; font-size: 14px; font-weight: 500;">Click to watch video</p>
