@@ -113,14 +113,20 @@ enum Role {
 
 model Member {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String?
+  firstName      String?
+  lastName      String?
   email     String  @unique
   note      String?
-  subscribed Boolean @default(true)
+  unsubscribed Boolean @default(false)
+  openRate      String?
+  location      String?
+  imageUrl      String?
+  resendContactId String? @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([name])
+  @@index([firstName])
+  @@index([lastName])
   @@index([createdAt])
   @@index([updatedAt])
 }

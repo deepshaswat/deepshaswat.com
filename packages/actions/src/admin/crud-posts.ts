@@ -4,8 +4,8 @@ import { SignedIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import prisma from "@repo/db/client";
-import { PostListType, PostType } from "./post-types";
-import { sendNewsletter } from "../mail";
+import { PostListType, PostType } from "../common/types";
+import { sendNewsletter } from "../common/resend";
 
 async function authenticateUser() {
   const sign = await SignedIn;
@@ -208,7 +208,7 @@ async function publishPost(
   scheduleType: string,
   publishType: string,
   post: PostListType,
-  markdown: string,
+  markdown: string
 ) {
   await authenticateUser();
 

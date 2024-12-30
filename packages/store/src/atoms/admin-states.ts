@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { PostListType, Tags } from "@repo/actions";
+import { Member, MemberInput, PostListType, Tags } from "@repo/actions";
 
 export const postMetadataState = atom({
   key: "postMetadataState",
@@ -83,4 +83,9 @@ export const savePostErrorState = atom<string | null>({
 export const blogPageNumberState = atom<number>({
   key: "blogPageNumberState",
   default: 0,
+});
+
+export const memberState = atom<Member | null>({
+  key: "memberState",
+  default: null,
 });

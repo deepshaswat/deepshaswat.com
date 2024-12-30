@@ -2,12 +2,7 @@
 
 import { Resend } from "resend";
 import { EmailTemplate, NewsletterTemplate } from "@repo/ui";
-import { PostListType } from "./admin/post-types";
-// import * as dotenv from "dotenv";
-// import path from "path";
-
-// // Load environment variables from the root .env file
-// dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+import { PostListType } from "./types";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 
@@ -16,11 +11,12 @@ if (!resendApiKey) {
 }
 
 const resend = new Resend(resendApiKey);
+const audienceId = "83dee91f-fdd3-4cbe-8ed2-11f597f1ad0f";
 
 export const sendEmail = async (
   name: string,
   email: string,
-  message: string,
+  message: string
 ) => {
   const { data, error } = await resend.emails.send({
     from: "Shaswat Deep <contact@mail.deepshaswat.com>",
@@ -170,3 +166,69 @@ export const sendNewsletter = async ({
 //     };
 //   }
 // };
+
+interface AddContactToAudienceProps {
+  email: string;
+  firstName: string;
+  lastName: string;
+  unsubscribed: boolean;
+}
+
+export const addContactToAudience = async ({
+  email,
+  firstName,
+  lastName,
+  unsubscribed,
+}: AddContactToAudienceProps) => {
+  try {
+    const { data, error } = await resend.contacts.create({
+      email,
+      firstName,
+      lastName,
+      audienceId,
+      unsubscribed,
+    });
+
+    if (error) {
+      console.log(error);
+      return {
+        error: "Something went wrong!",
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.error("Error adding contact to audience:", error);
+    return {
+      error: "Failed to add contact to audience",
+    };
+  }
+};
+
+export const updateContactAudience = async ({
+  id,
+  firstName,
+  lastName,
+  unsubscribed,
+}: {
+  id: string;
+  firstName: string;
+  lastName: string;
+  unsubscribed: boolean;
+}) => {
+  try {
+    await resend.contacts.update({
+      id,
+      firstName,
+      lastName,
+      audienceId,
+      unsubscribed,
+    });
+  } catch (error) {
+    console.error("Error updating contact audience:", error);
+    throw error;
+  }
+};

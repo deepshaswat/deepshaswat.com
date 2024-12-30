@@ -42,3 +42,4 @@ export * from "./components/ui/sonner";
 
 export * from "./components/common/email-template";
 export * from "./components/common/blocknote-to-markdown";
+export * from "./components/common/pagination-bar";
