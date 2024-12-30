@@ -97,15 +97,15 @@ export interface Author {
 
 export interface Member {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  note: string;
-  openRate: string;
-  location: string;
-  imageUrl: string;
+  note?: string;
+  openRate?: string;
+  location?: string;
+  imageUrl?: string;
   unsubscribed: boolean;
-  resendContactId: string;
+  resendContactId?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -19,9 +19,9 @@ async function authenticateUser() {
 
 export async function fetchAllPostsCount(
   postOption: string,
-  tagOption: string,
+  tagOption: string
 ) {
-  await authenticateUser();
+  // await authenticateUser();
   // modify for based on postOption and tagOption
   if (postOption === "all-posts") {
     const posts = await prisma.post.count();
@@ -59,7 +59,7 @@ export async function fetchAllPostsCount(
 }
 
 export async function fetchPublishedPostsCount(postOption: string) {
-  await authenticateUser();
+  // await authenticateUser();
   // modify for based on postOption and tagOption
   if (postOption === "all-posts") {
     const posts = await prisma.post.count();
@@ -95,7 +95,7 @@ export async function fetchPublishedPostsCount(postOption: string) {
 export async function fetchAllPosts(
   postOption: string,
   tagOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
   await authenticateUser();
   const pageSize = 10;
@@ -187,7 +187,7 @@ export async function fetchAllPosts(
 }
 
 export async function fetchPublishedPosts(postOption: string) {
-  await authenticateUser();
+  // await authenticateUser();
 
   if (postOption === "featured-posts") {
     const posts = await prisma.post.findMany({
@@ -242,9 +242,9 @@ export async function fetchPublishedPosts(postOption: string) {
 }
 export async function fetchPublishedPostsPaginated(
   postOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
-  await authenticateUser();
+  // await authenticateUser();
   const pageSize = 10;
   const offset = pageNumber * pageSize;
 
@@ -319,7 +319,7 @@ export async function fetchPostById(id: string) {
 }
 
 export async function fetchPostByPostUrl(postUrl: string) {
-  await authenticateUser();
+  // await authenticateUser();
   const post = await prisma.post.findUnique({
     where: { postUrl },
     include: {

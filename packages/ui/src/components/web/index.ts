@@ -27,3 +27,4 @@ export * from "./footer/Footer";
 export * from "./articles/articles-list-page";
 export * from "./articles/blog-content";
 export * from "./articles/newsletter-list-page";
+export * from "./newsletter-subscribe/newsletter-subscribe";

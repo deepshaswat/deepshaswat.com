@@ -5,7 +5,11 @@ import { SignedIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import { Member, MemberInput } from "../common/types";
-import { addContactToAudience, updateContactAudience } from "../common/resend";
+import {
+  addContactToAudience,
+  deleteContactAudience,
+  updateContactAudience,
+} from "../common/resend";
 
 async function authenticateUser() {
   const sign = await SignedIn;
@@ -15,16 +19,36 @@ async function authenticateUser() {
 }
 
 export async function createMember(member: Member) {
-  await authenticateUser();
+  // await authenticateUser();
   try {
+    const existingMember = await prisma.member.findUnique({
+      where: { email: member.email },
+    });
+
+    if (existingMember && existingMember.unsubscribed === false) {
+      return existingMember;
+    } else if (existingMember && existingMember.unsubscribed === true) {
+      await prisma.member.update({
+        where: { id: existingMember.id },
+        data: { unsubscribed: false },
+      });
+      if (existingMember.resendContactId) {
+        await updateContactAudience({
+          id: existingMember.resendContactId,
+          unsubscribed: false,
+        });
+      }
+      return existingMember;
+    }
+
     const newMember = await prisma.member.create({
       data: member,
     });
 
     const { data } = await addContactToAudience({
       email: member.email,
-      firstName: member.firstName,
-      lastName: member.lastName,
+      firstName: member.firstName || "",
+      lastName: member.lastName || "",
       unsubscribed: member.unsubscribed,
     });
 
@@ -38,6 +62,31 @@ export async function createMember(member: Member) {
     return newMember;
   } catch (error) {
     console.error("Error creating member:", error);
+    throw error;
+  }
+}
+
+export async function deleteMember(id: string) {
+  await authenticateUser();
+  try {
+    const existingMember = await prisma.member.findUnique({
+      where: { id },
+    });
+    if (existingMember) {
+      if (existingMember.resendContactId) {
+        const { error } = await deleteContactAudience(
+          existingMember.resendContactId
+        );
+        if (error) {
+          throw new Error(error);
+        }
+      }
+      await prisma.member.delete({
+        where: { id },
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting member:", error);
     throw error;
   }
 }
