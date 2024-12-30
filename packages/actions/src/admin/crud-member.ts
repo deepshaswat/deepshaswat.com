@@ -66,6 +66,36 @@ export async function createMember(member: Member) {
   }
 }
 
+export async function unsubscribeMember(email: string) {
+  // await authenticateUser();
+  try {
+    const existingMember = await prisma.member.findUnique({
+      where: { email },
+    });
+
+    if (existingMember && existingMember.unsubscribed === true) {
+      return existingMember;
+    } else if (existingMember && existingMember.unsubscribed === false) {
+      await prisma.member.update({
+        where: { id: existingMember.id },
+        data: { unsubscribed: true },
+      });
+      if (existingMember.resendContactId) {
+        await updateContactAudience({
+          id: existingMember.resendContactId,
+          unsubscribed: true,
+        });
+      }
+      return existingMember;
+    }
+  } catch (error) {
+    console.error("Error unsubscribing member:", error);
+    return {
+      error: "Error unsubscribing member",
+    };
+  }
+}
+
 export async function deleteMember(id: string) {
   await authenticateUser();
   try {
