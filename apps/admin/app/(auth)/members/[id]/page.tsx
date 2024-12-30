@@ -41,23 +41,23 @@ export default function ({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className='m-8  lg:ml-[156px] lg:mr-[156px]'>
-      <div className=''>
-        <div className='flex flex-row items-center justify-between mb-4 lg:mb-0 '>
+    <div className="m-8  lg:ml-[156px] lg:mr-[156px]">
+      <div className="">
+        <div className="flex flex-row items-center justify-between mb-4 lg:mb-0 ">
           <div>
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink
-                    href='/members'
-                    className='text-neutral-200 hover:text-neutral-100'
+                    href="/members"
+                    className="text-neutral-200 hover:text-neutral-100"
                   >
                     Members
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className='font-normal text-neutral-500'>
+                  <BreadcrumbPage className="font-normal text-neutral-500">
                     Edit member
                   </BreadcrumbPage>
                 </BreadcrumbItem>
@@ -65,15 +65,15 @@ export default function ({ params }: { params: { id: string } }) {
             </Breadcrumb>
           </div>
 
-          <div className=' gap-20 justify-start'>
+          <div className=" gap-20 justify-start">
             <Button
-              variant='secondary'
-              className='rounded-sm items-center'
+              variant="secondary"
+              className="rounded-sm items-center"
               onClick={handleSave}
             >
               {isLoading ? (
-                <div className='flex items-center gap-2 text-green-500'>
-                  <Loader2 className='w-4 h-4 animate-spin text-green-500' />{" "}
+                <div className="flex items-center gap-2 text-green-500">
+                  <Loader2 className="w-4 h-4 animate-spin text-green-500" />{" "}
                   Saving
                 </div>
               ) : (
