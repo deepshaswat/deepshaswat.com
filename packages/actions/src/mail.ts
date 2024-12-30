@@ -1,7 +1,8 @@
 "use server";
 
 import { Resend } from "resend";
-import { EmailTemplate } from "@repo/ui";
+import { EmailTemplate, NewsletterTemplate } from "@repo/ui";
+import { PostListType } from "./admin/post-types";
 // import * as dotenv from "dotenv";
 // import path from "path";
 
@@ -41,3 +42,131 @@ export const sendEmail = async (
     data: data,
   };
 };
+
+interface SendNewsletterProps {
+  post: PostListType;
+  sendData: any;
+  markdown: string;
+}
+
+export const sendNewsletter = async ({
+  post,
+  sendData,
+  markdown,
+}: SendNewsletterProps) => {
+  let sendDate;
+  if (sendData.status === "PUBLISHED") {
+    sendDate = new Date(Date.now() + 100 * 60).toISOString();
+  } else {
+    sendDate = new Date(sendData.publishDate).toISOString();
+  }
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "Shaswat Deep <contact@mail.deepshaswat.com>",
+      to: "deepshaswat@gmail.com",
+      replyTo: "hi@deepshaswat.com",
+      subject: post.title,
+      react: NewsletterTemplate({ post, markdown }),
+      headers: {
+        "List-Unsubscribe": "<https://deepshaswat.com/unsubscribe>",
+      },
+      scheduledAt: sendDate,
+    });
+
+    if (error) {
+      console.log(error);
+      return {
+        error: "Something went wrong!",
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.error("Error sending newsletter:", error);
+    return {
+      error: "Failed to send newsletter",
+    };
+  }
+};
+
+// TODO: Uncomment this when we have a proper audience list
+// export const sendNewsletter = async ({
+//   post,
+//   sendData,
+//   markdown,
+// }: SendNewsletterProps) => {
+//   let sendDate;
+//   const audienceId = "fbfc9b75-babe-43df-92cc-40c2c0095d42";
+//   if (sendData.status === "PUBLISHED") {
+//     sendDate = new Date(Date.now() + 100 * 60).toISOString();
+//   } else {
+//     sendDate = new Date(sendData.publishDate).toISOString();
+//   }
+
+//   try {
+//     // Fetch the contacts from the audience list
+//     const { data: contacts, error: contactsError } = await resend.contacts.list(
+//       {
+//         audienceId,
+//       }
+//     );
+
+//     if (contactsError) {
+//       console.error("Error fetching contacts:", contactsError);
+//       return {
+//         error: "Failed to fetch audience contacts",
+//       };
+//     }
+
+//     // Filter contacts to exclude unsubscribed users
+//     const validContacts = contacts?.data.filter(
+//       (contact) => !contact.unsubscribed
+//     );
+
+//     // Send emails to each contact in the filtered list
+//     const results = [];
+//     for (const contact of validContacts ?? []) {
+//       try {
+//         const { data, error } = await resend.emails.send({
+//           from: "Shaswat Deep <contact@mail.deepshaswat.com>",
+//           to: contact.email,
+//           replyTo: "hi@deepshaswat.com",
+//           subject: post.title,
+//           react: NewsletterTemplate({ post, markdown }),
+//           headers: {
+//             "List-Unsubscribe": "<https://deepshaswat.com/unsubscribe>",
+//           },
+//           scheduledAt: sendDate,
+//         });
+
+//         if (error) {
+//           console.error(`Error sending email to ${contact.email}:`, error);
+//           results.push({ email: contact.email, success: false, error });
+//         } else {
+//           results.push({ email: contact.email, success: true, data });
+//         }
+//       } catch (emailError) {
+//         console.error(`Error sending email to ${contact.email}:`, emailError);
+//         results.push({
+//           email: contact.email,
+//           success: false,
+//           error: emailError,
+//         });
+//       }
+//     }
+
+//     return {
+//       success: results.every((result) => result.success),
+//       results,
+//     };
+//   } catch (error) {
+//     console.error("Error sending newsletter:", error);
+//     return {
+//       error: "Failed to send newsletter",
+//     };
+//   }
+// };

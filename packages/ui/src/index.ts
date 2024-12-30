@@ -40,4 +40,5 @@ export * from "./components/ui/form";
 export * from "./components/ui/sonner";
 // export * from "./components/web/command/CommandBar";
 
-export { EmailTemplate } from "./components/email-template";
+export * from "./components/common/email-template";
+export * from "./components/common/blocknote-to-markdown";

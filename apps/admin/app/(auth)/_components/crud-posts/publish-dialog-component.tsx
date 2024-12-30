@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ArrowRight, MoveRight } from "lucide-react";
 
@@ -12,7 +14,7 @@ import {
   AccordionTrigger,
   Badge,
   Button,
-  DatePicker,
+  useNewsletterMarkdown,
 } from "@repo/ui";
 
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -25,7 +27,7 @@ import {
   savePostErrorState,
 } from "@repo/store";
 
-import { dateTimeValidation, publishPost } from "@repo/actions";
+import { dateTimeValidation, PostListType, publishPost } from "@repo/actions";
 import { useRouter } from "next/navigation";
 
 interface PublishDialogProps {
@@ -35,19 +37,25 @@ interface PublishDialogProps {
 
 const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
   const router = useRouter();
+
   const [isFirstDialogOpen, setFirstDialogOpen] = useState(value);
   const [isSecondDialogOpen, setSecondDialogOpen] = useState(false);
   const [finalTime, setFinalTime] = useState<Date | null>(null);
+  const [scheduleType, setScheduleType] = useState("now");
   const [publishType, setPublishType] = useState("newsletter");
-  const [error, setError] = useRecoilState(savePostErrorState);
   const [openAccordionItem, setOpenAccordionItem] = useState<
     string | undefined
   >(undefined);
+  const [error, setError] = useRecoilState(savePostErrorState);
 
   const [inputDate, setInputDate] = useRecoilState(selectDate);
   const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
-  const [scheduleType, setScheduleType] = useState("now");
+
   const postId = useRecoilValue(postIdState);
+  const post = useRecoilValue(postDataState);
+
+  const { markdown: newsletterMarkdown, NewsletterMarkdown } =
+    useNewsletterMarkdown(post?.content || "");
 
   const handleScheduleTypeChange = (type: string) => {
     setScheduleType(type);
@@ -66,63 +74,52 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
     setFirstDialogOpen(true);
   };
 
-  const handleClose = () => {
-    setFirstDialogOpen(false);
-    setSecondDialogOpen(false);
-    onOpenChange(false);
-  };
-
   const handlePublish = async () => {
     if (!postId) {
       console.error("Post ID is required");
       return;
     }
-    const timeValidation = await dateTimeValidation(inputDate, inputTimeIst);
+    try {
+      const markdown = publishType === "newsletter" ? newsletterMarkdown : "";
 
-    if (timeValidation.error) {
-      setError(timeValidation.error);
-    } else {
-      setError(null);
-      const combinedDate = timeValidation.combinedDate as Date;
-      setFinalTime(combinedDate);
-    }
+      const timeValidation = await dateTimeValidation(inputDate, inputTimeIst);
 
-    if (!finalTime) {
-      console.error("Publish time is required");
-      return;
-    }
-    console.log("Final time:", finalTime);
-    const result = await publishPost(
-      postId,
-      finalTime,
-      scheduleType,
-      publishType,
-    );
-    if (result.error) {
-      console.error("Error publishing post:", result.error);
-    } else {
-      console.log("Post published successfully");
-      setSecondDialogOpen(false);
-      setFirstDialogOpen(false);
-      router.push("/posts");
+      if (timeValidation.error) {
+        setError(timeValidation.error);
+      } else {
+        setError(null);
+        const combinedDate = timeValidation.combinedDate as Date;
+        setFinalTime(combinedDate);
+      }
+
+      if (!finalTime) {
+        console.error("Publish time is required");
+        return;
+      }
+
+      const result = await publishPost(
+        postId,
+        finalTime,
+        scheduleType,
+        publishType,
+        post as PostListType,
+        markdown,
+      );
+
+      if (result.success) {
+        console.log("Post published successfully");
+        setSecondDialogOpen(false);
+        setFirstDialogOpen(false);
+        router.push("/posts");
+      } else {
+        console.error("Error publishing post:", result.error);
+        setError(result.error || "Failed to publish post");
+      }
+    } catch (error) {
+      console.error("Error publishing post:", error);
+      setError("An unexpected error occurred");
     }
   };
-
-  //   useEffect(() => {
-  //     const validateDate = async () => {
-  //       const result = await dateTimeValidation(inputDate, inputTimeIst);
-
-  //       if (result.error) {
-  //         setError(result.error);
-  //       } else {
-  //         setError(null);
-  //         const combinedDate = result.combinedDate as Date;
-  //         setFinalTime(combinedDate);
-  //       }
-  //     };
-
-  //     validateDate();
-  //   }, [inputDate, inputTimeIst]);
 
   useEffect(() => {
     setFirstDialogOpen(value);
@@ -134,15 +131,8 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
 
   return (
     <>
-      {/* <Button
-        onClick={() => setFirstDialogOpen(true)}
-        variant='link'
-        size='sm'
-        className='flex flex-row items-center text-sm text-green-500 rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2'
-        disabled={disabled}
-      >
-        Publish
-      </Button> */}
+      {/* Hidden component to generate markdown */}
+      {publishType === "newsletter" && post?.content && <NewsletterMarkdown />}
 
       {/* FIRST DIALOG */}
       <Dialog
