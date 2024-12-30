@@ -1,7 +1,8 @@
 "use server";
 
 import { Resend } from "resend";
-import { EmailTemplate } from "@repo/ui";
+import { EmailTemplate, NewsletterTemplate } from "@repo/ui";
+import { PostListType } from "./admin/post-types";
 // import * as dotenv from "dotenv";
 // import path from "path";
 
@@ -19,7 +20,7 @@ const resend = new Resend(resendApiKey);
 export const sendEmail = async (
   name: string,
   email: string,
-  message: string,
+  message: string
 ) => {
   const { data, error } = await resend.emails.send({
     from: "Shaswat Deep <contact@mail.deepshaswat.com>",
@@ -40,4 +41,53 @@ export const sendEmail = async (
     success: "Message sent!",
     data: data,
   };
+};
+
+interface SendNewsletterProps {
+  post: PostListType;
+  sendData: any;
+  markdown: string;
+}
+
+export const sendNewsletter = async ({
+  post,
+  sendData,
+  markdown,
+}: SendNewsletterProps) => {
+  let sendDate;
+  if (sendData.status === "PUBLISHED") {
+    sendDate = new Date(Date.now() + 100 * 60).toISOString();
+  } else {
+    sendDate = new Date(sendData.publishDate).toISOString();
+  }
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "Shaswat Deep <contact@mail.deepshaswat.com>",
+      to: "hi@deepshaswat.com",
+      subject: post.title,
+      react: NewsletterTemplate({ post, markdown }),
+      headers: {
+        "List-Unsubscribe": "<https://deepshaswat.com/unsubscribe>",
+      },
+      scheduledAt: sendDate,
+    });
+
+    if (error) {
+      console.log(error);
+      return {
+        error: "Something went wrong!",
+      };
+    }
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    console.error("Error sending newsletter:", error);
+    return {
+      error: "Failed to send newsletter",
+    };
+  }
 };

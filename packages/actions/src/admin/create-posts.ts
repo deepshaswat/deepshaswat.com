@@ -4,7 +4,8 @@ import { SignedIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import prisma from "@repo/db/client";
-import { PostType } from "./post-types";
+import { PostListType, PostType } from "./post-types";
+import { sendNewsletter } from "../mail";
 
 async function authenticateUser() {
   const sign = await SignedIn;
@@ -206,6 +207,8 @@ async function publishPost(
   publishDate: Date,
   scheduleType: string,
   publishType: string,
+  post: PostListType,
+  markdown: string
 ) {
   await authenticateUser();
 
@@ -241,6 +244,9 @@ async function publishPost(
       where: { id: postId },
       data: data,
     });
+    if (publishType === "newsletter") {
+      await sendNewsletter({ post, sendData: data, markdown });
+    }
     return { success: true };
   } catch (error) {
     console.error("Error publishing post:", error);
