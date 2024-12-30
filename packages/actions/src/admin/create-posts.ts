@@ -208,7 +208,7 @@ async function publishPost(
   scheduleType: string,
   publishType: string,
   post: PostListType,
-  markdown: string,
+  markdown: string
 ) {
   await authenticateUser();
 
@@ -237,7 +237,7 @@ async function publishPost(
     };
   }
 
-  console.log("Data:", data);
+  // console.log("Data:", data);
 
   try {
     await prisma.post.update({
