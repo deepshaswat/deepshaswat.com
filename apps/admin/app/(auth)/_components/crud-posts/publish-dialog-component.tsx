@@ -103,7 +103,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
         scheduleType,
         publishType,
         post as PostListType,
-        markdown,
+        markdown
       );
 
       if (result.success) {
@@ -245,7 +245,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                     <AccordionTrigger className="text-gray-200 text-lg">
                       {scheduleType === "now"
                         ? "Right now"
-                        : `Schedule for ${formatDayAndDate(inputDate)} at ${inputTimeIst} IST`}
+                        : `Schedule for ${formatDayAndDate(
+                            inputDate
+                          )} at ${inputTimeIst} IST`}
                     </AccordionTrigger>
                     <AccordionContent>
                       <div className="space-y-4">
@@ -377,7 +379,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                   >
                     {scheduleType === "now"
                       ? "Publish & send, right now"
-                      : `Schedule for ${formatDayAndDate(inputDate)} at ${inputTimeIst} IST`}
+                      : `Schedule for ${formatDayAndDate(
+                          inputDate
+                        )} at ${inputTimeIst} IST`}
                   </Button>
                   <Button
                     className="flex-1 py-6 bg-neutral-700 "

@@ -36,7 +36,7 @@ const DrawerOverlay: React.ForwardRefExoticComponent<
       className={cn("fixed inset-0 z-50 bg-black/80", className)}
       {...props}
     />
-  ),
+  )
 );
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
@@ -55,7 +55,7 @@ const DrawerContent: React.ForwardRefExoticComponent<
         ref={ref}
         className={cn(
           "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
-          className,
+          className
         )}
         {...props}
       >
@@ -63,7 +63,7 @@ const DrawerContent: React.ForwardRefExoticComponent<
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
-  ),
+  )
 );
 DrawerContent.displayName = "DrawerContent";
 
@@ -99,7 +99,7 @@ const DrawerTitle: React.ForwardRefExoticComponent<
     ref={ref}
     className={cn(
       "text-lg font-semibold leading-none tracking-tight",
-      className,
+      className
     )}
     {...props}
   />
@@ -120,7 +120,7 @@ const DrawerDescription: React.ForwardRefExoticComponent<
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
-  ),
+  )
 );
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 

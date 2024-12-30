@@ -91,7 +91,7 @@ const insertDivider = (editor: typeof schema.BlockNoteEditor) => ({
 });
 
 const getCustomSlashMenuItems = (
-  editor: typeof schema.BlockNoteEditor,
+  editor: typeof schema.BlockNoteEditor
 ): DefaultReactSuggestionItem[] => [
   ...getDefaultReactSlashMenuItems(editor),
   insertYoutube(editor),

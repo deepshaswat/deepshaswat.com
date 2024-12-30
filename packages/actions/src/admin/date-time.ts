@@ -2,7 +2,7 @@ import { combinedDateTimeSchema, timeSchema } from "@repo/schema";
 
 async function dateTimeValidation(
   datePickerValue: Date,
-  timePickerValue: string,
+  timePickerValue: string
 ) {
   const validationTime = timeSchema.safeParse(timePickerValue);
 

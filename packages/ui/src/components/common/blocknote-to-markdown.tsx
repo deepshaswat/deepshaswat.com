@@ -89,7 +89,9 @@ export function NewsletterMarkdown({
   <tr>
     <td style="text-align: center;">
       <div style="position: relative;">
-        <a href="${block.props.url}" target="_blank" style="text-decoration: none;">
+        <a href="${
+          block.props.url
+        }" target="_blank" style="text-decoration: none;">
           <div style="background-color: #000000; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; padding: 0;">
             <div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
               <div style="width: 72px; height: 72px; background-color: rgba(0, 0, 0, 0.7); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(255, 255, 255, 0.8);">
@@ -98,7 +100,11 @@ export function NewsletterMarkdown({
             </div>
           </div>
           <p style="margin: 12px 0 4px; color: #ffffff; text-align: center; font-size: 14px; font-weight: 500;">Click to watch video</p>
-          ${block.props.caption ? `<p style="margin: 0; color: #666666; text-align: center; font-size: 12px;">${block.props.caption}</p>` : ""}
+          ${
+            block.props.caption
+              ? `<p style="margin: 0; color: #666666; text-align: center; font-size: 12px;">${block.props.caption}</p>`
+              : ""
+          }
         </a>
       </div>
     </td>
@@ -109,8 +115,14 @@ export function NewsletterMarkdown({
               blockMarkdown = `
 <table style="width: 100%; border-spacing: 0; margin: 16px 0;">
   <tr>
-    <td style="background-color: ${block.props.bgColor}; color: ${block.props.textColor}; padding: 16px; border-radius: 8px;">
-      ${block.props.showEmoji ? `<span style="margin-right: 8px; font-size: 1.2em;">${block.props.emoji}</span>` : ""}${block.props.text}
+    <td style="background-color: ${block.props.bgColor}; color: ${
+                block.props.textColor
+              }; padding: 16px; border-radius: 8px;">
+      ${
+        block.props.showEmoji
+          ? `<span style="margin-right: 8px; font-size: 1.2em;">${block.props.emoji}</span>`
+          : ""
+      }${block.props.text}
     </td>
   </tr>
 </table>`;
@@ -119,7 +131,9 @@ export function NewsletterMarkdown({
               blockMarkdown = `<hr style="border: none; border-top: 1px solid #333333; margin: 24px 0;" />`;
               break;
             case "markdown":
-              blockMarkdown = `\n\`\`\`markdown\n${block.props.content || ""}\n\`\`\`\n`;
+              blockMarkdown = `\n\`\`\`markdown\n${
+                block.props.content || ""
+              }\n\`\`\`\n`;
               break;
             case "table":
               const tableContent = await editor.blocksToMarkdownLossy([block]);
@@ -128,7 +142,7 @@ export function NewsletterMarkdown({
                 .split("\n")
                 .filter(
                   (row) =>
-                    row.trim() && !row.includes("---") && !row.includes("---"),
+                    row.trim() && !row.includes("---") && !row.includes("---")
                 ) // Remove empty rows and separator rows
                 .map((row) => row.trim());
 
@@ -142,7 +156,12 @@ export function NewsletterMarkdown({
                   if (cells.length === 0) return ""; // Skip empty rows
 
                   return `<tr>
-                    ${cells.map((cell) => `<td style="padding: 12px; color: #ffffff; border: 1px solid #333333;">${cell}</td>`).join("")}
+                    ${cells
+                      .map(
+                        (cell) =>
+                          `<td style="padding: 12px; color: #ffffff; border: 1px solid #333333;">${cell}</td>`
+                      )
+                      .join("")}
                   </tr>`;
                 })
                 .filter((row) => row) // Remove any empty rows we might have created
@@ -185,8 +204,14 @@ export function NewsletterMarkdown({
                 processedMarkdown = `
 <table style="width: 100%; border-spacing: 0; margin: 16px 0;">
   <tr>
-    <td style="padding: 16px 24px; background-color: ${bgColor || "#111111"}; border-left: 4px solid #333333; border-radius: 4px;">
-      <p style="color: ${textColor || "#d4d4d4"}; font-style: italic; margin: 0; font-size: 16px; line-height: 1.6;">${defaultMarkdown.substring(1).trim()}</p>
+    <td style="padding: 16px 24px; background-color: ${
+      bgColor || "#111111"
+    }; border-left: 4px solid #333333; border-radius: 4px;">
+      <p style="color: ${
+        textColor || "#d4d4d4"
+      }; font-style: italic; margin: 0; font-size: 16px; line-height: 1.6;">${defaultMarkdown
+                  .substring(1)
+                  .trim()}</p>
     </td>
   </tr>
 </table>`;
@@ -196,13 +221,21 @@ export function NewsletterMarkdown({
               else if (defaultMarkdown.includes("```")) {
                 processedMarkdown = defaultMarkdown.replace(
                   /```(.*?)\n([\s\S]*?)```/g,
-                  `<pre style="background-color: ${bgColor || "#111111"}; padding: 16px; border-radius: 8px; overflow-x: auto; color: ${textColor || "#d4d4d4"}; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$2</pre>`,
+                  `<pre style="background-color: ${
+                    bgColor || "#111111"
+                  }; padding: 16px; border-radius: 8px; overflow-x: auto; color: ${
+                    textColor || "#d4d4d4"
+                  }; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$2</pre>`
                 );
               }
 
               // Apply alignment and colors if needed
               if (alignment !== "left" || bgColor || textColor) {
-                blockMarkdown = `<div style="text-align: ${alignment}; ${bgColor ? `background-color: ${bgColor};` : ""} ${textColor ? `color: ${textColor};` : "color: #ffffff;"} border-radius: 4px;">\n\n${processedMarkdown}\n</div>`;
+                blockMarkdown = `<div style="text-align: ${alignment}; ${
+                  bgColor ? `background-color: ${bgColor};` : ""
+                } ${
+                  textColor ? `color: ${textColor};` : "color: #ffffff;"
+                } border-radius: 4px;">\n\n${processedMarkdown}\n</div>`;
               } else {
                 blockMarkdown = `<div style="color: #ffffff;">${processedMarkdown}</div>`;
               }

@@ -40,7 +40,7 @@ const PostContent: React.FC<PostContentProps> = ({ children, className }) => {
     <div
       className={cn(
         "relative z-1 h-full p-5 bg-background text-secondary text-lg leading-8",
-        className,
+        className
       )}
     >
       {children}

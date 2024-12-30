@@ -60,7 +60,7 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
   const post = useRecoilValue(postState);
   const [postId, setPostId] = useRecoilState(postIdState);
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
-    errorDuplicateUrlState,
+    errorDuplicateUrlState
   );
 
   const savePostError = useRecoilValue(savePostErrorState);
