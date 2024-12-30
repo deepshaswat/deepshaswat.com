@@ -37,7 +37,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
   const { post, markdown = "" } = props;
 
   return (
-    <Html lang='en' dir='ltr'>
+    <Html lang="en" dir="ltr">
       <Head>
         <title>{post.title}</title>
       </Head>
