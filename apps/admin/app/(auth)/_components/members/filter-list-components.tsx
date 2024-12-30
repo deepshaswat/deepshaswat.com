@@ -63,11 +63,14 @@ const FilterListComponent = () => {
     <div className="p-4  rounded-md">
       <div className="bg-neutral-900 p-6 mb-4 rounded-md">
         {filters.map((filter, index) => (
-          <div key={index} className="flex items-center gap-2 mb-4">
+          <div
+            key={index}
+            className="flex items-center gap-2 mb-4 w-full justify-between"
+          >
             <select
               value={filter.category}
               onChange={(e) => updateFilter(index, "category", e.target.value)}
-              className="flex items-center justify-center h-8 pl-10  rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed w-48 lg:w-64 pr-1"
+              className="flex items-center justify-center h-8   rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed w-48 lg:w-64 pr-1"
             >
               {filterCategories.map((category) => (
                 <option key={category} value={category}>
@@ -78,7 +81,7 @@ const FilterListComponent = () => {
             <select
               value={filter.operator}
               onChange={(e) => updateFilter(index, "operator", e.target.value)}
-              className="flex items-center justify-center h-8 pl-10  rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed w-36 lg:w-48"
+              className="flex items-center justify-center h-8  rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed w-36 lg:w-48"
             >
               {filterOperators.map((operator) => (
                 <option key={operator} value={operator}>
@@ -91,7 +94,7 @@ const FilterListComponent = () => {
                 type="text"
                 value={filter.value}
                 onChange={(e) => updateFilter(index, "value", e.target.value)}
-                className="flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed focus:bg-neutral-900 disabled:opacity-50"
+                className="flex h-8  w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed focus:bg-neutral-900 disabled:opacity-50"
               />
             </div>
             {filters.length > 1 && (

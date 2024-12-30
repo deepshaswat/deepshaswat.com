@@ -14,7 +14,9 @@ import {
   Textarea,
   Switch,
 } from "@repo/ui";
-import React from "react";
+
+import { createMember, Member, MemberInput } from "@repo/actions";
+import { useRouter } from "next/dist/client/components/navigation";
 
 const capitalizeWords = (input: string) => {
   return input
@@ -32,38 +34,72 @@ const getInitials = (name: string) => {
 };
 
 const NewMember = () => {
-  const [memberName, setMemberName] = useState("");
-  const [memberEmail, setMemberEmail] = useState("");
-  const [memberDescription, setMemberDescription] = useState("");
-  const [newsletterSubscription, setNewsletterSubscription] = useState(false);
-  const isEmpty = memberName === "";
+  const router = useRouter();
 
-  const bgColorClass = memberName
+  const [member, setMember] = useState<MemberInput>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    note: "",
+    openRate: "",
+    location: "",
+    imageUrl: "",
+    unsubscribed: false,
+    resendContactId: "",
+  });
+
+  const isEmpty = member.firstName === "" && member.lastName === "";
+
+  const isDisabled = member.email === "";
+
+  const bgColorClass = member.firstName
     ? "bg-pink-500"
-    : memberEmail
+    : member.email
       ? "bg-green-500"
       : "bg-neutral-500";
 
-  const handleMemberNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMemberName(e.target.value);
+  const handleMemberFirstNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setMember({ ...member, firstName: e.target.value });
+  };
+
+  const handleMemberLastNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setMember({ ...member, lastName: e.target.value });
   };
 
   const handleMemberEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMemberEmail(e.target.value);
+    setMember({ ...member, email: e.target.value });
   };
 
   const handleMemberDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    setMemberDescription(e.target.value);
+    setMember({ ...member, note: e.target.value });
+  };
+
+  const handleNewsletterSubscriptionChange = () => {
+    setMember({ ...member, unsubscribed: !member?.unsubscribed });
+  };
+
+  const handleSave = async () => {
+    try {
+      await createMember({
+        ...member,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as Member);
+      router.push("/members");
+    } catch (error) {
+      console.error("Error creating member:", error);
+    }
   };
 
   return (
-    <div className="m-8 lg:ml-[156px] lg:mr-[156px]">
-      <div
-        className="flex justify-between items-center mb-
-      "
-      >
+    <div className="m-8 lg:mx-[156px]">
+      <div className="flex flex-row justify-between items-center">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -83,30 +119,39 @@ const NewMember = () => {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <Button variant="secondary" className="rounded-sm">
+        <Button
+          variant="default"
+          className="rounded-sm"
+          onClick={handleSave}
+          disabled={isDisabled}
+        >
           Save
         </Button>
       </div>
 
-      <Label htmlFor="" className="text-3xl font-semibold">
-        New member
-      </Label>
+      <div className="flex flex-row justify-between items-center">
+        <Label htmlFor="" className="text-3xl font-semibold">
+          New member
+        </Label>
+      </div>
 
-      <div className="flex md:flex-col flex-row lg:flex-row mt-10 gap-8 lg:ml-16 ">
+      <div className="flex mt-10 gap-8 lg:ml-16 flex-col md:flex-row ">
         {/* Avatar and name */}
-        <div className="mr-16">
-          <div className="flex flex-row items-center gap-4 justify-start">
+        <div className="lg:mr-16">
+          <div className="flex flex-row items-center gap-4 justify-center lg:justify-start">
             <div
               className={`flex items-center justify-center w-20 h-20 rounded-full text-white text-4xl ${bgColorClass}`}
             >
-              {memberName
-                ? getInitials(capitalizeWords(memberName))
-                : memberEmail
-                  ? memberEmail.charAt(0).toUpperCase()
+              {member?.firstName
+                ? getInitials(capitalizeWords(member?.firstName))
+                : member?.email
+                  ? member?.email.charAt(0).toUpperCase()
                   : "N"}
             </div>
             <span className="text-neutral-400">
-              {isEmpty ? "New member" : memberName}
+              {isEmpty
+                ? "New member"
+                : member?.firstName + " " + member?.lastName}
             </span>
           </div>
         </div>
@@ -114,23 +159,42 @@ const NewMember = () => {
         {/* Form section */}
         <div className="flex flex-col flex-grow gap-6 lg:max-w-screen-md">
           <div className="bg-neutral-900 p-6 rounded-lg">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-6">
               {/* Name input */}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="MemberName"
-                  className="text-sm text-neutral-200"
-                >
-                  Name
-                </Label>
-                <div className="bg-neutral-800 border-2 border-transparent focus-within:border-green-500 rounded-md">
-                  <input
-                    id="MemberName"
-                    type="text"
-                    value={memberName}
-                    onChange={handleMemberNameChange}
-                    className="h-10 pl-3 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                  />
+              <div className="flex flex-row gap-4">
+                <div className="space-y-2 w-full">
+                  <Label
+                    htmlFor="MemberFirstName"
+                    className="text-sm text-neutral-200"
+                  >
+                    First Name
+                  </Label>
+                  <div className="bg-neutral-800 border-2 border-transparent focus-within:border-green-500 rounded-md">
+                    <input
+                      id="MemberFirstName"
+                      type="text"
+                      value={member?.firstName}
+                      onChange={handleMemberFirstNameChange}
+                      className="h-10 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2 w-full">
+                  <Label
+                    htmlFor="MemberLastName"
+                    className="text-sm text-neutral-200"
+                  >
+                    Last Name
+                  </Label>
+                  <div className="bg-neutral-800 border-2 border-transparent focus-within:border-green-500 rounded-md">
+                    <input
+                      id="MemberLastName"
+                      type="text"
+                      value={member?.lastName}
+                      onChange={handleMemberLastNameChange}
+                      className="h-10 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -146,9 +210,9 @@ const NewMember = () => {
                   <input
                     id="MemberEmail"
                     type="email"
-                    value={memberEmail}
+                    value={member?.email}
                     onChange={handleMemberEmailChange}
-                    className="h-10 pl-3 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-10 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
               </div>
@@ -164,7 +228,7 @@ const NewMember = () => {
               </Label>
               <Textarea
                 id="MemberDescription"
-                value={memberDescription}
+                value={member?.note}
                 onChange={handleMemberDescriptionChange}
                 maxLength={500}
                 className="mt-2 h-28 w-full rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 border-2 border-transparent focus-within:border-green-500"
@@ -172,11 +236,9 @@ const NewMember = () => {
               <div className="text-neutral-500 text-[12px]">
                 Maximum: 500 characters. You've used{" "}
                 <span
-                  className={
-                    memberDescription.length === 0 ? "" : "text-green-500"
-                  }
+                  className={member?.note.length === 0 ? "" : "text-green-500"}
                 >
-                  {memberDescription.length}
+                  {member?.note.length}
                 </span>
                 .
               </div>
@@ -200,8 +262,8 @@ const NewMember = () => {
               </Label>
               <Switch
                 id="newsletter-subscription"
-                checked={newsletterSubscription}
-                onCheckedChange={setNewsletterSubscription}
+                checked={member?.unsubscribed ? false : true}
+                onCheckedChange={handleNewsletterSubscriptionChange}
                 className="data-[state=checked]:bg-green-500"
               />
             </div>

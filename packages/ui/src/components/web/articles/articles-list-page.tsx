@@ -10,7 +10,7 @@ import {
   PostListType,
 } from "@repo/actions";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { PaginationBar } from "./pagination-bar";
+import { PaginationBar } from "@repo/ui";
 import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import { Loader2 } from "lucide-react";

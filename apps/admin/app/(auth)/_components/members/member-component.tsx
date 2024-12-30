@@ -1,9 +1,11 @@
 "use client";
 
-import { Settings, Search, ListFilter } from "lucide-react";
+import { Settings, Search, ListFilter, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useRecoilState, useResetRecoilState } from "recoil";
+
 import {
   differenceInYears,
   differenceInMonths,
@@ -22,9 +24,14 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  PaginationBar,
 } from "@repo/ui"; // Adjust the import path as needed
 
+import { pageNumberState } from "@repo/store";
+
 import FilterListComponent from "./filter-list-components";
+import { useEffect, useState } from "react";
+import { fetchMembers, Member } from "@repo/actions";
 
 const capitalizeWords = (input: string) => {
   return input
@@ -41,8 +48,7 @@ const getInitials = (name: string) => {
     .join("");
 };
 
-const calculateTimeDifference = (dateString: string) => {
-  const date = new Date(dateString);
+const calculateTimeDifference = (date: Date) => {
   const now = new Date();
 
   const years = differenceInYears(now, date);
@@ -57,40 +63,34 @@ const calculateTimeDifference = (dateString: string) => {
 
 const MemberComponent = () => {
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
+  const resetPageNumber = useResetRecoilState(pageNumberState);
+  const [membersList, setMembersList] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    resetPageNumber();
+  }, [resetPageNumber]);
 
   // ToDo: Add backend logic to fetch all members
-  const members = [
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@gmail.com",
-      openRate: "N/A",
-      location: "Unknown",
-      created: "2024-07-24",
-      image: "",
-      subscribed: true,
-    },
-    {
-      id: "2",
-      name: "Sarah",
-      email: "sarah@gmail.com",
-      openRate: "N/A",
-      location: "California, US",
-      created: "2023-12-2",
-      image: "",
-      subscribed: true,
-    },
-    {
-      id: "3",
-      name: "",
-      email: "rahul@gmail.com",
-      openRate: "N/A",
-      location: "India",
-      created: "2021-09-01",
-      image: "",
-      subscribed: false,
-    },
-  ];
+  const fetchMembersList = async () => {
+    const members = await fetchMembers({
+      pageNumber: currentPage,
+      pageSize: 10,
+      search: search,
+    });
+    setMembersList(members);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchMembersList();
+  }, [currentPage, search]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="m-8 lg:ml-[156px] lg:mr-[156px]">
@@ -106,7 +106,10 @@ const MemberComponent = () => {
                 id="SearchMembers"
                 type="text"
                 placeholder="Search members..."
-                className="flex h-10 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-10  w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
               />
             </div>
           </div>
@@ -161,95 +164,126 @@ const MemberComponent = () => {
         </div>
       </div>
 
-      <div className="mt-8 lg:mt-1">
-        <Table className="table-auto w-full">
-          <TableHeader>
-            <TableRow className="hover:bg-transparent text-neutral-200 font-light border-b-neutral-600">
-              <TableHead className="text-[12px] text-neutral-100 font-light">
-                {members.length} MEMBERS
-              </TableHead>
-              <TableHead className="text-[12px] text-neutral-100 font-light">
-                OPEN RATE
-              </TableHead>
-              <TableHead className="text-[12px] text-neutral-100 font-light">
-                LOCATION
-              </TableHead>
-              <TableHead className="text-[12px] text-neutral-100 font-light">
-                CREATED
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {members.map((member) => (
-              <TableRow
-                key={member.id}
-                className="hover:bg-neutral-800 cursor-pointer font-light border-b-neutral-600"
-                onClick={() => {
-                  router.push(`/members/${member.id}`);
-                }}
-              >
-                <TableCell className="flex items-center gap-3">
-                  {member.image ? (
-                    <Image
-                      src={member.image}
-                      alt={member.name || member.email.charAt(0)}
-                      className="rounded-full"
-                      width={40}
-                      height={40}
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-pink-500 text-white font-bold">
-                      {member.name
-                        ? getInitials(capitalizeWords(member.name))
-                        : member.email.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <div>
-                    <div className="font-medium text-neutral-100">
-                      {member.name
-                        ? capitalizeWords(member.name)
-                        : member.email}
-                    </div>
-                    <div className="text-neutral-400 text-sm">
-                      {member.name ? member.email : ""}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell
-                  className={
-                    member.openRate === "N/A"
-                      ? "text-neutral-400"
-                      : "text-neutral-100"
-                  }
-                >
-                  {member.openRate}
-                </TableCell>
-                <TableCell
-                  className={
-                    member.location === "Unknown"
-                      ? "text-neutral-400"
-                      : "text-neutral-100"
-                  }
-                >
-                  {member.location}
-                </TableCell>
-                <TableCell className="text-neutral-100">
-                  <div>
-                    {new Date(member.created).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </div>
-                  <div className="text-neutral-500 text-[12px] flex justify-start">
-                    ({calculateTimeDifference(member.created)})
-                  </div>
-                </TableCell>
+      {loading ? (
+        <div className="flex flex-row items-center justify-center h-screen-1/2">
+          <Loader2 className="size-10 animate-spin" />
+        </div>
+      ) : (
+        <div className="mt-8 lg:mt-1">
+          <Table className="table-auto w-full">
+            <TableHeader>
+              <TableRow className="hover:bg-transparent text-neutral-200 font-light border-b-neutral-600">
+                <TableHead className="text-[12px] text-neutral-100 font-light">
+                  {membersList.length} MEMBERS
+                </TableHead>
+                <TableHead className="text-[12px] text-neutral-100 font-light">
+                  OPEN RATE
+                </TableHead>
+                <TableHead className="text-[12px] text-neutral-100 font-light">
+                  LOCATION
+                </TableHead>
+                <TableHead className="text-[12px] text-neutral-100 font-light">
+                  CREATED
+                </TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {membersList.map((member) => (
+                <TableRow
+                  key={member.id}
+                  className="hover:bg-neutral-800 cursor-pointer font-light border-b-neutral-600"
+                  onClick={() => {
+                    router.push(`/members/${member.id}`);
+                  }}
+                >
+                  <TableCell className="flex items-center gap-3">
+                    {member.imageUrl ? (
+                      <Image
+                        src={member.imageUrl}
+                        alt={
+                          member.firstName ||
+                          member.lastName ||
+                          member.email.charAt(0)
+                        }
+                        className="rounded-full"
+                        width={40}
+                        height={40}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-pink-500 text-white font-bold">
+                        {member.firstName
+                          ? getInitials(
+                              capitalizeWords(
+                                member.firstName + " " + member.lastName,
+                              ),
+                            )
+                          : member.email.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-medium text-neutral-100">
+                        {member.firstName
+                          ? capitalizeWords(
+                              member.firstName + " " + member.lastName,
+                            )
+                          : member.email}
+                      </div>
+                      <div className="text-neutral-400 text-sm">
+                        {member.firstName && member.lastName
+                          ? member.email
+                          : ""}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell
+                    className={
+                      member.openRate === "N/A"
+                        ? "text-neutral-400"
+                        : "text-neutral-100"
+                    }
+                  >
+                    {member.openRate}
+                  </TableCell>
+                  <TableCell
+                    className={
+                      member.location === "Unknown"
+                        ? "text-neutral-400"
+                        : "text-neutral-100"
+                    }
+                  >
+                    {member.location}
+                  </TableCell>
+                  <TableCell className="text-neutral-100">
+                    <div>
+                      {new Date(member.createdAt).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </div>
+                    <div className="text-neutral-500 text-[12px] flex justify-start">
+                      ({calculateTimeDifference(member.createdAt)})
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+      {loading ? (
+        <> </>
+      ) : membersList.length > 0 ? (
+        <PaginationBar
+          currentPage={currentPage}
+          totalPages={Math.ceil(membersList.length / 10)}
+          onPageChange={handlePageChange}
+        />
+      ) : (
+        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
+          <p className="text-3xl text-red-700">No members found</p>
+        </div>
+      )}
     </div>
   );
 };

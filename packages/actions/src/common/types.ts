@@ -94,3 +94,30 @@ export interface Author {
   imageUrl: string;
   role: string;
 }
+
+export interface Member {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  note: string;
+  openRate: string;
+  location: string;
+  imageUrl: string;
+  unsubscribed: boolean;
+  resendContactId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface MemberInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  note: string;
+  openRate: string;
+  location: string;
+  imageUrl: string;
+  resendContactId: string;
+  unsubscribed: boolean;
+}

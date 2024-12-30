@@ -149,7 +149,6 @@ export const EditContentPost = ({
     setTags,
     pathname,
     setSelectedTags,
-
     setInputDate,
     setInputTimeIst,
   ]);

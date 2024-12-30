@@ -3,7 +3,7 @@
 import prisma from "@repo/db/client";
 import { SignedIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { PostListType, PostStatus } from "./post-types";
+import { PostListType, PostStatus } from "../common/types";
 
 const splitAndCapitalize = (item: string) => {
   const [firstWord] = item.split("-");

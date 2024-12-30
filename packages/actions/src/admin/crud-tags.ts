@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 // Import your validation schema
 import { tagSchema, updateTagSchema } from "@repo/schema";
-import { Tags } from "./post-types";
+import { Tags } from "../common/types";
 
 async function authenticateUser() {
   const sign = await SignedIn;

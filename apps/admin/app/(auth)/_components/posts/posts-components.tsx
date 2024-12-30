@@ -1,23 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import { useRecoilState, useResetRecoilState } from "recoil";
+
+import { Button, Label, Separator, PaginationBar } from "@repo/ui";
+import { pageNumberState } from "@repo/store";
 import {
   fetchAllPosts,
   fetchAllPostsCount,
   fetchAllTagsWithPostCount,
   PostListType,
 } from "@repo/actions";
-import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
-
-import { Button, Label, Separator } from "@repo/ui";
 
 import PostFilterNavbar from "./post-filter-navbar";
 import PostsTableRender from "./posts-table-render";
-import { PaginationBar } from "./pagination-bar";
-import { pageNumberState } from "@repo/store";
-import { useRecoilState, useResetRecoilState } from "recoil";
 
 const PostsComponent = () => {
   const [postOption, setPostOption] = useState("all-posts");
@@ -25,7 +23,6 @@ const PostsComponent = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [posts, setPosts] = useState<PostListType[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isNewsletter, setIsNewsletter] = useState(false);
 
   const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
   const resetPageNumber = useResetRecoilState(pageNumberState);

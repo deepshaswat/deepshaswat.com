@@ -1,32 +1,45 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { useState } from "react";
+"use client";
 
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { Loader2 } from "lucide-react";
 import {
   Button,
-  Label,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  SingleImageDropzone,
-  Textarea,
 } from "@repo/ui";
-import { fetchMemberDetails } from "@repo/actions";
-import React from "react";
+import { fetchMemberDetails, updateMember } from "@repo/actions";
+
 import EditMemberComponent from "../../_components/members/edit-member-component";
+import { memberState } from "@repo/store";
 
-export default async function ({ params }: { params: { id: string } }) {
+export default function ({ params }: { params: { id: string } }) {
   const { id } = params;
+  const [member, setMember] = useRecoilState(memberState);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const member = await fetchMemberDetails(id);
+  const memberFetch = async () => {
+    const member = await fetchMemberDetails(id);
+    setMember(member);
+  };
 
-  //Handle case where blog post is not found
-  if (!member) {
-    notFound();
-  }
+  useEffect(() => {
+    memberFetch();
+  }, [setMember]);
+
+  const handleSave = async () => {
+    if (!member) return;
+    setIsLoading(true);
+    await updateMember(id, member);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  };
+
   return (
     <div className="m-8  lg:ml-[156px] lg:mr-[156px]">
       <div className="">
@@ -53,13 +66,24 @@ export default async function ({ params }: { params: { id: string } }) {
           </div>
 
           <div className=" gap-20 justify-start">
-            <Button variant="secondary" className="rounded-sm items-center">
-              Save
+            <Button
+              variant="secondary"
+              className="rounded-sm items-center"
+              onClick={handleSave}
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2 text-green-500">
+                  <Loader2 className="w-4 h-4 animate-spin text-green-500" />{" "}
+                  Saving
+                </div>
+              ) : (
+                "Save"
+              )}
             </Button>
           </div>
         </div>
       </div>
-      <EditMemberComponent member={member} />
+      <EditMemberComponent />
     </div>
   );
 }
