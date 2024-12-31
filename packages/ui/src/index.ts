@@ -39,6 +39,8 @@ export * from "./components/ui/kbd";
 export * from "./components/ui/form";
 export * from "./components/ui/sonner";
 export * from "./components/ui/avatar";
+export * from "./components/ui/dropdown-menu";
+
 // export * from "./components/web/command/CommandBar";
 
 export * from "./components/common/email-template";

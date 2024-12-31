@@ -89,3 +89,8 @@ export const memberState = atom<Member | null>({
   key: "memberState",
   default: null,
 });
+
+export const totalMembersState = atom<number>({
+  key: "totalMembersState",
+  default: 0,
+});
