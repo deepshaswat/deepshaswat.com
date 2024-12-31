@@ -30,7 +30,9 @@ export function generateSiteConfig(
   extendedMetadata?: ExtendedMetadata
 ): Metadata {
   const fullUrl = `${BASE_URL}${urlSuffix}`;
-  const formattedTitle = `${extendedMetadata?.metadataTitle || title}${title === "Shaswat Deep" ? "" : ""}`;
+  const formattedTitle = `${extendedMetadata?.metadataTitle || title}${
+    title === "Shaswat Deep" ? "" : ""
+  }`;
 
   return {
     // Basic Metadata
