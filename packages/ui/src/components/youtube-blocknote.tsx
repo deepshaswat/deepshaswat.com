@@ -35,7 +35,7 @@ export const Youtube = createReactBlockSpec(
           className={cn(
             !props.block.props.url
               ? "rounded-md w-full justify-center bg-neutral-800 text-neutral-300"
-              : "relative w-full aspect-video"
+              : "relative w-full aspect-video",
           )}
         >
           {props.block.props.url ? (
@@ -98,5 +98,5 @@ export const Youtube = createReactBlockSpec(
         </div>
       );
     },
-  }
+  },
 );

@@ -50,7 +50,7 @@ export function MetadataSidebar() {
   const [metadata, setMetadata] = useRecoilState(postMetadataState);
   const [error, setError] = useRecoilState(savePostErrorState);
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
-    errorDuplicateUrlState
+    errorDuplicateUrlState,
   );
   const [inputDate, setInputDate] = useRecoilState(selectDate);
   const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
@@ -88,7 +88,7 @@ export function MetadataSidebar() {
   };
 
   const handleMetaDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMetadata((prev) => ({
       ...prev,
@@ -106,7 +106,7 @@ export function MetadataSidebar() {
   };
 
   const handleOgDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMetadata((prev) => ({
       ...prev,
@@ -122,7 +122,7 @@ export function MetadataSidebar() {
   };
 
   const handleTwitterDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMetadata((prev) => ({
       ...prev,
@@ -148,7 +148,7 @@ export function MetadataSidebar() {
           },
           {
             signal: controller.signal,
-          }
+          },
         );
 
         const { uploadURL, s3URL } = data;
@@ -370,8 +370,8 @@ export function MetadataSidebar() {
                 post.excerpt.length === 0
                   ? ""
                   : post.excerpt.length <= 250
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {post.excerpt.length}
@@ -427,8 +427,8 @@ export function MetadataSidebar() {
                 keywordCount === 0
                   ? ""
                   : metadata.keywords.length <= 100
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {keywordCount}
@@ -458,8 +458,8 @@ export function MetadataSidebar() {
                 metadata.title.length === 0
                   ? ""
                   : metadata.title.length <= 100
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {metadata.title.length}
@@ -488,8 +488,8 @@ export function MetadataSidebar() {
                 metadata.description.length === 0
                   ? ""
                   : metadata.description.length <= 500
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {metadata.description.length}
@@ -535,8 +535,8 @@ export function MetadataSidebar() {
                 metadata.ogTitle.length === 0
                   ? ""
                   : metadata.ogTitle.length <= 100
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {metadata.ogTitle.length}
@@ -566,8 +566,8 @@ export function MetadataSidebar() {
                 metadata.ogDescription.length === 0
                   ? ""
                   : metadata.ogDescription.length <= 500
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {metadata.ogDescription.length}
@@ -617,8 +617,8 @@ export function MetadataSidebar() {
                 metadata.twitterTitle.length === 0
                   ? ""
                   : metadata.twitterTitle.length <= 60
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {metadata.twitterTitle.length}
@@ -648,8 +648,8 @@ export function MetadataSidebar() {
                 metadata.twitterDescription.length === 0
                   ? ""
                   : metadata.twitterDescription.length <= 200
-                  ? "text-green-500"
-                  : "text-red-500"
+                    ? "text-green-500"
+                    : "text-red-500"
               }
             >
               {metadata.twitterDescription.length}
@@ -699,7 +699,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase()
+        : word.toLowerCase(),
     )
     .join(" ");
 };

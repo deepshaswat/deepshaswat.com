@@ -63,7 +63,7 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
       .map((word, index) =>
         index === 0
           ? word.charAt(0).toUpperCase() + word.slice(1)
-          : word.toLowerCase()
+          : word.toLowerCase(),
       )
       .join(" ");
   };
@@ -80,7 +80,7 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
           description: tag.description ?? "",
           imageUrl: tag.imageUrl ?? "",
           posts: tag.posts,
-        }))
+        })),
       );
     }
     setTagline(postData?.title || "Failures. Guides. Paths.");

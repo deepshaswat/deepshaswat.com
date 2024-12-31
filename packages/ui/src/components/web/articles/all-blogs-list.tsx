@@ -68,7 +68,7 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
       .map((word, index) =>
         index === 0
           ? word.charAt(0).toUpperCase() + word.slice(1)
-          : word.toLowerCase()
+          : word.toLowerCase(),
       )
       .join(" ");
   };
@@ -81,7 +81,7 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
         description: tag.description ?? "",
         imageUrl: tag.imageUrl ?? "",
         posts: tag.posts,
-      }))
+      })),
     );
   };
 

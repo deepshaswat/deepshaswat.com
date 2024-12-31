@@ -13,7 +13,7 @@ export function SimpleBlogWithGrid({ blogs }: { blogs: PostListType[] }) {
         <div className="relative z-20 sm:mt-20">
           <h1
             className={cn(
-              "scroll-m-20 text-3xl font-bold text-left tracking-tight text-black dark:text-white mb-6"
+              "scroll-m-20 text-3xl font-bold text-left tracking-tight text-black dark:text-white mb-6",
             )}
           >
             Featured Articles
@@ -126,7 +126,7 @@ export const BlurImage = ({
       className={cn(
         "transition duration-300 transform",
         isLoading ? "blur-sm scale-105" : "blur-0 scale-100",
-        className
+        className,
       )}
       onLoadingComplete={() => setLoading(false)}
       src={src}

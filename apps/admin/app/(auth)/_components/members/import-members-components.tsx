@@ -120,45 +120,45 @@ export default function ImportMembersComponent({
 
   return (
     <div>
-      <div className='px-6'>
-        <div className='space-y-6'>
+      <div className="px-6">
+        <div className="space-y-6">
           <div>
             <Label
-              htmlFor='file'
-              className='text-sm font-medium text-neutral-300 block mb-2'
+              htmlFor="file"
+              className="text-sm font-medium text-neutral-300 block mb-2"
             >
               CSV File
             </Label>
             <Input
-              id='file'
-              type='file'
-              accept='.csv'
+              id="file"
+              type="file"
+              accept=".csv"
               onChange={handleFileChange}
               disabled={isLoading}
-              className='bg-neutral-800 border-0 text-white cursor-pointer h-12 text-sm'
+              className="bg-neutral-800 border-0 text-white cursor-pointer h-12 text-sm"
             />
           </div>
 
           {previewData.length > 0 && (
-            <div className='space-y-2'>
-              <h3 className='text-sm font-medium text-neutral-300'>
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-neutral-300">
                 Preview (first 5 rows):
               </h3>
-              <div className='rounded bg-neutral-800/50'>
-                <div className='overflow-hidden'>
-                  <table className='w-full'>
+              <div className="rounded bg-neutral-800/50">
+                <div className="overflow-hidden">
+                  <table className="w-full">
                     <thead>
-                      <tr className='border-b border-neutral-700'>
-                        <th className='text-left py-2 px-4 text-sm font-normal text-neutral-400'>
+                      <tr className="border-b border-neutral-700">
+                        <th className="text-left py-2 px-4 text-sm font-normal text-neutral-400">
                           Email
                         </th>
-                        <th className='text-left py-2 px-4 text-sm font-normal text-neutral-400'>
+                        <th className="text-left py-2 px-4 text-sm font-normal text-neutral-400">
                           First Name
                         </th>
-                        <th className='text-left py-2 px-4 text-sm font-normal text-neutral-400'>
+                        <th className="text-left py-2 px-4 text-sm font-normal text-neutral-400">
                           Last Name
                         </th>
-                        <th className='text-left py-2 px-4 text-sm font-normal text-neutral-400'>
+                        <th className="text-left py-2 px-4 text-sm font-normal text-neutral-400">
                           Subscribed
                         </th>
                       </tr>
@@ -166,17 +166,17 @@ export default function ImportMembersComponent({
                     <tbody>
                       {previewData.map((row, index) => (
                         <tr key={index}>
-                          <td className='py-2 px-4 text-sm text-white'>
+                          <td className="py-2 px-4 text-sm text-white">
                             {truncateEmail(row.email)}
                           </td>
-                          <td className='py-2 px-4 text-sm text-white'>
+                          <td className="py-2 px-4 text-sm text-white">
                             {row.firstName}
                           </td>
-                          <td className='py-2 px-4 text-sm text-white'>
+                          <td className="py-2 px-4 text-sm text-white">
                             {row.lastName}
                           </td>
-                          <td className='py-2 px-4 text-sm'>
-                            <span className='text-red-500'>
+                          <td className="py-2 px-4 text-sm">
+                            <span className="text-red-500">
                               {row.unsubscribed ? "No" : "Yes"}
                             </span>
                           </td>
@@ -190,15 +190,15 @@ export default function ImportMembersComponent({
           )}
         </div>
       </div>
-      <div className='px-6 mt-6'>
+      <div className="px-6 mt-6">
         <Button
           onClick={handleImport}
           disabled={!file || isLoading}
-          className='w-full bg-white text-black hover:bg-neutral-100 h-11'
+          className="w-full bg-white text-black hover:bg-neutral-100 h-11"
         >
           {isLoading ? (
             <>
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Importing...
             </>
           ) : (

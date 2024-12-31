@@ -37,7 +37,7 @@ export async function GET() {
               .join(",")}</news:keywords>
           </news:news>
         </url>
-      `
+      `,
         )
         .join("")}
     </urlset>`;

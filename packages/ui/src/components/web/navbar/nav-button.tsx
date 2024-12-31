@@ -22,7 +22,7 @@ export const NavButton = ({ href, path }: NavButtonProps) => {
         variant={"outline"}
         className={cn(
           "w-full lg:w-auto justify-between  font-normal hover:bg-white/20 hover:text-white border-none focus-visible:ring-transparent focus:ring-offset-0 outline-none text-slate-200/50 focus:bg-white/30 transition",
-          isActive ? " text-white" : "bg-transparent" //bg-white/10
+          isActive ? " text-white" : "bg-transparent", //bg-white/10
         )}
       >
         <Link href={href}>

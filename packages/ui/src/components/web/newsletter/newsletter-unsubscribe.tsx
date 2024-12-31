@@ -43,7 +43,7 @@ export const NewsletterUnsubscribe = () => {
     } catch (error) {
       setStatus("error");
       setErrorMessage(
-        error instanceof Error ? error.message : "An error occurred"
+        error instanceof Error ? error.message : "An error occurred",
       );
     } finally {
       setStatus("idle");

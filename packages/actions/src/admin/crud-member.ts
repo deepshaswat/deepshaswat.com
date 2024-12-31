@@ -131,7 +131,7 @@ export async function deleteMember(id: string) {
     if (existingMember) {
       if (existingMember.resendContactId) {
         const { error } = await deleteContactAudience(
-          existingMember.resendContactId
+          existingMember.resendContactId,
         );
         if (error) {
           throw new Error(error);

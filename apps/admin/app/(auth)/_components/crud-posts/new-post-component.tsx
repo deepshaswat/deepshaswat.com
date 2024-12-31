@@ -67,7 +67,7 @@ const NewPostComponent = () => {
 
   const Editor = useMemo(
     () => dynamic(() => import("./editor"), { ssr: false }),
-    []
+    [],
   );
 
   const handleEditorContentChange = (content: string) => {
