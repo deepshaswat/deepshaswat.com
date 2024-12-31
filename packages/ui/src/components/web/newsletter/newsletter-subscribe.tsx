@@ -66,15 +66,13 @@ export const NewsletterButton = () => {
       } as Member);
       console.log("Member created:", member);
       setIsSubscribed(true);
-      setTimeout(() => {
-        setIsSubscribed(false);
-        setIsOpen(false);
-      }, 3000);
+
+      setIsSubscribed(false);
+      setIsOpen(false);
     } catch (error) {
       setError("Something went wrong");
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+
+      setLoading(false);
     } finally {
       setLoading(false);
       setFormData({

@@ -89,10 +89,10 @@ export const NewsletterUnsubscribe = () => {
                 variant="default"
               >
                 {status === "loading" ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <div className="flex items-center justify-center text-red-500">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin " />
                     Unsubscribing...
-                  </>
+                  </div>
                 ) : (
                   "Unsubscribe"
                 )}

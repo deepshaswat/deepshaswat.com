@@ -15,6 +15,7 @@ import {
   Newspaper,
   Search,
   FolderRoot,
+  Globe,
 } from "lucide-react";
 
 import {
@@ -65,12 +66,12 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
   const actions = [
     {
       id: "copy",
-      name: "Copy Link",
+      name: "Copy URL",
       shortcut: ["c"],
-      keywords: "copy-link",
+      keywords: "copy-url",
       section: "General",
       perform: copyLink,
-      icon: <Link size={20} />,
+      icon: <Globe size={20} />,
     },
     {
       id: "email",
@@ -80,6 +81,15 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       section: "General",
       perform: () => router.push("/contact"),
       icon: <MailOpen size={20} />,
+    },
+    {
+      id: "links",
+      name: "All Links",
+      shortcut: ["l"],
+      keywords: "all-links",
+      section: "General",
+      perform: () => router.push("/links"),
+      icon: <Link size={20} />,
     },
     {
       id: "source",
