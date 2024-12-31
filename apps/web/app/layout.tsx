@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = generateSiteConfig(
   "Shaswat Deep",
   "deepshaswat.com",
-  "/"
+  "/",
 );
 
 export default function RootLayout({

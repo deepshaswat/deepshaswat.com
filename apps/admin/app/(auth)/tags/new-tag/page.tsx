@@ -41,7 +41,7 @@ const NewTag = () => {
   };
 
   const handleTagDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setTagDescription(e.target.value);
   };

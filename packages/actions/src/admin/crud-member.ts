@@ -18,6 +18,32 @@ async function authenticateUser() {
   }
 }
 
+export async function importMembers(members: MemberInput[]) {
+  await authenticateUser();
+  let count = 0;
+  try {
+    for (const member of members) {
+      await createMember(member as Member);
+      count++;
+    }
+    return {
+      success: "Members imported successfully",
+      count: count,
+    };
+  } catch (error) {
+    console.error("Error importing members:", error);
+    return {
+      error: "Error importing members",
+    };
+  }
+}
+
+export async function totalMembers() {
+  await authenticateUser();
+  const members = await prisma.member.count();
+  return members;
+}
+
 export async function createMember(member: Member) {
   // await authenticateUser();
   try {
@@ -45,7 +71,7 @@ export async function createMember(member: Member) {
       data: member,
     });
 
-    const { data } = await addContactToAudience({
+    const { data, error } = await addContactToAudience({
       email: member.email,
       firstName: member.firstName || "",
       lastName: member.lastName || "",
@@ -105,7 +131,7 @@ export async function deleteMember(id: string) {
     if (existingMember) {
       if (existingMember.resendContactId) {
         const { error } = await deleteContactAudience(
-          existingMember.resendContactId
+          existingMember.resendContactId,
         );
         if (error) {
           throw new Error(error);

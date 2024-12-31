@@ -58,7 +58,7 @@ const PostsComponent = () => {
       const fetchedPosts = await fetchAllPosts(
         postOption,
         tagOption,
-        currentPage
+        currentPage,
       );
 
       setPosts(fetchedPosts as PostListType[]);

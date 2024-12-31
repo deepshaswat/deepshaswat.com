@@ -24,7 +24,7 @@ const capitalizeFirstLetter = (item: string) => {
     .map((word, index) =>
       index === 0
         ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase()
+        : word.toLowerCase(),
     )
     .join(" ");
 };
@@ -98,8 +98,8 @@ const TagComponentRendering = ({ tags }: TagListInterface) => {
                       {tag.posts.length === 0
                         ? "posts"
                         : tag.posts.length === 1
-                        ? "post"
-                        : "posts"}
+                          ? "post"
+                          : "posts"}
                     </span>
                   )}
                 </TableCell>

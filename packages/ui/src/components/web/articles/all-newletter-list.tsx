@@ -76,7 +76,7 @@ export const NewsletterPostRow = ({ blog }: { blog: PostListType }) => {
       .map((word, index) =>
         index === 0
           ? word.charAt(0).toUpperCase() + word.slice(1)
-          : word.toLowerCase()
+          : word.toLowerCase(),
       )
       .join(" ");
   };
@@ -89,7 +89,7 @@ export const NewsletterPostRow = ({ blog }: { blog: PostListType }) => {
         description: tag.description ?? "",
         imageUrl: tag.imageUrl ?? "",
         posts: tag.posts,
-      }))
+      })),
     );
   };
 
@@ -262,7 +262,7 @@ export const BlurImage = ({
       className={cn(
         "transition duration-300",
         isLoading ? "blur-sm" : "blur-0",
-        className
+        className,
       )}
       onLoad={() => setLoading(false)}
       src={src}

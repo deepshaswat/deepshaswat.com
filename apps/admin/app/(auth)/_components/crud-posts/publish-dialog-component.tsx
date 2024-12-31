@@ -103,7 +103,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
         scheduleType,
         publishType,
         post as PostListType,
-        markdown
+        markdown,
       );
 
       if (result.success) {
@@ -246,7 +246,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                       {scheduleType === "now"
                         ? "Right now"
                         : `Schedule for ${formatDayAndDate(
-                            inputDate
+                            inputDate,
                           )} at ${inputTimeIst} IST`}
                     </AccordionTrigger>
                     <AccordionContent>
@@ -380,7 +380,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                     {scheduleType === "now"
                       ? "Publish & send, right now"
                       : `Schedule for ${formatDayAndDate(
-                          inputDate
+                          inputDate,
                         )} at ${inputTimeIst} IST`}
                   </Button>
                   <Button

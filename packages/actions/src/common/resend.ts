@@ -11,12 +11,12 @@ if (!resendApiKey) {
 }
 
 const resend = new Resend(resendApiKey);
-const audienceId = "83dee91f-fdd3-4cbe-8ed2-11f597f1ad0f";
+const audienceId = "fbc556c1-04d2-4744-b004-2bdea369a820";
 
 export const sendEmail = async (
   name: string,
   email: string,
-  message: string
+  message: string,
 ) => {
   const { data, error } = await resend.emails.send({
     from: "Shaswat Deep <contact@mail.deepshaswat.com>",

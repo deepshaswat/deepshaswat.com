@@ -44,7 +44,7 @@ export async function GET() {
               .map((tag) => `<category>${tag.tagId}</category>`)
               .join("")}
           </item>
-        `
+        `,
           )
           .join("")}
       </channel>

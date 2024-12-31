@@ -55,17 +55,17 @@ const NewMember = () => {
   const bgColorClass = member.firstName
     ? "bg-pink-500"
     : member.email
-    ? "bg-green-500"
-    : "bg-neutral-500";
+      ? "bg-green-500"
+      : "bg-neutral-500";
 
   const handleMemberFirstNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setMember({ ...member, firstName: e.target.value });
   };
 
   const handleMemberLastNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setMember({ ...member, lastName: e.target.value });
   };
@@ -75,7 +75,7 @@ const NewMember = () => {
   };
 
   const handleMemberDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMember({ ...member, note: e.target.value });
   };
@@ -86,11 +86,7 @@ const NewMember = () => {
 
   const handleSave = async () => {
     try {
-      await createMember({
-        ...member,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as Member);
+      await createMember(member as Member);
       router.push("/members");
     } catch (error) {
       console.error("Error creating member:", error);
@@ -145,8 +141,8 @@ const NewMember = () => {
               {member?.firstName
                 ? getInitials(capitalizeWords(member?.firstName))
                 : member?.email
-                ? member?.email.charAt(0).toUpperCase()
-                : "N"}
+                  ? member?.email.charAt(0).toUpperCase()
+                  : "N"}
             </div>
             <span className="text-neutral-400">
               {isEmpty

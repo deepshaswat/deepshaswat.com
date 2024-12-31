@@ -31,17 +31,17 @@ export default function EditMemberComponent() {
   const bgColorClass = memberData.firstName
     ? "bg-pink-500"
     : memberData.email
-    ? "bg-green-500"
-    : "bg-neutral-500";
+      ? "bg-green-500"
+      : "bg-neutral-500";
 
   const handleMemberFirstNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setMemberData({ ...memberData, firstName: e.target.value });
   };
 
   const handleMemberLastNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setMemberData({ ...memberData, lastName: e.target.value });
   };
@@ -51,7 +51,7 @@ export default function EditMemberComponent() {
   };
 
   const handleMemberDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setMemberData({ ...memberData, note: e.target.value });
   };
@@ -71,12 +71,12 @@ export default function EditMemberComponent() {
             {memberData.firstName
               ? getInitials(
                   capitalizeWords(
-                    memberData.firstName + " " + memberData.lastName
-                  )
+                    memberData.firstName + " " + memberData.lastName,
+                  ),
                 )
               : memberData.email
-              ? memberData.email.charAt(0).toUpperCase()
-              : "N"}
+                ? memberData.email.charAt(0).toUpperCase()
+                : "N"}
           </div>
           <span className="text-neutral-400">
             {memberData.firstName + " " + memberData.lastName}

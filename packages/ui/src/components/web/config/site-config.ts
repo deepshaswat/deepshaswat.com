@@ -27,7 +27,7 @@ export function generateSiteConfig(
   description: string = DEFAULT_DESCRIPTION,
   urlSuffix: string = "",
   image_url: string = "/static/images/headShot.svg",
-  extendedMetadata?: ExtendedMetadata
+  extendedMetadata?: ExtendedMetadata,
 ): Metadata {
   const fullUrl = `${BASE_URL}${urlSuffix}`;
   const formattedTitle = `${extendedMetadata?.metadataTitle || title}${

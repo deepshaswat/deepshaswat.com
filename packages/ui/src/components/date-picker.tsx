@@ -38,7 +38,7 @@ export function DatePicker({
           variant={"date"}
           className={cn(
             "w-[280px] justify-start text-left font-normal bg-neutral-700",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
           )}
         >
           {date ? format(date, "PPP") : <span>Pick a date</span>}
