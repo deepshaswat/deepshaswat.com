@@ -25,7 +25,9 @@ export async function GET() {
             <title><![CDATA[${item.title}]]></title>
             <link>https://deepshaswat.com/${item.postUrl}</link>
             <guid>https://deepshaswat.com/${item.postUrl}</guid>
-            <pubDate>${item.publishDate?.toUTCString() ?? new Date().toUTCString()}</pubDate>
+            <pubDate>${
+              item.publishDate?.toUTCString() ?? new Date().toUTCString()
+            }</pubDate>
             <description><![CDATA[${item.excerpt}]]></description>
             ${
               item.featureImage
