@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
@@ -30,6 +31,7 @@
     "@repo/tailwind-config": "*",
     "tailwindcss": "^3.4.1",
     "@repo/typescript-config": "*",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "next-sitemap": "^4.2.3"
   }
 }

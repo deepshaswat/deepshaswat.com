@@ -1,26 +1,9 @@
-# Global rules
+# *
 User-agent: *
 Allow: /
-Allow: /sitemap.xml
-Allow: /*.js
-Allow: /*.css
-Allow: /*.png
-Allow: /*.jpg
-Allow: /*.gif
-Allow: /*.svg
-Allow: /*.ico
 
-# Prevent indexing of admin, api, and other utility routes
-Disallow: /api/*
-Disallow: /admin/*
-Disallow: /_next/*
-Disallow: /static/*
-Disallow: /unsubscribe
-Disallow: /404
-Disallow: /500
-
-# Crawl delay for better server performance
-Crawl-delay: 10
+# Host
+Host: https://deepshaswat.com
 
 # Sitemaps
-Sitemap: https://deepshaswat.com/sitemap.xml 
+Sitemap: https://deepshaswat.com/sitemap.xml
