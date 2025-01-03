@@ -32,7 +32,7 @@ export async function GET() {
     console.error("Error publishing scheduled posts:", error);
     return NextResponse.json(
       { error: "Failed to publish scheduled posts" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

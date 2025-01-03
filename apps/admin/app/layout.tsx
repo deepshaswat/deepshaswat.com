@@ -1,12 +1,14 @@
+import "@repo/ui/styles.css";
+import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import "./globals.css";
-import "@repo/ui/styles.css";
+import { ThemeProvider } from "@repo/ui";
+import type { Metadata, Viewport } from "next";
+import { Nunito } from "next/font/google";
+import { generateSiteConfig } from "@repo/ui/web";
 import { Providers } from "./providers";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Blog Admin",
@@ -24,7 +26,7 @@ export default function RootLayout({
         baseTheme: dark,
       }}
     >
-      <html lang="en" suppressHydrationWarning>
+      <html lang='en' suppressHydrationWarning>
         <body className={inter.className}>
           <Providers>{children}</Providers>
         </body>
