@@ -32,12 +32,17 @@ export async function GET() {
                 : new Date().toISOString()
             }</news:publication_date>
             <news:title>${item.title}</news:title>
-            <news:keywords>${item.tags
-              .map((tag) => tag.tagId)
-              .join(",")}</news:keywords>
+            ${
+              item.tags && item.tags.length > 0
+                ? `<news:keywords>${item.tags
+                    .map((tag) => tag.tagId)
+                    .filter(Boolean)
+                    .join(",")}</news:keywords>`
+                : ""
+            }
           </news:news>
         </url>
-      `,
+      `
         )
         .join("")}
     </urlset>`;
