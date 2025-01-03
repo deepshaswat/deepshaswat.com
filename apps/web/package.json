@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
-    "build": "next build",
+    "build": "prisma generate --schema=../../packages/db/prisma/schema.prisma && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
@@ -18,7 +18,8 @@
     "@repo/actions": "*",
     "next": "^14.1.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "prisma": "5.13.0"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.1",
