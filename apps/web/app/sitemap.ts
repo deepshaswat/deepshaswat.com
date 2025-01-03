@@ -85,7 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             : "monthly") as MetadataRoute.Sitemap[number]["changeFrequency"],
           priority: isWithinMonth ? 0.8 : 0.6,
         };
-      }
+      },
     );
 
     return [...routes, ...articleRoutes, ...newsletterRoutes];
