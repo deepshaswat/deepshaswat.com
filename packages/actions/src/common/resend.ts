@@ -11,12 +11,18 @@ if (!resendApiKey) {
 }
 
 const resend = new Resend(resendApiKey);
-const audienceId = "fbc556c1-04d2-4744-b004-2bdea369a820";
+const audience = process.env.RESEND_AUDIENCE_ID;
+
+if (!audience) {
+  throw new Error("RESEND_AUDIENCE_ID is not defined in environment variables");
+}
+
+const audienceId = audience;
 
 export const sendEmail = async (
   name: string,
   email: string,
-  message: string,
+  message: string
 ) => {
   const { data, error } = await resend.emails.send({
     from: "Shaswat Deep <contact@mail.deepshaswat.com>",
@@ -90,82 +96,60 @@ export const sendNewsletter = async ({
 };
 
 // TODO: Uncomment this when we have a proper audience list
-// export const sendNewsletter = async ({
-//   post,
-//   sendData,
-//   markdown,
-// }: SendNewsletterProps) => {
-//   let sendDate;
-//   const audienceId = "fbfc9b75-babe-43df-92cc-40c2c0095d42";
-//   if (sendData.status === "PUBLISHED") {
-//     sendDate = new Date(Date.now() + 100 * 60).toISOString();
-//   } else {
-//     sendDate = new Date(sendData.publishDate).toISOString();
-//   }
+export const sendBroadcastNewsletter = async ({
+  post,
+  sendData,
+  markdown,
+}: SendNewsletterProps) => {
+  let sendDate;
+  if (sendData.status === "PUBLISHED") {
+    sendDate = new Date(Date.now() + 100 * 60).toISOString();
+  } else {
+    sendDate = new Date(sendData.publishDate).toISOString();
+  }
 
-//   try {
-//     // Fetch the contacts from the audience list
-//     const { data: contacts, error: contactsError } = await resend.contacts.list(
-//       {
-//         audienceId,
-//       }
-//     );
+  try {
+    // Fetch the contacts from the audience list
+    const { data: broadcastData, error: broadcastError } =
+      await resend.broadcasts.create({
+        from: "Shaswat Deep <contact@mail.deepshaswat.com>",
+        audienceId,
+        replyTo: "hi@deepshaswat.com",
+        subject: post.title,
+        react: NewsletterTemplate({ post, markdown }),
+        name: "Newsletter: " + post.title,
+      });
 
-//     if (contactsError) {
-//       console.error("Error fetching contacts:", contactsError);
-//       return {
-//         error: "Failed to fetch audience contacts",
-//       };
-//     }
+    if (broadcastError) {
+      console.error("Error creating broadcast:", broadcastError);
+      return {
+        error: "Failed to create broadcast",
+      };
+    }
 
-//     // Filter contacts to exclude unsubscribed users
-//     const validContacts = contacts?.data.filter(
-//       (contact) => !contact.unsubscribed
-//     );
+    const { data: broadcastSendData, error: broadcastSendError } =
+      await resend.broadcasts.send(broadcastData?.id || "", {
+        scheduledAt: sendDate,
+      });
 
-//     // Send emails to each contact in the filtered list
-//     const results = [];
-//     for (const contact of validContacts ?? []) {
-//       try {
-//         const { data, error } = await resend.emails.send({
-//           from: "Shaswat Deep <contact@mail.deepshaswat.com>",
-//           to: contact.email,
-//           replyTo: "hi@deepshaswat.com",
-//           subject: post.title,
-//           react: NewsletterTemplate({ post, markdown }),
-//           headers: {
-//             "List-Unsubscribe": "<https://deepshaswat.com/unsubscribe>",
-//           },
-//           scheduledAt: sendDate,
-//         });
+    if (broadcastSendError) {
+      console.error("Error sending broadcast:", broadcastSendError);
+      return {
+        error: "Failed to send broadcast",
+      };
+    }
 
-//         if (error) {
-//           console.error(`Error sending email to ${contact.email}:`, error);
-//           results.push({ email: contact.email, success: false, error });
-//         } else {
-//           results.push({ email: contact.email, success: true, data });
-//         }
-//       } catch (emailError) {
-//         console.error(`Error sending email to ${contact.email}:`, emailError);
-//         results.push({
-//           email: contact.email,
-//           success: false,
-//           error: emailError,
-//         });
-//       }
-//     }
-
-//     return {
-//       success: results.every((result) => result.success),
-//       results,
-//     };
-//   } catch (error) {
-//     console.error("Error sending newsletter:", error);
-//     return {
-//       error: "Failed to send newsletter",
-//     };
-//   }
-// };
+    return {
+      success: true,
+      data: broadcastSendData,
+    };
+  } catch (error) {
+    console.error("Error sending newsletter:", error);
+    return {
+      error: "Failed to send newsletter",
+    };
+  }
+};
 
 interface AddContactToAudienceProps {
   email: string;

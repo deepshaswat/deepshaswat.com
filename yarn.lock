@@ -9942,10 +9942,10 @@ remark-stringify@^11.0.0:
     mdast-util-to-markdown "^2.0.0"
     unified "^11.0.0"
 
-resend@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/resend/-/resend-4.0.1.tgz#07e935a24752dec572bf249b7d21aa5a35b77b57"
-  integrity sha512-EkCRfzKw9JX7N75L+0BC8oXohDBLhlhl4w7AgrkEW2TAsOMBsVcbQHPe8cRWP6Ea7KDhD158TsNjbCBcohed5A==
+resend@4.1.0-alpha.0:
+  version "4.1.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/resend/-/resend-4.1.0-alpha.0.tgz#de635f61f08a8664b2641071821f4c1769acafd1"
+  integrity sha512-4YXzCxyx76msidziebLWR6sjYMG87LdNhEeGmWO9aFuJhHw1j8C3SG17AQ0Ho6rOtPduXOhYee7p148MUB6KYQ==
   dependencies:
     "@react-email/render" "1.0.1"
 

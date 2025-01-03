@@ -75,7 +75,7 @@
     "react-social-icons": "^6.17.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
-    "resend": "^4.0.1",
+    "resend": "4.1.0-alpha.0",
     "sonner": "^1.4.41",
     "supertest": "^7.0.0",
     "typescript": "^5.5.4",
