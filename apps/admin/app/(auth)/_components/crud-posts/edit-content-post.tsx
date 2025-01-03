@@ -116,7 +116,7 @@ export const EditContentPost = ({
         excerpt: initialPost.excerpt,
         featured: initialPost.featured,
         tags: tags,
-        authors: initialPost.author.id,
+        authors: initialPost.author?.id || "",
       });
 
       setSelectedTags(post.tags);

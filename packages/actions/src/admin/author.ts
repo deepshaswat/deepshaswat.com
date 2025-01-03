@@ -17,30 +17,42 @@ export async function createAuthor() {
   await authenticateUser();
   const user = await currentUser();
 
+  if (!user) {
+    console.error("No user found");
+    return { error: "No user found" };
+  }
+
   // add author to db under try catch
   try {
     const existingAuthor = await prisma.author.findUnique({
-      where: { clerkId: user?.id },
+      where: { clerkId: user.id },
     });
 
     if (!existingAuthor) {
-      await prisma.author.create({
+      const newAuthor = await prisma.author.create({
         data: {
-          clerkId: user?.id ?? "",
-          name: user?.firstName + " " + user?.lastName ?? "",
-          email: user?.emailAddresses[0].emailAddress ?? "",
-          imageUrl: user?.imageUrl ?? "",
+          clerkId: user.id,
+          name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+          email: user.emailAddresses[0]?.emailAddress || "",
+          imageUrl: user.imageUrl || "",
           role: "ADMIN",
         },
       });
+      return {
+        id: newAuthor.id,
+        name: newAuthor.name,
+        email: newAuthor.email,
+        imageUrl: newAuthor.imageUrl,
+        role: newAuthor.role,
+      };
     }
-    // Return a plain object
+    // Return existing author
     return {
-      id: existingAuthor?.id ?? "",
-      name: existingAuthor?.name ?? "",
-      email: existingAuthor?.email ?? "",
-      imageUrl: existingAuthor?.imageUrl ?? "",
-      role: existingAuthor?.role ?? "",
+      id: existingAuthor.id,
+      name: existingAuthor.name,
+      email: existingAuthor.email,
+      imageUrl: existingAuthor.imageUrl,
+      role: existingAuthor.role,
     };
   } catch (error) {
     console.error("Error creating author:", error);

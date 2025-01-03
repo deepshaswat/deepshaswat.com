@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import prisma from "@repo/db/client";
 import { PostListType, PostType } from "../common/types";
-import { sendNewsletter } from "../common/resend";
+import { sendBroadcastNewsletter, sendNewsletter } from "../common/resend";
 
 async function authenticateUser() {
   const sign = await SignedIn;
@@ -245,7 +245,8 @@ async function publishPost(
       data: data,
     });
     if (publishType === "newsletter") {
-      await sendNewsletter({ post, sendData: data, markdown });
+      // await sendNewsletter({ post, sendData: data, markdown });
+      await sendBroadcastNewsletter({ post, sendData: data, markdown });
     }
     return { success: true };
   } catch (error) {
