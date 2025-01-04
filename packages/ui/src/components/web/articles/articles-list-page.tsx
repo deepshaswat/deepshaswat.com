@@ -14,6 +14,7 @@ import { PaginationBar } from "@repo/ui";
 import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import { Loader2 } from "lucide-react";
+import ArticlesListingSkeleton from "./skeleton-blog-listing";
 
 const pageConfig = {
   tagline: "Failures. Guides. Paths.",
@@ -79,21 +80,22 @@ export const ArticlesListPage = () => {
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
-      description=""
+      title='Articles // Shaswat Deep'
+      description=''
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center h-screen">
-          <Loader2 className="size-16 animate-spin" />
+        <div className='flex flex-row mt-10 items-center justify-center '>
+          {/* <Loader2 className="size-16 animate-spin" /> */}
+          <ArticlesListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>
-          <p className="text-neutral-500">
+          <p className='text-neutral-500'>
             Here you can find all the{" "}
-            <span className="text-neutral-200">
+            <span className='text-neutral-200'>
               {postsCount} articles and poems
             </span>{" "}
             I wrote. You can read about web development, tech career, personal
@@ -109,8 +111,8 @@ export const ArticlesListPage = () => {
           /> */}
         </>
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </Base>

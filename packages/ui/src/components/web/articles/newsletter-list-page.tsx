@@ -15,6 +15,7 @@ import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import { Loader2 } from "lucide-react";
 import { NewsletterWithSearch } from "./all-newletter-list";
+import NewsletterListingSkeleton from "./skeleton-newletter-listing";
 
 const pageConfig = {
   tagline: "Knock Knock. Who's there?",
@@ -73,21 +74,22 @@ export const NewsletterListPage = () => {
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
-      description=""
+      title='Articles // Shaswat Deep'
+      description=''
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center h-screen">
-          <Loader2 className="size-16 animate-spin" />
+        <div className='flex flex-row mt-10 items-center justify-center'>
+          {/* <Loader2 className="size-16 animate-spin" /> */}
+          <NewsletterListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>
-          <p className="text-neutral-500">
+          <p className='text-neutral-500'>
             Here you can find all the{" "}
-            <span className="text-neutral-200">{postsCount} newsletters</span> I
+            <span className='text-neutral-200'>{postsCount} newsletters</span> I
             send out. I usually write about my entrepreneurship journey,
             personal finance, tech career, and more in English.
           </p>
@@ -101,8 +103,8 @@ export const NewsletterListPage = () => {
           /> */}
         </>
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </Base>
