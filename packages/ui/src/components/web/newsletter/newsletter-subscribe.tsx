@@ -94,26 +94,26 @@ export const NewsletterButton = () => {
   };
 
   return (
-    <div className="fixed bottom-10 right-10 z-50">
+    <div className='fixed bottom-12 right-4  sm:right-10 z-50'>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button
-            variant="default"
-            className="bg-neutral-700 hover:bg-neutral-600 text-white rounded-full px-6 py-6 shadow-lg flex items-center gap-2"
+            variant='default'
+            className='bg-neutral-700/70 hover:bg-neutral-600 text-white rounded-full px-4 py-4 sm:px-6 sm:py-6 shadow-lg flex items-center gap-2'
           >
-            <Mail className="h-5 w-5" />
-            <span>Subscribe</span>
+            <Mail className='h-4 w-4 sm:h-5 sm:w-5' />
+            <span className=''>Subscribe</span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-md bg-neutral-900">
-          <DialogHeader className="gap-y-4">
+        <DialogContent className='sm:max-w-md bg-neutral-900 border-none'>
+          <DialogHeader className='gap-y-4'>
             <DialogTitle>
-              <div className="flex flex-col items-center gap-2 justify-center gap-y-4">
-                <Avatar className="w-32 h-32">
-                  <AvatarImage src="/static/images/headshot.svg" />
+              <div className='flex flex-col items-center gap-2 justify-center gap-y-4'>
+                <Avatar className='w-24 h-24 sm:w-32 sm:h-32'>
+                  <AvatarImage src='/static/images/headshot.svg' />
                   <AvatarFallback>Shaswat Deep</AvatarFallback>
                 </Avatar>
-                <span className="text-lg font-bold">
+                <span className='text-base sm:text-lg font-bold text-center'>
                   Subscribe to my Newsletter
                 </span>
               </div>
@@ -122,51 +122,51 @@ export const NewsletterButton = () => {
               {/* Stay updated with my latest blog posts and news. */}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
+          <form onSubmit={handleSubmit} className='space-y-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              <div className='space-y-2'>
+                <Label htmlFor='firstName'>First Name</Label>
                 <Input
-                  id="firstName"
-                  name="firstName"
+                  id='firstName'
+                  name='firstName'
                   value={formData.firstName}
                   onChange={handleChange}
-                  placeholder="John"
+                  placeholder='John'
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='lastName'>Last Name</Label>
                 <Input
-                  id="lastName"
-                  name="lastName"
+                  id='lastName'
+                  name='lastName'
                   value={formData.lastName}
                   onChange={handleChange}
-                  placeholder="Doe"
+                  placeholder='Doe'
                 />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">
-                Email<span className="text-red-500">*</span>
+            <div className='space-y-2'>
+              <Label htmlFor='email'>
+                Email<span className='text-red-500'>*</span>
               </Label>
               <Input
-                id="email"
-                name="email"
-                type="email"
+                id='email'
+                name='email'
+                type='email'
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="john.doe@example.com"
+                placeholder='john.doe@example.com'
                 required
               />
             </div>
             <Button
-              type="submit"
-              className="w-full bg-neutral-700 hover:bg-neutral-600"
+              type='submit'
+              className='w-full bg-neutral-700 hover:bg-neutral-600'
               disabled={disabled}
             >
               {loading ? (
-                <div className="flex items-center gap-2 justify-center w-full text-green-500">
-                  <Loader2 className="w-4 h-4 animate-spin " />
+                <div className='flex items-center gap-2 justify-center w-full text-green-500'>
+                  <Loader2 className='w-4 h-4 animate-spin ' />
                   <span>Subscribing...</span>
                 </div>
               ) : isSubscribed ? (
@@ -175,7 +175,7 @@ export const NewsletterButton = () => {
                 "Subscribe"
               )}
             </Button>
-            {error && <div className="text-red-500">{error}</div>}
+            {error && <div className='text-red-500'>{error}</div>}
           </form>
         </DialogContent>
       </Dialog>
