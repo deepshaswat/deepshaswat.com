@@ -49,7 +49,7 @@ const BlockNoteRenderer: React.FC<BlockNoteRendererProps> = ({
 
   return (
     <div className={`relative w-full ${className}`}>
-      <div className="prose prose-lg max-w-none ml-0 pl-0">
+      <div className="prose prose-lg max-w-none ml-0 p-0">
         <div
           className="
             prose-headings:font-semibold 
@@ -93,15 +93,18 @@ const BlockNoteRenderer: React.FC<BlockNoteRendererProps> = ({
           background-color: transparent !important;
           margin-left: 0 !important;
           padding-left: 0 !important;
+          padding-right: 0 !important;
         }
         .bn-editor {
           background-color: transparent !important;
           margin-left: 0 !important;
           padding-left: 0 !important;
+          padding-right: 0 !important;
         }
         .bn-editor > div {
           margin-left: 0 !important;
           padding-left: 0 !important;
+          padding-right: 0 !important;
         }
         [data-node-type="bulletListItem"],
         [data-node-type="numberedListItem"] {

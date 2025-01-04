@@ -14,6 +14,7 @@ import { Base } from "../posts/base-static";
 
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import PostSkeleton from "./skeleton-post";
 
 const LIGHT_COLORS = ["yellow", "pink", "turquoise", "lime", "teal", "cyan"];
 
@@ -98,7 +99,8 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
     <>
       {isLoading ? (
         <div className="flex flex-row mt-10 items-center justify-center h-screen">
-          <Loader2 className="size-16 animate-spin" />
+          {/* <Loader2 className="size-16 animate-spin" /> */}
+          <PostSkeleton />
         </div>
       ) : (
         <Base
@@ -108,7 +110,7 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
           primaryColor={pageConfig.primaryColor}
           secondaryColor={pageConfig.secondaryColor}
         >
-          <div className="w-full px-4 md:px-8">
+          <div className="w-full px-1 sm:px-4 md:px-8">
             {post?.featureImage && (
               <Image
                 src={post?.featureImage || ""}
@@ -154,7 +156,7 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
               </p>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-10 ">
               <BlockNoteRenderer content={post.content} />
             </div>
           </div>

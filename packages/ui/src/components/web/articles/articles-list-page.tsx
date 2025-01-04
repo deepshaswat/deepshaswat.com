@@ -14,6 +14,7 @@ import { PaginationBar } from "@repo/ui";
 import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import { Loader2 } from "lucide-react";
+import ArticlesListingSkeleton from "./skeleton-blog-listing";
 
 const pageConfig = {
   tagline: "Failures. Guides. Paths.",
@@ -86,8 +87,9 @@ export const ArticlesListPage = () => {
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center h-screen">
-          <Loader2 className="size-16 animate-spin" />
+        <div className="flex flex-row mt-10 items-center justify-center ">
+          {/* <Loader2 className="size-16 animate-spin" /> */}
+          <ArticlesListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>

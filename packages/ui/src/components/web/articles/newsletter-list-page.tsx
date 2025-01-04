@@ -15,6 +15,7 @@ import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import { Loader2 } from "lucide-react";
 import { NewsletterWithSearch } from "./all-newletter-list";
+import NewsletterListingSkeleton from "./skeleton-newletter-listing";
 
 const pageConfig = {
   tagline: "Knock Knock. Who's there?",
@@ -80,8 +81,9 @@ export const NewsletterListPage = () => {
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center h-screen">
-          <Loader2 className="size-16 animate-spin" />
+        <div className="flex flex-row mt-10 items-center justify-center">
+          {/* <Loader2 className="size-16 animate-spin" /> */}
+          <NewsletterListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>
