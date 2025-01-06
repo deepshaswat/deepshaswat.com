@@ -18,8 +18,8 @@ export async function GET(request: Request) {
         now.getUTCDate(),
         now.getUTCHours(),
         now.getUTCMinutes(),
-        now.getUTCSeconds()
-      )
+        now.getUTCSeconds(),
+      ),
     );
 
     console.log(`Current UTC time: ${utcNow.toISOString()}`);
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
 
     console.log(
       `Found ${postsToPublish.length} posts to publish:`,
-      JSON.stringify(postsToPublish, null, 2)
+      JSON.stringify(postsToPublish, null, 2),
     );
 
     if (postsToPublish.length > 0) {
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
       });
 
       console.log(
-        `Successfully published ${updateResult.count} scheduled posts`
+        `Successfully published ${updateResult.count} scheduled posts`,
       );
       return NextResponse.json({
         success: true,
@@ -87,7 +87,7 @@ export async function GET(request: Request) {
     console.error("Error publishing scheduled posts:", error);
     return NextResponse.json(
       { error: "Failed to publish scheduled posts" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
