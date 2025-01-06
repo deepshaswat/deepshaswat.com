@@ -25,8 +25,8 @@ export async function GET(request: Request) {
         now.getUTCDate(),
         now.getUTCHours(),
         now.getUTCMinutes(),
-        now.getUTCSeconds()
-      )
+        now.getUTCSeconds(),
+      ),
     );
 
     log(`Current UTC time: ${utcNow.toISOString()}`);
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     });
 
     log(
-      `Found ${postsToPublish.length} posts to publish: ${JSON.stringify(postsToPublish, null, 2)}`
+      `Found ${postsToPublish.length} posts to publish: ${JSON.stringify(postsToPublish, null, 2)}`,
     );
 
     if (postsToPublish.length > 0) {
@@ -91,7 +91,7 @@ export async function GET(request: Request) {
     error("Failed to publish scheduled posts", err);
     return NextResponse.json(
       { error: "Failed to publish scheduled posts" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
