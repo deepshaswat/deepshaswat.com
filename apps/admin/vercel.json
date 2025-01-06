@@ -2,10 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/publish-scheduled",
-      "schedule": "*/5 * * * *",
-      "headers": {
-        "authorization": "Bearer @CRON_SECRET"
-      }
+      "schedule": "*/5 * * * *"
     }
   ]
 }

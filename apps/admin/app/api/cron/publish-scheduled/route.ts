@@ -3,10 +3,12 @@ import prisma from "@repo/db/client";
 
 export async function GET(request: Request) {
   try {
-    // Verify that the request is coming from Vercel Cron
-    const authHeader = request.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    // Verify the request is from Vercel Cron
+    if (process.env.VERCEL_ENV !== "production") {
+      const isVercelCron = request.headers.get("x-vercel-cron");
+      if (!isVercelCron) {
+        return new NextResponse("Unauthorized", { status: 401 });
+      }
     }
 
     // Find all scheduled posts where publishDate is in the past
@@ -37,7 +39,7 @@ export async function GET(request: Request) {
     console.error("Error publishing scheduled posts:", error);
     return NextResponse.json(
       { error: "Failed to publish scheduled posts" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
