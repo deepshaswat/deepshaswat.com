@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import prisma from "@repo/db/client";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // Find all scheduled posts where publishDate is in the past
+    // Verify that the request is coming from Vercel Cron
+    const authHeader = request.headers.get("authorization");
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
+    // Find all scheduled posts where publishDate is in the past
     const postsToPublish = await prisma.post.updateMany({
       where: {
         status: "SCHEDULED",
@@ -32,7 +37,7 @@ export async function GET() {
     console.error("Error publishing scheduled posts:", error);
     return NextResponse.json(
       { error: "Failed to publish scheduled posts" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
