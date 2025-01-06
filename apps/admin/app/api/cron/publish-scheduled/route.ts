@@ -1,11 +1,25 @@
+// Mark this route as dynamic
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import prisma from "@repo/db/client";
 
+const log = (message: string) => {
+  console.log(`[CRON:PUBLISH] ${message}`);
+};
+
+const error = (message: string, err?: any) => {
+  console.error(`[CRON:PUBLISH:ERROR] ${message}`, err || "");
+};
+
 export async function GET(request: Request) {
   try {
+    log("Starting scheduled post publishing check...");
+
     // Verify the request is from Vercel Cron
     const isVercelCron = request.headers.get("x-vercel-cron");
     if (!isVercelCron && process.env.VERCEL_ENV === "production") {
+      error("Unauthorized access attempt");
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -18,12 +32,12 @@ export async function GET(request: Request) {
         now.getUTCDate(),
         now.getUTCHours(),
         now.getUTCMinutes(),
-        now.getUTCSeconds(),
-      ),
+        now.getUTCSeconds()
+      )
     );
 
-    console.log(`Current UTC time: ${utcNow.toISOString()}`);
-    console.log(`Current Local time: ${now.toString()}`);
+    log(`Current UTC time: ${utcNow.toISOString()}`);
+    log(`Current Local time: ${now.toString()}`);
 
     // Find all scheduled posts where publishDate is in the past
     const postsToPublish = await prisma.post.findMany({
@@ -40,16 +54,15 @@ export async function GET(request: Request) {
       },
     });
 
-    console.log(
-      `Found ${postsToPublish.length} posts to publish:`,
-      JSON.stringify(postsToPublish, null, 2),
+    log(
+      `Found ${postsToPublish.length} posts to publish: ${JSON.stringify(postsToPublish, null, 2)}`
     );
 
     if (postsToPublish.length > 0) {
       // Log each post's publish date comparison
       postsToPublish.forEach((post) => {
         if (post.publishDate) {
-          console.log(`Post "${post.title}":
+          log(`Post "${post.title}":
             Publish Date (UTC): ${post.publishDate.toISOString()}
             Current Time (UTC): ${utcNow.toISOString()}
             Should Publish: ${post.publishDate <= utcNow}`);
@@ -68,26 +81,24 @@ export async function GET(request: Request) {
         },
       });
 
-      console.log(
-        `Successfully published ${updateResult.count} scheduled posts`,
-      );
+      log(`Successfully published ${updateResult.count} scheduled posts`);
       return NextResponse.json({
         success: true,
         message: `Published ${updateResult.count} posts`,
         posts: postsToPublish,
       });
     } else {
-      console.log("No scheduled posts found to publish");
+      log("No scheduled posts found to publish");
       return NextResponse.json({
         success: false,
         message: `No posts to publish`,
       });
     }
-  } catch (error) {
-    console.error("Error publishing scheduled posts:", error);
+  } catch (err) {
+    error("Failed to publish scheduled posts", err);
     return NextResponse.json(
       { error: "Failed to publish scheduled posts" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 // Create a matcher for the sign-in page
-const publicRoutes = createRouteMatcher(["/sign-in"]);
+const publicRoutes = createRouteMatcher([
+  "/sign-in",
+  "/api/cron/publish-scheduled",
+]);
 
 export default clerkMiddleware((auth, request) => {
   if (publicRoutes(request)) {
