@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 
     if (postsToPublish.count > 0) {
       console.log(
-        `Successfully published ${postsToPublish.count} scheduled posts`
+        `Successfully published ${postsToPublish.count} scheduled posts`,
       );
       return NextResponse.json({
         success: true,
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     console.error("Error publishing scheduled posts:", error);
     return NextResponse.json(
       { error: "Failed to publish scheduled posts" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
