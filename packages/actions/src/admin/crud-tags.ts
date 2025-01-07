@@ -33,6 +33,11 @@ async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
           },
         },
       },
+      orderBy: {
+        tag: {
+          slug: "asc",
+        },
+      },
     });
     return tags;
   } catch (error) {
@@ -47,6 +52,9 @@ async function fetchAllTagsWithPostCount(): Promise<Tags[]> {
     const tags = await prisma.tag.findMany({
       include: {
         posts: true,
+      },
+      orderBy: {
+        slug: "asc",
       },
     });
 
