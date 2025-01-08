@@ -7,7 +7,7 @@ export const metadata: Metadata = generateSiteConfig(
   "Links // Shaswat Deep",
   "Links to social media profiles, companies and other websites of Shaswat Deep.",
   "/links",
-  "/static/images/headshot.svg"
+  "/static/images/headshot.svg",
 );
 
 const LinksPage = () => {

@@ -44,7 +44,7 @@ export async function generateMetadata({
             post.metadataTwitterDescription || undefined,
           metadataTwitterImage: post.metadataTwitterImage || undefined,
         }
-      : undefined
+      : undefined,
   );
 }
 
