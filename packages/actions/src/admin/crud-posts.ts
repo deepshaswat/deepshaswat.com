@@ -2,6 +2,7 @@
 
 import { SignedIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import prisma from "@repo/db/client";
 import { PostListType, PostType } from "../common/types";
@@ -26,7 +27,6 @@ async function createPost(data: PostType) {
       return { error: "Post URL already exists" };
     }
 
-    // console.log("Creating post:", data);
     const newPost = await prisma.post.create({
       data: {
         title: data.title,
@@ -55,7 +55,6 @@ async function createPost(data: PostType) {
       },
     });
 
-    // 2. Insert tag connections if there are any tags
     if (data.tags && data.tags.length > 0) {
       await prisma.tagOnPost.createMany({
         data: data.tags.map((tag) => ({
@@ -65,8 +64,6 @@ async function createPost(data: PostType) {
       });
     }
 
-    // 3. Fetch the TagOnPost records to get their generated IDs
-    // const createdTagConnections =
     await prisma.tagOnPost.findMany({
       where: {
         postId: newPost.id,
@@ -74,13 +71,19 @@ async function createPost(data: PostType) {
       },
     });
 
-    // Optionally fetch the updated post with tags included, if needed:
     const updatedPost = await prisma.post.findUnique({
       where: { id: newPost.id },
       include: { tags: true },
     });
 
-    // console.log("Created post with tags:", updatedPost);
+    if (updatedPost?.status === "PUBLISHED") {
+      if (updatedPost.isNewsletter) {
+        revalidatePath("/newsletter");
+      } else {
+        revalidatePath("/articles");
+      }
+    }
+
     return { post: updatedPost, success: true };
   } catch (error) {
     console.error("Error creating post:", error);
@@ -90,7 +93,6 @@ async function createPost(data: PostType) {
 
 async function updatePost(data: PostType, postId: string) {
   await authenticateUser();
-  // Construct the post object
   const post: PostType = {
     title: data.title,
     content: data.content,
@@ -101,7 +103,6 @@ async function updatePost(data: PostType, postId: string) {
     excerpt: data.excerpt,
     featured: data.featured,
     featureImage: data.featureImage,
-    // Initially, we just store the incoming tag IDs
     tags: data.tags,
     authorId: data.authorId,
     metaData: {
@@ -135,12 +136,11 @@ async function updatePost(data: PostType, postId: string) {
       console.log("Post URL already exists");
       return { error: "Post URL already exists" };
     }
-    // 1. Delete existing tag connections
+
     await prisma.tagOnPost.deleteMany({
       where: { postId },
     });
 
-    // 2. Update the post
     const updatedPost = await prisma.post.update({
       where: { id: postId },
       data: {
@@ -170,7 +170,6 @@ async function updatePost(data: PostType, postId: string) {
       },
     });
 
-    // 3. Insert new tag connections
     if (post.tags && post.tags.length > 0) {
       await prisma.tagOnPost.createMany({
         data: post.tags.map((tag) => ({
@@ -180,8 +179,6 @@ async function updatePost(data: PostType, postId: string) {
       });
     }
 
-    // 4. Fetch the newly created TagOnPost records to get their IDs
-    // const createdTagConnections =
     await prisma.tagOnPost.findMany({
       where: {
         postId: updatedPost.id,
@@ -194,7 +191,15 @@ async function updatePost(data: PostType, postId: string) {
       include: { tags: true },
     });
 
-    // console.log("Updated post with tags:", finalUpdatedPost);
+    if (finalUpdatedPost?.status === "PUBLISHED") {
+      if (finalUpdatedPost.isNewsletter) {
+        revalidatePath("/newsletter");
+      } else {
+        revalidatePath("/articles");
+      }
+      revalidatePath(`/${finalUpdatedPost.postUrl}`);
+    }
+
     return { post: finalUpdatedPost, success: true };
   } catch (error) {
     console.error("Error updating post:", error);
@@ -208,7 +213,7 @@ async function publishPost(
   scheduleType: string,
   publishType: string,
   post: PostListType,
-  markdown: string,
+  markdown: string
 ) {
   await authenticateUser();
 
@@ -237,17 +242,25 @@ async function publishPost(
     };
   }
 
-  // console.log("Data:", data);
-
   try {
-    await prisma.post.update({
+    const updatedPost = await prisma.post.update({
       where: { id: postId },
       data: data,
     });
+
     if (publishType === "newsletter") {
-      // await sendNewsletter({ post, sendData: data, markdown });
       await sendBroadcastNewsletter({ post, sendData: data, markdown });
     }
+
+    if (updatedPost.status === "PUBLISHED") {
+      if (publishType === "newsletter") {
+        revalidatePath("/newsletter");
+      } else {
+        revalidatePath("/articles");
+      }
+      revalidatePath(`/${updatedPost.postUrl}`);
+    }
+
     return { success: true };
   } catch (error) {
     console.error("Error publishing post:", error);
