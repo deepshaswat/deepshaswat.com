@@ -1,6 +1,7 @@
 import { generateSiteConfig, NewsletterListPage } from "@repo/ui/web";
 import { Metadata } from "next";
 
+export const revalidate = 31536000;
 export const metadata: Metadata = generateSiteConfig(
   "Newsletter // Shaswat Deep",
   "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",

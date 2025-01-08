@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 import { generateSiteConfig, LinksComponent } from "@repo/ui/web";
 
+export const revalidate = 31536000;
 export const metadata: Metadata = generateSiteConfig(
   "Links // Shaswat Deep",
   "Links to social media profiles, companies and other websites of Shaswat Deep.",

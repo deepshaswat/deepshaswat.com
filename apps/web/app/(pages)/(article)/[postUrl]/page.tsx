@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { generateSiteConfig } from "@repo/ui/web";
 import { fetchPostByPostUrl } from "@repo/actions";
 
+export const revalidate = 31536000;
+
 export async function generateMetadata({
   params,
 }: {
