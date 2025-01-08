@@ -42,7 +42,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
   const [isSecondDialogOpen, setSecondDialogOpen] = useState(false);
   const [finalTime, setFinalTime] = useState<Date | null>(null);
   const [scheduleType, setScheduleType] = useState("now");
-  const [publishType, setPublishType] = useState("newsletter");
+  const [publishType, setPublishType] = useState("blog");
   const [openAccordionItem, setOpenAccordionItem] = useState<
     string | undefined
   >(undefined);
@@ -128,6 +128,21 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
   useEffect(() => {
     onOpenChange(isFirstDialogOpen);
   }, [isFirstDialogOpen, onOpenChange]);
+
+  const getScheduleText = (
+    scheduleType: string,
+    publishType: string,
+    inputDate: Date,
+    inputTimeIst: string,
+  ) => {
+    if (scheduleType === "now") {
+      return publishType === "newsletter"
+        ? "Publish & send, right now"
+        : "Publish, right now";
+    }
+
+    return `Schedule for ${formatDayAndDate(inputDate)} at ${inputTimeIst} IST`;
+  };
 
   return (
     <>
@@ -377,11 +392,12 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                     className="flex-1 bg-green-500 hover:bg-green-600  py-6 "
                     onClick={handlePublish}
                   >
-                    {scheduleType === "now"
-                      ? "Publish & send, right now"
-                      : `Schedule for ${formatDayAndDate(
-                          inputDate,
-                        )} at ${inputTimeIst} IST`}
+                    {getScheduleText(
+                      scheduleType,
+                      publishType,
+                      inputDate,
+                      inputTimeIst,
+                    )}
                   </Button>
                   <Button
                     className="flex-1 py-6 bg-neutral-700 "

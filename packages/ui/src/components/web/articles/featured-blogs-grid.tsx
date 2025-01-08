@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@repo/ui/utils";
-import { PostListType } from "@repo/actions";
+import { PostListType, Tags, fetchAllTagsFromTagOnPost } from "@repo/actions";
 import { Loader2 } from "lucide-react";
 
 export function SimpleBlogWithGrid({ blogs }: { blogs: PostListType[] }) {
@@ -57,6 +57,7 @@ export const BlogCard = ({ blog }: { blog: PostListType }) => {
   const truncate = (text: string, length: number) => {
     return text.length > length ? text.slice(0, length) + "..." : text;
   };
+
   return (
     <Link
       className="shadow-derek rounded-3xl border dark:border-neutral-800 w-full bg-white dark:bg-neutral-900  overflow-hidden  hover:scale-[1.02] transition duration-200"
@@ -76,7 +77,7 @@ export const BlogCard = ({ blog }: { blog: PostListType }) => {
         </div>
       )}
       <div className="p-4 md:p-8 bg-white dark:bg-neutral-900">
-        <div className="flex space-x-2 items-center  mb-2">
+        <div className="flex space-x-2 items-center mb-2">
           <Image
             src={blog.author.imageUrl || ""}
             alt={blog.author.name}

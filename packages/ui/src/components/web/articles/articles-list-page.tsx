@@ -48,14 +48,11 @@ export const ArticlesListPage = () => {
       setPosts(fetchedPosts as PostListType[]);
     } catch (error) {
       console.error("Error fetching posts:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchPostsCount = async () => {
     try {
-      setLoading(true);
       const fetchedPostsCount = await fetchPublishedPostsCount("articles");
       setPostsCount(fetchedPostsCount);
     } catch (error) {
@@ -68,10 +65,16 @@ export const ArticlesListPage = () => {
   //     fetchPosts({ option: "articles", setPosts: setPosts });
   //   }, [currentPage]);
 
+  const fetchAllPosts = async () => {
+    setLoading(true);
+    await fetchPostsCount();
+    await fetchPosts({ option: "articles", setPosts: setPosts });
+    await fetchPosts({ option: "featured-posts", setPosts: setFeaturedPosts });
+    setLoading(false);
+  };
+
   useEffect(() => {
-    fetchPostsCount();
-    fetchPosts({ option: "articles", setPosts: setPosts });
-    fetchPosts({ option: "featured-posts", setPosts: setFeaturedPosts });
+    fetchAllPosts();
   }, []);
 
   const handlePageChange = (page: number) => {

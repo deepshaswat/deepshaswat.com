@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import FuzzySearch from "fuzzy-search";
-import { fetchTagsFromTagOnPost, PostListType, Tags } from "@repo/actions";
+import { fetchAllTagsFromTagOnPost, PostListType, Tags } from "@repo/actions";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function BlogWithSearch({ blogs }: { blogs: PostListType[] }) {
@@ -21,16 +21,57 @@ export function BlogWithSearch({ blogs }: { blogs: PostListType[] }) {
 
 export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
   const [search, setSearch] = useState("");
+  const [allTags, setAllTags] = useState<Record<string, Tags[]>>({});
 
   const searcher = new FuzzySearch(blogs, ["title", "excerpt", "keywords"], {
     caseSensitive: false,
   });
 
   const [results, setResults] = useState(blogs);
+
+  useEffect(() => {
+    const fetchAllTags = async () => {
+      try {
+        const allTagsData = await fetchAllTagsFromTagOnPost();
+        const tagsByPost: Record<string, Tags[]> = {};
+
+        allTagsData.forEach(
+          (tagOnPost: {
+            postId: string;
+            tag: {
+              id: string;
+              slug: string;
+              description: string | null;
+              imageUrl: string | null;
+            };
+          }) => {
+            if (!tagsByPost[tagOnPost.postId]) {
+              tagsByPost[tagOnPost.postId] = [];
+            }
+            tagsByPost[tagOnPost.postId].push({
+              id: tagOnPost.tag.id,
+              slug: tagOnPost.tag.slug,
+              description: tagOnPost.tag.description ?? "",
+              imageUrl: tagOnPost.tag.imageUrl ?? "",
+              posts: [],
+            });
+          },
+        );
+
+        setAllTags(tagsByPost);
+      } catch (error) {
+        console.error("Failed to fetch tags:", error);
+      }
+    };
+
+    fetchAllTags();
+  }, []);
+
   useEffect(() => {
     const results = searcher.search(search);
     setResults(results);
   }, [search]);
+
   return (
     <div className="w-full py-20">
       {/* <p className='text-3xl font-bold mb-10'>All Articles</p> */}
@@ -50,7 +91,11 @@ export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
           <p className="text-neutral-400 text-center p-4">No results found</p>
         ) : (
           results.map((blog, index) => (
-            <BlogPostRow blog={blog} key={blog.postUrl + index} />
+            <BlogPostRow
+              blog={blog}
+              key={blog.postUrl + index}
+              tags={allTags[blog.id] || []}
+            />
           ))
         )}
       </div>
@@ -58,8 +103,13 @@ export const BlogPostRows = ({ blogs }: { blogs: PostListType[] }) => {
   );
 };
 
-export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
-  const [tags, setTags] = useState<Tags[]>([]);
+export const BlogPostRow = ({
+  blog,
+  tags,
+}: {
+  blog: PostListType;
+  tags: Tags[];
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const capitalizeFirstLetter = (item: string) => {
@@ -72,22 +122,6 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
       )
       .join(" ");
   };
-  const fetchTags = async () => {
-    const tagList = await fetchTagsFromTagOnPost({ postId: blog.id });
-    setTags(
-      tagList.map(({ tag }) => ({
-        id: tag.id,
-        slug: tag.slug,
-        description: tag.description ?? "",
-        imageUrl: tag.imageUrl ?? "",
-        posts: tag.posts,
-      })),
-    );
-  };
-
-  useEffect(() => {
-    fetchTags();
-  }, []);
 
   return (
     <Link
@@ -121,7 +155,7 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
           </p>
           {blog.excerpt && (
             <p className="text-neutral-400 text-sm mt-2 max-w-xl transition duration-200">
-              {truncate(blog.excerpt, 80)}
+              {truncate(blog.excerpt, 100)}
             </p>
           )}
 
@@ -130,7 +164,7 @@ export const BlogPostRow = ({ blog }: { blog: PostListType }) => {
               <div className="flex flex-wrap gap-2 my-2 sm:my-4">
                 {tags.map((tag) => (
                   <span
-                    key={tag.slug}
+                    key={tag.id}
                     className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
                   >
                     {capitalizeFirstLetter(tag.slug)}

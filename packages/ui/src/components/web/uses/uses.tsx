@@ -1,11 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
+
 import { categories } from "@repo/store";
 import { Base } from "@repo/ui/web";
-import { Loader2 } from "lucide-react";
-import type { Metadata } from "next";
-import { useEffect } from "react";
-import { useState } from "react";
 
 const pageConfig = {
   tagline: "Apps. Tools. Gear.",

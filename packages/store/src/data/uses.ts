@@ -138,6 +138,12 @@ const categories = [
     name: "Coding & Terminal",
     items: [
       {
+        title: "Cursor AI",
+        description:
+          "Got my mind blown by the AI code editor. It is my goto for writing code. Ditched VSCode with Copilot for Cursor.",
+        url: "https://www.cursor.com/",
+      },
+      {
         title: "VSCode",
         description:
           "After using Intellij for many years, I moved to VSCode once I moved to full-stack.",
@@ -157,7 +163,7 @@ const categories = [
     ],
   },
   {
-    name: "VSCode - Plugins",
+    name: "Cursor - Plugins",
     items: [
       {
         title: "Andromeda",
@@ -209,11 +215,6 @@ const categories = [
         description: "Helps in reading TS error. Great for someone like me.",
         url: "https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors",
       },
-      {
-        title: "GitHub Copilot",
-        description: "AI pair programmer. Speeds up the coding.",
-        url: "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot",
-      },
     ],
   },
   {
@@ -234,11 +235,6 @@ const categories = [
         title: "Clippy",
         description: "A great tool for managing clipboard history.",
         url: "https://clipy-app.com/",
-      },
-      {
-        title: "ColorShurp",
-        description: "A great tool for picking colors from the screen.",
-        url: "https://colorslurp.com/",
       },
       {
         title: "Da Vinci Resolve",
@@ -275,9 +271,16 @@ const categories = [
         url: "https://refer-nordvpn.com/CnNmFRYtrzq",
       },
       {
-        title: "OBS Studio",
-        description: "The best tool for screen recording and streaming.",
-        url: "https://obsproject.com/",
+        title: "Screen Studio",
+        description:
+          "The best tool for screen recording with AI for fast editing.",
+        url: "https://screenstudio.app/",
+      },
+      {
+        title: "CleanShot X",
+        description:
+          "The best tool for capturing screenshots and videos. Finally, a paid app that I use.",
+        url: "https://cleanshot.com/",
       },
       {
         title: "Raycast",
@@ -298,38 +301,23 @@ const categories = [
     name: "Services",
     items: [
       {
+        title: "Aceternity UI",
+        description:
+          "One of the best Framer UI components you can access for free.",
+        url: "https://ui.aceternity.com/",
+      },
+      {
         title: "Algolia",
         description:
           "My first choice when adding search capabilities to any project.",
         url: "https://www.algolia.com",
       },
+
       {
         title: "AWS Cloud",
         description:
           "The best cloud service I have used. I use it for all my projects.",
         url: "https://aws.amazon.com/",
-      },
-      {
-        title: "Cloudflare",
-        description:
-          "The DNS service I use with all my domains. Amazing product.",
-        url: "https://www.cloudflare.com",
-      },
-      {
-        title: "Firebase",
-        description:
-          "A no-brainer database and auth solution for side projects.",
-        url: "https://firebase.google.com",
-      },
-      {
-        title: "SquareSpace",
-        description: "I buy and renew all my domains here.",
-        url: "https://www.squarespace.com/",
-      },
-      {
-        title: "MongoDB Atlas",
-        description: "The best database service I have used.",
-        url: "https://www.mongodb.com/",
       },
       {
         title: "Clerk",
@@ -338,26 +326,36 @@ const categories = [
         url: "https://clerk.com/",
       },
       {
+        title: "Cloudflare",
+        description:
+          "The DNS service I use with all my domains. Amazing product.",
+        url: "https://www.cloudflare.com",
+      },
+      {
+        title: "Digital Ocean",
+        description:
+          "The best cloud hosting service I have used. Best for managed Databases like Redis, MongoDB, Kafka etc.",
+        url: "https://www.digitalocean.com/",
+      },
+      {
+        title: "Magic UI",
+        description: "Another great UI components I have used.",
+        url: "https://magicui.dev/",
+      },
+      {
+        title: "MongoDB Atlas",
+        description: "The best database service I have used.",
+        url: "https://www.mongodb.com/",
+      },
+      {
         title: "PostHog",
         description: "The best analytics service I have used.",
         url: "https://posthog.com/",
       },
       {
-        title: "Upstash",
-        description:
-          "The best Redis hosting service I have used. Great for side projects.",
-        url: "https://upstash.com/",
-      },
-      {
         title: "Resend",
         description: "The new email API for developers.",
         url: "https://resend.com",
-      },
-      {
-        title: "Vercel",
-        description:
-          "Here is where I host all my websites. By far the best developer experience.",
-        url: "https://vercel.com",
       },
       {
         title: "ShadCN/UI",
@@ -366,10 +364,15 @@ const categories = [
         url: "https://ui.shadcn.com/",
       },
       {
-        title: "Aceternity UI",
+        title: "SquareSpace",
+        description: "I buy and renew all my domains here.",
+        url: "https://www.squarespace.com/",
+      },
+      {
+        title: "Vercel",
         description:
-          "One of the best Framer UI components you can access for free.",
-        url: "https://ui.aceternity.com/",
+          "Here is where I host all my websites. By far the best developer experience.",
+        url: "https://vercel.com",
       },
     ],
   },

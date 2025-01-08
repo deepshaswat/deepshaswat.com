@@ -15,8 +15,29 @@ async function authenticateUser() {
   }
 }
 
+async function fetchAllTagsFromTagOnPost() {
+  // await authenticateUser();
+  try {
+    const tags = await prisma.tagOnPost.findMany({
+      include: {
+        post: true,
+        tag: true,
+      },
+      orderBy: {
+        tag: {
+          slug: "asc",
+        },
+      },
+    });
+    return tags;
+  } catch (error) {
+    console.error("Failed to fetch tags:", error);
+    throw new Error("Failed to fetch tags");
+  }
+}
+
 async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
-  await authenticateUser();
+  // await authenticateUser();
   try {
     const tags = await prisma.tagOnPost.findMany({
       where: {
@@ -33,6 +54,11 @@ async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
           },
         },
       },
+      orderBy: {
+        tag: {
+          slug: "asc",
+        },
+      },
     });
     return tags;
   } catch (error) {
@@ -42,11 +68,14 @@ async function fetchTagsFromTagOnPost({ postId }: { postId: string }) {
 }
 
 async function fetchAllTagsWithPostCount(): Promise<Tags[]> {
-  await authenticateUser();
+  // await authenticateUser();
   try {
     const tags = await prisma.tag.findMany({
       include: {
         posts: true,
+      },
+      orderBy: {
+        slug: "asc",
       },
     });
 
@@ -71,7 +100,7 @@ interface TagIterface {
 }
 
 async function fetchTagDetails(slug: string) {
-  await authenticateUser();
+  // await authenticateUser();
   try {
     const existingTag = await prisma.tag.findUnique({
       where: { slug },
@@ -200,4 +229,5 @@ export {
   updateTagAction,
   deleteTagAction,
   fetchTagsFromTagOnPost,
+  fetchAllTagsFromTagOnPost,
 };

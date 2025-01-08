@@ -1,6 +1,7 @@
 // NewsletterButton.tsx
 "use client";
 import { createMember, Member } from "@repo/actions";
+import Image from "next/image";
 import {
   Button,
   Dialog,
@@ -113,6 +114,13 @@ export const NewsletterButton = () => {
                   <AvatarImage src="/static/images/headshot.svg" />
                   <AvatarFallback>Shaswat Deep</AvatarFallback>
                 </Avatar>
+                {/* <Image
+                  alt='Shaswat Deep'
+                  src='/static/images/headShot.svg'
+                  width={156}
+                  height={156}
+                  className='rounded-full mb-4 items-center justify-center '
+                /> */}
                 <span className="text-base sm:text-lg font-bold text-center">
                   Subscribe to my Newsletter
                 </span>

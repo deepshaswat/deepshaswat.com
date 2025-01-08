@@ -41,7 +41,7 @@ export * from "./components/ui/sonner";
 export * from "./components/ui/avatar";
 export * from "./components/ui/dropdown-menu";
 export * from "./components/ui/skeleton";
-
+export * from "./components/ui/scroll-progress";
 // export * from "./components/web/command/CommandBar";
 
 export * from "./components/common/email-template";

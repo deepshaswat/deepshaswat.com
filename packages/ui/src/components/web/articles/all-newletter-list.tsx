@@ -6,29 +6,69 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import FuzzySearch from "fuzzy-search";
-import { fetchTagsFromTagOnPost, PostListType, Tags } from "@repo/actions";
+import { fetchAllTagsFromTagOnPost, PostListType, Tags } from "@repo/actions";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function NewsletterWithSearch({ blogs }: { blogs: PostListType[] }) {
+  const [allTags, setAllTags] = useState<Record<string, Tags[]>>({});
+
+  useEffect(() => {
+    const fetchAllTags = async () => {
+      try {
+        const allTagsData = await fetchAllTagsFromTagOnPost();
+        const tagsByPost: Record<string, Tags[]> = {};
+
+        allTagsData.forEach((tagOnPost) => {
+          if (!tagsByPost[tagOnPost.postId]) {
+            tagsByPost[tagOnPost.postId] = [];
+          }
+          tagsByPost[tagOnPost.postId].push({
+            id: tagOnPost.tag.id,
+            slug: tagOnPost.tag.slug,
+            description: tagOnPost.tag.description ?? "",
+            imageUrl: tagOnPost.tag.imageUrl ?? "",
+            posts: [],
+          });
+        });
+
+        setAllTags(tagsByPost);
+      } catch (error) {
+        console.error("Failed to fetch tags:", error);
+      }
+    };
+
+    fetchAllTags();
+  }, []);
+
   return (
     <div className="relative overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col items-center justify-between pb-20">
         <div className="relative z-20 py-10 ">
-          <h1 className="mt-4 text-xl  font-bold md:text-3xl lg:text-5xl text-black dark:text-white tracking-tight">
+          <h1 className="mt-4 text-xl font-bold md:text-3xl lg:text-5xl text-black dark:text-white tracking-tight">
             Most Recent
           </h1>
         </div>
 
         {blogs.slice(0, 1).map((blog, index) => (
-          <NewsletterCard blog={blog} key={blog.title + index} />
+          <NewsletterCard
+            blog={blog}
+            key={blog.title + index}
+            tags={allTags[blog.id] || []}
+          />
         ))}
-        <NewsletterPostRows blogs={blogs} />
+        <NewsletterPostRows blogs={blogs} allTags={allTags} />
       </div>
     </div>
   );
 }
 
-export const NewsletterPostRows = ({ blogs }: { blogs: PostListType[] }) => {
+export const NewsletterPostRows = ({
+  blogs,
+  allTags,
+}: {
+  blogs: PostListType[];
+  allTags: Record<string, Tags[]>;
+}) => {
   const [search, setSearch] = useState("");
 
   const searcher = new FuzzySearch(blogs, ["title", "excerpt", "keywords"], {
@@ -54,20 +94,31 @@ export const NewsletterPostRows = ({ blogs }: { blogs: PostListType[] }) => {
       </div>
 
       <div className="">
-        {results.length === 0 ? (
+        {results.length <= 1 ? (
           <p className="text-neutral-400 text-center p-4">No results found</p>
         ) : (
-          results.map((blog, index) => (
-            <NewsletterPostRow blog={blog} key={blog.postUrl + index} />
-          ))
+          results
+            .slice(1)
+            .map((blog, index) => (
+              <NewsletterPostRow
+                blog={blog}
+                key={blog.postUrl + index}
+                tags={allTags[blog.id] || []}
+              />
+            ))
         )}
       </div>
     </div>
   );
 };
 
-export const NewsletterPostRow = ({ blog }: { blog: PostListType }) => {
-  const [tags, setTags] = useState<Tags[]>([]);
+export const NewsletterPostRow = ({
+  blog,
+  tags,
+}: {
+  blog: PostListType;
+  tags: Tags[];
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const capitalizeFirstLetter = (item: string) => {
@@ -80,22 +131,6 @@ export const NewsletterPostRow = ({ blog }: { blog: PostListType }) => {
       )
       .join(" ");
   };
-  const fetchTags = async () => {
-    const tagList = await fetchTagsFromTagOnPost({ postId: blog.id });
-    setTags(
-      tagList.map(({ tag }) => ({
-        id: tag.id,
-        slug: tag.slug,
-        description: tag.description ?? "",
-        imageUrl: tag.imageUrl ?? "",
-        posts: tag.posts,
-      })),
-    );
-  };
-
-  useEffect(() => {
-    fetchTags();
-  }, []);
 
   return (
     <Link
@@ -129,7 +164,7 @@ export const NewsletterPostRow = ({ blog }: { blog: PostListType }) => {
           </p>
           {blog.excerpt && (
             <p className="text-neutral-400 text-sm mt-2 max-w-xl transition duration-200">
-              {truncate(blog.excerpt, 80)}
+              {truncate(blog.excerpt, 100)}
             </p>
           )}
 
@@ -138,7 +173,7 @@ export const NewsletterPostRow = ({ blog }: { blog: PostListType }) => {
               <div className="flex flex-wrap gap-2 my-2 sm:my-4">
                 {tags.map((tag) => (
                   <span
-                    key={tag.slug}
+                    key={tag.id}
                     className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
                   >
                     {capitalizeFirstLetter(tag.slug)}
@@ -182,7 +217,28 @@ const Logo = () => {
   );
 };
 
-export const NewsletterCard = ({ blog }: { blog: PostListType }) => {
+export const NewsletterCard = ({
+  blog,
+  tags,
+}: {
+  blog: PostListType;
+  tags: Tags[];
+}) => {
+  const truncate = (text: string, length: number) => {
+    return text.length > length ? text.slice(0, length) + "..." : text;
+  };
+
+  const capitalizeFirstLetter = (item: string) => {
+    return item
+      .split("-")
+      .map((word, index) =>
+        index === 0
+          ? word.charAt(0).toUpperCase() + word.slice(1)
+          : word.toLowerCase(),
+      )
+      .join(" ");
+  };
+
   return (
     <Link
       className="shadow-derek grid grid-cols-1 md:grid-cols-2  rounded-3xl group/blog border border-transparent dark:hover:border-neutral-800 w-full dark:hover:bg-neutral-900 hover:border-neutral-200 hover:bg-neutral-100  overflow-hidden  hover:scale-[1.02] transition duration-200"
@@ -211,8 +267,18 @@ export const NewsletterCard = ({ blog }: { blog: PostListType }) => {
           <p className="text-left text-base md:text-xl mt-2 text-neutral-600 dark:text-neutral-400">
             {truncate(blog.excerpt, 500)}
           </p>
+          <div className="flex flex-wrap gap-2 mt-4">
+            {tags.map((tag) => (
+              <span
+                key={tag.id}
+                className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
+              >
+                {capitalizeFirstLetter(tag.slug)}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="flex space-x-2 items-center  mt-6">
+        <div className="flex space-x-2 items-center mt-6">
           <Image
             src={blog.author.imageUrl}
             alt={blog.author.name}
@@ -224,7 +290,7 @@ export const NewsletterCard = ({ blog }: { blog: PostListType }) => {
             {blog.author.name}
           </p>
           <div className="h-1 w-1 bg-neutral-300 rounded-full"></div>
-          <p className="text-neutral-600 dark:text-neutral-300 text-sm  max-w-xl  transition duration-200">
+          <p className="text-neutral-600 dark:text-neutral-300 text-sm max-w-xl transition duration-200">
             {blog.publishDate
               ? format(new Date(blog.publishDate), "MMMM dd, yyyy")
               : ""}

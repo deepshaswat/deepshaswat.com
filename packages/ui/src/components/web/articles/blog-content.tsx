@@ -15,6 +15,7 @@ import { Base } from "../posts/base-static";
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import PostSkeleton from "./skeleton-post";
+import { ScrollProgress } from "@repo/ui";
 
 const LIGHT_COLORS = ["yellow", "pink", "turquoise", "lime", "teal", "cyan"];
 
@@ -157,6 +158,7 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
             </div>
 
             <div className="mt-10 ">
+              <ScrollProgress />
               <BlockNoteRenderer content={post.content} />
             </div>
           </div>
