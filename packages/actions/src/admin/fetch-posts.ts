@@ -10,16 +10,16 @@ const splitAndCapitalize = (item: string) => {
   return firstWord.toUpperCase();
 };
 
-async function authenticateUser() {
-  const sign = await SignedIn;
-  if (!sign) {
-    redirect("/sign-in");
-  }
-}
+// async function authenticateUser() {
+//   const sign = await SignedIn;
+//   if (!sign) {
+//     redirect("/sign-in");
+//   }
+// }
 
 export async function fetchAllPostsCount(
   postOption: string,
-  tagOption: string,
+  tagOption: string
 ) {
   // await authenticateUser();
   // modify for based on postOption and tagOption
@@ -95,9 +95,9 @@ export async function fetchPublishedPostsCount(postOption: string) {
 export async function fetchAllPosts(
   postOption: string,
   tagOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
-  await authenticateUser();
+  //  await authenticateUser();
   const pageSize = 10;
   const offset = pageNumber * pageSize;
 
@@ -242,7 +242,7 @@ export async function fetchPublishedPosts(postOption: string) {
 }
 export async function fetchPublishedPostsPaginated(
   postOption: string,
-  pageNumber: number,
+  pageNumber: number
 ) {
   // await authenticateUser();
   const pageSize = 10;
@@ -306,7 +306,7 @@ export async function fetchPublishedPostsPaginated(
 }
 
 export async function fetchPostById(id: string) {
-  await authenticateUser();
+  // await authenticateUser();
   const post = await prisma.post.findUnique({
     where: { id },
     include: {

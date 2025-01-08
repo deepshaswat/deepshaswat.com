@@ -48,14 +48,11 @@ export const ArticlesListPage = () => {
       setPosts(fetchedPosts as PostListType[]);
     } catch (error) {
       console.error("Error fetching posts:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchPostsCount = async () => {
     try {
-      setLoading(true);
       const fetchedPostsCount = await fetchPublishedPostsCount("articles");
       setPostsCount(fetchedPostsCount);
     } catch (error) {
@@ -68,10 +65,16 @@ export const ArticlesListPage = () => {
   //     fetchPosts({ option: "articles", setPosts: setPosts });
   //   }, [currentPage]);
 
+  const fetchAllPosts = async () => {
+    setLoading(true);
+    await fetchPostsCount();
+    await fetchPosts({ option: "articles", setPosts: setPosts });
+    await fetchPosts({ option: "featured-posts", setPosts: setFeaturedPosts });
+    setLoading(false);
+  };
+
   useEffect(() => {
-    fetchPostsCount();
-    fetchPosts({ option: "articles", setPosts: setPosts });
-    fetchPosts({ option: "featured-posts", setPosts: setFeaturedPosts });
+    fetchAllPosts();
   }, []);
 
   const handlePageChange = (page: number) => {
@@ -80,22 +83,22 @@ export const ArticlesListPage = () => {
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
-      description=""
+      title='Articles // Shaswat Deep'
+      description=''
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center ">
+        <div className='flex flex-row mt-10 items-center justify-center '>
           {/* <Loader2 className="size-16 animate-spin" /> */}
           <ArticlesListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>
-          <p className="text-neutral-500">
+          <p className='text-neutral-500'>
             Here you can find all the{" "}
-            <span className="text-neutral-200">
+            <span className='text-neutral-200'>
               {postsCount} articles and poems
             </span>{" "}
             I wrote. You can read about web development, tech career, personal
@@ -111,8 +114,8 @@ export const ArticlesListPage = () => {
           /> */}
         </>
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </Base>
