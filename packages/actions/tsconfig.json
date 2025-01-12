@@ -11,7 +11,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../ui/src/components/web/indexDB.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

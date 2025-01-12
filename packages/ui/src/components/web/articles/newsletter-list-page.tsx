@@ -1,6 +1,6 @@
 "use client";
 
-import { Base } from "@repo/ui/web";
+import { Base, cacheService } from "@repo/ui/web";
 import { useState } from "react";
 import { useEffect } from "react";
 import { pageNumberState } from "@repo/store";
@@ -11,9 +11,7 @@ import {
 } from "@repo/actions";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { PaginationBar } from "@repo/ui";
-import { BlogWithSearch } from "./all-blogs-list";
-import { SimpleBlogWithGrid } from "./featured-blogs-grid";
-import { Loader2 } from "lucide-react";
+
 import { NewsletterWithSearch } from "./all-newletter-list";
 import NewsletterListingSkeleton from "./skeleton-newletter-listing";
 
@@ -35,26 +33,45 @@ export const NewsletterListPage = () => {
   //     resetPageNumber();
   //   }, [resetPageNumber]);
 
-  const fetchPosts = async () => {
+  const fetchPostsCount = async () => {
     try {
-      // const fetchedPosts = await fetchPublishedPostsPaginated(option, currentPage);
-      const fetchedPosts = await fetchPublishedPosts("newsletters");
+      const cachedCount = await cacheService.getCachedCount("newsletters");
 
-      setPosts(fetchedPosts as PostListType[]);
+      if (cachedCount !== null) {
+        setPostsCount(cachedCount);
+        return;
+      }
+
+      const freshCount = await fetchPublishedPostsCount("newsletters");
+
+      if (typeof freshCount === "number" && freshCount >= 0) {
+        setPostsCount(freshCount);
+        await cacheService.setCachedCount("newsletters", freshCount);
+      }
     } catch (error) {
-      console.error("Error fetching posts:", error);
-    } finally {
-      setLoading(false);
+      console.error("NewsletterListPage: Error in fetchPostsCount:", error);
     }
   };
 
-  const fetchPostsCount = async () => {
+  const fetchPosts = async () => {
     try {
-      setLoading(true);
-      const fetchedPostsCount = await fetchPublishedPostsCount("newsletters");
-      setPostsCount(fetchedPostsCount);
+      const cachedPosts = await cacheService.getCachedItems("newsletters");
+
+      if (cachedPosts && cachedPosts.length > 0) {
+        setPosts(cachedPosts);
+        return;
+      }
+
+      const freshPosts = await fetchPublishedPosts("newsletters");
+
+      if (Array.isArray(freshPosts)) {
+        setPosts(freshPosts);
+        await cacheService.setCachedItems("newsletters", freshPosts);
+      }
     } catch (error) {
-      console.error("Error fetching posts count:", error);
+      console.error("NewsletterListPage: Error in fetchPosts:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,22 +91,22 @@ export const NewsletterListPage = () => {
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
-      description=""
+      title='Articles // Shaswat Deep'
+      description=''
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center">
+        <div className='flex flex-row mt-10 items-center justify-center'>
           {/* <Loader2 className="size-16 animate-spin" /> */}
           <NewsletterListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>
-          <p className="text-neutral-500">
+          <p className='text-neutral-500'>
             Here you can find all the{" "}
-            <span className="text-neutral-200">{postsCount} newsletters</span> I
+            <span className='text-neutral-200'>{postsCount} newsletters</span> I
             send out. I usually write about my entrepreneurship journey,
             personal finance, tech career, and more in English.
           </p>
@@ -103,8 +120,8 @@ export const NewsletterListPage = () => {
           /> */}
         </>
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </Base>

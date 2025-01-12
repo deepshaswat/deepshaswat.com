@@ -3,6 +3,6 @@
   "compilerOptions": {
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["src", "../ui/src/components/web/indexDB.ts"],
   "exclude": ["node_modules", "dist"]
 }

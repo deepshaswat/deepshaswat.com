@@ -8,7 +8,6 @@ export * from "./admin/fetch-posts";
 
 // Web
 export { contact } from "./web/contact";
-export * from "./web/indexDB";
 
 // Common
 export * from "./common/types";

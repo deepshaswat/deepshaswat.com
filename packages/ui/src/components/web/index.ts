@@ -30,3 +30,4 @@ export * from "./articles/newsletter-list-page";
 export * from "./newsletter/newsletter-subscribe";
 export * from "./newsletter/newsletter-unsubscribe";
 export * from "./links/link-component";
+export * from "./indexDB";
