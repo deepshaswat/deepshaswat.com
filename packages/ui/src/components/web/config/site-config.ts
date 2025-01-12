@@ -65,8 +65,6 @@ export function generateSiteConfig(
 
     // Manifest and Theme
     manifest: "/site.webmanifest",
-    themeColor: "#ffffff",
-    colorScheme: "dark light",
 
     // Twitter Metadata
     twitter: {
@@ -152,14 +150,6 @@ export function generateSiteConfig(
         "max-image-preview": "large",
         "max-snippet": -1,
       },
-    },
-
-    // Viewport settings for better mobile experience
-    viewport: {
-      width: "device-width",
-      initialScale: 1,
-      maximumScale: 5,
-      userScalable: true,
     },
 
     // Additional app-specific metadata

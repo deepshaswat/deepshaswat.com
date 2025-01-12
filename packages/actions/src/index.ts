@@ -7,8 +7,15 @@ export * from "./admin/author";
 export * from "./admin/fetch-posts";
 
 // Web
-export * from "./web/contact";
+export { contact } from "./web/contact";
 
 // Common
 export * from "./common/types";
-export * from "./common/resend";
+export {
+  sendEmail,
+  sendNewsletter,
+  sendBroadcastNewsletter,
+  addContactToAudience,
+  updateContactAudience,
+  deleteContactAudience,
+} from "./common/resend";

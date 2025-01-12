@@ -1,6 +1,6 @@
 "use client";
 
-import { Base } from "@repo/ui/web";
+import { Base, cacheService } from "@repo/ui/web";
 import { useState } from "react";
 import { useEffect } from "react";
 import { pageNumberState } from "@repo/store";
@@ -13,7 +13,6 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import { PaginationBar } from "@repo/ui";
 import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
-import { Loader2 } from "lucide-react";
 import ArticlesListingSkeleton from "./skeleton-blog-listing";
 
 const pageConfig = {
@@ -31,9 +30,34 @@ export const ArticlesListPage = () => {
   const resetPageNumber = useResetRecoilState(pageNumberState);
   const [postsCount, setPostsCount] = useState(0);
 
+  //Caching variables
+  const CACHE_KEY = "postsCountCache";
+  const CACHE_EXPIRATION_1_DAY = 1000 * 60 * 60 * 24; // 24 hours
+  const CACHE_EXPIRATION_1_WEEK = 1000 * 60 * 60 * 24 * 7; // 7 days
+
   //   useEffect(() => {
   //     resetPageNumber();
   //   }, [resetPageNumber]);
+
+  const fetchPostsCount = async () => {
+    try {
+      const cachedCount = await cacheService.getCachedCount("articles");
+
+      if (cachedCount !== null) {
+        setPostsCount(cachedCount);
+        return;
+      }
+
+      const freshCount = await fetchPublishedPostsCount("articles");
+
+      if (typeof freshCount === "number" && freshCount >= 0) {
+        setPostsCount(freshCount);
+        await cacheService.setCachedCount("articles", freshCount);
+      }
+    } catch (error) {
+      console.error("ArticlesListPage: Error in fetchPostsCount:", error);
+    }
+  };
 
   const fetchPosts = async ({
     option,
@@ -43,20 +67,29 @@ export const ArticlesListPage = () => {
     setPosts: (posts: PostListType[]) => void;
   }) => {
     try {
-      // const fetchedPosts = await fetchPublishedPostsPaginated(option, currentPage);
-      const fetchedPosts = await fetchPublishedPosts(option);
-      setPosts(fetchedPosts as PostListType[]);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
-  };
+      const cachedPosts = await cacheService.getCachedItems(
+        option as "articles" | "featured-posts",
+      );
 
-  const fetchPostsCount = async () => {
-    try {
-      const fetchedPostsCount = await fetchPublishedPostsCount("articles");
-      setPostsCount(fetchedPostsCount);
+      if (cachedPosts && cachedPosts.length > 0) {
+        setPosts(cachedPosts);
+        return;
+      }
+
+      const freshPosts = await fetchPublishedPosts(option);
+
+      if (Array.isArray(freshPosts) && freshPosts.length > 0) {
+        setPosts(freshPosts);
+        await cacheService.setCachedItems(
+          option as "articles" | "featured-posts",
+          freshPosts,
+        );
+      }
     } catch (error) {
-      console.error("Error fetching posts count:", error);
+      console.error(
+        `ArticlesListPage: Error in fetchPosts for ${option}:`,
+        error,
+      );
     }
   };
 
@@ -67,12 +100,23 @@ export const ArticlesListPage = () => {
 
   const fetchAllPosts = async () => {
     setLoading(true);
-    await fetchPostsCount();
-    await fetchPosts({ option: "articles", setPosts: setPosts });
-    await fetchPosts({ option: "featured-posts", setPosts: setFeaturedPosts });
-    setLoading(false);
+
+    try {
+      await fetchPostsCount();
+
+      await fetchPosts({ option: "articles", setPosts: setPosts });
+      await fetchPosts({
+        option: "featured-posts",
+        setPosts: setFeaturedPosts,
+      });
+    } catch (error) {
+      console.error("Error in fetchAllPosts:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Ensure the effect only runs once
   useEffect(() => {
     fetchAllPosts();
   }, []);

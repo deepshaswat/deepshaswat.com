@@ -10,12 +10,12 @@ import {
   Tags,
 } from "@repo/actions";
 import BlockNoteRenderer from "./blocknote-render";
-import { Base } from "../posts/base-static";
 
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import PostSkeleton from "./skeleton-post";
 import { ScrollProgress } from "@repo/ui";
+import { Base, cacheService } from "@repo/ui/web";
 
 const LIGHT_COLORS = ["yellow", "pink", "turquoise", "lime", "teal", "cyan"];
 
@@ -71,24 +71,73 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
   };
 
   const getPost = async () => {
-    const postData = await fetchPostByPostUrl(params.postUrl);
-    setPost(postData as PostListType);
-    if (postData?.id) {
-      const tagList = await fetchTagsFromTagOnPost({ postId: postData.id });
-      setTags(
-        tagList.map(({ tag }) => ({
-          id: tag.id,
-          slug: tag.slug,
-          description: tag.description ?? "",
-          imageUrl: tag.imageUrl ?? "",
-          posts: tag.posts,
-        })),
+    try {
+      // Try to get from cache first
+      const cachedPost = await cacheService.getCachedBlogContent(
+        params.postUrl,
       );
+
+      if (cachedPost) {
+        // console.log(`Using cached blog content for ${params.postUrl}`);
+        setPost(cachedPost);
+        setTagline(cachedPost.title || "Failures. Guides. Paths.");
+
+        // Fetch and set tags
+        if (cachedPost.id) {
+          const tagList = await fetchTagsFromTagOnPost({
+            postId: cachedPost.id,
+          });
+          setTags(
+            tagList.map(({ tag }) => ({
+              id: tag.id,
+              slug: tag.slug,
+              description: tag.description ?? "",
+              imageUrl: tag.imageUrl ?? "",
+              posts: tag.posts,
+            })),
+          );
+        }
+      } else {
+        // If no cache, fetch fresh data
+        // console.log(`Fetching fresh blog content for ${params.postUrl}`);
+        const postData = await fetchPostByPostUrl(params.postUrl);
+
+        if (postData) {
+          setPost(postData as PostListType);
+          setTagline(postData.title || "Failures. Guides. Paths.");
+
+          // Cache the blog content
+          await cacheService.setCachedBlogContent(
+            params.postUrl,
+            postData as PostListType,
+          );
+
+          // Fetch and set tags
+          if (postData.id) {
+            const tagList = await fetchTagsFromTagOnPost({
+              postId: postData.id,
+            });
+            setTags(
+              tagList.map(({ tag }) => ({
+                id: tag.id,
+                slug: tag.slug,
+                description: tag.description ?? "",
+                imageUrl: tag.imageUrl ?? "",
+                posts: tag.posts,
+              })),
+            );
+          }
+        }
+      }
+
+      generateRandomColors();
+    } catch (error) {
+      console.error("Error fetching blog post:", error);
+    } finally {
+      setIsLoading(false);
     }
-    setTagline(postData?.title || "Failures. Guides. Paths.");
-    generateRandomColors();
-    setIsLoading(false);
   };
+
   useEffect(() => {
     getPost();
   }, []);

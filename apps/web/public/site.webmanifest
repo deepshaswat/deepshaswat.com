@@ -1,0 +1,26 @@
+{
+  "name": "Shaswat Deep",
+  "short_name": "deepshaswat.com",
+  "description": "Shaswat Deep is software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/static/images/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/images/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

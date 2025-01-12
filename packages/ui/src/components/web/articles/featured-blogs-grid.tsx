@@ -129,7 +129,6 @@ export const BlurImage = ({
         isLoading ? "blur-sm scale-105" : "blur-0 scale-100",
         className,
       )}
-      onLoadingComplete={() => setLoading(false)}
       src={src}
       width={width}
       height={height}
@@ -139,6 +138,7 @@ export const BlurImage = ({
       layout={layout}
       alt={alt ? alt : "Avatar"}
       {...rest}
+      onLoad={() => setLoading(false)}
     />
   );
 };
