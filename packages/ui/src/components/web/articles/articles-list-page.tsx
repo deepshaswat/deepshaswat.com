@@ -31,6 +31,11 @@ export const ArticlesListPage = () => {
   const resetPageNumber = useResetRecoilState(pageNumberState);
   const [postsCount, setPostsCount] = useState(0);
 
+  //Caching variables
+  const CACHE_KEY = "postsCountCache";
+  const CACHE_EXPIRATION_1_DAY = 1000 * 60 * 60 * 24; // 24 hours
+  const CACHE_EXPIRATION_1_WEEK = 1000 * 60 * 60 * 24 * 7; // 7 days
+
   //   useEffect(() => {
   //     resetPageNumber();
   //   }, [resetPageNumber]);
@@ -53,8 +58,37 @@ export const ArticlesListPage = () => {
 
   const fetchPostsCount = async () => {
     try {
+      // Check for cached data
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      if (cachedData) {
+        const { count, timestamp } = JSON.parse(cachedData);
+
+        // Check if cache is still valid
+        if (Date.now() - timestamp < CACHE_EXPIRATION_1_DAY) {
+          console.log("Using cached post count");
+          setPostsCount(count);
+          return;
+        } else {
+          console.log("Cached post count expired");
+        }
+      }
+
+      // Fetch fresh data if no valid cache
+      console.log("Fetching fresh post count...");
       const fetchedPostsCount = await fetchPublishedPostsCount("articles");
+      console.log("Fetched posts count:", fetchedPostsCount);
+
+      // Update the state
       setPostsCount(fetchedPostsCount);
+
+      // Store the data in the cache
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          count: fetchedPostsCount,
+          timestamp: Date.now(),
+        })
+      );
     } catch (error) {
       console.error("Error fetching posts count:", error);
     }
@@ -83,22 +117,22 @@ export const ArticlesListPage = () => {
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
-      description=""
+      title='Articles // Shaswat Deep'
+      description=''
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center ">
+        <div className='flex flex-row mt-10 items-center justify-center '>
           {/* <Loader2 className="size-16 animate-spin" /> */}
           <ArticlesListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>
-          <p className="text-neutral-500">
+          <p className='text-neutral-500'>
             Here you can find all the{" "}
-            <span className="text-neutral-200">
+            <span className='text-neutral-200'>
               {postsCount} articles and poems
             </span>{" "}
             I wrote. You can read about web development, tech career, personal
@@ -114,8 +148,8 @@ export const ArticlesListPage = () => {
           /> */}
         </>
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </Base>
