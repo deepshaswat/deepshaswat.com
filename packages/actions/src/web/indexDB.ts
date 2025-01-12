@@ -26,7 +26,7 @@ export class BlogCache {
           const error = (event.target as IDBOpenDBRequest).error;
           console.error(
             "Failed to open IndexedDB:",
-            error?.message || "Unknown error"
+            error?.message || "Unknown error",
           );
           reject(error);
         };
@@ -35,7 +35,7 @@ export class BlogCache {
           const db = (event.target as IDBOpenDBRequest).result;
           console.log(
             "IndexedDB opened successfully. Object stores:",
-            Array.from(db.objectStoreNames)
+            Array.from(db.objectStoreNames),
           );
           resolve(db);
         };
@@ -72,7 +72,7 @@ export class BlogCache {
       request.onerror = () => {
         console.error(
           `Failed to retrieve data for ${option} from IndexedDB:`,
-          request.error
+          request.error,
         );
         reject(request.error);
       };
@@ -117,7 +117,7 @@ export class BlogCache {
           const error = (event.target as IDBTransaction).error;
           console.error(
             `Transaction error for ${option}:`,
-            error?.message || "Unknown error"
+            error?.message || "Unknown error",
           );
           reject(error);
         };
@@ -141,7 +141,7 @@ export class BlogCache {
           const error = (event.target as IDBRequest).error;
           console.error(
             `Failed to store data for ${option} in IndexedDB:`,
-            error?.message || "Unknown error"
+            error?.message || "Unknown error",
           );
           reject(error);
         };
