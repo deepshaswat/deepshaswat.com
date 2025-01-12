@@ -92,7 +92,7 @@ class CacheService {
   }
 
   async getCachedCount(
-    type: "articles" | "newsletters"
+    type: "articles" | "newsletters",
   ): Promise<number | null> {
     const cacheKey =
       type === "articles"
@@ -109,7 +109,7 @@ class CacheService {
       try {
         const transaction = this.db!.transaction(
           [STORE_NAMES.COUNTS],
-          "readonly"
+          "readonly",
         );
         const store = transaction.objectStore(STORE_NAMES.COUNTS);
         const request = store.get(cacheKey);
@@ -131,14 +131,14 @@ class CacheService {
         request.onerror = () => {
           console.error(
             `GetCachedCount: Error reading from store for ${type}:`,
-            request.error
+            request.error,
           );
           resolve(null);
         };
       } catch (error) {
         console.error(
           `GetCachedCount: Error accessing store for ${type}:`,
-          error
+          error,
         );
         resolve(null);
       }
@@ -147,7 +147,7 @@ class CacheService {
 
   async setCachedCount(
     type: "articles" | "newsletters",
-    count: number
+    count: number,
   ): Promise<void> {
     const cacheKey =
       type === "articles"
@@ -161,7 +161,7 @@ class CacheService {
       try {
         const transaction = this.db!.transaction(
           [STORE_NAMES.COUNTS],
-          "readwrite"
+          "readwrite",
         );
         const store = transaction.objectStore(STORE_NAMES.COUNTS);
 
@@ -184,14 +184,14 @@ class CacheService {
         request.onerror = () => {
           console.error(
             `SetCachedCount: Error writing to store for ${type}:`,
-            request.error
+            request.error,
           );
           resolve();
         };
       } catch (error) {
         console.error(
           `SetCachedCount: Error accessing store for ${type}:`,
-          error
+          error,
         );
         resolve();
       }
@@ -199,7 +199,7 @@ class CacheService {
   }
 
   async getCachedItems(
-    type: "articles" | "newsletters" | "featured-posts"
+    type: "articles" | "newsletters" | "featured-posts",
   ): Promise<PostListType[] | null> {
     const storeName =
       type === "newsletters" ? STORE_NAMES.NEWSLETTERS : STORE_NAMES.BLOGS;
@@ -233,14 +233,14 @@ class CacheService {
         request.onerror = () => {
           console.error(
             `GetCachedItems: Error reading from store for ${type}:`,
-            request.error
+            request.error,
           );
           resolve(null);
         };
       } catch (error) {
         console.error(
           `GetCachedItems: Error accessing store for ${type}:`,
-          error
+          error,
         );
         resolve(null);
       }
@@ -249,7 +249,7 @@ class CacheService {
 
   async setCachedItems(
     type: "articles" | "newsletters" | "featured-posts",
-    posts: PostListType[]
+    posts: PostListType[],
   ): Promise<void> {
     const storeName =
       type === "newsletters" ? STORE_NAMES.NEWSLETTERS : STORE_NAMES.BLOGS;
@@ -282,14 +282,14 @@ class CacheService {
         request.onerror = () => {
           console.error(
             `SetCachedItems: Error writing to store for ${type}:`,
-            request.error
+            request.error,
           );
           resolve();
         };
       } catch (error) {
         console.error(
           `SetCachedItems: Error accessing store for ${type}:`,
-          error
+          error,
         );
         resolve();
       }
@@ -305,7 +305,7 @@ class CacheService {
       try {
         const transaction = this.db!.transaction(
           [STORE_NAMES.BLOG_CONTENT],
-          "readonly"
+          "readonly",
         );
         const store = transaction.objectStore(STORE_NAMES.BLOG_CONTENT);
         const request = store.get(postUrl);
@@ -328,14 +328,14 @@ class CacheService {
         request.onerror = () => {
           console.error(
             `GetCachedBlogContent: Error reading from store for ${postUrl}:`,
-            request.error
+            request.error,
           );
           resolve(null);
         };
       } catch (error) {
         console.error(
           `GetCachedBlogContent: Error accessing store for ${postUrl}:`,
-          error
+          error,
         );
         resolve(null);
       }
@@ -344,7 +344,7 @@ class CacheService {
 
   async setCachedBlogContent(
     postUrl: string,
-    post: PostListType
+    post: PostListType,
   ): Promise<void> {
     if (!(await this.ensureInitialized())) {
       // console.log("SetCachedBlogContent: Database not initialized");
@@ -355,7 +355,7 @@ class CacheService {
       try {
         const transaction = this.db!.transaction(
           [STORE_NAMES.BLOG_CONTENT],
-          "readwrite"
+          "readwrite",
         );
         const store = transaction.objectStore(STORE_NAMES.BLOG_CONTENT);
 
@@ -377,14 +377,14 @@ class CacheService {
         request.onerror = () => {
           console.error(
             `SetCachedBlogContent: Error writing to store for ${postUrl}:`,
-            request.error
+            request.error,
           );
           resolve();
         };
       } catch (error) {
         console.error(
           `SetCachedBlogContent: Error accessing store for ${postUrl}:`,
-          error
+          error,
         );
         resolve();
       }
