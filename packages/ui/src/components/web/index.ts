@@ -1,5 +1,3 @@
-import { cacheService } from "./indexDB";
-
 export * from "./shortcut/shortcut-button";
 export * from "./shortcut/shortcut-home";
 export * from "./shortcut/shortcut-home-error";
@@ -33,4 +31,5 @@ export * from "./newsletter/newsletter-subscribe";
 export * from "./newsletter/newsletter-unsubscribe";
 export * from "./links/link-component";
 export * from "./indexDB";
+import { cacheService } from "./indexDB";
 export { cacheService };

@@ -8,6 +8,7 @@ export * from "./admin/fetch-posts";
 
 // Web
 export { contact } from "./web/contact";
+export * from "./web/redis-client";
 
 // Common
 export * from "./common/types";

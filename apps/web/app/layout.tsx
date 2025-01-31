@@ -20,11 +20,30 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export const metadata: Metadata = generateSiteConfig(
-  "Shaswat Deep",
-  "deepshaswat.com",
-  "/",
-);
+export const metadata: Metadata = {
+  ...generateSiteConfig("Shaswat Deep", "deepshaswat.com", "/"),
+  icons: {
+    icon: [
+      {
+        url: "/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+      {
+        url: "/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+    ],
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
+};
 
 export default function RootLayout({
   children,
@@ -32,13 +51,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       <head />
       <body className={inter.className} suppressHydrationWarning>
         <Providers>
-          <main className="flex min-h-screen flex-col">
+          <main className='flex min-h-screen flex-col'>
             <Appbar />
-            <div className="flex-1 w-full max-w-screen-lg mx-auto px-4">
+            <div className='flex-1 w-full max-w-screen-lg mx-auto px-4'>
               {children}
               <Toaster />
               <NewsletterButton />

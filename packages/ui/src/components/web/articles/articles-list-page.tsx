@@ -8,6 +8,10 @@ import {
   fetchPublishedPosts,
   fetchPublishedPostsCount,
   PostListType,
+  getArticlesCount,
+  setArticlesCount,
+  getArticlesPosts,
+  setArticlesPosts,
 } from "@repo/actions";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { PaginationBar } from "@repo/ui";
@@ -30,10 +34,6 @@ export const ArticlesListPage = () => {
   const resetPageNumber = useResetRecoilState(pageNumberState);
   const [postsCount, setPostsCount] = useState(0);
 
-  //   useEffect(() => {
-  //     resetPageNumber();
-  //   }, [resetPageNumber]);
-
   const fetchPostsCount = async () => {
     try {
       const cachedCount = await cacheService.getCachedCount("articles");
@@ -43,10 +43,20 @@ export const ArticlesListPage = () => {
         return;
       }
 
+      // Check Redis cache
+      const redisCachedCount = await getArticlesCount();
+
+      if (redisCachedCount !== null) {
+        setPostsCount(redisCachedCount);
+        await cacheService.setCachedCount("articles", redisCachedCount);
+        return;
+      }
+
       const freshCount = await fetchPublishedPostsCount("articles");
 
       if (typeof freshCount === "number" && freshCount >= 0) {
         setPostsCount(freshCount);
+        await setArticlesCount(freshCount);
         await cacheService.setCachedCount("articles", freshCount);
       }
     } catch (error) {
@@ -63,7 +73,7 @@ export const ArticlesListPage = () => {
   }) => {
     try {
       const cachedPosts = await cacheService.getCachedItems(
-        option as "articles" | "featured-posts",
+        option as "articles" | "featured-posts"
       );
 
       if (cachedPosts && cachedPosts.length > 0) {
@@ -71,27 +81,35 @@ export const ArticlesListPage = () => {
         return;
       }
 
+      // Check Redis cache
+      const redisCachedPosts = await getArticlesPosts(option);
+
+      if (redisCachedPosts !== null) {
+        setPosts(redisCachedPosts);
+        await cacheService.setCachedItems(
+          option as "articles" | "featured-posts",
+          redisCachedPosts
+        );
+        return;
+      }
+
       const freshPosts = await fetchPublishedPosts(option);
 
       if (Array.isArray(freshPosts) && freshPosts.length > 0) {
         setPosts(freshPosts);
+        await setArticlesPosts(option, freshPosts);
         await cacheService.setCachedItems(
           option as "articles" | "featured-posts",
-          freshPosts,
+          freshPosts
         );
       }
     } catch (error) {
       console.error(
         `ArticlesListPage: Error in fetchPosts for ${option}:`,
-        error,
+        error
       );
     }
   };
-
-  // ToDo: Enable pagination when a lot of blogs are added and algolia search is added
-  //   useEffect(() => {
-  //     fetchPosts({ option: "articles", setPosts: setPosts });
-  //   }, [currentPage]);
 
   const fetchAllPosts = async () => {
     setLoading(true);
@@ -122,22 +140,22 @@ export const ArticlesListPage = () => {
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
-      description=""
+      title='Articles // Shaswat Deep'
+      description=''
       tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
     >
       {loading ? (
-        <div className="flex flex-row mt-10 items-center justify-center ">
+        <div className='flex flex-row mt-10 items-center justify-center '>
           {/* <Loader2 className="size-16 animate-spin" /> */}
           <ArticlesListingSkeleton />
         </div>
       ) : postsCount > 0 ? (
         <>
-          <p className="text-neutral-500">
+          <p className='text-neutral-500'>
             Here you can find all the{" "}
-            <span className="text-neutral-200">
+            <span className='text-neutral-200'>
               {postsCount} articles and poems
             </span>{" "}
             I wrote. You can read about web development, tech career, personal
@@ -153,8 +171,8 @@ export const ArticlesListPage = () => {
           /> */}
         </>
       ) : (
-        <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
-          <p className="text-3xl text-red-700">No posts found</p>
+        <div className='flex flex-row mt-10 items-start justify-center h-screen-1/2'>
+          <p className='text-3xl text-red-700'>No posts found</p>
         </div>
       )}
     </Base>

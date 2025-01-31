@@ -8,6 +8,10 @@ import prisma from "@repo/db/client";
 import { PostListType, PostType } from "../common/types";
 import { sendBroadcastNewsletter, sendNewsletter } from "../common/resend";
 import { cacheService } from "@repo/ui/web";
+import {
+  invalidatePostCache,
+  invalidateBlogContentCache,
+} from "../web/redis-client";
 
 async function authenticateUser() {
   const sign = await SignedIn;
@@ -80,9 +84,14 @@ async function createPost(data: PostType) {
     if (updatedPost?.status === "PUBLISHED") {
       if (updatedPost.isNewsletter) {
         revalidatePath("/newsletter");
+        await cacheService.clearNewslettersCache();
+        await invalidatePostCache("newsletters");
       } else {
         revalidatePath("/articles");
+        await cacheService.clearArticlesCache();
+        await invalidatePostCache("articles");
       }
+      await invalidateBlogContentCache(updatedPost.postUrl);
     }
 
     return { post: updatedPost, success: true };
@@ -196,11 +205,14 @@ async function updatePost(data: PostType, postId: string) {
       if (finalUpdatedPost.isNewsletter) {
         revalidatePath("/newsletter");
         await cacheService.clearNewslettersCache();
+        await invalidatePostCache("newsletters");
       } else {
         revalidatePath("/articles");
         await cacheService.clearArticlesCache();
+        await invalidatePostCache("articles");
       }
       revalidatePath(`/${finalUpdatedPost.postUrl}`);
+      await invalidateBlogContentCache(finalUpdatedPost.postUrl);
     }
 
     return { post: finalUpdatedPost, success: true };
@@ -216,7 +228,7 @@ async function publishPost(
   scheduleType: string,
   publishType: string,
   post: PostListType,
-  markdown: string,
+  markdown: string
 ) {
   await authenticateUser();
 
@@ -259,11 +271,14 @@ async function publishPost(
       if (publishType === "newsletter") {
         revalidatePath("/newsletter");
         await cacheService.clearNewslettersCache();
+        await invalidatePostCache("newsletters");
       } else {
         revalidatePath("/articles");
         await cacheService.clearArticlesCache();
+        await invalidatePostCache("articles");
       }
       revalidatePath(`/${updatedPost.postUrl}`);
+      await invalidateBlogContentCache(updatedPost.postUrl);
     }
 
     return { success: true };
