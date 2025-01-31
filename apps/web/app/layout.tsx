@@ -51,13 +51,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head />
       <body className={inter.className} suppressHydrationWarning>
         <Providers>
-          <main className='flex min-h-screen flex-col'>
+          <main className="flex min-h-screen flex-col">
             <Appbar />
-            <div className='flex-1 w-full max-w-screen-lg mx-auto px-4'>
+            <div className="flex-1 w-full max-w-screen-lg mx-auto px-4">
               {children}
               <Toaster />
               <NewsletterButton />

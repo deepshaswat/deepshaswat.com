@@ -25,7 +25,7 @@ export async function setArticlesCount(count: number): Promise<void> {
 }
 
 export async function getArticlesPosts(
-  option: string
+  option: string,
 ): Promise<PostListType[] | null> {
   try {
     const redis = getRedisClient();
@@ -39,7 +39,7 @@ export async function getArticlesPosts(
 
 export async function setArticlesPosts(
   option: string,
-  posts: PostListType[]
+  posts: PostListType[],
 ): Promise<void> {
   try {
     const redis = getRedisClient();
@@ -51,7 +51,7 @@ export async function setArticlesPosts(
 
 // Blog Content
 export async function getBlogContent(
-  postUrl: string
+  postUrl: string,
 ): Promise<PostListType | null> {
   try {
     const redis = getRedisClient();
@@ -65,7 +65,7 @@ export async function getBlogContent(
 
 export async function setBlogContent(
   postUrl: string,
-  post: PostListType
+  post: PostListType,
 ): Promise<void> {
   try {
     const redis = getRedisClient();
@@ -108,7 +108,7 @@ export async function getNewslettersPosts(): Promise<PostListType[] | null> {
 }
 
 export async function setNewslettersPosts(
-  posts: PostListType[]
+  posts: PostListType[],
 ): Promise<void> {
   try {
     const redis = getRedisClient();
@@ -139,7 +139,7 @@ export async function invalidatePostCache(postType: string): Promise<void> {
 }
 
 export async function invalidateBlogContentCache(
-  postUrl: string
+  postUrl: string,
 ): Promise<void> {
   try {
     const redis = getRedisClient();
