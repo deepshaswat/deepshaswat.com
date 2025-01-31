@@ -216,7 +216,7 @@ async function publishPost(
   scheduleType: string,
   publishType: string,
   post: PostListType,
-  markdown: string
+  markdown: string,
 ) {
   await authenticateUser();
 
