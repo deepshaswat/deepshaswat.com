@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@repo/db/client";
 import { PostListType, PostType } from "../common/types";
 import { sendBroadcastNewsletter, sendNewsletter } from "../common/resend";
+import { cacheService } from "@repo/ui/web";
 
 async function authenticateUser() {
   const sign = await SignedIn;
@@ -194,8 +195,10 @@ async function updatePost(data: PostType, postId: string) {
     if (finalUpdatedPost?.status === "PUBLISHED") {
       if (finalUpdatedPost.isNewsletter) {
         revalidatePath("/newsletter");
+        await cacheService.clearNewslettersCache();
       } else {
         revalidatePath("/articles");
+        await cacheService.clearArticlesCache();
       }
       revalidatePath(`/${finalUpdatedPost.postUrl}`);
     }
@@ -213,7 +216,7 @@ async function publishPost(
   scheduleType: string,
   publishType: string,
   post: PostListType,
-  markdown: string,
+  markdown: string
 ) {
   await authenticateUser();
 
@@ -255,8 +258,10 @@ async function publishPost(
     if (updatedPost.status === "PUBLISHED") {
       if (publishType === "newsletter") {
         revalidatePath("/newsletter");
+        await cacheService.clearNewslettersCache();
       } else {
         revalidatePath("/articles");
+        await cacheService.clearArticlesCache();
       }
       revalidatePath(`/${updatedPost.postUrl}`);
     }
