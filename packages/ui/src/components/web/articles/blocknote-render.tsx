@@ -3,7 +3,6 @@ import { BlockNoteView } from "@blocknote/mantine";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core";
 import "@blocknote/mantine/style.css";
-import { useTheme } from "next-themes";
 
 import { Markdown, Youtube, Callout, Divider } from "@repo/ui";
 

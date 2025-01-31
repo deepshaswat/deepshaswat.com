@@ -8,6 +8,8 @@ import {
   fetchTagsFromTagOnPost,
   PostListType,
   Tags,
+  getBlogContent,
+  setBlogContent,
 } from "@repo/actions";
 import BlockNoteRenderer from "./blocknote-render";
 
@@ -78,7 +80,6 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
       );
 
       if (cachedPost) {
-        // console.log(`Using cached blog content for ${params.postUrl}`);
         setPost(cachedPost);
         setTagline(cachedPost.title || "Failures. Guides. Paths.");
 
@@ -97,36 +98,66 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
             })),
           );
         }
-      } else {
-        // If no cache, fetch fresh data
-        // console.log(`Fetching fresh blog content for ${params.postUrl}`);
-        const postData = await fetchPostByPostUrl(params.postUrl);
+        return;
+      }
 
-        if (postData) {
-          setPost(postData as PostListType);
-          setTagline(postData.title || "Failures. Guides. Paths.");
+      // Try Redis cache
+      const redisCachedPost = await getBlogContent(params.postUrl);
 
-          // Cache the blog content
-          await cacheService.setCachedBlogContent(
-            params.postUrl,
-            postData as PostListType,
+      if (redisCachedPost) {
+        setPost(redisCachedPost);
+        setTagline(redisCachedPost.title || "Failures. Guides. Paths.");
+        await cacheService.setCachedBlogContent(
+          params.postUrl,
+          redisCachedPost,
+        );
+
+        // Fetch and set tags
+        if (redisCachedPost.id) {
+          const tagList = await fetchTagsFromTagOnPost({
+            postId: redisCachedPost.id,
+          });
+          setTags(
+            tagList.map(({ tag }) => ({
+              id: tag.id,
+              slug: tag.slug,
+              description: tag.description ?? "",
+              imageUrl: tag.imageUrl ?? "",
+              posts: tag.posts,
+            })),
           );
+        }
+        return;
+      }
 
-          // Fetch and set tags
-          if (postData.id) {
-            const tagList = await fetchTagsFromTagOnPost({
-              postId: postData.id,
-            });
-            setTags(
-              tagList.map(({ tag }) => ({
-                id: tag.id,
-                slug: tag.slug,
-                description: tag.description ?? "",
-                imageUrl: tag.imageUrl ?? "",
-                posts: tag.posts,
-              })),
-            );
-          }
+      // If no cache, fetch fresh data
+      const postData = await fetchPostByPostUrl(params.postUrl);
+
+      if (postData) {
+        setPost(postData as PostListType);
+        setTagline(postData.title || "Failures. Guides. Paths.");
+
+        // Cache the blog content in both Redis and local cache
+        await setBlogContent(params.postUrl, postData as PostListType);
+        await cacheService.setCachedBlogContent(
+          params.postUrl,
+          postData as PostListType,
+        );
+
+        // Fetch and set tags
+        if (postData.id) {
+          const tagList = await fetchTagsFromTagOnPost({
+            postId: postData.id,
+          });
+          setTags(
+            tagList.map(({ tag }) => ({
+              id: tag.id,
+              slug: tag.slug,
+              description: tag.description ?? "",
+              imageUrl: tag.imageUrl ?? "",
+              posts: tag.posts,
+            })),
+          );
         }
       }
 

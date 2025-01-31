@@ -31,3 +31,5 @@ export * from "./newsletter/newsletter-subscribe";
 export * from "./newsletter/newsletter-unsubscribe";
 export * from "./links/link-component";
 export * from "./indexDB";
+import { cacheService } from "./indexDB";
+export { cacheService };

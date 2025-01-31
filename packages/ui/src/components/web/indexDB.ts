@@ -25,7 +25,7 @@ class CacheService {
       // console.log("CacheService: Constructor called, initializing...");
       this.initPromise = this.initDB();
     } else {
-      console.log("CacheService: Running in SSR environment");
+      // console.log("CacheService: Running in SSR environment");
     }
   }
 
@@ -386,6 +386,117 @@ class CacheService {
           `SetCachedBlogContent: Error accessing store for ${postUrl}:`,
           error,
         );
+        resolve();
+      }
+    });
+  }
+
+  async clearArticlesCache(): Promise<void> {
+    if (!(await this.ensureInitialized())) return;
+
+    return new Promise((resolve) => {
+      try {
+        // Clear articles count cache
+        const countsTransaction = this.db!.transaction(
+          [STORE_NAMES.COUNTS],
+          "readwrite",
+        );
+        const countsStore = countsTransaction.objectStore(STORE_NAMES.COUNTS);
+        countsStore.delete(CACHE_KEYS.ARTICLES_COUNT);
+
+        // Clear articles and featured posts cache
+        const blogsTransaction = this.db!.transaction(
+          [STORE_NAMES.BLOGS],
+          "readwrite",
+        );
+        const blogsStore = blogsTransaction.objectStore(STORE_NAMES.BLOGS);
+        blogsStore.delete("articles");
+        blogsStore.delete("featured-posts");
+
+        resolve();
+      } catch (error) {
+        console.error("ClearArticlesCache: Error clearing caches:", error);
+        resolve();
+      }
+    });
+  }
+
+  async clearNewslettersCache(): Promise<void> {
+    if (!(await this.ensureInitialized())) return;
+
+    return new Promise((resolve) => {
+      try {
+        // Clear newsletters count cache
+        const countsTransaction = this.db!.transaction(
+          [STORE_NAMES.COUNTS],
+          "readwrite",
+        );
+        const countsStore = countsTransaction.objectStore(STORE_NAMES.COUNTS);
+        countsStore.delete(CACHE_KEYS.NEWSLETTER_COUNT);
+
+        // Clear newsletters cache
+        const newslettersTransaction = this.db!.transaction(
+          [STORE_NAMES.NEWSLETTERS],
+          "readwrite",
+        );
+        const newslettersStore = newslettersTransaction.objectStore(
+          STORE_NAMES.NEWSLETTERS,
+        );
+        newslettersStore.delete("newsletters");
+
+        resolve();
+      } catch (error) {
+        console.error("ClearNewslettersCache: Error clearing caches:", error);
+        resolve();
+      }
+    });
+  }
+
+  // Add a convenience method to clear all caches
+  async clearAllCaches(): Promise<void> {
+    if (!(await this.ensureInitialized())) return;
+
+    return new Promise((resolve) => {
+      try {
+        // Clear all counts
+        const countsTransaction = this.db!.transaction(
+          [STORE_NAMES.COUNTS],
+          "readwrite",
+        );
+        const countsStore = countsTransaction.objectStore(STORE_NAMES.COUNTS);
+        countsStore.clear();
+
+        // Clear all blogs
+        const blogsTransaction = this.db!.transaction(
+          [STORE_NAMES.BLOGS],
+          "readwrite",
+        );
+        const blogsStore = blogsTransaction.objectStore(STORE_NAMES.BLOGS);
+        blogsStore.clear();
+
+        // Clear all newsletters
+        const newslettersTransaction = this.db!.transaction(
+          [STORE_NAMES.NEWSLETTERS],
+          "readwrite",
+        );
+        const newslettersStore = newslettersTransaction.objectStore(
+          STORE_NAMES.NEWSLETTERS,
+        );
+        newslettersStore.clear();
+
+        // Clear all blog content
+        const blogContentTransaction = this.db!.transaction(
+          [STORE_NAMES.BLOG_CONTENT],
+          "readwrite",
+        );
+        const blogContentStore = blogContentTransaction.objectStore(
+          STORE_NAMES.BLOG_CONTENT,
+        );
+        blogContentStore.clear();
+
+        resolve();
+      } catch (error) {
+        console.error("ClearAllCaches: Error clearing all caches:", error);
         resolve();
       }
     });

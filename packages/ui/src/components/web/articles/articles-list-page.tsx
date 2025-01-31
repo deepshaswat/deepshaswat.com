@@ -8,6 +8,10 @@ import {
   fetchPublishedPosts,
   fetchPublishedPostsCount,
   PostListType,
+  getArticlesCount,
+  setArticlesCount,
+  getArticlesPosts,
+  setArticlesPosts,
 } from "@repo/actions";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { PaginationBar } from "@repo/ui";
@@ -30,10 +34,6 @@ export const ArticlesListPage = () => {
   const resetPageNumber = useResetRecoilState(pageNumberState);
   const [postsCount, setPostsCount] = useState(0);
 
-  //   useEffect(() => {
-  //     resetPageNumber();
-  //   }, [resetPageNumber]);
-
   const fetchPostsCount = async () => {
     try {
       const cachedCount = await cacheService.getCachedCount("articles");
@@ -43,10 +43,20 @@ export const ArticlesListPage = () => {
         return;
       }
 
+      // Check Redis cache
+      const redisCachedCount = await getArticlesCount();
+
+      if (redisCachedCount !== null) {
+        setPostsCount(redisCachedCount);
+        await cacheService.setCachedCount("articles", redisCachedCount);
+        return;
+      }
+
       const freshCount = await fetchPublishedPostsCount("articles");
 
       if (typeof freshCount === "number" && freshCount >= 0) {
         setPostsCount(freshCount);
+        await setArticlesCount(freshCount);
         await cacheService.setCachedCount("articles", freshCount);
       }
     } catch (error) {
@@ -71,10 +81,23 @@ export const ArticlesListPage = () => {
         return;
       }
 
+      // Check Redis cache
+      const redisCachedPosts = await getArticlesPosts(option);
+
+      if (redisCachedPosts !== null) {
+        setPosts(redisCachedPosts);
+        await cacheService.setCachedItems(
+          option as "articles" | "featured-posts",
+          redisCachedPosts,
+        );
+        return;
+      }
+
       const freshPosts = await fetchPublishedPosts(option);
 
       if (Array.isArray(freshPosts) && freshPosts.length > 0) {
         setPosts(freshPosts);
+        await setArticlesPosts(option, freshPosts);
         await cacheService.setCachedItems(
           option as "articles" | "featured-posts",
           freshPosts,
@@ -87,11 +110,6 @@ export const ArticlesListPage = () => {
       );
     }
   };
-
-  // ToDo: Enable pagination when a lot of blogs are added and algolia search is added
-  //   useEffect(() => {
-  //     fetchPosts({ option: "articles", setPosts: setPosts });
-  //   }, [currentPage]);
 
   const fetchAllPosts = async () => {
     setLoading(true);

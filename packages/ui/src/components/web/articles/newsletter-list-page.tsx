@@ -8,6 +8,10 @@ import {
   fetchPublishedPosts,
   fetchPublishedPostsCount,
   PostListType,
+  getNewslettersCount,
+  setNewslettersCount,
+  getNewslettersPosts,
+  setNewslettersPosts,
 } from "@repo/actions";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { PaginationBar } from "@repo/ui";
@@ -42,10 +46,20 @@ export const NewsletterListPage = () => {
         return;
       }
 
+      // Check Redis cache
+      const redisCachedCount = await getNewslettersCount();
+
+      if (redisCachedCount !== null) {
+        setPostsCount(redisCachedCount);
+        await cacheService.setCachedCount("newsletters", redisCachedCount);
+        return;
+      }
+
       const freshCount = await fetchPublishedPostsCount("newsletters");
 
       if (typeof freshCount === "number" && freshCount >= 0) {
         setPostsCount(freshCount);
+        await setNewslettersCount(freshCount);
         await cacheService.setCachedCount("newsletters", freshCount);
       }
     } catch (error) {
@@ -62,10 +76,20 @@ export const NewsletterListPage = () => {
         return;
       }
 
+      // Check Redis cache
+      const redisCachedPosts = await getNewslettersPosts();
+
+      if (redisCachedPosts !== null) {
+        setPosts(redisCachedPosts);
+        await cacheService.setCachedItems("newsletters", redisCachedPosts);
+        return;
+      }
+
       const freshPosts = await fetchPublishedPosts("newsletters");
 
       if (Array.isArray(freshPosts)) {
         setPosts(freshPosts);
+        await setNewslettersPosts(freshPosts);
         await cacheService.setCachedItems("newsletters", freshPosts);
       }
     } catch (error) {
@@ -74,11 +98,6 @@ export const NewsletterListPage = () => {
       setLoading(false);
     }
   };
-
-  // ToDo: Enable pagination when a lot of blogs are added and algolia search is added
-  //   useEffect(() => {
-  //     fetchPosts({ option: "articles", setPosts: setPosts });
-  //   }, [currentPage]);
 
   useEffect(() => {
     fetchPostsCount();
