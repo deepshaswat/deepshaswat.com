@@ -29,7 +29,8 @@ monorepo structure to manage multiple applications and shared packages.
 - `web/` - Blog site with personal website. Newsletter page with option to
   subscribe [Live here](https://deepshaswat.com/)
 - `admin/` - Admin site with create blogs, newsletter and user management.
-  _Enhancements are still in progress_. [Link to demo]()
+  _Enhancements are still in progress_.
+  [Link to demo](https://youtu.be/WCVI4_IB_6E)
 
 ### Packages
 
