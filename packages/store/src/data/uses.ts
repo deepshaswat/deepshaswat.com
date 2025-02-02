@@ -53,6 +53,12 @@ const categories = [
     name: "Keyboard & Mouse",
     items: [
       {
+        title: "LoFree Flow84",
+        description:
+          "The smoothest mechanical keyboard I have used. And I am loving it.",
+        url: "https://www.lofree.co/products/lofree-flow-the-smoothest-mechanical-keyboard?variant=44741423169755",
+      },
+      {
         title: "RK Royal Kludge RK100",
         description:
           "My preferred wireless keyboard with a 96% compact layout. With customised switches and keycaps.",

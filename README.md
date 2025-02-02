@@ -1,73 +1,98 @@
-# Turborepo Tailwind CSS with Prisma Shadcn Recoil NextAuth
+# deepshaswat.com - Modern Newsletter Platform
 
-## Using this example
+This is a modern newsletter platform with custom CMS to create and manage blogs,
+newsletters and members with Notion style text editor built with Turborepo,
+Next.js, and various other cutting-edge technologies. The project uses a
+monorepo structure to manage multiple applications and shared packages.
 
-## What's inside?
+## 🚀 Tech Stack
 
-This Turborepo includes the following packages/apps:
+- [Turborepo](https://turbo.build/repo) - High-performance build system
+- [Next.js](https://nextjs.org/) - React framework
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Prisma](https://www.prisma.io/) - Next-generation ORM
+- [Shadcn/ui](https://ui.shadcn.com/) - Re-usable components
+- [AceternityUI](https://ui.aceternity.com/components) - Modern animated
+  components
+- [Recoil](https://recoiljs.org/) - State management
+- [Clerk](https://clerk.com/) - Authentication
+- [Resend](https://resend.com/home) - Modern way of sending email
+- [Digital Ocean](https://www.digitalocean.com/) - New age managed services.
+  Using for redis, mongodb etc.
+- [PostHog](https://posthog.com/) - Best tool for analytics and best free tier.
+- [AWS](https://aws.amazon.com/) - Suing S3 bucket here to store all the media
 
-### Apps and Packages
+## 📦 Project Structure
 
-- `docs`: a [Next.js](https://nextjs.org/) app with
-  [Tailwind CSS](https://tailwindcss.com/)
-- `web`: another [Next.js](https://nextjs.org/) app with
-  [Tailwind CSS](https://tailwindcss.com/)
-- `ui`: a stub React component library with
-  [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs`
-  applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next`
-  and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Apps
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- `web/` - Blog site with personal website. Newsletter page with option to
+  subscribe [Live here](https://deepshaswat.com/)
+- `admin/` - Admin site with create blogs, newsletter and user management.
+  _Enhancements are still in progress_. [Link to demo]()
 
-### Building packages/ui
+### Packages
 
-This example is set up to produce compiled styles for `ui` components into the
-`dist` directory. The component `.tsx` files are consumed by the Next.js apps
-directly using `transpilePackages` in `next.config.js`. This was chosen for
-several reasons:
+- `actions/` - Shared business logic and API actions
+- `db/` - Database client and schema definitions
+- `ui/` - Shared UI component library
+- `store/` - State management and data stores
+- `schema/` - Shared type definitions and schemas
+- `config-tailwind/` - Shared Tailwind configuration
+- `config-typescript/` - Shared TypeScript configurations
+- `config-eslint/` - Shared ESLint configurations
 
-- Make sharing one `tailwind.config.js` to apps and packages as easy as
-  possible.
-- Make package compilation simple by only depending on the Next.js Compiler and
-  `tailwindcss`.
-- Ensure Tailwind classes do not overwrite each other. The `ui` package uses a
-  `ui-` prefix for it's classes.
-- Maintain clear package export boundaries.
+## 🛠️ Development
 
-Another option is to consume `packages/ui` directly from source without
-building. If using this option, you will need to update the `tailwind.config.js`
-in your apps to be aware of your package locations, so it can find all usages of
-the `tailwindcss` class names for CSS compilation.
+### Prerequisites
 
-For example, in
-[tailwind.config.js](packages/tailwind-config/tailwind.config.js):
+- Node.js >= 16
+- Yarn
+- MongoDB (for Prisma)
 
-```js
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/ui/*.{js,ts,jsx,tsx}",
-  ],
+### Getting Started
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/deepshaswat/deepshaswat.com.git
 ```
 
-If you choose this strategy, you can remove the `tailwindcss` and `autoprefixer`
-dependencies from the `ui` package.
+2. Install dependencies:
 
-### Utilities
+```bash
+yarn install
+```
 
-This Turborepo has some additional tools already setup for you:
+3. Set up environment variables:
 
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+```bash
+cp .env.example .env
+```
 
-# boilerplates used
+4. Start the development server:
 
-- [MultiSelect](https://github.com/sersavan/shadcn-multi-select-component) based
-  on shadcn for NextJs
-- [Fusion UI](https://nyxbui.design/docs/components/accordion) Shadcn components
-  but a lot of additional components. Merged together with Magic UI
+```bash
+yarn dev
+```
+
+## 🏗️ Building
+
+```bash
+yarn build
+```
+
+## 🧪 Testing
+
+```bash
+yarn test
+```
+
+## 📚 Additional Resources
+
+- [MultiSelect Component](https://nyxbui.design/docs/components/multi-select)
+- [Fusion UI Components](https://nyxbui.design/docs/components/accordion)
+
+## 📝 License
+
+MIT

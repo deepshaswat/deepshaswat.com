@@ -65,43 +65,6 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
 
   const actions = [
     {
-      id: "copy",
-      name: "Copy URL",
-      shortcut: ["c"],
-      keywords: "copy-url",
-      section: "General",
-      perform: copyLink,
-      icon: <Globe size={20} />,
-    },
-    {
-      id: "email",
-      name: "Send Email",
-      shortcut: ["e"],
-      keywords: "send-email",
-      section: "General",
-      perform: () => router.push("/contact"),
-      icon: <MailOpen size={20} />,
-    },
-    {
-      id: "links",
-      name: "All Links",
-      shortcut: ["l"],
-      keywords: "all-links",
-      section: "General",
-      perform: () => router.push("/links"),
-      icon: <Link size={20} />,
-    },
-    {
-      id: "source",
-      name: "View Source",
-      shortcut: ["s"],
-      keywords: "view-source",
-      section: "General",
-      perform: () =>
-        window.open("https://github.com/deepshaswat/deepshaswat.com", "_blank"),
-      icon: <CodeXml size={20} />,
-    },
-    {
       id: "home",
       name: "Home",
       shortcut: ["g", "h"],
@@ -192,6 +155,43 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       section: "Go To",
       perform: () => router.push("/reminder"),
       icon: <Hourglass size={20} />,
+    },
+    {
+      id: "links",
+      name: "All Links",
+      shortcut: ["l"],
+      keywords: "all-links",
+      section: "General",
+      perform: () => router.push("/links"),
+      icon: <Link size={20} />,
+    },
+    {
+      id: "copy",
+      name: "Copy URL",
+      shortcut: ["c"],
+      keywords: "copy-url",
+      section: "General",
+      perform: copyLink,
+      icon: <Globe size={20} />,
+    },
+    {
+      id: "email",
+      name: "Send Email",
+      shortcut: ["e"],
+      keywords: "send-email",
+      section: "General",
+      perform: () => router.push("/contact"),
+      icon: <MailOpen size={20} />,
+    },
+    {
+      id: "source",
+      name: "View Source",
+      shortcut: ["s"],
+      keywords: "view-source",
+      section: "General",
+      perform: () =>
+        window.open("https://github.com/deepshaswat/deepshaswat.com", "_blank"),
+      icon: <CodeXml size={20} />,
     },
   ];
 
