@@ -9,8 +9,7 @@
     ".": "./src/index.ts",
     "./utils": "./lib/utils.ts",
     "./web": "./src/components/web/index.ts",
-    "./admin": "./src/components/admin/index.ts",
-    "./": "./src/components/index.ts"
+    "./admin": "./src/components/admin/index.ts"
   },
   "license": "MIT",
   "scripts": {

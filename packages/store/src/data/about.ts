@@ -1,8 +1,8 @@
 const items = [
   {
     jobTitle: "Founder",
-    company: "Orbizza",
-    companyUrl: "https://orbizza.com",
+    company: "Rate Creator",
+    companyUrl: "https://ratecreator.com",
     startDate: "2024-03-22",
     location: "Remote",
   },
