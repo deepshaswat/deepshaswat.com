@@ -142,7 +142,7 @@ export function NewsletterMarkdown({
                 .split("\n")
                 .filter(
                   (row) =>
-                    row.trim() && !row.includes("---") && !row.includes("---"),
+                    row.trim() && !row.includes("---") && !row.includes("---")
                 ) // Remove empty rows and separator rows
                 .map((row) => row.trim());
 
@@ -159,7 +159,7 @@ export function NewsletterMarkdown({
                     ${cells
                       .map(
                         (cell) =>
-                          `<td style="padding: 12px; color: #ffffff; border: 1px solid #333333;">${cell}</td>`,
+                          `<td style="padding: 12px; color: #ffffff; border: 1px solid #333333;">${cell}</td>`
                       )
                       .join("")}
                   </tr>`;
@@ -225,7 +225,7 @@ export function NewsletterMarkdown({
                     bgColor || "#111111"
                   }; padding: 16px; border-radius: 8px; overflow-x: auto; color: ${
                     textColor || "#d4d4d4"
-                  }; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$2</pre>`,
+                  }; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$2</pre>`
                 );
               }
 

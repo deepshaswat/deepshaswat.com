@@ -66,7 +66,7 @@
     "fuzzy-search": "^3.2.1",
     "ioredis": "^5.4.1",
     "kbar": "^0.1.0-beta.45",
-    "posthog-js": "^1.203.1",
+    "posthog-js": "^1.260.1",
     "react-color": "^2.19.3",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",

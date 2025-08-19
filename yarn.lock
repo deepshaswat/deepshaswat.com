@@ -9800,25 +9800,15 @@ postcss@^8.4.38:
     picocolors "^1.0.1"
     source-map-js "^1.2.0"
 
-posthog-js@^1.116.5:
-  version "1.215.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.215.0.tgz#906c1a21fa8e02d93c0c9cc0f0e70f4a38f97c33"
-  integrity sha512-okdh+fOUZiWYMBmKd6Zm2rekgMAR8XdxinwFWlua6exx8IblKZuVO94OjQtoVAFwxmhH/i7UK/ANfohMeorS7Q==
+posthog-js@^1.260.1:
+  version "1.260.1"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.260.1.tgz#7a0011c768bd06debabd14f86d372d26d0c50c6e"
+  integrity sha512-DD8ZSRpdScacMqtqUIvMFme8lmOWkOvExG8VvjONE7Cm3xpRH5xXpfrwMJE4bayTGWKMx4ij6SfphK6dm/o2ug==
   dependencies:
     core-js "^3.38.1"
     fflate "^0.4.8"
     preact "^10.19.3"
-    web-vitals "^4.2.0"
-
-posthog-js@^1.203.1:
-  version "1.203.1"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.203.1.tgz#e1ce0ac65227d18b615f727ea4ec593694c6a33f"
-  integrity sha512-r/WiSyz6VNbIKEV/30+aD5gdrYkFtmZwvqNa6h9frl8hG638v098FrXaq3EYzMcCdkQf3phaZTDIAFKegpiTjw==
-  dependencies:
-    core-js "^3.38.1"
-    fflate "^0.4.8"
-    preact "^10.19.3"
-    web-vitals "^4.2.0"
+    web-vitals "^4.2.4"
 
 preact@^10.19.3:
   version "10.25.3"
@@ -12243,7 +12233,7 @@ web-namespaces@^2.0.0:
   resolved "https://registry.yarnpkg.com/web-namespaces/-/web-namespaces-2.0.1.tgz#1010ff7c650eccb2592cebeeaf9a1b253fd40692"
   integrity sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==
 
-web-vitals@^4.2.0:
+web-vitals@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-4.2.4.tgz#1d20bc8590a37769bd0902b289550936069184b7"
   integrity sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==

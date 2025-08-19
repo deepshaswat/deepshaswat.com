@@ -8,9 +8,8 @@ import { RecoilRoot } from "recoil";
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeProvider
-      attribute="class"
-      defaultTheme="dark"
-      enableSystem
+      attribute='class'
+      defaultTheme='dark'
       disableTransitionOnChange
     >
       <RecoilRoot>
