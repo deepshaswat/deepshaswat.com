@@ -10,8 +10,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     <CSPostHogProvider>
       <RecoilRoot>
         <ThemeProvider
-          attribute='class'
-          defaultTheme='dark'
+          attribute="class"
+          defaultTheme="dark"
           disableTransitionOnChange
         >
           <CommandBar>{children}</CommandBar>

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
-import "@repo/ui/styles.css";
 import "./globals.css";
 import { Providers } from "./providers";
 import {

@@ -60,7 +60,7 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
   const post = useRecoilValue(postState);
   const [postId, setPostId] = useRecoilState(postIdState);
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
-    errorDuplicateUrlState
+    errorDuplicateUrlState,
   );
 
   const savePostError = useRecoilValue(savePostErrorState);
@@ -135,37 +135,37 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
   // useEffect(() => {}, [setIsDialogOpen]);
 
   return (
-    <div className='ml-auto mt-5 mr-2 lg:m-5'>
-      <nav className='w-full flex flex-row justify-between ml-2'>
-        <div className='flex flex-row gap-2 lg:gap-10 items-center'>
+    <div className="ml-auto mt-5 mr-2 lg:m-5">
+      <nav className="w-full flex flex-row justify-between ml-2">
+        <div className="flex flex-row gap-2 lg:gap-10 items-center">
           <Link
-            href='/posts'
+            href="/posts"
             passHref
-            className='flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2'
+            className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
           >
-            <ChevronLeft className='size-4 mr-3' />
+            <ChevronLeft className="size-4 mr-3" />
             Posts
           </Link>
-          <Label className='flex flex-row items-center text-sm font-light text-neutral-400 rounded-sm hover:bg-neutral-700 p-2'>
+          <Label className="flex flex-row items-center text-sm font-light text-neutral-400 rounded-sm hover:bg-neutral-700 p-2">
             {postId ? "Drafts" : "New Post"}
           </Label>
         </div>
 
         {/* Right-aligned section */}
-        <div className='flex flex-row items-center gap-2 mr-2'>
-          <div className='flex flex-row gap-4 items-center'>
+        <div className="flex flex-row items-center gap-2 mr-2">
+          <div className="flex flex-row gap-4 items-center">
             <Link
-              href='/preview'
+              href="/preview"
               passHref
-              className='flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2'
+              className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
             >
               Preview
             </Link>
             <Button
               onClick={handlePublish}
-              variant='link'
-              size='sm'
-              className='flex flex-row items-center text-sm text-green-500 rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2'
+              variant="link"
+              size="sm"
+              className="flex flex-row items-center text-sm text-green-500 rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
               disabled={isDisabled}
             >
               Publish
@@ -178,35 +178,35 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
 
             <TooltipProvider>
               <Tooltip>
-                <div className='inline-block'>
+                <div className="inline-block">
                   {" "}
                   {/* Wrapper div to prevent button nesting */}
                   <TooltipTrigger asChild>
                     <Button
-                      variant='ghost'
-                      aria-label='Save post'
+                      variant="ghost"
+                      aria-label="Save post"
                       onClick={handleSave}
-                      className='flex z-50 items-center'
+                      className="flex z-50 items-center"
                       disabled={isDisabled}
                     >
                       {isSaving && !isSavingSuccess ? (
                         <>
-                          <Loader2 className='size-4 mr-1 animate-spin' />
+                          <Loader2 className="size-4 mr-1 animate-spin" />
                           Saving...
                         </>
                       ) : savePostError ? (
-                        <span className='flex flex-row items-center text-red-500'>
-                          <AlertTriangle className='size-4 mr-1' />
+                        <span className="flex flex-row items-center text-red-500">
+                          <AlertTriangle className="size-4 mr-1" />
                           Error
                         </span>
                       ) : !isSaving && !isSavingSuccess && !savePostError ? (
                         <>
-                          <Save className='size-4 mr-1' />
+                          <Save className="size-4 mr-1" />
                           Save
                         </>
                       ) : (
-                        <span className='flex flex-row items-center text-green-500'>
-                          <Check className='size-4 mr-1' />
+                        <span className="flex flex-row items-center text-green-500">
+                          <Check className="size-4 mr-1" />
                           Saved
                         </span>
                       )}
@@ -221,14 +221,14 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
             </TooltipProvider>
           </div>
           <Button
-            variant='ghost'
-            size='icon'
-            aria-label='Toggle sidebar'
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle sidebar"
             onClick={toggleSidebar}
-            className='flex z-50 items-center'
+            className="flex z-50 items-center"
           >
-            {!isOpen && <PanelRightOpen className='size-5' />}
-            {isOpen && <PanelRightClose className='size-5' />}
+            {!isOpen && <PanelRightOpen className="size-5" />}
+            {isOpen && <PanelRightClose className="size-5" />}
           </Button>
         </div>
       </nav>
