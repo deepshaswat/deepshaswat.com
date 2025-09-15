@@ -16,7 +16,6 @@ export * from "./components/ui/dialog";
 export * from "./components/ui/switch";
 export * from "./components/ui/table";
 export * from "./components/ui/breadcrumb";
-export * from "./components/ui/alert";
 export * from "./components/ui/separator";
 export * from "./components/spinner";
 export * from "./components/time-picker";
