@@ -33,9 +33,6 @@ const DARK_COLORS = [
 
 type ColorType = (typeof LIGHT_COLORS | typeof DARK_COLORS)[number];
 
-// Added here to avoid revalidation of the page
-export const revalidate = 31536000;
-
 export function BlogContent({ params }: { params: { postUrl: string } }) {
   const [post, setPost] = useState<PostListType | null>(null);
   const [isLoading, setIsLoading] = useState(true);

@@ -1,8 +1,15 @@
-import { BlogContent } from "@repo/ui/web";
+import dynamic from "next/dynamic";
+const BlogContent = dynamic(
+  () => import("@repo/ui/web").then((m) => m.BlogContent),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 import { Metadata } from "next";
 import prisma from "@repo/db/client";
 
-// export const revalidate = 31536000;
+export const revalidate = 31536000;
 
 export async function generateMetadata({
   params,
