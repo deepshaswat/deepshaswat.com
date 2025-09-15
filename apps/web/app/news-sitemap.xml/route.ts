@@ -93,7 +93,7 @@ export async function GET() {
           "Content-Type": "application/xml",
           "Cache-Control": "public, max-age=3600",
         },
-      },
+      }
     );
   }
 }

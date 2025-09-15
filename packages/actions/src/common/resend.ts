@@ -22,7 +22,7 @@ const audienceId = audience;
 export const sendEmail = async (
   name: string,
   email: string,
-  message: string,
+  message: string
 ) => {
   const { data, error } = await resend.emails.send({
     from: "Shaswat Deep <contact@mail.deepshaswat.com>",

@@ -76,8 +76,8 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                 <Img
                   src={post.featureImage}
                   alt={post.title}
-                  width="600"
-                  height="auto"
+                  width='600'
+                  height='auto'
                   style={{
                     borderRadius: "8px",
                     maxWidth: "100%",
@@ -138,7 +138,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
               }}
             >
               <Heading
-                as="h3"
+                as='h3'
                 style={{
                   color: "#ffffff",
                   fontSize: "16px",
@@ -166,7 +166,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                 }}
               >
                 <Link
-                  href="https://x.com/shaswat_X"
+                  href='https://x.com/shaswat_X'
                   style={{
                     display: "inline-flex",
                     height: "12px",
@@ -174,13 +174,13 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                   }}
                 >
                   <Img
-                    alt="X"
-                    src="https://react.email/static/x-icon.png"
+                    alt='X'
+                    src='https://react.email/static/x-icon.png'
                     style={{ height: "12px", width: "12px" }}
                   />
                 </Link>
                 <Link
-                  href="https://www.linkedin.com/in/deepshaswat/"
+                  href='https://www.linkedin.com/in/deepshaswat/'
                   style={{
                     display: "inline-flex",
                     height: "12px",
@@ -189,8 +189,8 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                   }}
                 >
                   <Img
-                    alt="LinkedIn"
-                    src="https://react.email/static/in-icon.png"
+                    alt='LinkedIn'
+                    src='https://react.email/static/in-icon.png'
                     style={{ height: "12px", width: "12px" }}
                   />
                 </Link>
@@ -285,7 +285,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                 newsletter.
               </Text>
               <Link
-                href="https://deepshaswat.com/unsubscribe"
+                href='https://deepshaswat.com/unsubscribe'
                 style={footerLink}
               >
                 Unsubscribe from emails like this
