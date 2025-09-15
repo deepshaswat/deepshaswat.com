@@ -1,6 +1,6 @@
 import { BlogContent } from "@repo/ui/web";
 import { Metadata } from "next";
-import { fetchPostByPostUrl } from "@repo/actions";
+import prisma from "@repo/db/client";
 
 export const revalidate = 31536000;
 
@@ -10,7 +10,13 @@ export async function generateMetadata({
   params: { postUrl: string };
 }): Promise<Metadata> {
   // Fetch post data server-side
-  const post = await fetchPostByPostUrl(params.postUrl);
+  const post = await prisma.post.findUnique({
+    where: { postUrl: params.postUrl },
+    include: {
+      tags: true,
+      author: true,
+    },
+  });
 
   const title = `${post?.title + " // Shaswat Deep"}`;
   const description =
@@ -46,20 +52,9 @@ export async function generateMetadata({
             post?.metadataImageUrl ||
             post?.featureImage ||
             "https://deepshaswat.com/static/images/headShot.png",
-          width:
-            post?.metadataOgImage ||
-            post?.metadataImageUrl ||
-            post?.featureImage
-              ? 1200
-              : 800,
-          height:
-            post?.metadataOgImage ||
-            post?.metadataImageUrl ||
-            post?.featureImage
-              ? 630
-              : 800,
-          alt: `${post?.title} // Shaswat Deep`,
-          type: "image/png",
+          width: 1200,
+          height: 630,
+          alt: title,
         },
       ],
     },

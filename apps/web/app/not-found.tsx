@@ -27,6 +27,14 @@ export const metadata: Metadata = {
     url: link,
     locale,
     type,
+    images: [
+      {
+        url: image,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
   },
   twitter: {
     card: twitterCard,
