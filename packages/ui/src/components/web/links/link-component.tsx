@@ -14,6 +14,11 @@ import {
   Calendar,
   CodeXml,
   BriefcaseBusiness,
+  Sailboat,
+  Star,
+  Clapperboard,
+  GraduationCap,
+  Handshake,
 } from "lucide-react";
 
 interface LinkData {
@@ -25,36 +30,58 @@ interface LinkData {
 const LinksComponent = () => {
   const links: LinkData[] = [
     {
-      title: "RateCreator - Creator Review Site",
-      url: "https://ratecreator.com/",
-      icon: <CodeXml className="h-5 w-5" />,
-    },
-    {
       title: "Schedule a call with me",
       url: "https://topmate.io/deepshaswat/",
       icon: <Calendar className="h-5 w-5" />,
     },
     {
-      title: "Orbizza - Startup Page",
+      title: "RateCreator - Discover Content Creators",
+      url: "https://ratecreator.com/",
+      icon: <Star className="h-5 w-5" />,
+    },
+    {
+      title: "VibeCreation - Vibe Create Contents",
+      url: "https://vibecreation.ai/",
+      icon: <Clapperboard className="h-5 w-5" />,
+    },
+    {
+      title: "Ship - AI DevOps Engineer for Developers",
+      url: "https://ship.build/",
+      icon: <Sailboat className="h-5 w-5" />,
+    },
+    {
+      title: "Naviya - Personalized AI Tutor for Students",
+      url: "https://naviya.school/",
+      icon: <GraduationCap className="h-5 w-5" />,
+    },
+
+    {
+      title: "Orbizza, Inc. - Creator Economy Startup",
       url: "https://orbizza.com/",
       icon: <BriefcaseBusiness className="h-5 w-5" />,
     },
+
     {
-      title: "Check out my Github",
-      url: "https://github.com/deepshaswat",
-      icon: <Github className="h-5 w-5" />,
+      title: "DIS Digital LLP - Indian Startup",
+      url: "https://disdigital.in/",
+      icon: <Handshake className="h-5 w-5" />,
     },
+    // {
+    //   title: "Check out my Github",
+    //   url: "https://github.com/deepshaswat",
+    //   icon: <Github className='h-5 w-5' />,
+    // },
 
     {
       title: "Visit my Portfolio",
       url: "https://deepshaswat.com",
       icon: <ExternalLink className="h-5 w-5" />,
     },
-    {
-      title: "Send me an email",
-      url: "/contact",
-      icon: <Mail className="h-5 w-5" />,
-    },
+    // {
+    //   title: "Send me an email",
+    //   url: "/contact",
+    //   icon: <Mail className='h-5 w-5' />,
+    // },
   ];
 
   const socialIcons = [
@@ -105,23 +132,31 @@ const LinksComponent = () => {
                 <span className="text-neutral-200 font-bold">
                   Hey, I&apos;m Shaswat Deep
                 </span>{" "}
-                I started as a software engineer back in 2013, working with
-                automation testing.
+                I started as a software engineer back in 2013, working as an{" "}
+                <strong className="text-neutral-200">
+                  Automation Engineer.
+                </strong>{" "}
               </p>
               <p className="pb-4 text-neutral-400 leading-relaxed tracking-wide">
                 Now as a{" "}
-                <strong className="text-neutral-200">Founder & CEO</strong> of
-                Orbizza, I&apos;m building a platform to find and review{" "}
-                <strong className="text-neutral-200">Content Creators</strong>.
+                <strong className="text-neutral-200">Solo-Founder,</strong>{" "}
+                I&apos;m building products for{" "}
+                <strong className="text-neutral-200">Creator Economy</strong> as
+                part of Orbizza, Inc. called{" "}
+                <strong className="text-neutral-200">
+                  RateCreator &amp; VibeCreation.
+                </strong>
               </p>
               <p className="pb-4 text-neutral-400 leading-relaxed tracking-wide">
-                Outside of work, I love{" "}
-                <strong className="text-neutral-200">dark mode</strong>, the
-                stock market, and ideating side projects. I like{" "}
-                <strong className="text-neutral-200">cooking</strong>, reading
-                books, watching animes, and thinking about{" "}
-                <strong className="text-neutral-200">What If </strong>{" "}
-                scenarios.
+                I&apos;m also tinkering with two side projects:{" "}
+                <strong className="text-neutral-200">
+                  Naviya - A personalized AI Tutor
+                </strong>{" "}
+                for students and{" "}
+                <strong className="text-neutral-200">
+                  Ship - AI Native DevOps Engineer
+                </strong>{" "}
+                for developers.
               </p>
             </div>
 

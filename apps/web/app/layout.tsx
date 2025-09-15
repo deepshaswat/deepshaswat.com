@@ -18,7 +18,7 @@ export const metadataBase = new URL("https://deepshaswat.com");
 export const metadata: Metadata = {
   title: "Shaswat Deep",
   description:
-    "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
+    "Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.",
   keywords: [
     "Shaswat Deep",
     "software engineer",

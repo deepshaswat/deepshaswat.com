@@ -31,24 +31,37 @@ function renderIntro() {
           <span className="text-neutral-200 font-bold">
             Hey, I&apos;m Shaswat Deep
           </span>{" "}
-          I started as a software engineer back in 2013, working with automation
-          testing.
+          I started as a software engineer back in 2013, working as an{" "}
+          <strong className="text-neutral-200">Automation Engineer.</strong>{" "}
         </p>
         <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
-          Now as a <strong className="text-neutral-200">Founder & CEO</strong>{" "}
-          of Orbizza, I&apos;m building a platform to find and review{" "}
-          <strong className="text-neutral-200">Content Creators</strong>.
-          {/* I&apos;m from India and now living
-            with my family in a small town. */}
+          Now as a <strong className="text-neutral-200">Solo-Founder,</strong>{" "}
+          I&apos;m building products for{" "}
+          <strong className="text-neutral-200">Creator Economy</strong> as part
+          of Orbizza, Inc. called{" "}
+          <strong className="text-neutral-200">
+            RateCreator &amp; VibeCreation.
+          </strong>
         </p>
         <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
+          I&apos;m also tinkering with two side projects:{" "}
+          <strong className="text-neutral-200">
+            Naviya - A personalized AI Tutor
+          </strong>{" "}
+          for students and{" "}
+          <strong className="text-neutral-200">
+            Ship - AI Native DevOps Engineer
+          </strong>{" "}
+          for developers.
+        </p>
+        {/* <p className='p-4 text-neutral-400 leading-relaxed tracking-wide'>
           Outside of work, I love{" "}
-          <strong className="text-neutral-200">dark mode</strong>, the stock
+          <strong className='text-neutral-200'>dark mode</strong>, the stock
           market, and ideating side projects. I like{" "}
-          <strong className="text-neutral-200">cooking</strong>, reading books,
+          <strong className='text-neutral-200'>cooking</strong>, reading books,
           watching animes, and thinking about{" "}
-          <strong className="text-neutral-200">What If </strong> scenarios.
-        </p>
+          <strong className='text-neutral-200'>What If </strong> scenarios.
+        </p> */}
       </div>
     </div>
   );

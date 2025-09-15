@@ -28,10 +28,10 @@ export async function generateMetadata({
   const title = `${post?.title + " // Shaswat Deep"}`;
   const description =
     post?.metadataDescription ||
-    `Shaswat Deep is a software engineer, entrepreneur, and writer.`;
+    `Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.`;
   const keywords =
     post?.metadataKeywords ||
-    "Shaswat Deep, software engineer, entrepreneur, writer";
+    "Shaswat Deep, builder, entrepreneur, conspiracy theorist";
 
   return {
     title,
