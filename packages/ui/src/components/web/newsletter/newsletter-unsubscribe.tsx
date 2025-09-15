@@ -43,7 +43,7 @@ export const NewsletterUnsubscribe = () => {
     } catch (error) {
       setStatus("error");
       setErrorMessage(
-        error instanceof Error ? error.message : "An error occurred",
+        error instanceof Error ? error.message : "An error occurred"
       );
     } finally {
       setStatus("idle");
@@ -53,44 +53,44 @@ export const NewsletterUnsubscribe = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className='min-h-screen flex items-center justify-center p-4'>
+      <Card className='w-full max-w-md'>
         <CardHeader>
-          <CardTitle className="flex flex-col items-center gap-2 justify-center gap-y-6">
-            <Avatar className="w-32 h-32">
-              <AvatarImage src="/static/images/headshot.svg" />
+          <CardTitle className='flex flex-col items-center gap-2 justify-center gap-y-6'>
+            <Avatar className='w-32 h-32'>
+              <AvatarImage src='/static/images/headShot.png' />
               <AvatarFallback>Shaswat Deep</AvatarFallback>
             </Avatar>
-            <div className="flex items-center gap-2 text-lg font-bold">
-              <Mail className="h-6 w-6" />
+            <div className='flex items-center gap-2 text-lg font-bold'>
+              <Mail className='h-6 w-6' />
               Unsubscribe from Newsletter
             </div>
           </CardTitle>
-          <CardDescription className="text-neutral-400 pt-5">
+          <CardDescription className='text-neutral-400 pt-5'>
             We're sorry to see you go. <br /> Please enter your email to
             unsubscribe from our newsletter.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {status === "idle" || status === "loading" ? (
-            <form onSubmit={handleUnsubscribe} className="space-y-4">
+            <form onSubmit={handleUnsubscribe} className='space-y-4'>
               <Input
-                type="email"
-                placeholder="Enter your email address"
+                type='email'
+                placeholder='Enter your email address'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={status === "loading"}
                 required
               />
               <Button
-                type="submit"
-                className="w-full bg-neutral-700 hover:bg-neutral-600"
+                type='submit'
+                className='w-full bg-neutral-700 hover:bg-neutral-600'
                 disabled={status === "loading"}
-                variant="default"
+                variant='default'
               >
                 {status === "loading" ? (
-                  <div className="flex items-center justify-center text-red-500">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin " />
+                  <div className='flex items-center justify-center text-red-500'>
+                    <Loader2 className='mr-2 h-4 w-4 animate-spin ' />
                     Unsubscribing...
                   </div>
                 ) : (
@@ -99,8 +99,8 @@ export const NewsletterUnsubscribe = () => {
               </Button>
             </form>
           ) : status === "success" ? (
-            <Alert variant="default" className=" border-green-200">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
+            <Alert variant='default' className=' border-green-200'>
+              <CheckCircle2 className='h-4 w-4 text-green-600' />
               <AlertTitle>Successfully Unsubscribed</AlertTitle>
               <AlertDescription>
                 You have been successfully unsubscribed from our newsletter. You
@@ -108,8 +108,8 @@ export const NewsletterUnsubscribe = () => {
               </AlertDescription>
             </Alert>
           ) : (
-            <Alert variant="destructive">
-              <XCircle className="h-4 w-4" />
+            <Alert variant='destructive'>
+              <XCircle className='h-4 w-4' />
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>

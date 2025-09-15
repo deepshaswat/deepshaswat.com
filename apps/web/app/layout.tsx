@@ -74,12 +74,15 @@ export const metadata: Metadata = {
       "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
     url: "https://deepshaswat.com",
     siteName: "Shaswat Deep",
+    type: "website",
+    locale: "en_US",
     images: [
       {
-        url: "/static/images/headShot.svg",
-        width: 1200,
-        height: 630,
+        url: "https://deepshaswat.com/static/images/headShot.png",
+        width: 800,
+        height: 800,
         alt: "Shaswat Deep",
+        type: "image/png",
       },
     ],
   },
@@ -88,7 +91,7 @@ export const metadata: Metadata = {
     title: "Shaswat Deep",
     description:
       "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
-    images: ["/static/images/headShot.svg"],
+    images: ["https://deepshaswat.com/static/images/headShot.png"],
   },
   robots: {
     index: true,
@@ -116,16 +119,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       <head />
       <body
         className={`${inter.className} bg-background text-foreground`}
         suppressHydrationWarning
       >
         <Providers>
-          <main className="flex min-h-screen flex-col">
+          <main className='flex min-h-screen flex-col'>
             <Appbar />
-            <div className="flex-1 w-full max-w-screen-lg mx-auto px-4">
+            <div className='flex-1 w-full max-w-screen-lg mx-auto px-4'>
               {children}
               <Toaster />
               <NewsletterButton />

@@ -9,7 +9,7 @@ const description =
   "Links to social media profiles, companies, projects and other websites of Shaswat Deep.";
 
 const link = "https://deepshaswat.com/links";
-const image = "/static/images/links.jpeg";
+const image = "https://deepshaswat.com/static/images/links.jpeg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";
@@ -18,6 +18,9 @@ const twitterCard = "summary_large_image";
 export const metadata: Metadata = {
   title,
   description,
+  alternates: {
+    canonical: "/links",
+  },
   openGraph: {
     title,
     description,
@@ -25,6 +28,14 @@ export const metadata: Metadata = {
     url: link,
     locale,
     type,
+    images: [
+      {
+        url: image,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
   },
   twitter: {
     card: twitterCard,

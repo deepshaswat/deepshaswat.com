@@ -1,0 +1,150 @@
+# deepshaswat.com - Personal Website & Blog
+
+This is the web application for Shaswat Deep's personal website and blog platform. It's a Next.js application that serves as the public-facing website for articles, newsletters, and personal content.
+
+## Project Overview
+
+**Website**: https://deepshaswat.com
+**Purpose**: Personal website, blog, and newsletter platform for Shaswat Deep
+**Tech Stack**: Next.js 14, React 18, TypeScript, Tailwind CSS, Prisma
+
+## Application Structure
+
+### Core Pages
+- `/` - Landing page with personal introduction and featured content
+- `/articles` - Blog articles listing page
+- `/newsletter` - Newsletter subscription and archive
+- `/about` - Personal bio and background
+- `/projects` - Portfolio of projects and work
+- `/contact` - Contact form and information
+- `/investing` - Investment-related content
+- `/library` - Curated resources and recommendations
+- `/links` - Social links and external profiles
+- `/uses` - Tools and technology stack
+- `/reminder` - Personal reminders and notes
+- `/unsubscribe` - Newsletter unsubscription
+
+### Dynamic Routes
+- `/[postUrl]` - Individual blog post/article pages
+
+### API Routes
+- `/feed.xml` - RSS feed for articles
+- `/news-sitemap.xml` - News sitemap for SEO
+- `/sitemap.ts` - Main sitemap generation
+
+## Key Features
+
+1. **Content Management**
+   - Dynamic blog posts and articles
+   - Newsletter system with subscription management
+   - Rich text editor for content creation
+   - Image upload and media management
+
+2. **SEO Optimization**
+   - Comprehensive metadata and Open Graph tags
+   - Automated sitemap generation
+   - RSS feed support
+   - Structured data markup
+
+3. **User Experience**
+   - Responsive design with Tailwind CSS
+   - Dark/light mode support
+   - Newsletter subscription modal
+   - Fast page load times with Next.js optimization
+
+4. **Analytics & Performance**
+   - PostHog integration for analytics
+   - Performance monitoring
+   - Core Web Vitals optimization
+
+## Technical Details
+
+### Framework & Dependencies
+- **Next.js 14** - React framework with App Router
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling framework
+- **Prisma** - Database ORM
+- **Clerk** - Authentication (for admin features)
+
+### Shared Packages (Monorepo)
+- `@repo/ui` - Shared UI components
+- `@repo/actions` - Server actions and business logic
+- `@repo/db` - Database client and schema
+- `@repo/schema` - Type definitions and validation
+- `@repo/store` - State management
+
+### Content Types
+- **Articles** - Technical blog posts, tutorials, opinions
+- **Newsletters** - Periodic email content and announcements
+- **Static Pages** - About, contact, projects, etc.
+
+### Database Schema
+The application uses Prisma with the following main entities:
+- Posts (articles and newsletters)
+- Members (newsletter subscribers)
+- Tags (content categorization)
+- Authors (content creators)
+
+### Environment Variables
+- `NEXT_PUBLIC_APP_URL` - Base URL (https://deepshaswat.com)
+- Database connection strings
+- Authentication keys
+- Third-party service API keys
+
+## Development Workflow
+
+### Local Development
+```bash
+yarn dev  # Starts development server on port 3000
+```
+
+### Building
+```bash
+yarn build     # Build for production
+yarn start     # Start production server
+```
+
+### Code Quality
+```bash
+yarn lint      # ESLint checking
+yarn type-check # TypeScript checking
+```
+
+## Content Strategy
+
+The website focuses on:
+1. **Technical Content** - Software engineering, DevOps, cloud technologies
+2. **Entrepreneurship** - Startup experiences, business insights
+3. **Personal Growth** - Career development, learning resources
+4. **Investment & Finance** - Market analysis, investment strategies
+
+## SEO & Marketing
+
+- **Target Keywords**: Software engineering, entrepreneurship, technology, investing
+- **Content Categories**: Articles, tutorials, opinion pieces, newsletters
+- **Social Presence**: Twitter, LinkedIn, GitHub integration
+- **Newsletter**: Regular technical and business content distribution
+
+## Performance Characteristics
+
+- **Core Web Vitals Optimized** - Fast loading times and good user experience
+- **Mobile-First Design** - Responsive across all devices
+- **SEO Optimized** - Proper meta tags, sitemaps, and structured data
+- **Accessible** - Following WCAG guidelines for accessibility
+
+## Security & Privacy
+
+- **HTTPS Enforced** - Secure connection for all traffic
+- **Privacy Compliant** - GDPR-friendly newsletter subscription
+- **Content Security** - Proper sanitization of user-generated content
+- **Authentication** - Secure admin access with Clerk
+
+## Monitoring & Analytics
+
+- **PostHog** - User behavior and performance analytics
+- **Core Web Vitals** - Performance monitoring
+- **Error Tracking** - Application error monitoring
+- **SEO Monitoring** - Search engine optimization tracking
+
+This application serves as both a personal brand platform and a technical showcase of modern web development practices using the Next.js ecosystem.

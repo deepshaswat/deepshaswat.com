@@ -34,7 +34,7 @@ export const Contact = () => {
     title: "Contact // Shaswat Deep",
     description: "",
     tagline: "Email me. Like in the old days.",
-    image: "/static/images/reminder-bw.jpg",
+    image: "https://deepshaswat.com/static/images/reminder-bw.jpg",
     primaryColor: "cyan",
     secondaryColor: "green",
   };
@@ -72,7 +72,7 @@ export const Contact = () => {
 
   useEffect(() => {
     const displayToast = () => {
-      <div className="fixed bottom-15 right-5">
+      <div className='fixed bottom-15 right-5'>
         {toast("Email Sent!", {
           action: {
             label: "Close",
@@ -90,26 +90,26 @@ export const Contact = () => {
 
   const renderForm = () => {
     return (
-      <Card className="flex flex-col h-full  w-full max-w-md">
+      <Card className='flex flex-col h-full  w-full max-w-md'>
         <CardHeader>
-          <CardTitle className="text-2xl justify-center items-center">
+          <CardTitle className='text-2xl justify-center items-center'>
             Let&apos;s Talk
           </CardTitle>
         </CardHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-0 px-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+            <div className='space-y-0 px-4'>
               <FormField
                 control={form.control}
-                name="name"
+                name='name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-neutral-500">Name</FormLabel>
+                    <FormLabel className='text-neutral-500'>Name</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         disabled={isPending}
-                        placeholder="John Doe"
+                        placeholder='John Doe'
                       />
                     </FormControl>
                     <FormMessage />
@@ -118,16 +118,16 @@ export const Contact = () => {
               />
               <FormField
                 control={form.control}
-                name="email"
+                name='email'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-neutral-500">Email</FormLabel>
+                    <FormLabel className='text-neutral-500'>Email</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         disabled={isPending}
-                        placeholder="john.doe@example.com"
-                        type="email"
+                        placeholder='john.doe@example.com'
+                        type='email'
                       />
                     </FormControl>
                     <FormMessage />
@@ -136,17 +136,17 @@ export const Contact = () => {
               />
               <FormField
                 control={form.control}
-                name="message"
+                name='message'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-neutral-500">Message</FormLabel>
+                    <FormLabel className='text-neutral-500'>Message</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
-                        className="min-h-[100px] "
-                        id="message"
+                        className='min-h-[100px] '
+                        id='message'
                         disabled={isPending}
-                        placeholder="Enter your message"
+                        placeholder='Enter your message'
                       />
                     </FormControl>
                     <FormMessage />
@@ -154,16 +154,16 @@ export const Contact = () => {
                 )}
               />
             </div>
-            <div className="mx-auto pl-4 pr-4">
+            <div className='mx-auto pl-4 pr-4'>
               <FormError message={error} />
             </div>
 
             <CardFooter>
               <Button
                 disabled={isPending}
-                type="submit"
-                className="w-full"
-                variant="outline"
+                type='submit'
+                className='w-full'
+                variant='outline'
               >
                 Send
               </Button>
@@ -178,15 +178,15 @@ export const Contact = () => {
     <>
       <Head>
         <title>{title}</title>
-        <meta content={description} name="description" />
-        <meta content={description} property="og:description" />
-        <meta content="https://deepshaswat.com/reminder" property="og:url" />
-        <meta content={`https://deepshaswat.com${image}`} property="og:image" />
+        <meta content={description} name='description' />
+        <meta content={description} property='og:description' />
+        <meta content='https://deepshaswat.com/reminder' property='og:url' />
+        <meta content={`https://deepshaswat.com${image}`} property='og:image' />
       </Head>
 
       <Base
         title={title}
-        description=""
+        description=''
         tagline={tagline}
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
