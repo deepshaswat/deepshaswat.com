@@ -4,7 +4,7 @@ const BlogContent = dynamic(
   {
     ssr: false,
     loading: () => null,
-  }
+  },
 );
 import { Metadata } from "next";
 import prisma from "@repo/db/client";
