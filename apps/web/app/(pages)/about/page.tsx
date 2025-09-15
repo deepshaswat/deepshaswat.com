@@ -5,7 +5,7 @@ export const revalidate = 31536000;
 
 const title = "About // Shaswat Deep";
 const description =
-  "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.";
+  "Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.";
 const link = "https://deepshaswat.com/about";
 const image = "https://deepshaswat.com/static/images/about.jpeg";
 const siteName = "Shaswat Deep";

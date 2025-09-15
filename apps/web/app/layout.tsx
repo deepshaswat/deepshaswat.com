@@ -18,7 +18,7 @@ export const metadataBase = new URL("https://deepshaswat.com");
 export const metadata: Metadata = {
   title: "Shaswat Deep",
   description:
-    "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
+    "Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.",
   keywords: [
     "Shaswat Deep",
     "software engineer",
@@ -119,16 +119,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       <head />
       <body
         className={`${inter.className} bg-background text-foreground`}
         suppressHydrationWarning
       >
         <Providers>
-          <main className="flex min-h-screen flex-col">
+          <main className='flex min-h-screen flex-col'>
             <Appbar />
-            <div className="flex-1 w-full max-w-screen-lg mx-auto px-4">
+            <div className='flex-1 w-full max-w-screen-lg mx-auto px-4'>
               {children}
               <Toaster />
               <NewsletterButton />
