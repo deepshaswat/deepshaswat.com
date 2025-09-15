@@ -111,12 +111,12 @@ export const NewsletterButton = () => {
             <DialogTitle>
               <div className="flex flex-col items-center gap-2 justify-center gap-y-4">
                 <Avatar className="w-24 h-24 sm:w-32 sm:h-32">
-                  <AvatarImage src="/static/images/headshot.svg" />
+                  <AvatarImage src="/static/images/headShot.png" />
                   <AvatarFallback>Shaswat Deep</AvatarFallback>
                 </Avatar>
                 {/* <Image
                   alt='Shaswat Deep'
-                  src='/static/images/headShot.svg'
+                  src='/static/images/headShot.png'
                   width={156}
                   height={156}
                   className='rounded-full mb-4 items-center justify-center '

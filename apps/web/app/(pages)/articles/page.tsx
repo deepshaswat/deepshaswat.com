@@ -7,7 +7,7 @@ const title = "Articles // Shaswat Deep";
 const description =
   "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.";
 const link = "https://deepshaswat.com/articles";
-const image = "/static/images/articles.jpeg";
+const image = "https://deepshaswat.com/static/images/articles.jpeg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";
@@ -16,6 +16,9 @@ const twitterCard = "summary_large_image";
 export const metadata: Metadata = {
   title,
   description,
+  alternates: {
+    canonical: "/articles",
+  },
   openGraph: {
     title,
     description,
@@ -23,6 +26,14 @@ export const metadata: Metadata = {
     url: link,
     locale,
     type,
+    images: [
+      {
+        url: image,
+        width: 1200,
+        height: 630,
+        alt: title,
+      },
+    ],
   },
   twitter: {
     card: twitterCard,

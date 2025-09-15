@@ -8,7 +8,7 @@ import { Metadata } from "next";
 const title = "500 | Ooops!";
 const description = "Something isn't right.";
 const link = "https://deepshaswat.com/error";
-const image = "/static/images/headShot.svg";
+const image = "https://deepshaswat.com/static/images/headShot.png";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";
@@ -17,6 +17,9 @@ const twitterCard = "summary_large_image";
 export const metadata: Metadata = {
   title,
   description,
+  alternates: {
+    canonical: "/error",
+  },
   openGraph: {
     title,
     description,

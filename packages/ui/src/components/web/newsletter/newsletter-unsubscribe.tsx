@@ -58,7 +58,7 @@ export const NewsletterUnsubscribe = () => {
         <CardHeader>
           <CardTitle className="flex flex-col items-center gap-2 justify-center gap-y-6">
             <Avatar className="w-32 h-32">
-              <AvatarImage src="/static/images/headshot.svg" />
+              <AvatarImage src="/static/images/headShot.png" />
               <AvatarFallback>Shaswat Deep</AvatarFallback>
             </Avatar>
             <div className="flex items-center gap-2 text-lg font-bold">

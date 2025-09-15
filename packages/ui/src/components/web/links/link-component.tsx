@@ -84,13 +84,13 @@ const LinksComponent = () => {
           {/* Profile Section - Left Side */}
           <div className="md:col-span-4 flex flex-col items-center md:items-start space-y-4 mb-8 md:mb-0">
             {/* <Avatar className='h-24 w-24 mb-4'>
-              <AvatarImage src='/static/images/headshot.svg' />
+              <AvatarImage src='/static/images/headShot.png' />
               <AvatarFallback>SD</AvatarFallback>
             </Avatar> */}
             <div className="flex flex-col items-center justify-center md:items-start">
               <Image
                 alt="Shaswat Deep"
-                src="/static/images/headShot.svg"
+                src="/static/images/headShot.png"
                 width={156}
                 height={156}
                 className="rounded-full md:rounded-lg mb-4 items-center justify-center md:w-full"

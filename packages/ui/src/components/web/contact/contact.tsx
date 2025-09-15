@@ -34,7 +34,7 @@ export const Contact = () => {
     title: "Contact // Shaswat Deep",
     description: "",
     tagline: "Email me. Like in the old days.",
-    image: "/static/images/reminder-bw.jpg",
+    image: "https://deepshaswat.com/static/images/reminder-bw.jpg",
     primaryColor: "cyan",
     secondaryColor: "green",
   };

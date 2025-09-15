@@ -20,7 +20,7 @@ function renderIntro() {
       <div className="flex-1 pt-3 size-1048">
         <Image
           alt="Shaswat"
-          src="/static/images/headShot.svg"
+          src="/static/images/headShot.png"
           width={size}
           height={size}
           className="rounded-lg"

@@ -74,12 +74,15 @@ export const metadata: Metadata = {
       "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
     url: "https://deepshaswat.com",
     siteName: "Shaswat Deep",
+    type: "website",
+    locale: "en_US",
     images: [
       {
-        url: "/static/images/headShot.svg",
-        width: 1200,
-        height: 630,
+        url: "https://deepshaswat.com/static/images/headShot.png",
+        width: 800,
+        height: 800,
         alt: "Shaswat Deep",
+        type: "image/png",
       },
     ],
   },
@@ -88,7 +91,7 @@ export const metadata: Metadata = {
     title: "Shaswat Deep",
     description:
       "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
-    images: ["/static/images/headShot.svg"],
+    images: ["https://deepshaswat.com/static/images/headShot.png"],
   },
   robots: {
     index: true,
