@@ -16,7 +16,7 @@ export const ShortcutButton = ({
 
   return (
     <Button variant={"ghost"} onClick={query.toggle} className={className}>
-      <div className='grid grid-flow-col gap-1 mx-[0] text-lg'>{children}</div>
+      <div className="grid grid-flow-col gap-1 mx-[0] text-lg">{children}</div>
     </Button>
   );
 };
