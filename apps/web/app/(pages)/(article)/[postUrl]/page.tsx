@@ -1,6 +1,5 @@
 import { BlogContent } from "@repo/ui/web";
 import { Metadata } from "next";
-import { generateSiteConfig } from "@repo/ui/web";
 import { fetchPostByPostUrl } from "@repo/actions";
 
 export const revalidate = 31536000;
@@ -13,39 +12,58 @@ export async function generateMetadata({
   // Fetch post data server-side
   const post = await fetchPostByPostUrl(params.postUrl);
 
-  // Generate metadata using post data
-  return generateSiteConfig(
-    `${post?.title + " // Shaswat Deep"}`,
-    post?.excerpt ||
-      "Shaswat Deep is a software engineer, entrepreneur, and writer.",
-    `/${params.postUrl}`,
-    post?.featureImage || "/static/images/headShot.svg",
-    post
-      ? {
-          metadataTitle: post.metadataTitle + " // Shaswat Deep" || undefined,
-          metadataDescription: post.metadataDescription || undefined,
-          metadataImageUrl: post.metadataImageUrl || undefined,
-          metadataKeywords: post.metadataKeywords || undefined,
-          metadataAuthorName: post.metadataAuthorName || undefined,
-          metadataCanonicalUrl: post.metadataCanonicalUrl || undefined,
-          metadataOgTitle:
-            post.metadataOgTitle + " // Shaswat Deep" || undefined,
-          metadataOgDescription: post.metadataOgDescription || undefined,
-          metadataOgImage: post.metadataOgImage || undefined,
-          metadataTwitterCard: (post.metadataTwitterCard ||
-            "summary_large_image") as
-            | "summary_large_image"
-            | "summary"
-            | "player"
-            | "app",
-          metadataTwitterTitle:
-            post.metadataTwitterTitle + " // Shaswat Deep" || undefined,
-          metadataTwitterDescription:
-            post.metadataTwitterDescription || undefined,
-          metadataTwitterImage: post.metadataTwitterImage || undefined,
-        }
-      : undefined,
-  );
+  const title = `${post?.title + " // Shaswat Deep"}`;
+  const description =
+    post?.metadataDescription ||
+    `Shaswat Deep is a software engineer, entrepreneur, and writer.`;
+  const keywords =
+    post?.metadataKeywords ||
+    "Shaswat Deep, software engineer, entrepreneur, writer";
+
+  return {
+    title,
+    description,
+    keywords,
+    authors: [{ name: "Shaswat Deep", url: "https://deepshaswat.com" }],
+    creator: "Shaswat Deep",
+    publisher: "Shaswat Deep",
+
+    metadataBase: new URL("https://deepshaswat.com"),
+    alternates: {
+      canonical: post?.metadataCanonicalUrl || `/${params.postUrl}`,
+    },
+    openGraph: {
+      title: post?.metadataOgTitle || title,
+      description: post?.metadataOgDescription || description,
+      siteName: "Shaswat Deep",
+      url: `https://deepshaswat.com/${params.postUrl}`,
+      locale: "en_US",
+      type: "website",
+      images: [
+        {
+          url:
+            post?.metadataOgImage ||
+            post?.metadataImageUrl ||
+            post?.featureImage ||
+            "/static/images/headShot.svg",
+          width: 1200,
+          height: 630,
+          alt: `${post?.title} // Shaswat Deep`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post?.metadataTwitterTitle || title,
+      description: post?.metadataTwitterDescription || description,
+      images: [
+        post?.metadataTwitterImage ||
+          post?.metadataImageUrl ||
+          post?.featureImage ||
+          "/static/images/headShot.svg",
+      ],
+    },
+  };
 }
 
 export default function EditorPage({
