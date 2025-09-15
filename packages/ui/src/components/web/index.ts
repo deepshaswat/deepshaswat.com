@@ -22,7 +22,6 @@ export * from "./generate-select-colour";
 export * from "./uses/uses";
 export * from "./landing/landing";
 export * from "./command/CommandBar";
-export * from "./config/site-config";
 export * from "./footer/Footer";
 export * from "./articles/articles-list-page";
 export * from "./articles/blog-content";

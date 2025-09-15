@@ -1,7 +1,6 @@
 "use client";
 
 import { ShortcutErrorHome } from "@repo/ui/web";
-import React from "react";
 
 interface ErrorMessageProps {
   code?: number;

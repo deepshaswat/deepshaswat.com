@@ -2,12 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import {
-  Appbar,
-  Footer,
-  generateSiteConfig,
-  NewsletterButton,
-} from "@repo/ui/web";
+import { Appbar, Footer, NewsletterButton } from "@repo/ui/web";
 import { Toaster } from "@repo/ui";
 
 const inter = Nunito({ subsets: ["latin"] });
@@ -19,29 +14,99 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
 };
-
+export const metadataBase = new URL("https://deepshaswat.com");
 export const metadata: Metadata = {
-  ...generateSiteConfig("Shaswat Deep", "deepshaswat.com", "/"),
-  icons: {
-    icon: [
+  title: "Shaswat Deep",
+  description:
+    "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
+  keywords: [
+    "Shaswat Deep",
+    "software engineer",
+    "entrepreneur",
+    "writer",
+    "Orbizza",
+    "Technology",
+    "Blogging",
+    "Entrepreneurship",
+    "Shaswat Deep",
+    "Vibecreation",
+    "Naviya",
+    "RateCreator",
+    "StockMarket",
+    "Investing",
+    "Crypto",
+    "Web3",
+    "AI",
+    "MachineLearning",
+    "DeepLearning",
+    "DataScience",
+    "Ship",
+    "DevOps",
+    "Cloud",
+    "AWS",
+    "GCP",
+    "Azure",
+    "Docker",
+    "Kubernetes",
+    "CI/CD",
+    "Git",
+    "GitHub",
+    "GitLab",
+    "Bitbucket",
+    "Linear",
+    "Resend",
+  ],
+  authors: [{ name: "Shaswat Deep", url: "https://deepshaswat.com" }],
+  creator: "Shaswat Deep",
+  publisher: "Shaswat Deep",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Shaswat Deep",
+    description:
+      "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
+    url: "https://deepshaswat.com",
+    siteName: "Shaswat Deep",
+    images: [
       {
-        url: "/favicon-16x16.png",
-        sizes: "16x16",
-        type: "image/png",
-      },
-      {
-        url: "/favicon-32x32.png",
-        sizes: "32x32",
-        type: "image/png",
+        url: "/static/images/headShot.svg",
+        width: 1200,
+        height: 630,
+        alt: "Shaswat Deep",
       },
     ],
-    apple: [
-      {
-        url: "/apple-touch-icon.png",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shaswat Deep",
+    description:
+      "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
+    images: ["/static/images/headShot.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black",
+    "format-detection": "telephone=no",
   },
 };
 

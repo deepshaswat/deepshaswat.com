@@ -1,15 +1,36 @@
 import { About } from "@repo/ui/web";
-import { generateSiteConfig } from "@repo/ui/web";
 import { Metadata } from "next";
 
 export const revalidate = 31536000;
 
-export const metadata: Metadata = generateSiteConfig(
-  "About // Shaswat Deep",
-  "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.",
-  "/about",
-  "/static/images/headShot.svg",
-);
+const title = "About // Shaswat Deep";
+const description =
+  "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder & CEO of Orbizza.";
+const link = "https://deepshaswat.com/about";
+const image = "/static/images/about.jpeg";
+const siteName = "Shaswat Deep";
+const locale = "en_US";
+const type = "website";
+const twitterCard = "summary_large_image";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    siteName,
+    url: link,
+    locale,
+    type,
+  },
+  twitter: {
+    card: twitterCard,
+    title,
+    description,
+    images: [image],
+  },
+};
 
 const AboutPage = () => {
   return <About />;

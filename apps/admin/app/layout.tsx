@@ -4,7 +4,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
-import { generateSiteConfig } from "@repo/ui/web";
 import { Providers } from "./providers";
 
 const inter = Nunito({ subsets: ["latin"] });
