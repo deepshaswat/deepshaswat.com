@@ -148,7 +148,7 @@ export const BlogPostRow = ({
           />
         )}
       </AnimatePresence>
-      <div className="flex md:flex-row flex-col items-start justify-between md:items-center group/blog-row py-4 px-4 relative z-10 ">
+      <div className="flex md:flex-row flex-col items-start justify-between md:items-center group/blog-row py-4 px-4 relative">
         <div>
           <p className="text-neutral-100 text-lg font-medium transition duration-200">
             {blog.title}
