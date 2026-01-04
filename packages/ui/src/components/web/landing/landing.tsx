@@ -5,8 +5,8 @@ import { ShortcutHome } from "@repo/ui/web";
 
 export const Landing = () => {
   return (
-    <div className="min-h-[calc(100vh-20vh)] sm:min-h-[calc(100vh-12vh)] flex items-center justify-start max-w-screen-sm md:max-w-screen-md  ">
-      <div className="flex flex-col justify-center items-start ml-6 md:mx-auto">
+    <div className="min-h-[calc(100vh-20vh)] sm:min-h-[calc(100vh-12vh)] flex items-center justify-start max-w-screen-sm mx-auto">
+      <div className="flex flex-col justify-center items-start ml-6 ">
         <h1 className="text-2xl sm:text-5xl font-bold mb-12 px-4">
           Shaswat Deep
         </h1>
@@ -14,7 +14,7 @@ export const Landing = () => {
           Builder.
           <br /> Entrepreneur.
           <br /> Conspiracy Theorist.
-          <br /> Stock Market Enthusiast.
+          <br /> Stock Market Trader &amp; Investor.
           {/* <Link
             href={"https://ratecreator.com"}
             className="underline underline-offset-4 hover:text-neutral-400 "
@@ -23,45 +23,23 @@ export const Landing = () => {
             Rate Creator
           </Link> */}
         </h3>
-        <h4 className="text-lg font-noraml text-slate-500 px-4 mb-8 mt-8">
-          Building{" "}
+        <h4 className="text-lg font-normal text-neutral-400 px-4 mb-8 mt-8">
+          Check out the list of{" "}
           <Link
-            href={"https://ratecreator.com"}
+            href="/projects"
             className="underline underline-offset-4 text-neutral-200 hover:text-neutral-400 "
-            target="_blank"
           >
-            Rate Creator
+            featuredprojects
           </Link>{" "}
-          &amp;{" "}
+          that I&apos;m working on.
+          <br /> <br /> You can read my{" "}
           <Link
-            href={"https://vibecreation.ai"}
+            href="/articles"
             className="underline underline-offset-4 text-neutral-200 hover:text-neutral-400 "
-            target="_blank"
           >
-            Vibe Creation
+            articles
           </Link>{" "}
-          for Creator Economy.
-          <br /> Also tinkering with{" "}
-          <Link
-            href={"https://ship.build"}
-            className="underline underline-offset-4 text-neutral-200 hover:text-neutral-400 "
-            target="_blank"
-          >
-            Ship
-          </Link>{" "}
-          &amp;{" "}
-          <Link
-            href={"https://naviya.school"}
-            className="underline underline-offset-4 text-neutral-200 hover:text-neutral-400 "
-            target="_blank"
-          >
-            Naviya
-          </Link>{" "}
-          which are AI-Native Products.
-          {/* 
-          1. Content Creator Review Platform for <em> YouTube, Instagram, X (Twitter)</em> and more.
-          2. Building the future of content interaction
-          */}
+          about tech, stocks and conspiracy theories.
         </h4>
         <ShortcutHome />
       </div>

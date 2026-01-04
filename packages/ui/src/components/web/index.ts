@@ -20,6 +20,7 @@ export * from "./about/about";
 export * from "./posts/BaseStatic";
 export * from "./generate-select-colour";
 export * from "./uses/uses";
+export * from "./projects/projects";
 export * from "./landing/landing";
 export * from "./command/CommandBar";
 export * from "./footer/Footer";
