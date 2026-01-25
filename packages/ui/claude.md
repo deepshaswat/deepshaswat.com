@@ -7,7 +7,9 @@ The **ui package** is the shared React component library for the monorepo. It co
 ## What Has Been Done
 
 ### Base Components (`src/components/ui/`)
+
 Shadcn/ui components customized for the project:
+
 - Button, Card, Dialog, Alert
 - Form, Input, Label, Textarea
 - Select, Multi-select, Checkbox
@@ -20,6 +22,7 @@ Shadcn/ui components customized for the project:
 ### Web Components (`src/components/web/`)
 
 #### Articles
+
 - `blog-content.tsx` - Blog post reader with BlockNote rendering
 - `blocknote-render.tsx` - BlockNote content renderer
 - `featured-blogs-grid.tsx` - Featured posts showcase
@@ -28,22 +31,26 @@ Shadcn/ui components customized for the project:
 - Skeleton loaders for loading states
 
 #### Navigation
+
 - `Appbar.tsx` - Header navigation
 - `navigation.tsx` - Nav items configuration
 - `nav-button.tsx` - Navigation buttons
 - `Footer.tsx` - Site footer
 
 #### Newsletter
+
 - `newsletter-subscribe.tsx` - Subscription form
 - `newsletter-unsubscribe.tsx` - Unsubscribe form
 
 #### Posts
+
 - `Post.tsx` - Post card component
 - `base-client.tsx` - Client-side post wrapper
 - `base-static.tsx` - Static post wrapper
 - `GradientText.tsx` - Gradient text effect
 
 #### Pages
+
 - `landing.tsx` - Hero landing section
 - `about.tsx` - About page content
 - `projects.tsx` - Portfolio projects
@@ -54,12 +61,14 @@ Shadcn/ui components customized for the project:
 - `reminder.tsx` - Reminder feature
 
 #### Utilities
+
 - `CommandBar.tsx` - Command palette (kbar)
 - `GoogleAnalytics.tsx` - Analytics integration
 - `posthog-providers/` - PostHog setup
 - `error-page/` - Error display components
 
 ### Custom Components (`src/components/`)
+
 - `markdown-editor.tsx` - Rich text editor wrapper
 - `time-picker.tsx` - Time selection
 - `date-picker.tsx` - Date selection
@@ -73,6 +82,7 @@ Shadcn/ui components customized for the project:
 - `theme-provider.tsx` - Theme context
 
 ### Common Components (`src/components/common/`)
+
 - `blocknote-to-markdown.tsx` - BlockNote to markdown converter
 - `email-template.tsx` - Email HTML template generator
 - `pagination-bar.tsx` - Pagination UI

@@ -10,6 +10,7 @@ The **Web App** is the public-facing website for deepshaswat.com. It serves the 
 ## What Has Been Done
 
 ### Pages Implemented
+
 - **Landing Page** (`/`) - Hero section with featured content
 - **Articles** (`/articles`) - Blog listing with pagination
 - **Newsletter** (`/newsletter`) - Newsletter listing and subscription
@@ -25,6 +26,7 @@ The **Web App** is the public-facing website for deepshaswat.com. It serves the 
 - **Reminder** (`/reminder`) - Reminder functionality
 
 ### SEO Features
+
 - Dynamic sitemap generation (`sitemap.ts`)
 - News sitemap (`news-sitemap.xml/route.ts`)
 - RSS feed (`feed.xml/route.ts`)
@@ -33,6 +35,7 @@ The **Web App** is the public-facing website for deepshaswat.com. It serves the 
 - Canonical URLs
 
 ### Integrations
+
 - PostHog analytics
 - Google Analytics
 - Command palette (kbar) for navigation

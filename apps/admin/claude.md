@@ -9,6 +9,7 @@ The **Admin App** is the CMS dashboard for content creation and management. It p
 ## What Has Been Done
 
 ### Post Management
+
 - Create new posts with rich text editor
 - Edit existing posts
 - Save as draft or publish immediately
@@ -19,22 +20,26 @@ The **Admin App** is the CMS dashboard for content creation and management. It p
 - Tag assignment
 
 ### Newsletter Management
+
 - Create newsletters (special post type)
 - Send to all subscribers via Resend
 - View newsletter history
 
 ### Member Management
+
 - View all newsletter subscribers
 - Add new members manually
 - Track subscription status
 - Handle unsubscribes
 
 ### Tag Management
+
 - Create and edit tags
 - Assign tags to posts
 - View posts by tag
 
 ### Editor Features
+
 - BlockNote rich text editor (Notion-style)
 - Image upload to S3
 - YouTube embed support

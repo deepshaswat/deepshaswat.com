@@ -32,39 +32,39 @@ web/
 
 ## Pages & Routes
 
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/` | `Landing` | Hero landing page with featured content |
-| `/articles` | `AllBlogsList` | Blog listing with pagination |
-| `/newsletter` | `AllNewsletterList` | Newsletter archive and subscription |
-| `/[postUrl]` | `BlogContent` | Individual blog post reader |
-| `/about` | `About` | Personal about page |
-| `/projects` | `Projects` | Portfolio showcase |
-| `/library` | `Library` | Resource collection |
-| `/uses` | `Uses` | Tech stack and tools |
-| `/links` | `LinkComponent` | Social and bio links |
-| `/contact` | `Contact` | Contact form |
-| `/unsubscribe` | `NewsletterUnsubscribe` | Newsletter unsubscribe |
+| Route          | Component               | Description                             |
+| -------------- | ----------------------- | --------------------------------------- |
+| `/`            | `Landing`               | Hero landing page with featured content |
+| `/articles`    | `AllBlogsList`          | Blog listing with pagination            |
+| `/newsletter`  | `AllNewsletterList`     | Newsletter archive and subscription     |
+| `/[postUrl]`   | `BlogContent`           | Individual blog post reader             |
+| `/about`       | `About`                 | Personal about page                     |
+| `/projects`    | `Projects`              | Portfolio showcase                      |
+| `/library`     | `Library`               | Resource collection                     |
+| `/uses`        | `Uses`                  | Tech stack and tools                    |
+| `/links`       | `LinkComponent`         | Social and bio links                    |
+| `/contact`     | `Contact`               | Contact form                            |
+| `/unsubscribe` | `NewsletterUnsubscribe` | Newsletter unsubscribe                  |
 
 ## Key Components
 
-| Component | File | Description |
-|-----------|------|-------------|
-| `Appbar` | `@repo/ui/components/web/navbar` | Navigation header with theme toggle |
-| `Footer` | `@repo/ui/components/web/footer` | Site footer with links |
-| `BlogContent` | `@repo/ui/components/web/articles` | Renders blog posts with BlockNote |
-| `FeaturedBlogsGrid` | `@repo/ui/components/web/articles` | Featured posts showcase grid |
-| `NewsletterSubscribe` | `@repo/ui/components/web/newsletter` | Email subscription form |
-| `CommandBar` | `@repo/ui/components/web/command` | kbar command palette |
-| `ScrollProgress` | `components/` | Reading progress indicator |
+| Component             | File                                 | Description                         |
+| --------------------- | ------------------------------------ | ----------------------------------- |
+| `Appbar`              | `@repo/ui/components/web/navbar`     | Navigation header with theme toggle |
+| `Footer`              | `@repo/ui/components/web/footer`     | Site footer with links              |
+| `BlogContent`         | `@repo/ui/components/web/articles`   | Renders blog posts with BlockNote   |
+| `FeaturedBlogsGrid`   | `@repo/ui/components/web/articles`   | Featured posts showcase grid        |
+| `NewsletterSubscribe` | `@repo/ui/components/web/newsletter` | Email subscription form             |
+| `CommandBar`          | `@repo/ui/components/web/command`    | kbar command palette                |
+| `ScrollProgress`      | `components/`                        | Reading progress indicator          |
 
 ## API Routes
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/feed.xml` | GET | RSS feed generation |
-| `/news-sitemap.xml` | GET | News sitemap for Google |
-| `/sitemap.xml` | GET | Full sitemap generation |
+| Endpoint            | Method | Description             |
+| ------------------- | ------ | ----------------------- |
+| `/feed.xml`         | GET    | RSS feed generation     |
+| `/news-sitemap.xml` | GET    | News sitemap for Google |
+| `/sitemap.xml`      | GET    | Full sitemap generation |
 
 ## Development
 

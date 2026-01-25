@@ -33,50 +33,50 @@ admin/
 
 ## Pages & Routes
 
-| Route | Component | Description |
-|-------|-----------|-------------|
-| `/posts` | `PostsTableRender` | View all posts with filtering |
-| `/new-post` | `NewPostPage` | Create new post |
-| `/editor/[id]` | `EditPostComponent` | Edit existing post |
-| `/published` | `PostsTableRender` | View published posts |
-| `/drafts` | `PostsTableRender` | View draft posts |
-| `/scheduled-posts` | `PostsTableRender` | View scheduled posts |
-| `/newsletters` | `PostsTableRender` | Manage newsletters |
-| `/tags` | `TagComponentRendering` | View all tags |
-| `/tags/new-tag` | `TagComponent` | Create new tag |
-| `/tags/[slug]` | `EditComponent` | Edit tag |
-| `/members` | `MembersPage` | Manage subscribers |
+| Route              | Component               | Description                   |
+| ------------------ | ----------------------- | ----------------------------- |
+| `/posts`           | `PostsTableRender`      | View all posts with filtering |
+| `/new-post`        | `NewPostPage`           | Create new post               |
+| `/editor/[id]`     | `EditPostComponent`     | Edit existing post            |
+| `/published`       | `PostsTableRender`      | View published posts          |
+| `/drafts`          | `PostsTableRender`      | View draft posts              |
+| `/scheduled-posts` | `PostsTableRender`      | View scheduled posts          |
+| `/newsletters`     | `PostsTableRender`      | Manage newsletters            |
+| `/tags`            | `TagComponentRendering` | View all tags                 |
+| `/tags/new-tag`    | `TagComponent`          | Create new tag                |
+| `/tags/[slug]`     | `EditComponent`         | Edit tag                      |
+| `/members`         | `MembersPage`           | Manage subscribers            |
 
 ## Key Components
 
-| Component | File | Description |
-|-----------|------|-------------|
-| `EditPostComponent` | `components/editor/edit-post-component.tsx` | Main post editor with metadata sidebar |
-| `MarkdownEditor` | `components/editor/markdown-editor.tsx` | BlockNote rich text editor |
-| `MetadataSidebar` | `components/editor/metadata-sidebar.tsx` | SEO metadata editor |
-| `PostsTableRender` | `components/posts/posts-table-render.tsx` | Posts listing table |
-| `PostFilterNavbar` | `components/posts/post-filter-navbar.tsx` | Filtering and sorting controls |
-| `PublishDialogComponent` | `components/posts/publish-dialog-component.tsx` | Publish settings dialog |
-| `TagComponent` | `components/tags/tag-component.tsx` | Tag creation/editing |
-| `UploadImageComponent` | `@repo/ui/components` | S3 image uploader |
+| Component                | File                                            | Description                            |
+| ------------------------ | ----------------------------------------------- | -------------------------------------- |
+| `EditPostComponent`      | `components/editor/edit-post-component.tsx`     | Main post editor with metadata sidebar |
+| `MarkdownEditor`         | `components/editor/markdown-editor.tsx`         | BlockNote rich text editor             |
+| `MetadataSidebar`        | `components/editor/metadata-sidebar.tsx`        | SEO metadata editor                    |
+| `PostsTableRender`       | `components/posts/posts-table-render.tsx`       | Posts listing table                    |
+| `PostFilterNavbar`       | `components/posts/post-filter-navbar.tsx`       | Filtering and sorting controls         |
+| `PublishDialogComponent` | `components/posts/publish-dialog-component.tsx` | Publish settings dialog                |
+| `TagComponent`           | `components/tags/tag-component.tsx`             | Tag creation/editing                   |
+| `UploadImageComponent`   | `@repo/ui/components`                           | S3 image uploader                      |
 
 ## API Routes
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/upload` | POST | Upload images to S3 |
-| `/api/cron/publish-scheduled` | POST | Cron job for scheduled publishing |
+| Endpoint                      | Method | Description                       |
+| ----------------------------- | ------ | --------------------------------- |
+| `/api/upload`                 | POST   | Upload images to S3               |
+| `/api/cron/publish-scheduled` | POST   | Cron job for scheduled publishing |
 
 ## Server Actions Used
 
-| Action | Package | Description |
-|--------|---------|-------------|
-| `createPost` | `@repo/actions/admin` | Create new post |
-| `updatePost` | `@repo/actions/admin` | Update existing post |
-| `deletePost` | `@repo/actions/admin` | Soft delete post |
-| `fetchAllPosts` | `@repo/actions/admin` | Get posts with filters |
-| `createMember` | `@repo/actions/admin` | Add newsletter subscriber |
-| `createTag` | `@repo/actions/admin` | Create new tag |
+| Action                    | Package                | Description                    |
+| ------------------------- | ---------------------- | ------------------------------ |
+| `createPost`              | `@repo/actions/admin`  | Create new post                |
+| `updatePost`              | `@repo/actions/admin`  | Update existing post           |
+| `deletePost`              | `@repo/actions/admin`  | Soft delete post               |
+| `fetchAllPosts`           | `@repo/actions/admin`  | Get posts with filters         |
+| `createMember`            | `@repo/actions/admin`  | Add newsletter subscriber      |
+| `createTag`               | `@repo/actions/admin`  | Create new tag                 |
 | `sendBroadcastNewsletter` | `@repo/actions/common` | Send newsletter to all members |
 
 ## Development

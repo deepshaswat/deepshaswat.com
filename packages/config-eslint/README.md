@@ -14,10 +14,10 @@ module.exports = config;
 
 ## Exports
 
-| Configuration | Description |
-|---------------|-------------|
-| `library.js` | Configuration for library packages |
-| `next.js` | Configuration for Next.js apps |
+| Configuration       | Description                               |
+| ------------------- | ----------------------------------------- |
+| `library.js`        | Configuration for library packages        |
+| `next.js`           | Configuration for Next.js apps            |
 | `react-internal.js` | Configuration for internal React packages |
 
 ## Configurations
@@ -33,6 +33,7 @@ module.exports = config;
 ```
 
 **Features:**
+
 - TypeScript support
 - Import sorting
 - General best practices
@@ -48,6 +49,7 @@ module.exports = config;
 ```
 
 **Features:**
+
 - Next.js specific rules
 - React hooks rules
 - Core web vitals rules
@@ -63,19 +65,20 @@ module.exports = config;
 ```
 
 **Features:**
+
 - React specific rules
 - Hooks linting
 - JSX accessibility
 
 ## Rules Included
 
-| Category | Rules |
-|----------|-------|
+| Category   | Rules                            |
+| ---------- | -------------------------------- |
 | TypeScript | `@typescript-eslint/recommended` |
-| React | `eslint-plugin-react` |
-| Hooks | `eslint-plugin-react-hooks` |
-| Import | Import ordering and sorting |
-| Next.js | `@next/eslint-plugin-next` |
+| React      | `eslint-plugin-react`            |
+| Hooks      | `eslint-plugin-react-hooks`      |
+| Import     | Import ordering and sorting      |
+| Next.js    | `@next/eslint-plugin-next`       |
 
 ## Usage Examples
 
@@ -103,11 +106,7 @@ const baseConfig = require("@repo/config-eslint/next");
 
 module.exports = {
   ...baseConfig,
-  ignorePatterns: [
-    "node_modules/",
-    ".next/",
-    "dist/",
-  ],
+  ignorePatterns: ["node_modules/", ".next/", "dist/"],
 };
 ```
 

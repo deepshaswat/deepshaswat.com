@@ -15,88 +15,88 @@ import { aboutData } from "@repo/store/data/about";
 
 ### Atoms
 
-| Export Path | Description |
-|-------------|-------------|
-| `@repo/store/atoms/post` | Post content and metadata state |
-| `@repo/store/atoms/tags` | Tags state |
-| `@repo/store/atoms/pagination` | Pagination state |
-| `@repo/store/atoms/member` | Member state |
-| `@repo/store/atoms/ui` | UI state (errors, etc.) |
+| Export Path                    | Description                     |
+| ------------------------------ | ------------------------------- |
+| `@repo/store/atoms/post`       | Post content and metadata state |
+| `@repo/store/atoms/tags`       | Tags state                      |
+| `@repo/store/atoms/pagination` | Pagination state                |
+| `@repo/store/atoms/member`     | Member state                    |
+| `@repo/store/atoms/ui`         | UI state (errors, etc.)         |
 
 ### Static Data
 
-| Export Path | Description |
-|-------------|-------------|
-| `@repo/store/data/about` | About page data |
+| Export Path                 | Description        |
+| --------------------------- | ------------------ |
+| `@repo/store/data/about`    | About page data    |
 | `@repo/store/data/projects` | Portfolio projects |
-| `@repo/store/data/library` | Resource library |
-| `@repo/store/data/uses` | Tech stack data |
+| `@repo/store/data/library`  | Resource library   |
+| `@repo/store/data/uses`     | Tech stack data    |
 
 ## Atoms
 
 ### Post Atoms (`atoms/post.ts`)
 
-| Atom | Type | Description |
-|------|------|-------------|
-| `postState` | `PostState` | Current post content (title, content, featureImage, postUrl, tags) |
-| `postMetadataState` | `MetadataState` | SEO metadata (title, description, keywords, og, twitter) |
-| `postIdState` | `string \| null` | Current post ID |
-| `postDataState` | `PostType \| null` | Full post data object |
+| Atom                | Type               | Description                                                        |
+| ------------------- | ------------------ | ------------------------------------------------------------------ |
+| `postState`         | `PostState`        | Current post content (title, content, featureImage, postUrl, tags) |
+| `postMetadataState` | `MetadataState`    | SEO metadata (title, description, keywords, og, twitter)           |
+| `postIdState`       | `string \| null`   | Current post ID                                                    |
+| `postDataState`     | `PostType \| null` | Full post data object                                              |
 
 ### Tags Atoms (`atoms/tags.ts`)
 
-| Atom | Type | Description |
-|------|------|-------------|
-| `tagsState` | `Tag[]` | All available tags |
+| Atom                | Type    | Description                    |
+| ------------------- | ------- | ------------------------------ |
+| `tagsState`         | `Tag[]` | All available tags             |
 | `selectedTagsState` | `Tag[]` | Selected tags for current post |
 
 ### Pagination Atoms (`atoms/pagination.ts`)
 
-| Atom | Type | Description |
-|------|------|-------------|
-| `pageNumberState` | `number` | Admin posts pagination page |
+| Atom                  | Type     | Description                  |
+| --------------------- | -------- | ---------------------------- |
+| `pageNumberState`     | `number` | Admin posts pagination page  |
 | `blogPageNumberState` | `number` | Blog listing pagination page |
 
 ### Member Atoms (`atoms/member.ts`)
 
-| Atom | Type | Description |
-|------|------|-------------|
-| `memberState` | `Member \| null` | Current member data |
-| `totalMembersState` | `number` | Total member count |
+| Atom                | Type             | Description         |
+| ------------------- | ---------------- | ------------------- |
+| `memberState`       | `Member \| null` | Current member data |
+| `totalMembersState` | `number`         | Total member count  |
 
 ### UI Atoms (`atoms/ui.ts`)
 
-| Atom | Type | Description |
-|------|------|-------------|
-| `selectDate` | `Date \| null` | Selected publish date |
-| `selectedTimeIst` | `string` | Selected publish time (IST) |
-| `errorDuplicateUrlState` | `boolean` | Duplicate URL error flag |
-| `savePostErrorState` | `string \| null` | Post save error message |
+| Atom                     | Type             | Description                 |
+| ------------------------ | ---------------- | --------------------------- |
+| `selectDate`             | `Date \| null`   | Selected publish date       |
+| `selectedTimeIst`        | `string`         | Selected publish time (IST) |
+| `errorDuplicateUrlState` | `boolean`        | Duplicate URL error flag    |
+| `savePostErrorState`     | `string \| null` | Post save error message     |
 
 ## Static Data
 
 ### About Data (`data/about.ts`)
 
-| Export | Type | Description |
-|--------|------|-------------|
+| Export      | Type        | Description                  |
+| ----------- | ----------- | ---------------------------- |
 | `aboutData` | `AboutData` | Personal bio and information |
 
 ### Projects Data (`data/projects.ts`)
 
-| Export | Type | Description |
-|--------|------|-------------|
+| Export         | Type        | Description            |
+| -------------- | ----------- | ---------------------- |
 | `projectsData` | `Project[]` | Portfolio project list |
 
 ### Library Data (`data/library.ts`)
 
-| Export | Type | Description |
-|--------|------|-------------|
+| Export        | Type            | Description                |
+| ------------- | --------------- | -------------------------- |
 | `libraryData` | `LibraryItem[]` | Books, articles, resources |
 
 ### Uses Data (`data/uses.ts`)
 
-| Export | Type | Description |
-|--------|------|-------------|
+| Export     | Type             | Description          |
+| ---------- | ---------------- | -------------------- |
 | `usesData` | `UsesCategory[]` | Tools and tech stack |
 
 ## Usage Examples

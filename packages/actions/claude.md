@@ -9,6 +9,7 @@ The **actions package** contains all server-side business logic as Next.js Serve
 ### Admin Actions (`src/admin/`)
 
 #### Post Operations (`crud-posts.ts`)
+
 - `createPost()` - Create new post with metadata
 - `updatePost()` - Update existing post
 - `deletePost()` - Soft delete post
@@ -16,6 +17,7 @@ The **actions package** contains all server-side business logic as Next.js Serve
 - `archivePost()` - Archive post
 
 #### Post Fetching (`fetch-posts.ts`)
+
 - `fetchAllPosts()` - Get posts with filtering
 - `fetchAllPostsCount()` - Get post count
 - `fetchPostById()` - Get single post
@@ -24,26 +26,31 @@ The **actions package** contains all server-side business logic as Next.js Serve
 - `fetchPostsByTag()` - Filter by tag
 
 #### Member Operations (`crud-member.ts`)
+
 - `createMember()` - Add newsletter subscriber
 - `fetchAllMembers()` - Get all members
 - `updateMemberStatus()` - Update subscription
 - `unsubscribeMember()` - Handle unsubscribe
 
 #### Tag Operations (`crud-tags.ts`)
+
 - `createTag()` - Create new tag
 - `updateTag()` - Update tag
 - `deleteTag()` - Delete tag
 - `fetchAllTags()` - Get all tags
 
 #### Author Operations (`author.ts`)
+
 - `getOrCreateAuthor()` - Get/create author from Clerk
 
 ### Web Actions (`src/web/`)
 
 #### Contact (`contact.ts`)
+
 - `submitContactForm()` - Process contact submissions
 
 #### Cache (`redis-client.ts`)
+
 - `invalidateCache()` - Clear Redis cache
 - `getFromCache()` - Retrieve cached data
 - `setCache()` - Store in cache
@@ -51,15 +58,18 @@ The **actions package** contains all server-side business logic as Next.js Serve
 ### Common Utilities (`src/common/`)
 
 #### Email (`resend.ts`)
+
 - `sendEmail()` - Send single email
 - `sendNewsletter()` - Send to one subscriber
 - `sendBroadcastNewsletter()` - Send to all subscribers
 - `addContactToAudience()` - Add to Resend audience
 
 #### Revalidation (`revalidate.ts`)
+
 - `revalidatePaths()` - Invalidate Next.js cache
 
 #### Types (`types.ts`)
+
 - `PostType` - Full post interface
 - `PostListType` - Post list item interface
 - `Tags` - Tag interface

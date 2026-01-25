@@ -15,10 +15,10 @@ This package is internal to the monorepo and available via workspace imports.
 
 ## Exports
 
-| Configuration | Description |
-|---------------|-------------|
-| `base.json` | Base configuration for all packages |
-| `nextjs.json` | Configuration for Next.js apps |
+| Configuration        | Description                              |
+| -------------------- | ---------------------------------------- |
+| `base.json`          | Base configuration for all packages      |
+| `nextjs.json`        | Configuration for Next.js apps           |
 | `react-library.json` | Configuration for React library packages |
 
 ## Configurations
@@ -34,6 +34,7 @@ Used by all packages as a foundation:
 ```
 
 **Features:**
+
 - Strict mode enabled
 - ES2020 target
 - Module resolution settings
@@ -50,6 +51,7 @@ Used by Next.js applications:
 ```
 
 **Features:**
+
 - Next.js plugin integration
 - JSX support
 - Server/client component types
@@ -66,6 +68,7 @@ Used by React component packages:
 ```
 
 **Features:**
+
 - React JSX transform
 - Declaration file generation
 - Library-optimized settings
@@ -105,10 +108,10 @@ Used by React component packages:
 
 ## Compiler Options
 
-| Option | Value | Description |
-|--------|-------|-------------|
-| `strict` | `true` | Enable strict type checking |
-| `target` | `ES2020` | ECMAScript target version |
-| `moduleResolution` | `bundler` | Module resolution strategy |
-| `esModuleInterop` | `true` | ES module interoperability |
-| `skipLibCheck` | `true` | Skip type checking of declaration files |
+| Option             | Value     | Description                             |
+| ------------------ | --------- | --------------------------------------- |
+| `strict`           | `true`    | Enable strict type checking             |
+| `target`           | `ES2020`  | ECMAScript target version               |
+| `moduleResolution` | `bundler` | Module resolution strategy              |
+| `esModuleInterop`  | `true`    | ES module interoperability              |
+| `skipLibCheck`     | `true`    | Skip type checking of declaration files |

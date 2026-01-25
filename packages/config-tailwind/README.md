@@ -13,8 +13,8 @@ import sharedConfig from "@repo/config-tailwind";
 
 ## Exports
 
-| Export | Description |
-|--------|-------------|
+| Export    | Description                 |
+| --------- | --------------------------- |
 | `default` | Base Tailwind configuration |
 
 ## Configuration
@@ -41,22 +41,22 @@ export default config;
 
 ## Included Configuration
 
-| Feature | Description |
-|---------|-------------|
+| Feature       | Description                      |
+| ------------- | -------------------------------- |
 | Color Palette | Custom colors with CSS variables |
-| Typography | Font families and sizes |
-| Spacing | Consistent spacing scale |
-| Breakpoints | Responsive breakpoints |
-| Animations | Custom animation utilities |
-| Dark Mode | Dark mode via class strategy |
+| Typography    | Font families and sizes          |
+| Spacing       | Consistent spacing scale         |
+| Breakpoints   | Responsive breakpoints           |
+| Animations    | Custom animation utilities       |
+| Dark Mode     | Dark mode via class strategy     |
 
 ## Custom Utilities
 
-| Utility | Description |
-|---------|-------------|
-| `animate-fade-in` | Fade in animation |
-| `animate-slide-up` | Slide up animation |
-| `text-gradient` | Gradient text effect |
+| Utility            | Description          |
+| ------------------ | -------------------- |
+| `animate-fade-in`  | Fade in animation    |
+| `animate-slide-up` | Slide up animation   |
+| `text-gradient`    | Gradient text effect |
 
 ## CSS Variables
 

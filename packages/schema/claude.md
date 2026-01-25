@@ -7,19 +7,25 @@ The **schema package** provides shared Zod validation schemas and TypeScript typ
 ## What Has Been Done
 
 ### Contact Schema (`zod/contact-schema.ts`)
+
 Validates contact form submissions:
+
 - `email` - Valid email format
 - `name` - Minimum 6 characters
 - `message` - Minimum 20 characters
 
 ### Tag Schema (`zod/tag-schema.ts`)
+
 Validates tag creation/editing:
+
 - `name` - Tag name validation
 - `slug` - URL-safe slug
 - `description` - Optional description
 
 ### Date/Time Validation (`zod/date-time-validation.ts`)
+
 Utilities for date and time validation:
+
 - `validateDate()` - Date format validation
 - `validateTime()` - Time format validation
 - `combineDateTimeIST()` - Combine date and time in IST
@@ -46,7 +52,10 @@ import { contactSchema } from "@repo/schema/zod/contact-schema";
 import { tagSchema } from "@repo/schema/zod/tag-schema";
 
 // Date/time validation
-import { validateDate, combineDateTimeIST } from "@repo/schema/zod/date-time-validation";
+import {
+  validateDate,
+  combineDateTimeIST,
+} from "@repo/schema/zod/date-time-validation";
 ```
 
 ## Restrictions
@@ -75,7 +84,7 @@ import { contactSchema } from "@repo/schema/zod/contact-schema";
 const result = contactSchema.safeParse({
   email: "user@example.com",
   name: "John Doe",
-  message: "This is a test message that is long enough."
+  message: "This is a test message that is long enough.",
 });
 
 if (!result.success) {

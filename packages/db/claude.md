@@ -7,27 +7,30 @@ The **db package** provides the database client and connection management for th
 ## What Has Been Done
 
 ### Prisma Client
+
 - Singleton pattern to prevent connection pool exhaustion in Next.js
 - MongoDB datasource configuration
 - Full schema with all models
 
 ### Redis Client
+
 - Connection to DigitalOcean managed Redis
 - Error handling and connection management
 - Used for blog content caching
 
 ### Database Models
 
-| Model | Purpose |
-|-------|---------|
-| `ContactForm` | Contact form submissions |
-| `Post` | Blog posts and newsletters |
-| `Tag` | Content categorization |
-| `TagOnPost` | Many-to-many relationship |
-| `Author` | Content creators (Clerk integration) |
-| `Member` | Newsletter subscribers |
+| Model         | Purpose                              |
+| ------------- | ------------------------------------ |
+| `ContactForm` | Contact form submissions             |
+| `Post`        | Blog posts and newsletters           |
+| `Tag`         | Content categorization               |
+| `TagOnPost`   | Many-to-many relationship            |
+| `Author`      | Content creators (Clerk integration) |
+| `Member`      | Newsletter subscribers               |
 
 ### Post Model Features
+
 - Status management (DRAFT, PUBLISHED, SCHEDULED, ARCHIVED, DELETED)
 - Newsletter type support (PERSONAL, COMPANY)
 - SEO metadata fields (og, twitter, canonical)
@@ -36,6 +39,7 @@ The **db package** provides the database client and connection management for th
 - View count tracking
 
 ### Indexes
+
 - `featured` - For featured posts queries
 - `publishDate` - For scheduled post queries
 - `status` - For filtering by status

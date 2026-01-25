@@ -9,44 +9,53 @@ The **store package** manages shared state using Recoil atoms. It provides centr
 ### Atoms (`src/atoms/`)
 
 #### Post State (`post.ts`)
+
 - `postState` - Current post content (title, content, featureImage, postUrl, tags)
 - `postMetadataState` - SEO metadata (title, description, keywords, og, twitter)
 - `postIdState` - Current post ID
 - `postDataState` - Full post data object
 
 #### UI State
+
 - `selectDate` - Selected publish date
 - `selectedTimeIst` - Selected publish time (IST)
 - `errorDuplicateUrlState` - Duplicate URL error flag
 - `savePostErrorState` - Post save error message
 
 #### Tags State
+
 - `tagsState` - All available tags
 - `selectedTagsState` - Tags selected for current post
 
 #### Pagination State
+
 - `pageNumberState` - Admin posts pagination
 - `blogPageNumberState` - Blog listing pagination
 
 #### Member State
+
 - `memberState` - Current member data
 - `totalMembersState` - Total member count
 
 ### Static Data (`src/data/`)
 
 #### About (`about.ts`)
+
 - Personal bio and information
 - Experience and background
 
 #### Projects (`projects.ts`)
+
 - Portfolio project list
 - Project descriptions and links
 
 #### Library (`library.ts`)
+
 - Resource collection
 - Books, articles, tools
 
 #### Uses (`uses.ts`)
+
 - Tech stack information
 - Tools and software used
 
@@ -112,7 +121,7 @@ function PostEditor() {
   const metadata = useRecoilValue(postMetadataState);
 
   const updateTitle = (title: string) => {
-    setPost(prev => ({ ...prev, title }));
+    setPost((prev) => ({ ...prev, title }));
   };
 }
 ```

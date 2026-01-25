@@ -6,20 +6,20 @@
 
 ## Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| **Turborepo** | Monorepo build system |
-| **Next.js 14** | Frontend framework (App Router) |
-| **Prisma 5.13** | ORM for MongoDB |
-| **MongoDB** | Database |
-| **Clerk** | Authentication |
-| **Resend** | Email & newsletter delivery |
-| **PostHog** | Analytics |
-| **AWS S3** | Media storage |
-| **Redis** | Caching (DigitalOcean) |
-| **BlockNote** | Rich text editor |
-| **Tailwind CSS** | Styling |
-| **Shadcn/ui** | Component library |
+| Technology       | Purpose                         |
+| ---------------- | ------------------------------- |
+| **Turborepo**    | Monorepo build system           |
+| **Next.js 14**   | Frontend framework (App Router) |
+| **Prisma 5.13**  | ORM for MongoDB                 |
+| **MongoDB**      | Database                        |
+| **Clerk**        | Authentication                  |
+| **Resend**       | Email & newsletter delivery     |
+| **PostHog**      | Analytics                       |
+| **AWS S3**       | Media storage                   |
+| **Redis**        | Caching (DigitalOcean)          |
+| **BlockNote**    | Rich text editor                |
+| **Tailwind CSS** | Styling                         |
+| **Shadcn/ui**    | Component library               |
 
 ## Architecture Overview
 
@@ -59,6 +59,7 @@ Email Delivery (Resend) / Storage (S3)
 ## What Has Been Done
 
 ### Core Features (Completed)
+
 - Blog creation and editing with Notion-style BlockNote editor
 - Newsletter management and sending via Resend
 - Member subscription management
@@ -75,6 +76,7 @@ Email Delivery (Resend) / Storage (S3)
 - Contact form with email notifications
 
 ### Admin Features (Completed)
+
 - Post CRUD operations (create, read, update, delete)
 - Draft/Published/Scheduled post states
 - Featured post management
@@ -83,6 +85,7 @@ Email Delivery (Resend) / Storage (S3)
 - Role-based access (ADMIN, OWNER, WRITER)
 
 ### Web Features (Completed)
+
 - Landing page
 - Blog/Articles listing
 - Newsletter subscription
@@ -94,12 +97,14 @@ Email Delivery (Resend) / Storage (S3)
 ## Restrictions & Constraints
 
 ### Technical Constraints
+
 - MongoDB only (no SQL databases)
 - Clerk for authentication (no custom auth)
 - Resend for emails (rate limits apply)
 - Redis caching requires DigitalOcean managed Redis
 
 ### Code Patterns to Follow
+
 - Server actions in `packages/actions` for all data mutations
 - Shared components in `packages/ui`
 - State management via Recoil atoms in `packages/store`
@@ -107,6 +112,7 @@ Email Delivery (Resend) / Storage (S3)
 - All database access through Prisma client in `packages/db`
 
 ### Environment Variables Required
+
 ```
 # Database
 DATABASE_URL=
@@ -136,6 +142,7 @@ NEXT_PUBLIC_POSTHOG_HOST=
 ## What Needs To Be Done
 
 ### Pending Features
+
 - [ ] Email template customization UI
 - [ ] Analytics dashboard in admin
 - [ ] Member segmentation for targeted newsletters
@@ -148,6 +155,7 @@ NEXT_PUBLIC_POSTHOG_HOST=
 - [ ] Collaborative editing
 
 ### Technical Debt
+
 - [ ] Add comprehensive test coverage
 - [ ] Implement proper error boundaries
 - [ ] Add loading states for all async operations
@@ -155,6 +163,7 @@ NEXT_PUBLIC_POSTHOG_HOST=
 - [ ] Add rate limiting for API routes
 
 ### Performance Improvements
+
 - [ ] Implement ISR for frequently accessed pages
 - [ ] Add CDN for static assets
 - [ ] Optimize database queries with proper indexing
@@ -177,12 +186,12 @@ pnpm db:push       # Push schema to database
 
 ## Key Files Reference
 
-| File | Purpose |
-|------|---------|
-| `apps/web/app/page.tsx` | Landing page |
-| `apps/admin/app/(posts)/editor/[id]/page.tsx` | Post editor |
-| `packages/actions/src/admin/crud-posts.ts` | Post CRUD operations |
-| `packages/actions/src/common/resend.ts` | Email sending logic |
-| `packages/db/prisma/schema.prisma` | Database schema |
-| `packages/ui/src/components/web/articles/blog-content.tsx` | Blog reader |
-| `packages/store/src/atoms/post.ts` | Post state atoms |
+| File                                                       | Purpose              |
+| ---------------------------------------------------------- | -------------------- |
+| `apps/web/app/page.tsx`                                    | Landing page         |
+| `apps/admin/app/(posts)/editor/[id]/page.tsx`              | Post editor          |
+| `packages/actions/src/admin/crud-posts.ts`                 | Post CRUD operations |
+| `packages/actions/src/common/resend.ts`                    | Email sending logic  |
+| `packages/db/prisma/schema.prisma`                         | Database schema      |
+| `packages/ui/src/components/web/articles/blog-content.tsx` | Blog reader          |
+| `packages/store/src/atoms/post.ts`                         | Post state atoms     |
