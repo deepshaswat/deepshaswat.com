@@ -1,11 +1,15 @@
 "use client";
 
 import React from "react";
+import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "@repo/ui";
 import { CommandBar, CSPostHogProvider } from "@repo/ui/web";
-import { RecoilRoot } from "recoil";
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
+export function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
   return (
     <CSPostHogProvider>
       <RecoilRoot>
@@ -19,4 +23,4 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       </RecoilRoot>
     </CSPostHogProvider>
   );
-};
+}

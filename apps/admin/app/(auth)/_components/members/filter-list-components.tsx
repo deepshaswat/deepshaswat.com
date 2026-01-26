@@ -29,48 +29,65 @@ const filterOperators = [
   "ends with",
 ];
 
-const FilterListComponent = () => {
-  const [filters, setFilters] = useState([
-    { category: "Name", operator: "is", value: "" },
+interface Filter {
+  id: string;
+  category: string;
+  operator: string;
+  value: string;
+}
+
+const generateId = (): string => Math.random().toString(36).substring(2, 9);
+
+function FilterListComponent(): JSX.Element {
+  const [filters, setFilters] = useState<Filter[]>([
+    { id: generateId(), category: "Name", operator: "is", value: "" },
   ]);
 
-  const addFilter = () => {
-    setFilters([...filters, { category: "Name", operator: "is", value: "" }]);
+  const addFilter = (): void => {
+    setFilters([
+      ...filters,
+      { id: generateId(), category: "Name", operator: "is", value: "" },
+    ]);
   };
 
-  const removeFilter = (index: number) => {
-    const updatedFilters = filters.filter((_, i) => i !== index);
+  const removeFilter = (id: string): void => {
+    const updatedFilters = filters.filter((filter) => filter.id !== id);
     setFilters(updatedFilters);
   };
 
-  const updateFilter = (index: number, key: string, value: string) => {
-    const updatedFilters = filters.map((filter, i) =>
-      i === index ? { ...filter, [key]: value } : filter,
+  const updateFilter = (id: string, key: string, value: string): void => {
+    const updatedFilters = filters.map((filter) =>
+      filter.id === id ? { ...filter, [key]: value } : filter,
     );
     setFilters(updatedFilters);
   };
 
-  const applyFilters = () => {
+  const applyFilters = (): void => {
     // Handle the application of filters
+    // eslint-disable-next-line no-console -- Debug logging for filter application
     console.log(filters);
   };
 
-  const resetFilters = () => {
-    setFilters([{ category: "Name", operator: "is", value: "" }]);
+  const resetFilters = (): void => {
+    setFilters([
+      { id: generateId(), category: "Name", operator: "is", value: "" },
+    ]);
   };
 
   return (
     <div className="p-4  rounded-md">
       <div className="bg-neutral-900 p-6 mb-4 rounded-md">
-        {filters.map((filter, index) => (
+        {filters.map((filter) => (
           <div
-            key={index}
             className="flex items-center gap-2 mb-4 w-full justify-between"
+            key={filter.id}
           >
             <select
-              value={filter.category}
-              onChange={(e) => updateFilter(index, "category", e.target.value)}
               className="flex items-center justify-center h-8   rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed w-48 lg:w-64 pr-1"
+              onChange={(e) => {
+                updateFilter(filter.id, "category", e.target.value);
+              }}
+              value={filter.category}
             >
               {filterCategories.map((category) => (
                 <option key={category} value={category}>
@@ -79,9 +96,11 @@ const FilterListComponent = () => {
               ))}
             </select>
             <select
-              value={filter.operator}
-              onChange={(e) => updateFilter(index, "operator", e.target.value)}
               className="flex items-center justify-center h-8  rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed w-36 lg:w-48"
+              onChange={(e) => {
+                updateFilter(filter.id, "operator", e.target.value);
+              }}
+              value={filter.operator}
             >
               {filterOperators.map((operator) => (
                 <option key={operator} value={operator}>
@@ -91,27 +110,31 @@ const FilterListComponent = () => {
             </select>
             <div className="flex items-center bg-neutral-800 border-2 border-transparent focus-within:border-green-500 rounded-md">
               <input
+                className="flex h-8  w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed focus:bg-neutral-900 disabled:opacity-50"
+                onChange={(e) => {
+                  updateFilter(filter.id, "value", e.target.value);
+                }}
                 type="text"
                 value={filter.value}
-                onChange={(e) => updateFilter(index, "value", e.target.value)}
-                className="flex h-8  w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-800 px-3 py-2 text-sm file:text-sm file:font-medium  disabled:cursor-not-allowed focus:bg-neutral-900 disabled:opacity-50"
               />
             </div>
-            {filters.length > 1 && (
+            {filters.length > 1 ? (
               <Button
-                onClick={() => removeFilter(index)}
-                variant="ghost"
                 className="text-red-500"
+                onClick={() => {
+                  removeFilter(filter.id);
+                }}
+                variant="ghost"
               >
                 <X className="w-4 h-4" />
               </Button>
-            )}
+            ) : null}
           </div>
         ))}
         <Button
+          className="text-green-500 !no-underline !ml-0"
           onClick={addFilter}
           variant="link"
-          className="text-green-500 !no-underline !ml-0"
         >
           <Plus className="w-4 h-4 mr-2" /> Add filter
         </Button>
@@ -126,6 +149,6 @@ const FilterListComponent = () => {
       </div>
     </div>
   );
-};
+}
 
 export default FilterListComponent;

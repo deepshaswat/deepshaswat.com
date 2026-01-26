@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
+import { Toaster } from "@repo/ui";
+import { Appbar, Footer, NewsletterButton } from "@repo/ui/web";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Appbar, Footer, NewsletterButton } from "@repo/ui/web";
-import { Toaster } from "@repo/ui";
 
 const inter = Nunito({ subsets: ["latin"] });
 
@@ -117,7 +117,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>): JSX.Element {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />

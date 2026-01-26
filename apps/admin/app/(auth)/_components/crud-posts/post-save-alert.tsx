@@ -17,14 +17,14 @@ interface NavigationConfirmationProps {
   onDiscard: () => void;
 }
 
-const NavigationConfirmation = ({
+function NavigationConfirmation({
   isOpen,
   onClose,
   onSave,
   onDiscard,
-}: NavigationConfirmationProps) => {
+}: NavigationConfirmationProps): JSX.Element {
   return (
-    <AlertDialog open={isOpen} onOpenChange={onClose}>
+    <AlertDialog onOpenChange={onClose} open={isOpen}>
       <AlertDialogContent className="bg-neutral-800 text-neutral-200">
         <AlertDialogHeader>
           <AlertDialogTitle>Unsaved Changes</AlertDialogTitle>
@@ -35,14 +35,14 @@ const NavigationConfirmation = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-            onClick={onDiscard}
             className="bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
+            onClick={onDiscard}
           >
             Discard
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={onSave}
             className="bg-green-600 text-white hover:bg-green-500"
+            onClick={onSave}
           >
             Save Changes
           </AlertDialogAction>
@@ -50,6 +50,6 @@ const NavigationConfirmation = ({
       </AlertDialogContent>
     </AlertDialog>
   );
-};
+}
 
 export default NavigationConfirmation;

@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import type { Tags } from "@repo/actions";
+import {
+  dateTimeValidation,
+  fetchAllTagsWithPostCount,
+  PostStatus,
+} from "@repo/actions";
 import { Link as LinkIcon, Trash2, Star } from "lucide-react";
-
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-
+import axios from "axios";
 import {
   selectDate,
   postMetadataState,
@@ -17,7 +21,6 @@ import {
   savePostErrorState,
   postDataState,
 } from "@repo/store";
-
 import {
   Label,
   DatePicker,
@@ -36,19 +39,22 @@ import {
   Separator,
 } from "@repo/ui";
 
-import {
-  dateTimeValidation,
-  fetchAllTagsWithPostCount,
-  PostStatus,
-  Tags,
-} from "@repo/actions";
-import axios from "axios";
+interface UploadResponse {
+  uploadURL: string;
+  s3URL: string;
+}
 
-export function MetadataSidebar() {
+function getCharCountClass(length: number, limit: number): string {
+  if (length === 0) return "";
+  return length <= limit ? "text-green-500" : "text-red-500";
+}
+
+export function MetadataSidebar(): JSX.Element {
   const [post, setPost] = useRecoilState(postState);
-  const [postFull, setPostFull] = useRecoilState(postDataState);
+  const [postFull] = useRecoilState(postDataState);
   const [metadata, setMetadata] = useRecoilState(postMetadataState);
-  const [error, setError] = useRecoilState(savePostErrorState);
+  const [validationError, setValidationError] =
+    useRecoilState(savePostErrorState);
   const [errorDuplicateUrl, setErrorDuplicateUrl] = useRecoilState(
     errorDuplicateUrlState,
   );
@@ -63,22 +69,28 @@ export function MetadataSidebar() {
   const [abortController, setAbortController] =
     useState<AbortController | null>(null);
 
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const url = reverseAndHyphenate(e.target.value);
     setPost({ ...post, postUrl: url });
-    const canonicalUrl = "www.deepshaswat.com/" + url;
-    setMetadata({ ...metadata, canonicalUrl: canonicalUrl });
+    const canonicalUrl = `www.deepshaswat.com/${url}`;
+    setMetadata({ ...metadata, canonicalUrl });
   };
 
-  const handleExcerptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleExcerptChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ): void => {
     setPost((prev) => ({ ...prev, excerpt: e.target.value }));
   };
 
-  const handleTimeIstChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTimeIstChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     setInputTimeIst(e.target.value);
   };
 
-  const handleMetaTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMetaTitleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     setMetadata((prev) => ({
       ...prev,
       title: e.target.value,
@@ -89,7 +101,7 @@ export function MetadataSidebar() {
 
   const handleMetaDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
+  ): void => {
     setMetadata((prev) => ({
       ...prev,
       description: e.target.value,
@@ -98,7 +110,9 @@ export function MetadataSidebar() {
     }));
   };
 
-  const handleOgTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOgTitleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     setMetadata((prev) => ({
       ...prev,
       ogTitle: e.target.value,
@@ -107,14 +121,16 @@ export function MetadataSidebar() {
 
   const handleOgDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
+  ): void => {
     setMetadata((prev) => ({
       ...prev,
       ogDescription: e.target.value,
     }));
   };
 
-  const handleTwitterTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTwitterTitleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     setMetadata((prev) => ({
       ...prev,
       twitterTitle: e.target.value,
@@ -123,25 +139,25 @@ export function MetadataSidebar() {
 
   const handleTwitterDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
+  ): void => {
     setMetadata((prev) => ({
       ...prev,
       twitterDescription: e.target.value,
     }));
   };
 
-  const toggleFeaturePost = () => {
+  const toggleFeaturePost = (): void => {
     setPost({ ...post, featured: !post.featured });
   };
 
-  const handleFileUpload = async (file?: File) => {
+  const handleFileUpload = async (file?: File): Promise<string | undefined> => {
     if (file) {
       setIsSubmitting(true);
       const controller = new AbortController();
       setAbortController(controller);
 
       try {
-        const { data } = await axios.post(
+        const { data } = await axios.post<UploadResponse>(
           "/api/upload",
           {
             fileType: file.type,
@@ -161,21 +177,18 @@ export function MetadataSidebar() {
         });
 
         return s3URL;
-      } catch (error) {
-        if (axios.isCancel(error)) {
-          console.log("Upload cancelled");
-        } else {
-          console.error("Error uploading file:", error);
-        }
+      } catch {
+        // Upload cancelled or failed
       } finally {
         setIsSubmitting(false);
         setAbortController(null);
         closeAllUploaders();
       }
     }
+    return undefined;
   };
 
-  const handleCancelUpload = () => {
+  const handleCancelUpload = (): void => {
     if (abortController) {
       abortController.abort();
       setIsSubmitting(false);
@@ -183,63 +196,66 @@ export function MetadataSidebar() {
     }
   };
 
-  // Separate close handlers for each uploader
-  const closeMetaImageUpload = () => {
+  const closeMetaImageUpload = (): void => {
     setIsMetaImageUploadOpen(false);
     setIsSubmitting(false);
     setMetadata((prev) => ({ ...prev, imageUrl: "" }));
   };
 
-  const closeOgImageUpload = () => {
+  const closeOgImageUpload = (): void => {
     setIsOgImageUploadOpen(false);
     setIsSubmitting(false);
     setMetadata((prev) => ({ ...prev, ogImage: "" }));
   };
 
-  const closeTwitterImageUpload = () => {
+  const closeTwitterImageUpload = (): void => {
     setIsTwitterImageUploadOpen(false);
     setIsSubmitting(false);
     setMetadata((prev) => ({ ...prev, twitterImage: "" }));
   };
 
-  // Helper function to close all uploaders
-  const closeAllUploaders = () => {
+  const closeAllUploaders = (): void => {
     setIsMetaImageUploadOpen(false);
     setIsOgImageUploadOpen(false);
     setIsTwitterImageUploadOpen(false);
     setIsSubmitting(false);
   };
 
-  // Modified handlers for each type of upload
-  const handleMetaDataImageChange = async (file?: File) => {
+  const handleMetaDataImageChange = async (file?: File): Promise<void> => {
     if (!file) {
       closeMetaImageUpload();
       return;
     }
     const url = await handleFileUpload(file);
-    setMetadata((prev) => ({ ...prev, imageUrl: url }));
+    if (url) {
+      setMetadata((prev) => ({ ...prev, imageUrl: url }));
+    }
   };
 
-  const handleOgImageChange = async (file?: File) => {
+  const handleOgImageChange = async (file?: File): Promise<void> => {
     if (!file) {
       closeOgImageUpload();
       return;
     }
     const url = await handleFileUpload(file);
-    setMetadata((prev) => ({ ...prev, ogImage: url }));
+    if (url) {
+      setMetadata((prev) => ({ ...prev, ogImage: url }));
+    }
   };
 
-  const handleTwitterImageChange = async (file?: File) => {
+  const handleTwitterImageChange = async (file?: File): Promise<void> => {
     if (!file) {
       closeTwitterImageUpload();
       return;
     }
     const url = await handleFileUpload(file);
-    setMetadata((prev) => ({ ...prev, twitterImage: url }));
+    if (url) {
+      setMetadata((prev) => ({ ...prev, twitterImage: url }));
+    }
   };
 
   useEffect(() => {
-    const validateDate = async () => {
+    const validateDate = async (): Promise<void> => {
       const result = await dateTimeValidation(inputDate, inputTimeIst);
 
       if (
@@ -247,16 +263,16 @@ export function MetadataSidebar() {
           postFull?.status === PostStatus.SCHEDULED) &&
         result.error
       ) {
-        setError(result.error);
-      } else {
-        setError(null);
-        const combinedDate = result.combinedDate as Date;
-        setPost({ ...post, publishDate: combinedDate });
+        setValidationError(result.error);
+      } else if (result.combinedDate) {
+        setValidationError(null);
+        const combinedDate = result.combinedDate;
+        setPost((prev) => ({ ...prev, publishDate: combinedDate }));
       }
     };
 
-    validateDate();
-  }, [inputDate, inputTimeIst]);
+    void validateDate();
+  }, [inputDate, inputTimeIst, postFull?.status, setValidationError, setPost]);
 
   useEffect(() => {
     if (errorDuplicateUrl) {
@@ -264,7 +280,7 @@ export function MetadataSidebar() {
         setErrorDuplicateUrl(null);
       }, 5000);
     }
-  }, [errorDuplicateUrl]);
+  }, [errorDuplicateUrl, setErrorDuplicateUrl]);
 
   const keywordCount = metadata.keywords
     ? metadata.keywords
@@ -273,20 +289,18 @@ export function MetadataSidebar() {
         .filter((k) => k.length > 0).length
     : 0;
 
-  const reverseAndHyphenate = (item: string) => {
+  const reverseAndHyphenate = (item: string): string => {
     const url = item.toLowerCase().split(" ").join("-");
     const trimmedItem = url.trim();
     return trimmedItem;
   };
 
-  const handleTagsChange = (tags: Tags[]) => {
-    // First update selectedTags state
-    setSelectedTags(tags);
+  const handleTagsChange = (newTags: Tags[]): void => {
+    setSelectedTags(newTags);
 
-    // Then update post.tags state
     setPost((prevPost) => ({
       ...prevPost,
-      tags: tags, // Directly set the new tags instead of appending
+      tags: newTags,
     }));
   };
 
@@ -296,39 +310,39 @@ export function MetadataSidebar() {
 
       <div className="space-y-4 mt-8">
         <div className="space-y-2">
-          <Label htmlFor="PostUrl" className="text-[13px] text-neutral-200">
+          <Label className="text-[13px] text-neutral-200" htmlFor="PostUrl">
             Post URL
           </Label>
           <div className="flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md">
             <LinkIcon className="text-neutral-400 ml-2 size-4" />
             <input
-              id="PostUrl"
-              type="text"
-              placeholder="Post URL"
-              value={post.postUrl}
-              onChange={handleUrlChange}
               className="flex h-8 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              id="PostUrl"
+              onChange={handleUrlChange}
+              placeholder="Post URL"
+              type="text"
+              value={post.postUrl}
             />
           </div>
 
-          {!post.postUrl && (
+          {post.postUrl === "" && (
             <span className="text-[12px] text-neutral-500">
               www.deepshaswat.com/
             </span>
           )}
-          {!errorDuplicateUrl && post.postUrl && (
+          {!errorDuplicateUrl && post.postUrl !== "" && (
             <span className="text-[12px] text-neutral-500">
               www.deepshaswat.com/{post.postUrl}/
             </span>
           )}
-          {errorDuplicateUrl && (
+          {errorDuplicateUrl !== null && (
             <span className="text-red-500 text-sm mt-1">
               {errorDuplicateUrl}
             </span>
           )}
         </div>
         <div className="flex flex-col gap-2 mb-4">
-          <Label htmlFor="PublishDate" className="text-[13px] text-neutral-200">
+          <Label className="text-[13px] text-neutral-200" htmlFor="PublishDate">
             Publish Date
           </Label>
           <div className="flex flex-row items-center">
@@ -336,12 +350,12 @@ export function MetadataSidebar() {
             <div className="flex flex-row items-center group">
               <div className="ml-2 flex items-center bg-neutral-700 group-hover:bg-neutral-900 border-none rounded-md">
                 <input
-                  id="publishTime"
-                  type="time"
-                  placeholder="17:00"
-                  value={inputTimeIst}
-                  onChange={handleTimeIstChange}
                   className="flex h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  id="publishTime"
+                  onChange={handleTimeIstChange}
+                  placeholder="17:00"
+                  type="time"
+                  value={inputTimeIst}
                 />
                 <span className="text-neutral-400 items-center mr-4 text-[10px]">
                   IST
@@ -349,31 +363,25 @@ export function MetadataSidebar() {
               </div>
             </div>
           </div>
-          {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+          {validationError ? (
+            <span className="text-red-500 text-sm mt-1">{validationError}</span>
+          ) : null}
         </div>
 
         <div>
-          <Label htmlFor="Excerpt" className="text-[13px] text-neutral-200">
+          <Label className="text-[13px] text-neutral-200" htmlFor="Excerpt">
             Excerpt
           </Label>
           <Textarea
+            className="flex mt-4 h-8 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
             id="Excerpt"
+            onChange={handleExcerptChange}
             placeholder="Write a short description of your post"
             value={post.excerpt}
-            onChange={handleExcerptChange}
-            className="flex mt-4 h-8 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 150 characters. You've used{" "}
-            <span
-              className={
-                post.excerpt.length === 0
-                  ? ""
-                  : post.excerpt.length <= 250
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
-            >
+            Recommended: 150 characters. You&apos;ve used{" "}
+            <span className={getCharCountClass(post.excerpt.length, 250)}>
               {post.excerpt.length}
             </span>
             .
@@ -381,8 +389,8 @@ export function MetadataSidebar() {
         </div>
         {/* <div className='mt-4'> */}
         <TagsComponent
-          oldSelectedTags={selectedTags}
           newSelectedTags={handleTagsChange}
+          oldSelectedTags={selectedTags}
         />
         {/* </div> */}
         <div className="flex items-center justify-between space-x-2 bg-neutral-700 p-4 rounded-md ">
@@ -395,10 +403,10 @@ export function MetadataSidebar() {
             <Label htmlFor="feature-post">Feature this post</Label>
           </div>
           <Switch
-            id="feature-post"
             checked={post.featured}
-            onCheckedChange={toggleFeaturePost}
             className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500 data-[state=unchecked]:bg-neutral-200 data-[state=unchecked]:border-neutral-200"
+            id="feature-post"
+            onCheckedChange={toggleFeaturePost}
           />
         </div>
         <div className="mt-4">
@@ -408,29 +416,21 @@ export function MetadataSidebar() {
         </div>
         <Separator />
         <div>
-          <Label htmlFor="SEOKeywords" className="text-[13px] text-neutral-200">
+          <Label className="text-[13px] text-neutral-200" htmlFor="SEOKeywords">
             SEO Keywords
           </Label>
           <Textarea
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
             id="SEOKeywords"
+            onChange={(e) => {
+              setMetadata((prev) => ({ ...prev, keywords: e.target.value }));
+            }}
             placeholder="SEO Keywords"
             value={metadata.keywords}
-            onChange={(e) =>
-              setMetadata((prev) => ({ ...prev, keywords: e.target.value }))
-            }
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 10 words (Max: 500 characters). <br /> You've used{" "}
-            <span
-              className={
-                keywordCount === 0
-                  ? ""
-                  : metadata.keywords.length <= 100
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
-            >
+            Recommended: 10 words (Max: 500 characters). <br /> You&apos;ve used{" "}
+            <span className={getCharCountClass(keywordCount, 100)}>
               {keywordCount}
             </span>
             .
@@ -438,30 +438,22 @@ export function MetadataSidebar() {
         </div>
         <div className="space-y-2">
           <Label
-            htmlFor="MetaDataTitle"
             className="text-[13px] text-neutral-200"
+            htmlFor="MetaDataTitle"
           >
             Meta Data Title
           </Label>
           <input
-            id="MetaDataTitle"
-            type="text"
-            placeholder="Meta Data Title"
-            value={metadata.title}
-            onChange={handleMetaTitleChange}
             className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            id="MetaDataTitle"
+            onChange={handleMetaTitleChange}
+            placeholder="Meta Data Title"
+            type="text"
+            value={metadata.title}
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 50 characters. You've used{" "}
-            <span
-              className={
-                metadata.title.length === 0
-                  ? ""
-                  : metadata.title.length <= 100
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
-            >
+            Recommended: 50 characters. You&apos;ve used{" "}
+            <span className={getCharCountClass(metadata.title.length, 100)}>
               {metadata.title.length}
             </span>
             .
@@ -469,28 +461,22 @@ export function MetadataSidebar() {
         </div>
         <div>
           <Label
-            htmlFor="MetaDataDescription"
             className="text-[13px] text-neutral-200"
+            htmlFor="MetaDataDescription"
           >
             Meta Data Description
           </Label>
           <Textarea
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
             id="MetaDataDescription"
+            onChange={handleMetaDescriptionChange}
             placeholder="Meta Data Description"
             value={metadata.description}
-            onChange={handleMetaDescriptionChange}
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 160 characters. You've used{" "}
+            Recommended: 160 characters. You&apos;ve used{" "}
             <span
-              className={
-                metadata.description.length === 0
-                  ? ""
-                  : metadata.description.length <= 500
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
+              className={getCharCountClass(metadata.description.length, 500)}
             >
               {metadata.description.length}
             </span>
@@ -499,46 +485,42 @@ export function MetadataSidebar() {
         </div>
         <div className="flex flex-col gap-4">
           <Label
-            htmlFor="MetaDataImage"
             className="text-[13px] text-neutral-200 mt-4"
+            htmlFor="MetaDataImage"
           >
             Meta Data Image Upload
           </Label>
           <UploadComponent
-            imageUrl={metadata.imageUrl}
-            isSubmitting={isSubmitting}
-            onChange={handleMetaDataImageChange}
-            isFileUploadOpen={isMetaImageUploadOpen}
-            toggleFileUpload={() => setIsMetaImageUploadOpen((prev) => !prev)}
-            onCancel={handleCancelUpload}
-            text="Add an image"
             buttonVariant="metadata"
+            imageUrl={metadata.imageUrl}
+            isFileUploadOpen={isMetaImageUploadOpen}
+            isSubmitting={isSubmitting}
+            onCancel={handleCancelUpload}
+            onChange={(file) => {
+              void handleMetaDataImageChange(file);
+            }}
+            text="Add an image"
+            toggleFileUpload={() => {
+              setIsMetaImageUploadOpen((prev) => !prev);
+            }}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="OgTitle" className="text-[13px] text-neutral-200">
+          <Label className="text-[13px] text-neutral-200" htmlFor="OgTitle">
             OG Title
           </Label>
           <input
-            id="OgTitle"
-            type="text"
-            placeholder="OG Title"
-            value={metadata.ogTitle}
-            onChange={handleOgTitleChange}
             className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            id="OgTitle"
+            onChange={handleOgTitleChange}
+            placeholder="OG Title"
+            type="text"
+            value={metadata.ogTitle}
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 50 characters. You've used{" "}
-            <span
-              className={
-                metadata.ogTitle.length === 0
-                  ? ""
-                  : metadata.ogTitle.length <= 100
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
-            >
+            Recommended: 50 characters. You&apos;ve used{" "}
+            <span className={getCharCountClass(metadata.ogTitle.length, 100)}>
               {metadata.ogTitle.length}
             </span>
             .
@@ -547,28 +529,22 @@ export function MetadataSidebar() {
 
         <div className="space-y-2">
           <Label
-            htmlFor="OgDescription"
             className="text-[13px] text-neutral-200"
+            htmlFor="OgDescription"
           >
             OG Description
           </Label>
           <Textarea
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
             id="OgDescription"
+            onChange={handleOgDescriptionChange}
             placeholder="OG Description"
             value={metadata.ogDescription}
-            onChange={handleOgDescriptionChange}
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 160 characters. You've used{" "}
+            Recommended: 160 characters. You&apos;ve used{" "}
             <span
-              className={
-                metadata.ogDescription.length === 0
-                  ? ""
-                  : metadata.ogDescription.length <= 500
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
+              className={getCharCountClass(metadata.ogDescription.length, 500)}
             >
               {metadata.ogDescription.length}
             </span>
@@ -578,48 +554,46 @@ export function MetadataSidebar() {
 
         <div className="flex flex-col gap-4">
           <Label
-            htmlFor="OgImage"
             className="text-[13px] text-neutral-200 mt-4"
+            htmlFor="OgImage"
           >
             OG Image URL
           </Label>
           <UploadComponent
-            imageUrl={metadata.ogImage}
-            isSubmitting={isSubmitting}
-            onChange={handleOgImageChange}
-            isFileUploadOpen={isOgImageUploadOpen}
-            toggleFileUpload={() => setIsOgImageUploadOpen((prev) => !prev)}
-            onCancel={handleCancelUpload}
-            text="Add an image"
             buttonVariant="metadata"
+            imageUrl={metadata.ogImage}
+            isFileUploadOpen={isOgImageUploadOpen}
+            isSubmitting={isSubmitting}
+            onCancel={handleCancelUpload}
+            onChange={(file) => {
+              void handleOgImageChange(file);
+            }}
+            text="Add an image"
+            toggleFileUpload={() => {
+              setIsOgImageUploadOpen((prev) => !prev);
+            }}
           />
         </div>
 
         <div className="space-y-2">
           <Label
-            htmlFor="TwitterTitle"
             className="text-[13px] text-neutral-200"
+            htmlFor="TwitterTitle"
           >
             Twitter Title
           </Label>
           <input
-            id="TwitterTitle"
-            type="text"
-            placeholder="Twitter Title"
-            value={metadata.twitterTitle}
-            onChange={handleTwitterTitleChange}
             className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            id="TwitterTitle"
+            onChange={handleTwitterTitleChange}
+            placeholder="Twitter Title"
+            type="text"
+            value={metadata.twitterTitle}
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 50 characters. You've used{" "}
+            Recommended: 50 characters. You&apos;ve used{" "}
             <span
-              className={
-                metadata.twitterTitle.length === 0
-                  ? ""
-                  : metadata.twitterTitle.length <= 60
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
+              className={getCharCountClass(metadata.twitterTitle.length, 60)}
             >
               {metadata.twitterTitle.length}
             </span>
@@ -629,28 +603,25 @@ export function MetadataSidebar() {
 
         <div className="space-y-2">
           <Label
-            htmlFor="TwitterDescription"
             className="text-[13px] text-neutral-200"
+            htmlFor="TwitterDescription"
           >
             Twitter Description
           </Label>
           <Textarea
+            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
             id="TwitterDescription"
+            onChange={handleTwitterDescriptionChange}
             placeholder="Twitter Description"
             value={metadata.twitterDescription}
-            onChange={handleTwitterDescriptionChange}
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
           />
           <div className="text-neutral-500 text-[12px]">
-            Recommended: 160 characters. You've used{" "}
+            Recommended: 160 characters. You&apos;ve used{" "}
             <span
-              className={
-                metadata.twitterDescription.length === 0
-                  ? ""
-                  : metadata.twitterDescription.length <= 200
-                    ? "text-green-500"
-                    : "text-red-500"
-              }
+              className={getCharCountClass(
+                metadata.twitterDescription.length,
+                200,
+              )}
             >
               {metadata.twitterDescription.length}
             </span>
@@ -660,27 +631,29 @@ export function MetadataSidebar() {
 
         <div className="flex flex-col gap-4">
           <Label
-            htmlFor="TwitterImage"
             className="text-[13px] text-neutral-200 mt-4"
+            htmlFor="TwitterImage"
           >
             Twitter Image URL
           </Label>
           <UploadComponent
-            imageUrl={metadata.twitterImage}
-            isSubmitting={isSubmitting}
-            onChange={handleTwitterImageChange}
-            isFileUploadOpen={isTwitterImageUploadOpen}
-            toggleFileUpload={() =>
-              setIsTwitterImageUploadOpen((prev) => !prev)
-            }
-            onCancel={handleCancelUpload}
-            text="Add an image"
             buttonVariant="metadata"
+            imageUrl={metadata.twitterImage}
+            isFileUploadOpen={isTwitterImageUploadOpen}
+            isSubmitting={isSubmitting}
+            onCancel={handleCancelUpload}
+            onChange={(file) => {
+              void handleTwitterImageChange(file);
+            }}
+            text="Add an image"
+            toggleFileUpload={() => {
+              setIsTwitterImageUploadOpen((prev) => !prev);
+            }}
           />
         </div>
 
         <div>
-          <Button variant="destructive-outline" className="w-full mt-4">
+          <Button className="w-full mt-4" variant="destructive-outline">
             <Trash2 className="mr-2 size-4" /> Delete Post
           </Button>
         </div>
@@ -693,7 +666,7 @@ interface TagsProps {
   newSelectedTags: (value: Tags[]) => void;
 }
 
-const capitalizeFirstLetter = (item: string) => {
+function capitalizeFirstLetter(item: string): string {
   return item
     .split("-")
     .map((word, index) =>
@@ -702,35 +675,34 @@ const capitalizeFirstLetter = (item: string) => {
         : word.toLowerCase(),
     )
     .join(" ");
-};
+}
 
-// TagsComponent
-export const TagsComponent: React.FC<TagsProps> = ({
+export function TagsComponent({
   oldSelectedTags,
   newSelectedTags,
-}) => {
+}: TagsProps): JSX.Element {
   const [tags, setTags] = useRecoilState(tagsState);
   const [currentSelectedTags, setCurrentSelectedTags] =
     useState<Tags[]>(oldSelectedTags);
 
   useEffect(() => {
-    const fetchTags = async () => {
+    const fetchTags = async (): Promise<void> => {
       try {
         const tagOptions = await fetchAllTagsWithPostCount();
         setTags(tagOptions);
-      } catch (error) {
-        console.error("Error fetching tags:", error);
+      } catch {
+        // Error fetching tags
       }
     };
 
-    fetchTags();
+    void fetchTags();
   }, [setTags]);
 
   useEffect(() => {
     setCurrentSelectedTags(oldSelectedTags);
   }, [oldSelectedTags]);
 
-  const handleTagChange = (values: string[]) => {
+  const handleTagChange = (values: string[]): void => {
     const updatedTags = values
       .map((tagId) => {
         const tag = tags.find((t) => t.id === tagId);
@@ -754,24 +726,24 @@ export const TagsComponent: React.FC<TagsProps> = ({
   return (
     <div className="space-y-4">
       <Label className="text-[13px] mb-4 block">Tags</Label>
-      <MultiSelect value={selectedTagIds} onValueChange={handleTagChange}>
+      <MultiSelect onValueChange={handleTagChange} value={selectedTagIds}>
         <MultiSelectTrigger className="bg-neutral-700 border-2 border-transparent text-neutral-200">
           <MultiSelectValue
             className="text-neutral-200"
-            placeholder="Select tags"
             maxDisplay={2}
+            placeholder="Select tags"
           />
         </MultiSelectTrigger>
 
         <MultiSelectContent className="">
           <MultiSelectSearch
-            placeholder="Search tags..."
             className="border-neutral-700"
+            placeholder="Search tags..."
           />
           <MultiSelectList>
             <MultiSelectGroup>
               {tags.map((tag) => (
-                <MultiSelectItem key={tag.id} value={tag.id} className="">
+                <MultiSelectItem className="" key={tag.id} value={tag.id}>
                   {capitalizeFirstLetter(tag.slug)}
                 </MultiSelectItem>
               ))}
@@ -781,4 +753,4 @@ export const TagsComponent: React.FC<TagsProps> = ({
       </MultiSelect>
     </div>
   );
-};
+}

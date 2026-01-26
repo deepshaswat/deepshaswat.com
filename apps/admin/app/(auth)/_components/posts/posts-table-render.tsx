@@ -1,13 +1,12 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-import { ChevronRight, Pencil } from "lucide-react";
-import { Button, Table, TableBody, TableCell, TableRow } from "@repo/ui";
+import type { PostListType } from "@repo/actions";
+import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { PostListType } from "@repo/actions";
+import React from "react";
+import { Button, Table, TableBody, TableCell, TableRow } from "@repo/ui";
 
-const capitalizeFirstLetter = (item: string) => {
+function capitalizeFirstLetter(item: string): string {
   return item
     .split("-")
     .map((word, index) =>
@@ -16,18 +15,21 @@ const capitalizeFirstLetter = (item: string) => {
         : word.toLowerCase(),
     )
     .join(" ");
-};
+}
 
 interface PostsTableRenderProps {
   posts: PostListType[];
 }
 
-const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
+function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
   const router = useRouter();
 
-  const getStatusBadge = (status: string, post: PostListType) => {
+  const getStatusBadge = (
+    status: string,
+    post: PostListType,
+  ): JSX.Element | null => {
     const baseClasses = "text-sm font-medium";
-    if (post.isNewsletter && post.status === "PUBLISHED") {
+    if (post.isNewsletter && status === "PUBLISHED") {
       return (
         <div className="flex items-center gap-2">
           <span className={`${baseClasses} text-green-600`}>
@@ -49,7 +51,7 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
           </div>
         </div>
       );
-    } else if (post.isNewsletter && post.status === "SCHEDULED") {
+    } else if (post.isNewsletter && status === "SCHEDULED") {
       return (
         <div className="flex items-center gap-2">
           <span className={`${baseClasses} text-blue-600`}>
@@ -185,9 +187,11 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
         <TableBody>
           {posts.map((post) => (
             <TableRow
-              key={post.id}
               className="hover:bg-neutral-700/50 cursor-pointer border-b border-neutral-600"
-              onClick={() => router.push(`/editor/${post.id}`)}
+              key={post.id}
+              onClick={() => {
+                router.push(`/editor/${post.id}`);
+              }}
             >
               <TableCell>
                 <div className="flex flex-row items-center justify-between">
@@ -202,9 +206,9 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
                   </div>
 
                   <Button
-                    variant="ghost"
-                    size="icon"
                     className="text-neutral-600"
+                    size="icon"
+                    variant="ghost"
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -216,6 +220,6 @@ const PostsTableRender = ({ posts }: PostsTableRenderProps) => {
       </Table>
     </div>
   );
-};
+}
 
 export default PostsTableRender;

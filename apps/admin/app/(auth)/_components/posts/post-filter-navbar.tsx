@@ -8,7 +8,7 @@ import {
   SelectTrigger,
 } from "@repo/ui";
 
-const capitalizeFirstLetter = (item: string) => {
+function capitalizeFirstLetter(item: string): string {
   return item
     .split("-")
     .map((word, index) =>
@@ -17,7 +17,7 @@ const capitalizeFirstLetter = (item: string) => {
         : word.toLowerCase(),
     )
     .join(" ");
-};
+}
 
 interface PostFilterNavbarProps {
   postOption: string;
@@ -28,21 +28,21 @@ interface PostFilterNavbarProps {
   postFilter: string[];
 }
 
-const PostFilterNavbar = ({
+function PostFilterNavbar({
   postOption,
   onSelectPostOption,
   tagOption,
   onSelectTagOption,
   tags,
   postFilter,
-}: PostFilterNavbarProps) => {
+}: PostFilterNavbarProps): JSX.Element {
   return (
     <>
       <div className="">
         <SelectComponent
           items={postFilter}
-          placeholder="all-posts"
           onSelect={onSelectPostOption}
+          placeholder="all-posts"
           selectedItem={postOption}
         />
       </div>
@@ -51,15 +51,15 @@ const PostFilterNavbar = ({
       <div className="mr-1">
         <SelectComponent
           items={tags}
-          placeholder="all-tags"
           onSelect={onSelectTagOption}
+          placeholder="all-tags"
           selectedItem={tagOption}
         />
       </div>
       <div>Newest first</div>
     </>
   );
-};
+}
 
 export default PostFilterNavbar;
 
@@ -70,25 +70,24 @@ interface SelectComponentProps {
   selectedItem: string;
 }
 
-const SelectComponent = ({
+function SelectComponent({
   placeholder,
   items,
   onSelect,
   selectedItem,
-}: SelectComponentProps) => {
-  const handleSelect = (item: string) => {
+}: SelectComponentProps): JSX.Element {
+  const handleSelect = (item: string): void => {
     onSelect(item);
   };
 
+  const displayClassName =
+    selectedItem && selectedItem !== placeholder
+      ? "text-green-500 bg-neutral-800 rounded-sm"
+      : "text-neutral-200";
+
   return (
     <Select onValueChange={handleSelect}>
-      <div
-        className={`${
-          selectedItem && selectedItem !== placeholder
-            ? "text-green-500 bg-neutral-800 rounded-sm"
-            : "text-neutral-200"
-        }`}
-      >
+      <div className={displayClassName}>
         <SelectTrigger className="ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none  text-[11px] md:text-[12px]">
           {capitalizeFirstLetter(selectedItem) ||
             capitalizeFirstLetter(placeholder)}
@@ -98,10 +97,12 @@ const SelectComponent = ({
         <SelectGroup className="pl-0 bg-neutral-800 ">
           {items.map((item) => (
             <SelectItem
-              key={item}
               className="text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-[11px] md:text-[12px] font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 "
+              key={item}
+              onClick={() => {
+                handleSelect(item);
+              }}
               value={item}
-              onClick={() => handleSelect(item)}
             >
               {capitalizeFirstLetter(item)}
             </SelectItem>
@@ -110,4 +111,4 @@ const SelectComponent = ({
       </SelectContent>
     </Select>
   );
-};
+}

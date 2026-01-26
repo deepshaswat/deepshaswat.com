@@ -1,5 +1,4 @@
-import { Metadata } from "next";
-
+import type { Metadata } from "next";
 import { NewsletterUnsubscribe } from "@repo/ui/web";
 
 export const revalidate = 31536000;
@@ -44,8 +43,6 @@ export const metadata: Metadata = {
   },
 };
 
-const NewsletterUnsubscribePage = () => {
+export default function NewsletterUnsubscribePage(): JSX.Element {
   return <NewsletterUnsubscribe />;
-};
-
-export default NewsletterUnsubscribePage;
+}

@@ -1,5 +1,3 @@
-const InvestingPage = () => {
+export default function InvestingPage(): JSX.Element {
   return <div>Investing</div>;
-};
-
-export default InvestingPage;
+}

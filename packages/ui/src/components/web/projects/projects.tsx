@@ -7,7 +7,7 @@ import {
   Mail,
   Clipboard,
   Code,
-  ChartCandlestick,
+  CandlestickChart,
   GraduationCap,
   Clapperboard,
   Star,
@@ -24,7 +24,7 @@ const pageConfig = {
 };
 
 const iconMap: Record<string, React.ReactNode> = {
-  "chart-candlestick": <ChartCandlestick className="size-8" />,
+  "chart-candlestick": <CandlestickChart className="size-8" />,
   "graduation-cap": <GraduationCap className="size-8" />,
   clapperboard: <Clapperboard className="size-8" />,
   star: <Star className="size-8" />,

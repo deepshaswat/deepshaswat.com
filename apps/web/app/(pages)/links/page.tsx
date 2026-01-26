@@ -1,5 +1,4 @@
-import { Metadata } from "next";
-
+import type { Metadata } from "next";
 import { LinksComponent } from "@repo/ui/web";
 
 export const revalidate = 31536000;
@@ -45,8 +44,6 @@ export const metadata: Metadata = {
   },
 };
 
-const LinksPage = () => {
+export default function LinksPage(): JSX.Element {
   return <LinksComponent />;
-};
-
-export default LinksPage;
+}

@@ -1,9 +1,7 @@
 "use client";
 
+import type { Metadata } from "next";
 import { ErrorMessage } from "@repo/ui/web";
-import React from "react";
-
-import { Metadata } from "next";
 
 const title = "404 | Not Found";
 const description = "This page doesn't exist.";
@@ -44,8 +42,6 @@ export const metadata: Metadata = {
   },
 };
 
-const Custom404: React.FC = () => {
+export default function Custom404(): JSX.Element {
   return <ErrorMessage code={404} />;
-};
-
-export default Custom404;
+}

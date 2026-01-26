@@ -2,11 +2,9 @@
 
 import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
-
-//import { CustomSignIn } from "../../../../../packages/ui/src/components/ui/custom-sign-in";
 import { CustomSignIn } from "@repo/ui";
 
-export default function Page() {
+export default function Page(): JSX.Element {
   return (
     <div className="min-h-screen grid grid-cols-1">
       <div className="flex items-center justify-center mt-8">

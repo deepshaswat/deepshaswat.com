@@ -1,4 +1,4 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 import { fetchPublishedPosts } from "@repo/actions";
 import type { PostListType } from "@repo/actions";
 
@@ -31,8 +31,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let articles: PostListType[] = [];
   try {
     articles = await fetchPublishedPosts("articles");
-  } catch (error) {
-    console.error("Error fetching articles:", error);
+  } catch {
+    // Error fetching articles - continue with empty array
   }
 
   const articleRoutes = articles.map((article) => ({
@@ -48,8 +48,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let newsletters: PostListType[] = [];
   try {
     newsletters = await fetchPublishedPosts("newsletters");
-  } catch (error) {
-    console.error("Error fetching newsletters:", error);
+  } catch {
+    // Error fetching newsletters - continue with empty array
   }
 
   const newsletterRoutes = newsletters.map((newsletter) => ({

@@ -1,9 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-
-import Link from "next/link";
-
+import type { PostType } from "@repo/actions";
+import { createAuthor, createPost, updatePost } from "@repo/actions";
+import {
+  postState,
+  postMetadataState,
+  postIdState,
+  postDataState,
+  errorDuplicateUrlState,
+  savePostErrorState,
+} from "@repo/store";
+import {
+  Button,
+  Label,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/ui";
 import {
   ChevronLeft,
   PanelRightOpen,
@@ -13,30 +27,10 @@ import {
   Loader2,
   AlertTriangle,
 } from "lucide-react";
-
-import {
-  Button,
-  Input,
-  Label,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@repo/ui";
-import {
-  postState,
-  postMetadataState,
-  postIdState,
-  postDataState,
-  errorDuplicateUrlState,
-  savePostErrorState,
-  selectDate,
-  selectedTimeIst,
-} from "@repo/store";
-import { createAuthor, createPost, updatePost } from "@repo/actions";
-import { PostType } from "@repo/actions";
-import { useRecoilState, useRecoilValue } from "recoil";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import PublishDialog from "./publish-dialog-component";
 
 interface NavBarPostProps {
@@ -52,7 +46,47 @@ interface NavBarPostProps {
  * 3. Clicking on the "Publish" link should navigate to the Pre-publish page.
  *
  */
-export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
+function renderSaveButtonContent(
+  isSaving: boolean,
+  isSavingSuccess: boolean,
+  savePostError: string | null,
+): JSX.Element {
+  if (isSaving && !isSavingSuccess) {
+    return (
+      <>
+        <Loader2 className="size-4 mr-1 animate-spin" />
+        Saving...
+      </>
+    );
+  }
+  if (savePostError) {
+    return (
+      <span className="flex flex-row items-center text-red-500">
+        <AlertTriangle className="size-4 mr-1" />
+        Error
+      </span>
+    );
+  }
+  if (isSavingSuccess) {
+    return (
+      <span className="flex flex-row items-center text-green-500">
+        <Check className="size-4 mr-1" />
+        Saved
+      </span>
+    );
+  }
+  return (
+    <>
+      <Save className="size-4 mr-1" />
+      Save
+    </>
+  );
+}
+
+export function NavBarPost({
+  isOpen,
+  toggleSidebar,
+}: NavBarPostProps): JSX.Element {
   const router = useRouter();
 
   const metadata = useRecoilValue(postMetadataState);
@@ -72,17 +106,15 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
 
   useEffect(() => {
     if (postFull) {
-      setPostId(postFull?.id ?? null);
+      setPostId(postFull.id);
     }
   }, [postFull, setPostId]);
 
   useEffect(() => {
-    if (errorDuplicateUrl) {
-      console.log("Error state updated:", errorDuplicateUrl);
-    }
+    // Error state updated - handled by UI
   }, [errorDuplicateUrl]);
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<void> => {
     if (isDisabled) return;
     setErrorDuplicateUrl(null);
     setIsSaving(true);
@@ -92,16 +124,16 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
       ...post,
       metaData: {
         ...metadata,
-        authorName: user?.name ?? "",
+        authorName: user.name ?? "",
       },
-      authorId: user?.id ?? "",
+      authorId: user.id ?? "",
       tags: post.tags,
     };
 
     if (postId) {
       const result = await updatePost(data, postId);
       setIsSaving(false);
-      if (result && "error" in result) {
+      if ("error" in result) {
         setErrorDuplicateUrl(result.error ?? "Duplicate URL");
       } else {
         setIsSavingSuccess(true);
@@ -113,9 +145,9 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
     } else {
       const result = await createPost(data);
       setIsSaving(false);
-      if (result && "error" in result) {
+      if ("error" in result) {
         setErrorDuplicateUrl(result.error ?? "Duplicate URL");
-      } else if (result && "post" in result && result.post) {
+      } else if ("post" in result && result.post) {
         setPostId(result.post.id);
         setIsSavingSuccess(true);
         setTimeout(() => {
@@ -126,7 +158,7 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
     }
   };
 
-  const handlePublish = async () => {
+  const handlePublish = async (): Promise<void> => {
     if (isDisabled) return;
     await handleSave();
     setIsDialogOpen(true);
@@ -139,9 +171,9 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
       <nav className="w-full flex flex-row justify-between ml-2">
         <div className="flex flex-row gap-2 lg:gap-10 items-center">
           <Link
+            className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
             href="/posts"
             passHref
-            className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
           >
             <ChevronLeft className="size-4 mr-3" />
             Posts
@@ -155,25 +187,27 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
         <div className="flex flex-row items-center gap-2 mr-2">
           <div className="flex flex-row gap-4 items-center">
             <Link
+              className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
               href="/preview"
               passHref
-              className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
             >
               Preview
             </Link>
             <Button
-              onClick={handlePublish}
-              variant="link"
-              size="sm"
               className="flex flex-row items-center text-sm text-green-500 rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
               disabled={isDisabled}
+              onClick={() => {
+                void handlePublish();
+              }}
+              size="sm"
+              variant="link"
             >
               Publish
             </Button>
 
             <PublishDialog
-              value={isDialogOpen}
               onOpenChange={setIsDialogOpen}
+              value={isDialogOpen}
             />
 
             <TooltipProvider>
@@ -183,52 +217,38 @@ export function NavBarPost({ isOpen, toggleSidebar }: NavBarPostProps) {
                   {/* Wrapper div to prevent button nesting */}
                   <TooltipTrigger asChild>
                     <Button
-                      variant="ghost"
                       aria-label="Save post"
-                      onClick={handleSave}
                       className="flex z-50 items-center"
                       disabled={isDisabled}
+                      onClick={() => {
+                        void handleSave();
+                      }}
+                      variant="ghost"
                     >
-                      {isSaving && !isSavingSuccess ? (
-                        <>
-                          <Loader2 className="size-4 mr-1 animate-spin" />
-                          Saving...
-                        </>
-                      ) : savePostError ? (
-                        <span className="flex flex-row items-center text-red-500">
-                          <AlertTriangle className="size-4 mr-1" />
-                          Error
-                        </span>
-                      ) : !isSaving && !isSavingSuccess && !savePostError ? (
-                        <>
-                          <Save className="size-4 mr-1" />
-                          Save
-                        </>
-                      ) : (
-                        <span className="flex flex-row items-center text-green-500">
-                          <Check className="size-4 mr-1" />
-                          Saved
-                        </span>
+                      {renderSaveButtonContent(
+                        isSaving,
+                        isSavingSuccess,
+                        savePostError,
                       )}
                     </Button>
                   </TooltipTrigger>
                 </div>
                 <TooltipContent>
-                  {isDisabled && <p>Title and URL are required</p>}
-                  {!isDisabled && <p>Click to save</p>}
+                  {isDisabled ? <p>Title and URL are required</p> : null}
+                  {!isDisabled ? <p>Click to save</p> : null}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
           <Button
-            variant="ghost"
-            size="icon"
             aria-label="Toggle sidebar"
-            onClick={toggleSidebar}
             className="flex z-50 items-center"
+            onClick={toggleSidebar}
+            size="icon"
+            variant="ghost"
           >
-            {!isOpen && <PanelRightOpen className="size-5" />}
-            {isOpen && <PanelRightClose className="size-5" />}
+            {!isOpen ? <PanelRightOpen className="size-5" /> : null}
+            {isOpen ? <PanelRightClose className="size-5" /> : null}
           </Button>
         </div>
       </nav>

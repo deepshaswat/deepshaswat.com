@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
-
-import { ThemeProvider, TooltipProvider } from "@repo/ui";
 import { RecoilRoot } from "recoil";
+import { ThemeProvider, TooltipProvider } from "@repo/ui";
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
+export function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element {
   return (
     <ThemeProvider
       attribute="class"
@@ -17,4 +20,4 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       </RecoilRoot>
     </ThemeProvider>
   );
-};
+}

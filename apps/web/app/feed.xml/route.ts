@@ -1,6 +1,6 @@
 import { fetchPublishedPosts } from "@repo/actions";
 
-export async function GET() {
+export async function GET(): Promise<Response> {
   const articles = await fetchPublishedPosts("articles");
   const newsletters = await fetchPublishedPosts("newsletters");
 
@@ -40,7 +40,7 @@ export async function GET() {
             }
             <author>hi@deepshaswat.com (${item.author.name})</author>
             ${item.tags
-              .filter((tag) => tag && tag.tagId)
+              .filter((tag) => tag.tagId)
               .map((tag) => `<category>${tag.tagId}</category>`)
               .join("")}
           </item>

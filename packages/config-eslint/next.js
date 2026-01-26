@@ -18,8 +18,8 @@ module.exports = {
     "@vercel/style-guide/eslint/browser",
     "@vercel/style-guide/eslint/react",
     "@vercel/style-guide/eslint/next",
-    "eslint-config-turbo",
   ].map(require.resolve),
+  plugins: ["turbo"],
   parserOptions: {
     project,
   },
@@ -41,5 +41,27 @@ module.exports = {
   // add rules configurations here
   rules: {
     "import/no-default-export": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        devDependencies: true,
+        includeInternal: true,
+        includeTypes: true,
+        packageDir: [__dirname, process.cwd()],
+      },
+    ],
+    "turbo/no-undeclared-env-vars": "warn",
+    // Remaining relaxed rules
+    "@typescript-eslint/require-await": "warn",
+    "@typescript-eslint/no-shadow": "warn",
+    "@typescript-eslint/non-nullable-type-assertion-style": "warn",
+    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/consistent-type-imports": "warn",
+    "eslint-comments/require-description": "warn",
+    "import/named": "warn",
+    "import/no-duplicates": "warn",
+    "import/no-named-as-default-member": "warn",
+    "func-names": "warn",
+    "react/display-name": "warn",
   },
 };

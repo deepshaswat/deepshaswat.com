@@ -1,6 +1,3 @@
-import React from "react";
-const Published = () => {
+export default function Published(): JSX.Element {
   return <div>Published Post</div>;
-};
-
-export default Published;
+}

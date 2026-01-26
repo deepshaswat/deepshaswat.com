@@ -16,7 +16,7 @@ import {
   Clapperboard,
   GraduationCap,
   Handshake,
-  ChartCandlestick,
+  CandlestickChart,
 } from "lucide-react";
 
 interface LinkData {
@@ -42,7 +42,7 @@ const LinksComponent = () => {
     {
       title: "StockBook - Stock Market Research Platform",
       url: "https://stockbook.space/",
-      icon: <ChartCandlestick className="h-5 w-5" />,
+      icon: <CandlestickChart className="h-5 w-5" />,
     },
     {
       title: "Naviya - Personalized AI Tutor for Students",

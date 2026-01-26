@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
-
-import Link from "next/link";
+import type { Tags } from "@repo/actions";
 import { ChevronRight } from "lucide-react";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
 import {
   Button,
   Label,
@@ -15,10 +15,12 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui";
-import { useRouter } from "next/navigation";
-import { Tags } from "@repo/actions";
 
-const capitalizeFirstLetter = (item: string) => {
+function getPostsLabel(count: number): string {
+  return count === 1 ? "post" : "posts";
+}
+
+function capitalizeFirstLetter(item: string): string {
   return item
     .split("-")
     .map((word, index) =>
@@ -27,25 +29,25 @@ const capitalizeFirstLetter = (item: string) => {
         : word.toLowerCase(),
     )
     .join(" ");
-};
+}
 
 interface TagListInterface {
   tags: Tags[];
 }
 
-const TagComponentRendering = ({ tags }: TagListInterface) => {
+function TagComponentRendering({ tags }: TagListInterface): JSX.Element {
   const router = useRouter();
 
   return (
     <div className="m-8 lg:ml-[156px] lg:mr-[156px]">
       <div className="flex flex-row items-center justify-between w-full lg:w-auto mb-4 lg:mb-0">
-        <Label htmlFor="tags" className="text-3xl font-semibold">
+        <Label className="text-3xl font-semibold" htmlFor="tags">
           Tags
         </Label>
 
         <div className="flex gap-2">
-          <Link href="/tags/new-tag" className="items-center">
-            <Button variant="default" className="rounded-sm items-center">
+          <Link className="items-center" href="/tags/new-tag">
+            <Button className="rounded-sm items-center" variant="default">
               New tag
             </Button>
           </Link>
@@ -65,14 +67,14 @@ const TagComponentRendering = ({ tags }: TagListInterface) => {
               <TableHead className="text-neutral-200 font-light ">
                 NO. OF POSTS
               </TableHead>
-              <TableHead></TableHead>
+              <TableHead />
             </TableRow>
           </TableHeader>
           <TableBody>
             {tags.map((tag) => (
               <TableRow
-                key={tag.slug}
                 className="hover:bg-neutral-800 cursor-pointer font-light border-b-neutral-600"
+                key={tag.slug}
                 onClick={() => {
                   router.push(`/tags/${tag.slug}`);
                 }}
@@ -85,8 +87,8 @@ const TagComponentRendering = ({ tags }: TagListInterface) => {
                   {tag.posts.length !== 0 ? (
                     <Link href={`/posts?tags=${tag.slug}`}>
                       <Button
-                        variant="link"
                         className="rounded-sm font-light text-neutral-200 hover:text-green-500 hover:no-underline"
+                        variant="link"
                       >
                         {tag.posts.length}{" "}
                         {tag.posts.length === 1 ? "post" : "posts"}
@@ -94,20 +96,15 @@ const TagComponentRendering = ({ tags }: TagListInterface) => {
                     </Link>
                   ) : (
                     <span className="ml-4">
-                      {tag.posts.length}{" "}
-                      {tag.posts.length === 0
-                        ? "posts"
-                        : tag.posts.length === 1
-                          ? "post"
-                          : "posts"}
+                      {tag.posts.length} {getPostsLabel(tag.posts.length)}
                     </span>
                   )}
                 </TableCell>
                 <TableCell className="text-right">
                   {/* <Link href={`/tags/${tag.slug}`}> */}
                   <Button
-                    variant="link"
                     className="rounded-sm text-neutral-600"
+                    variant="link"
                   >
                     <ChevronRight />
                   </Button>
@@ -120,6 +117,6 @@ const TagComponentRendering = ({ tags }: TagListInterface) => {
       </div>
     </div>
   );
-};
+}
 
 export default TagComponentRendering;

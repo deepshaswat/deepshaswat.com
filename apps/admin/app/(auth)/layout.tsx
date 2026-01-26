@@ -5,7 +5,7 @@ export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}): JSX.Element {
   return (
     <div className="h-full flex dark:bg-[#1F1F1F]">
       <Navigation />

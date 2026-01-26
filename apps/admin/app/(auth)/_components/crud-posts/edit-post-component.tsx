@@ -1,7 +1,12 @@
-import { fetchPostById, PostListType } from "@repo/actions";
+import type { PostListType } from "@repo/actions";
+import { fetchPostById } from "@repo/actions";
 import { EditContentPost } from "./edit-content-post";
 
-const EditPostComponent = async ({ params }: { params: { id: string } }) => {
+async function EditPostComponent({
+  params,
+}: {
+  params: { id: string };
+}): Promise<JSX.Element> {
   const post = await fetchPostById(params.id);
 
   if (!post) {
@@ -9,6 +14,6 @@ const EditPostComponent = async ({ params }: { params: { id: string } }) => {
   }
 
   return <EditContentPost initialPost={post as PostListType} />;
-};
+}
 
 export default EditPostComponent;

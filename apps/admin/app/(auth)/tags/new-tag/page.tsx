@@ -1,9 +1,9 @@
 "use client";
 
+import { createTagAction } from "@repo/actions";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-
 import {
   Button,
   Label,
@@ -17,59 +17,58 @@ import {
   Textarea,
 } from "@repo/ui";
 
-import { createTagAction } from "@repo/actions";
-import { useRouter } from "next/navigation";
+interface UploadResponse {
+  uploadURL: string;
+  s3URL: string;
+}
 
-const reverseAndHyphenate = (item: string) => {
+function reverseAndHyphenate(item: string): string {
   return item.toLowerCase().split(" ").join("-");
-};
+}
 
-const NewTag = () => {
+function NewTag(): JSX.Element {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [inputSlug, setInputSlug] = useState("");
   const [tagImageUrl, setTagImageUrl] = useState("");
   const [tagDescription, setTagDescription] = useState("");
-  const isEmpty = inputSlug === "";
   const [slugError, setSlugError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
-  const [saveButtonColor, setSaveButtonColor] = useState("secondary");
+  // eslint-disable-next-line react/hook-use-state -- Button color state for future visual feedback
+  const [_saveButtonColor, setSaveButtonColor] = useState("secondary");
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [_isPending, startTransition] = useTransition();
 
-  const handleSlugNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSlugNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     setInputSlug(reverseAndHyphenate(e.target.value));
   };
 
   const handleTagDescriptionChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
+  ): void => {
     setTagDescription(e.target.value);
   };
 
-  const handleTagImageChange = async (file?: File) => {
+  const handleTagImageChange = async (file?: File): Promise<void> => {
     if (file) {
       setIsSubmitting(true);
       try {
-        // Request presigned URL from the API route
-        const { data } = await axios.post("/api/upload", {
+        const { data } = await axios.post<UploadResponse>("/api/upload", {
           fileType: file.type,
         });
 
         const { uploadURL, s3URL } = data;
 
-        // Upload file to S3 using the presigned URL
         await axios.put(uploadURL, file, {
           headers: {
             "Content-Type": file.type,
           },
         });
 
-        // Set the S3 URL as the image URL
         setTagImageUrl(s3URL);
-
-        console.log("File uploaded successfully:", s3URL);
-      } catch (error) {
-        console.error("Error uploading file:", error);
+      } catch {
+        // Error uploading file
       } finally {
         setIsSubmitting(false);
       }
@@ -78,12 +77,12 @@ const NewTag = () => {
     }
   };
 
-  const onCloseTagImage = () => {
+  const onCloseTagImage = (): void => {
     setTagImageUrl("");
     setIsSubmitting(false);
   };
 
-  const handleSave = async () => {
+  const handleSave = (): void => {
     setIsSubmitting(true);
     setSlugError("");
     setDescriptionError("");
@@ -96,21 +95,16 @@ const NewTag = () => {
       });
 
       if (result.success) {
-        console.log("Tag created successfully:", result);
         router.push(`/tags/${inputSlug}`);
         setSaveButtonColor("green");
       } else {
         setSaveButtonColor("red");
-        // if (result.error?.slug) {
-        //   setSlugError(result.error.slug || "");
-        // }
-        // if (result.error?.description) {
-        //   setDescriptionError(result.error.description);
-        // }
       }
 
       setIsSubmitting(false);
-      setTimeout(() => setSaveButtonColor("secondary"), 3000);
+      setTimeout(() => {
+        setSaveButtonColor("secondary");
+      }, 3000);
     });
   };
 
@@ -122,8 +116,8 @@ const NewTag = () => {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  href="/tags"
                   className="text-neutral-200 hover:text-neutral-100"
+                  href="/tags"
                 >
                   Tags
                 </BreadcrumbLink>
@@ -138,10 +132,10 @@ const NewTag = () => {
           </Breadcrumb>
 
           <Button
-            variant={"default"}
             className="rounded-sm"
-            onClick={handleSave}
             disabled={isSubmitting}
+            onClick={handleSave}
+            variant="default"
           >
             {/* {isSubmitting ? "Saving..." : "Save"} */}
             Save
@@ -154,43 +148,43 @@ const NewTag = () => {
         <div className="flex flex-col lg:flex-row!important lg:overflow-hidden gap-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="SlugName" className="text-sm text-neutral-200">
+              <Label className="text-sm text-neutral-200" htmlFor="SlugName">
                 Slug
               </Label>
               <input
-                id="SlugName"
-                type="text"
-                value={inputSlug}
-                onChange={handleSlugNameChange}
                 className={`w-full h-10 rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm border-2 ${
                   slugError ? "border-red-500" : "border-transparent"
                 } focus:border-green-500 focus:outline-none`}
+                id="SlugName"
+                onChange={handleSlugNameChange}
+                type="text"
+                value={inputSlug}
               />
               <span className="text-xs text-neutral-500">
                 www.deepshaswat.com/tags/{inputSlug || ""}
               </span>
-              {slugError && (
+              {slugError ? (
                 <div className="text-red-500 text-sm mt-1">{slugError}</div>
-              )}
+              ) : null}
             </div>
 
             <div className="space-y-2">
               <Label
-                htmlFor="TagDescription"
                 className="text-sm text-neutral-200"
+                htmlFor="TagDescription"
               >
                 Description
               </Label>
               <Textarea
-                id="TagDescription"
-                value={tagDescription}
-                onChange={handleTagDescriptionChange}
                 className={`w-full min-h-[100px] rounded-md text-neutral-300 bg-neutral-800 px-3 py-2 text-sm border-2 ${
                   descriptionError ? "border-red-500" : "border-transparent"
                 } focus:border-green-500 focus:outline-none`}
+                id="TagDescription"
+                onChange={handleTagDescriptionChange}
+                value={tagDescription}
               />
               <div className="text-xs text-neutral-500">
-                Maximum: 500 characters. You've used{" "}
+                Maximum: 500 characters. You&apos;ve used{" "}
                 <span
                   className={
                     tagDescription.length === 0 ? "" : "text-green-500"
@@ -200,32 +194,34 @@ const NewTag = () => {
                 </span>
                 .
               </div>
-              {descriptionError && (
+              {descriptionError ? (
                 <div className="text-red-500 text-sm mt-1">
                   {descriptionError}
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
 
           <div className="">
             <Label
-              htmlFor="TagImage"
               className="text-sm text-neutral-200 mb-2 block"
+              htmlFor="TagImage"
             >
               Tag image
             </Label>
             <SingleImageDropzone
               className="w-full h-[200px] outline-none"
               disabled={isSubmitting}
+              onChange={(file) => {
+                void handleTagImageChange(file);
+              }}
               value={tagImageUrl}
-              onChange={handleTagImageChange}
             />
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default NewTag;
