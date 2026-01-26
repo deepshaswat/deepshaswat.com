@@ -8,6 +8,7 @@
 
 | Technology       | Purpose                         |
 | ---------------- | ------------------------------- |
+| **Yarn**         | Package manager (DO NOT use npm/pnpm) |
 | **Turborepo**    | Monorepo build system           |
 | **Next.js 14**   | Frontend framework (App Router) |
 | **Prisma 5.13**  | ORM for MongoDB                 |
@@ -98,6 +99,7 @@ Email Delivery (Resend) / Storage (S3)
 
 ### Technical Constraints
 
+- **Yarn only** - Do not use npm or pnpm for package management
 - MongoDB only (no SQL databases)
 - Clerk for authentication (no custom auth)
 - Resend for emails (rate limits apply)
@@ -171,17 +173,19 @@ NEXT_PUBLIC_POSTHOG_HOST=
 
 ## Commands
 
+**IMPORTANT: This project uses Yarn. Do not use npm or pnpm.**
+
 ```bash
 # Development
-pnpm dev           # Start all apps in dev mode
-pnpm build         # Build all apps
-pnpm lint          # Run ESLint
-pnpm type-check    # TypeScript type checking
-pnpm clean         # Clean build artifacts
+yarn dev           # Start all apps in dev mode
+yarn build         # Build all apps
+yarn lint          # Run ESLint
+yarn type-check    # TypeScript type checking
+yarn clean         # Clean build artifacts
 
 # Database
-pnpm db:generate   # Generate Prisma client
-pnpm db:push       # Push schema to database
+yarn db:generate   # Generate Prisma client
+yarn db:push       # Push schema to database
 ```
 
 ## Key Files Reference
