@@ -6,21 +6,21 @@
 
 ## Tech Stack
 
-| Technology       | Purpose                         |
-| ---------------- | ------------------------------- |
+| Technology       | Purpose                               |
+| ---------------- | ------------------------------------- |
 | **Yarn**         | Package manager (DO NOT use npm/pnpm) |
-| **Turborepo**    | Monorepo build system           |
-| **Next.js 14**   | Frontend framework (App Router) |
-| **Prisma 5.13**  | ORM for MongoDB                 |
-| **MongoDB**      | Database                        |
-| **Clerk**        | Authentication                  |
-| **Resend**       | Email & newsletter delivery     |
-| **PostHog**      | Analytics                       |
-| **AWS S3**       | Media storage                   |
-| **Redis**        | Caching (DigitalOcean)          |
-| **BlockNote**    | Rich text editor                |
-| **Tailwind CSS** | Styling                         |
-| **Shadcn/ui**    | Component library               |
+| **Turborepo**    | Monorepo build system                 |
+| **Next.js 14**   | Frontend framework (App Router)       |
+| **Prisma 5.13**  | ORM for MongoDB                       |
+| **MongoDB**      | Database                              |
+| **Clerk**        | Authentication                        |
+| **Resend**       | Email & newsletter delivery           |
+| **PostHog**      | Analytics                             |
+| **AWS S3**       | Media storage                         |
+| **Redis**        | Caching (DigitalOcean)                |
+| **BlockNote**    | Rich text editor                      |
+| **Tailwind CSS** | Styling                               |
+| **Shadcn/ui**    | Component library                     |
 
 ## Architecture Overview
 
