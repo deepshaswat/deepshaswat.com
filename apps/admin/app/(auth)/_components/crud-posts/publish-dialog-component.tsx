@@ -1,8 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ChevronLeft, ArrowRight, MoveRight } from "lucide-react";
-
+import { dateTimeValidation, publishPost } from "@repo/actions";
+import {
+  selectDate,
+  postDataState,
+  selectedTimeIst,
+  postIdState,
+  savePostErrorState,
+} from "@repo/store";
 import {
   Dialog,
   DialogContent,
@@ -16,40 +21,34 @@ import {
   Button,
   useNewsletterMarkdown,
 } from "@repo/ui";
-
-import { useRecoilState, useRecoilValue } from "recoil";
-
-import {
-  selectDate,
-  postDataState,
-  selectedTimeIst,
-  postIdState,
-  savePostErrorState,
-} from "@repo/store";
-
-import { dateTimeValidation, PostListType, publishPost } from "@repo/actions";
+import { ChevronLeft, MoveRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 interface PublishDialogProps {
   value: boolean;
   onOpenChange: (value: boolean) => void;
 }
 
-const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
+function PublishDialog({
+  value,
+  onOpenChange,
+}: PublishDialogProps): JSX.Element {
   const router = useRouter();
 
-  const [isFirstDialogOpen, setFirstDialogOpen] = useState(value);
-  const [isSecondDialogOpen, setSecondDialogOpen] = useState(false);
+  const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(value);
+  const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [finalTime, setFinalTime] = useState<Date | null>(null);
   const [scheduleType, setScheduleType] = useState("now");
   const [publishType, setPublishType] = useState("blog");
   const [openAccordionItem, setOpenAccordionItem] = useState<
     string | undefined
   >(undefined);
-  const [error, setError] = useRecoilState(savePostErrorState);
+  const [_error, setError] = useRecoilState(savePostErrorState);
 
-  const [inputDate, setInputDate] = useRecoilState(selectDate);
-  const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
+  const [inputDate, _setInputDate] = useRecoilState(selectDate);
+  const [inputTimeIst, _setInputTimeIst] = useRecoilState(selectedTimeIst);
 
   const postId = useRecoilValue(postIdState);
   const post = useRecoilValue(postDataState);
@@ -57,25 +56,26 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
   const { markdown: newsletterMarkdown, NewsletterMarkdown } =
     useNewsletterMarkdown(post?.content || "");
 
-  const handleScheduleTypeChange = (type: string) => {
+  const handleScheduleTypeChange = (type: string): void => {
     setScheduleType(type);
     if (type === "later") {
       setOpenAccordionItem("schedule");
     }
   };
 
-  const handleContinue = () => {
-    setFirstDialogOpen(false);
-    setSecondDialogOpen(true);
+  const handleContinue = (): void => {
+    setIsFirstDialogOpen(false);
+    setIsSecondDialogOpen(true);
   };
 
-  const handleBackToSettings = () => {
-    setSecondDialogOpen(false);
-    setFirstDialogOpen(true);
+  const handleBackToSettings = (): void => {
+    setIsSecondDialogOpen(false);
+    setIsFirstDialogOpen(true);
   };
 
-  const handlePublish = async () => {
+  const handlePublish = async (): Promise<void> => {
     if (!postId) {
+      // eslint-disable-next-line no-console -- Error logging for missing post ID
       console.error("Post ID is required");
       return;
     }
@@ -86,14 +86,21 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
 
       if (timeValidation.error) {
         setError(timeValidation.error);
-      } else {
+      } else if (timeValidation.combinedDate) {
         setError(null);
-        const combinedDate = timeValidation.combinedDate as Date;
+        const combinedDate = timeValidation.combinedDate;
         setFinalTime(combinedDate);
       }
 
       if (!finalTime) {
+        // eslint-disable-next-line no-console -- Error logging for missing publish time
         console.error("Publish time is required");
+        return;
+      }
+
+      if (!post) {
+        // eslint-disable-next-line no-console -- Error logging for missing post data
+        console.error("Post data is required");
         return;
       }
 
@@ -102,27 +109,30 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
         finalTime,
         scheduleType,
         publishType,
-        post as PostListType,
+        post,
         markdown,
       );
 
       if (result.success) {
+        // eslint-disable-next-line no-console -- Success logging for publish operation
         console.log("Post published successfully");
-        setSecondDialogOpen(false);
-        setFirstDialogOpen(false);
+        setIsSecondDialogOpen(false);
+        setIsFirstDialogOpen(false);
         router.push("/posts");
       } else {
+        // eslint-disable-next-line no-console -- Error logging for publish failure
         console.error("Error publishing post:", result.error);
         setError(result.error || "Failed to publish post");
       }
-    } catch (error) {
-      console.error("Error publishing post:", error);
+    } catch (caughtError) {
+      // eslint-disable-next-line no-console -- Error logging for unexpected errors
+      console.error("Error publishing post:", caughtError);
       setError("An unexpected error occurred");
     }
   };
 
   useEffect(() => {
-    setFirstDialogOpen(value);
+    setIsFirstDialogOpen(value);
   }, [value]);
 
   useEffect(() => {
@@ -130,51 +140,59 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
   }, [isFirstDialogOpen, onOpenChange]);
 
   const getScheduleText = (
-    scheduleType: string,
-    publishType: string,
-    inputDate: Date,
-    inputTimeIst: string,
-  ) => {
-    if (scheduleType === "now") {
-      return publishType === "newsletter"
+    scheduleTypeParam: string,
+    publishTypeParam: string,
+    dateParam: Date,
+    timeIstParam: string,
+  ): string => {
+    if (scheduleTypeParam === "now") {
+      return publishTypeParam === "newsletter"
         ? "Publish & send, right now"
         : "Publish, right now";
     }
 
-    return `Schedule for ${formatDayAndDate(inputDate)} at ${inputTimeIst} IST`;
+    return `Schedule for ${formatDayAndDate(dateParam)} at ${timeIstParam} IST`;
   };
 
   return (
     <>
       {/* Hidden component to generate markdown */}
-      {publishType === "newsletter" && post?.content && <NewsletterMarkdown />}
+      {publishType === "newsletter" && Boolean(post?.content) && (
+        <NewsletterMarkdown />
+      )}
 
       {/* FIRST DIALOG */}
       <Dialog
+        onOpenChange={(open) => {
+          if (!open) setIsFirstDialogOpen(false);
+        }}
         open={isFirstDialogOpen}
-        onOpenChange={(open) => !open && setFirstDialogOpen(false)}
       >
         <DialogContent className="fixed  w-full h-full bg-gray-900 border-none flex flex-col !max-w-none !max-h-none overflow-hidden">
           {/* Top Navigation Area */}
           <div className="flex items-center justify-between px-4 py-2 flex-shrink-0">
             <div className="flex items-center space-x-2">
               <Button
-                variant="ghost"
-                onClick={() => setFirstDialogOpen(false)}
                 className="text-muted-foreground"
+                onClick={() => {
+                  setIsFirstDialogOpen(false);
+                }}
+                variant="ghost"
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 <span>Editor</span>
               </Button>
             </div>
             <div className="flex items-center space-x-4 mr-4">
-              <Button variant="ghost" className="text-gray-400">
+              <Button className="text-gray-400" variant="ghost">
                 Preview
               </Button>
               <Button
-                variant="ghost"
                 className="text-green-500 hover:text-green-500 bg-neutral-800 hover:bg-neutral-950"
-                onClick={() => setFirstDialogOpen(false)}
+                onClick={() => {
+                  setIsFirstDialogOpen(false);
+                }}
+                variant="ghost"
               >
                 Publish
               </Button>
@@ -203,15 +221,15 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
 
               <div className="space-y-12">
                 <Accordion
-                  type="single"
-                  collapsible
                   className="w-full space-y-3"
-                  value={openAccordionItem}
+                  collapsible
                   onValueChange={setOpenAccordionItem}
+                  type="single"
+                  value={openAccordionItem}
                 >
                   <AccordionItem
-                    value="publish-type"
                     className="border-b-[1px] border-gray-700"
+                    value="publish-type"
                   >
                     <AccordionTrigger className="text-gray-200 text-lg">
                       {publishType === "newsletter"
@@ -226,7 +244,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                               ? "bg-green-500"
                               : "bg-gray-700"
                           }`}
-                          onClick={() => setPublishType("blog")}
+                          onClick={() => {
+                            setPublishType("blog");
+                          }}
                         >
                           Blog
                         </Badge>
@@ -236,7 +256,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                               ? "bg-green-500"
                               : "bg-gray-700"
                           }`}
-                          onClick={() => setPublishType("newsletter")}
+                          onClick={() => {
+                            setPublishType("newsletter");
+                          }}
                         >
                           Newsletter
                         </Badge>
@@ -244,8 +266,8 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem
-                    value="subscribers"
                     className="border-b-[1px] border-gray-700"
+                    value="subscribers"
                   >
                     <AccordionTrigger className="text-gray-200 text-lg">
                       All 405 subscribers
@@ -256,7 +278,7 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                       </div>
                     </AccordionContent>
                   </AccordionItem>
-                  <AccordionItem value="schedule" className="border-none">
+                  <AccordionItem className="border-none" value="schedule">
                     <AccordionTrigger className="text-gray-200 text-lg">
                       {scheduleType === "now"
                         ? "Right now"
@@ -273,7 +295,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                                 ? "bg-green-500"
                                 : "bg-gray-700"
                             }`}
-                            onClick={() => handleScheduleTypeChange("now")}
+                            onClick={() => {
+                              handleScheduleTypeChange("now");
+                            }}
                           >
                             Set it live now
                           </Badge>
@@ -283,7 +307,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                                 ? "bg-green-500"
                                 : "bg-gray-700"
                             }`}
-                            onClick={() => handleScheduleTypeChange("later")}
+                            onClick={() => {
+                              handleScheduleTypeChange("later");
+                            }}
                           >
                             Schedule for later
                           </Badge>
@@ -335,30 +361,36 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
 
       {/* SECOND DIALOG */}
       <Dialog
+        onOpenChange={(open) => {
+          if (!open) setIsSecondDialogOpen(false);
+        }}
         open={isSecondDialogOpen}
-        onOpenChange={(open) => !open && setSecondDialogOpen(false)}
       >
         <DialogContent className="fixed w-full h-full border-none bg-gray-900 flex flex-col !max-w-none !max-h-none overflow-hidden">
           {/* Top Navigation Area */}
           <div className="flex items-center justify-between px-4 py-2 flex-shrink-0 ">
             <div className="flex items-center space-x-2">
               <Button
-                variant="ghost"
-                onClick={() => setSecondDialogOpen(false)}
                 className="text-muted-foreground"
+                onClick={() => {
+                  setIsSecondDialogOpen(false);
+                }}
+                variant="ghost"
               >
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 <span>Editor</span>
               </Button>
             </div>
             <div className="flex flex-row items-center space-x-4 mr-4">
-              <Button variant="ghost" className="text-gray-400">
+              <Button className="text-gray-400" variant="ghost">
                 Preview
               </Button>
               <Button
-                variant="ghost"
                 className="text-green-500 hover:text-green-500 bg-neutral-800 hover:bg-neutral-950"
-                onClick={() => setSecondDialogOpen(false)}
+                onClick={() => {
+                  setIsSecondDialogOpen(false);
+                }}
+                variant="ghost"
               >
                 Publish
               </Button>
@@ -390,7 +422,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button
                     className="flex-1 bg-green-500 hover:bg-green-600  py-6 "
-                    onClick={handlePublish}
+                    onClick={() => {
+                      void handlePublish();
+                    }}
                   >
                     {getScheduleText(
                       scheduleType,
@@ -414,9 +448,9 @@ const PublishDialog = ({ value, onOpenChange }: PublishDialogProps) => {
       </Dialog>
     </>
   );
-};
+}
 
-function formatDayAndDate(date: Date) {
+function formatDayAndDate(date: Date): string {
   const options = {
     weekday: "short",
     month: "short",

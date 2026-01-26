@@ -1,17 +1,8 @@
 "use client";
 
-import { Settings, Search, ListFilter, Loader2 } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { useRecoilState, useResetRecoilState } from "recoil";
-
-import {
-  differenceInYears,
-  differenceInMonths,
-  differenceInDays,
-} from "date-fns";
-
+import type { Member } from "@repo/actions";
+import { fetchMembers, totalMembers } from "@repo/actions";
+import { pageNumberState, totalMembersState } from "@repo/store";
 import {
   Button,
   Label,
@@ -36,30 +27,36 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@repo/ui";
-
-import { pageNumberState, totalMembersState } from "@repo/store";
-
-import FilterListComponent from "./filter-list-components";
+import {
+  differenceInYears,
+  differenceInMonths,
+  differenceInDays,
+} from "date-fns";
+import { Settings, Search, ListFilter, Loader2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { fetchMembers, Member, totalMembers } from "@repo/actions";
+import { useRecoilState, useResetRecoilState } from "recoil";
+import FilterListComponent from "./filter-list-components";
 import ImportMembersComponent from "./import-members-components";
 
-const capitalizeWords = (input: string) => {
+function capitalizeWords(input: string): string {
   return input
     .split(" ") // Split the string into an array of words
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
     .join(" "); // Join the words back into a single string
-};
+}
 
 // Helper function to generate initials
-const getInitials = (name: string) => {
+function getInitials(name: string): string {
   return name
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
-};
+}
 
-const calculateTimeDifference = (date: Date) => {
+function calculateTimeDifference(date: Date): string {
   const now = new Date();
 
   const years = differenceInYears(now, date);
@@ -70,9 +67,9 @@ const calculateTimeDifference = (date: Date) => {
 
   const days = differenceInDays(now, date);
   return `${days} ${days === 1 ? "day" : "days"} ago`;
-};
+}
 
-const MemberComponent = () => {
+function MemberComponent(): JSX.Element {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
   const [totalMembersCount, setTotalMembersCount] =
@@ -87,44 +84,43 @@ const MemberComponent = () => {
     resetPageNumber();
   }, [resetPageNumber]);
 
-  // ToDo: Add backend logic to fetch all members
-  const fetchMembersList = async () => {
-    const members = await fetchMembers({
-      pageNumber: currentPage,
-      pageSize: 30,
-      search: search,
-    });
-    setMembersList(members);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    const getTotalMembers = async () => {
+    const getTotalMembers = async (): Promise<void> => {
       const total = await totalMembers();
       if (total > 0) {
         setTotalMembersCount(total);
       }
     };
-    getTotalMembers();
-  }, []);
+    void getTotalMembers();
+  }, [setTotalMembersCount]);
 
   useEffect(() => {
-    fetchMembersList();
+    const loadMembers = async (): Promise<void> => {
+      const members = await fetchMembers({
+        pageNumber: currentPage,
+        pageSize: 30,
+        search,
+      });
+      setMembersList(members);
+      setLoading(false);
+    };
+    void loadMembers();
   }, [currentPage, search]);
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (page: number): void => {
     setCurrentPage(page);
   };
 
-  const handleExportMembers = async () => {
+  const handleExportMembers = (): void => {
     // TODO: Implement export functionality
+    // eslint-disable-next-line no-console -- Placeholder for export functionality
     console.log("Export members");
   };
 
   return (
     <div className="m-8 lg:ml-[156px] lg:mr-[156px]">
       <div className="flex flex-row items-center justify-between w-full lg:w-auto mb-4 lg:mb-0">
-        <Label htmlFor="members" className="text-3xl font-semibold">
+        <Label className="text-3xl font-semibold" htmlFor="members">
           Members
         </Label>
         <div className="flex flex-row gap-3">
@@ -132,13 +128,13 @@ const MemberComponent = () => {
             <div className="flex items-center justify-end bg-neutral-900 border-2 border-neutral-950 focus-within:border-green-500 rounded-md">
               <Search className="text-neutral-400 ml-2 size-4" />
               <input
-                id="SearchMembers"
-                type="text"
-                placeholder="Search members..."
                 className="flex h-10  w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50"
+                id="SearchMembers"
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
+                placeholder="Search members..."
+                type="text"
               />
             </div>
           </div>
@@ -164,7 +160,7 @@ const MemberComponent = () => {
             </Popover>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size={"icon"} variant={"icon"}>
+                <Button size="icon" variant="icon">
                   <Settings />
                 </Button>
               </DropdownMenuTrigger>
@@ -172,9 +168,13 @@ const MemberComponent = () => {
                 align="end"
                 className=" bg-neutral-800 border-none text-neutral-100"
               >
-                <Dialog open={isImportOpen} onOpenChange={setIsImportOpen}>
+                <Dialog onOpenChange={setIsImportOpen} open={isImportOpen}>
                   <DialogTrigger asChild>
-                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                    <DropdownMenuItem
+                      onSelect={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
                       Import members
                     </DropdownMenuItem>
                   </DialogTrigger>
@@ -190,11 +190,17 @@ const MemberComponent = () => {
                       </DialogDescription>
                     </DialogHeader>
                     <ImportMembersComponent
-                      onClose={() => setIsImportOpen(false)}
+                      onClose={() => {
+                        setIsImportOpen(false);
+                      }}
                     />
                   </DialogContent>
                 </Dialog>
-                <DropdownMenuItem onSelect={handleExportMembers}>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    handleExportMembers();
+                  }}
+                >
                   Export all members
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -202,8 +208,8 @@ const MemberComponent = () => {
           </div>
 
           <div className="flex gap-2">
-            <Link href="/members/new-member" className="items-center">
-              <Button variant="secondary" className="rounded-sm items-center">
+            <Link className="items-center" href="/members/new-member">
+              <Button className="rounded-sm items-center" variant="secondary">
                 New member
               </Button>
             </Link>
@@ -212,15 +218,15 @@ const MemberComponent = () => {
       </div>
 
       <div className="flex lg:invisible overflow-hidden">
-        <div className="w-2/3 "></div>
+        <div className="w-2/3 " />
         {/* ToDo: Add search functionality */}
         <div className="flex w-1/3 items-center justify-end bg-neutral-900 border-2 border-neutral-950 focus-within:border-green-500 rounded-md">
           <Search className="text-neutral-400 ml-2 size-4" />
           <input
-            id="SearchMembers"
-            type="text"
-            placeholder="Search members..."
             className="flex h-8 pl-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-thin placeholder:text-neutral-600 placeholder:font-normal disabled:cursor-not-allowed disabled:opacity-50"
+            id="SearchMembers"
+            placeholder="Search members..."
+            type="text"
           />
         </div>
       </div>
@@ -251,8 +257,8 @@ const MemberComponent = () => {
             <TableBody>
               {membersList.map((member) => (
                 <TableRow
-                  key={member.id}
                   className="hover:bg-neutral-800 cursor-pointer font-light border-b-neutral-600"
+                  key={member.id}
                   onClick={() => {
                     router.push(`/members/${member.id}`);
                   }}
@@ -260,22 +266,22 @@ const MemberComponent = () => {
                   <TableCell className="flex items-center gap-3">
                     {member.imageUrl ? (
                       <Image
-                        src={member.imageUrl}
                         alt={
                           member.firstName ||
                           member.lastName ||
                           member.email.charAt(0)
                         }
                         className="rounded-full"
-                        width={40}
                         height={40}
+                        src={member.imageUrl}
+                        width={40}
                       />
                     ) : (
                       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-pink-500 text-white font-bold">
                         {member.firstName
                           ? getInitials(
                               capitalizeWords(
-                                member.firstName + " " + member.lastName,
+                                `${member.firstName} ${member.lastName}`,
                               ),
                             )
                           : member.email.charAt(0).toUpperCase()}
@@ -285,7 +291,7 @@ const MemberComponent = () => {
                       <div className="font-medium text-neutral-100">
                         {member.firstName
                           ? capitalizeWords(
-                              member.firstName + " " + member.lastName,
+                              `${member.firstName} ${member.lastName}`,
                             )
                           : member.email}
                       </div>
@@ -332,21 +338,20 @@ const MemberComponent = () => {
           </Table>
         </div>
       )}
-      {loading ? (
-        <> </>
-      ) : membersList.length > 0 ? (
+      {!loading && membersList.length > 0 && (
         <PaginationBar
           currentPage={currentPage}
-          totalPages={Math.ceil(totalMembersCount / 30)}
           onPageChange={handlePageChange}
+          totalPages={Math.ceil(totalMembersCount / 30)}
         />
-      ) : (
+      )}
+      {!loading && membersList.length === 0 && (
         <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
           <p className="text-3xl text-red-700">No members found</p>
         </div>
       )}
     </div>
   );
-};
+}
 
 export default MemberComponent;

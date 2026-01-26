@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { Button } from "@repo/ui";
-import { Input } from "@repo/ui";
-import { Label } from "@repo/ui";
+import type { MemberInput } from "@repo/actions";
+import { importMembers } from "@repo/actions";
+import { Button, Input, Label } from "@repo/ui";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { importMembers, MemberInput } from "@repo/actions";
 
 interface ImportMembersComponentProps {
   onClose: () => void;
@@ -12,24 +11,24 @@ interface ImportMembersComponentProps {
 
 export default function ImportMembersComponent({
   onClose,
-}: ImportMembersComponentProps) {
+}: ImportMembersComponentProps): JSX.Element {
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [previewData, setPreviewData] = useState<MemberInput[]>([]);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
 
-    if (file.type !== "text/csv") {
+    if (selectedFile.type !== "text/csv") {
       toast.error("Please upload a CSV file");
       return;
     }
 
-    setFile(file);
+    setFile(selectedFile);
     const reader = new FileReader();
-    reader.onload = async (e) => {
-      const text = e.target?.result as string;
+    reader.onload = (readerEvent): void => {
+      const text = readerEvent.target?.result as string;
       const rows = text.split("\n");
       const headers = rows[0].toLowerCase().split(",");
 
@@ -50,10 +49,10 @@ export default function ImportMembersComponent({
 
       setPreviewData(preview as MemberInput[]);
     };
-    reader.readAsText(file);
+    reader.readAsText(selectedFile);
   };
 
-  const handleImport = async () => {
+  const handleImport = async (): Promise<void> => {
     if (!file) return;
 
     setIsLoading(true);
@@ -83,7 +82,7 @@ export default function ImportMembersComponent({
         .filter((member) => member.email);
 
       // Start import in background
-      const importPromise = await importMembers(members)
+      await importMembers(members)
         .then((response) => {
           if (response.error) {
             toast.error("Failed to import members");
@@ -94,7 +93,7 @@ export default function ImportMembersComponent({
           setFile(null);
           setPreviewData([]);
         })
-        .catch((error) => {
+        .catch((_error) => {
           toast.error("Failed to import members");
           setIsLoading(false);
           setFile(null);
@@ -111,7 +110,7 @@ export default function ImportMembersComponent({
     }
   };
 
-  const truncateEmail = (email: string) => {
+  const truncateEmail = (email: string): string => {
     if (email.length > 20) {
       return `${email.slice(0, 20)}...`;
     }
@@ -124,18 +123,20 @@ export default function ImportMembersComponent({
         <div className="space-y-6">
           <div>
             <Label
-              htmlFor="file"
               className="text-sm font-medium text-neutral-300 block mb-2"
+              htmlFor="file"
             >
               CSV File
             </Label>
             <Input
-              id="file"
-              type="file"
               accept=".csv"
-              onChange={handleFileChange}
-              disabled={isLoading}
               className="bg-neutral-800 border-0 text-white cursor-pointer h-12 text-sm"
+              disabled={isLoading}
+              id="file"
+              onChange={(e) => {
+                handleFileChange(e);
+              }}
+              type="file"
             />
           </div>
 
@@ -164,8 +165,8 @@ export default function ImportMembersComponent({
                       </tr>
                     </thead>
                     <tbody>
-                      {previewData.map((row, index) => (
-                        <tr key={index}>
+                      {previewData.map((row) => (
+                        <tr key={row.email}>
                           <td className="py-2 px-4 text-sm text-white">
                             {truncateEmail(row.email)}
                           </td>
@@ -192,9 +193,11 @@ export default function ImportMembersComponent({
       </div>
       <div className="px-6 mt-6">
         <Button
-          onClick={handleImport}
-          disabled={!file || isLoading}
           className="w-full bg-white text-black hover:bg-neutral-100 h-11"
+          disabled={!file || isLoading}
+          onClick={() => {
+            void handleImport();
+          }}
         >
           {isLoading ? (
             <>

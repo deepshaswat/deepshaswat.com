@@ -1,6 +1,3 @@
-import React from "react";
-const Newsletters = () => {
+export default function Newsletters(): JSX.Element {
   return <div>Newsletters</div>;
-};
-
-export default Newsletters;
+}

@@ -4,7 +4,8 @@ import { createReactBlockSpec } from "@blocknote/react";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@repo/ui/utils";
 import { FaPalette, FaSmile, FaFont } from "react-icons/fa";
-import { Popover, PopoverContent, PopoverTrigger, Switch } from "@repo/ui";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Switch } from "./ui/switch";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 
 const ColorButton = ({

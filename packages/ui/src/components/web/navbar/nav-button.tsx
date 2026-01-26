@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Button } from "@repo/ui";
+import { Button } from "../../ui/button";
 import { cn } from "@repo/ui/utils";
 
 type NavButtonProps = {

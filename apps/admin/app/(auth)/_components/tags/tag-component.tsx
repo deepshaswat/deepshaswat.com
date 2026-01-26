@@ -1,12 +1,12 @@
 import { fetchAllTagsWithPostCount } from "@repo/actions";
-import TagComponentRendering from "../../_components/tags/tag-component-rendering";
+import TagComponentRendering from "./tag-component-rendering";
 
-const TagComponent = async () => {
+async function TagComponent(): Promise<JSX.Element> {
   // const router = useRouter();
 
   const tags = await fetchAllTagsWithPostCount();
 
   return <TagComponentRendering tags={tags} />;
-};
+}
 
 export default TagComponent;

@@ -11,7 +11,8 @@ import { toast } from "sonner";
 import { showToastEmailState } from "@repo/store";
 import { ContactSchema } from "@repo/schema";
 import { contact } from "@repo/actions";
-import { FormError, Base } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
+import { FormError } from "../error-page/form-error";
 
 import {
   FormProvider as Form,
@@ -20,14 +21,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Textarea,
-  Input,
-  Button,
-  Card,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui";
+} from "../../ui/form";
+import { Textarea } from "../../ui/textarea";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
+import { Card, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 
 export const Contact = () => {
   const meta = {

@@ -1,7 +1,7 @@
 "use client";
 
 import { books } from "@repo/store";
-import { Base } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useState } from "react";

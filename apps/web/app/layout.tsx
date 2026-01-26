@@ -1,9 +1,11 @@
+import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
-import { Providers } from "./providers";
 import { Appbar, Footer, NewsletterButton } from "@repo/ui/web";
-import { Toaster } from "@repo/ui";
+import { Providers } from "./providers";
+import { siteConfig } from "../lib/site-config";
 
 const inter = Nunito({ subsets: ["latin"] });
 
@@ -14,93 +16,59 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
 };
-export const metadataBase = new URL("https://deepshaswat.com");
+
 export const metadata: Metadata = {
-  title: "Shaswat Deep",
-  description:
-    "Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.",
-  keywords: [
-    "Shaswat Deep",
-    "software engineer",
-    "entrepreneur",
-    "writer",
-    "Orbizza",
-    "Technology",
-    "Blogging",
-    "Entrepreneurship",
-    "Shaswat Deep",
-    "Vibecreation",
-    "Naviya",
-    "RateCreator",
-    "StockMarket",
-    "Investing",
-    "Crypto",
-    "Web3",
-    "AI",
-    "MachineLearning",
-    "DeepLearning",
-    "DataScience",
-    "Ship",
-    "DevOps",
-    "Cloud",
-    "AWS",
-    "GCP",
-    "Azure",
-    "Docker",
-    "Kubernetes",
-    "CI/CD",
-    "Git",
-    "GitHub",
-    "GitLab",
-    "Bitbucket",
-    "Linear",
-    "Resend",
-  ],
-  authors: [{ name: "Shaswat Deep", url: "https://deepshaswat.com" }],
-  creator: "Shaswat Deep",
-  publisher: "Shaswat Deep",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.author.name, url: siteConfig.url }],
+  creator: siteConfig.author.name,
+  publisher: siteConfig.author.name,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase,
   alternates: {
     canonical: "/",
+    types: {
+      "application/rss+xml": `${siteConfig.url}/feed.xml`,
+    },
   },
   openGraph: {
-    title: "Shaswat Deep",
-    description:
-      "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
-    url: "https://deepshaswat.com",
-    siteName: "Shaswat Deep",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
     type: "website",
     locale: "en_US",
     images: [
       {
-        url: "https://deepshaswat.com/static/images/headShot.png",
+        url: siteConfig.ogImage,
         width: 800,
         height: 800,
-        alt: "Shaswat Deep",
+        alt: siteConfig.name,
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shaswat Deep",
-    description:
-      "Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza, Inc.",
-    images: ["https://deepshaswat.com/static/images/headShot.png"],
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+    creator: siteConfig.author.twitter,
   },
   robots: {
     index: true,
     follow: true,
-    nocache: true,
     googleBot: {
       index: true,
       follow: true,
-      noimageindex: true,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
@@ -109,15 +77,14 @@ export const metadata: Metadata = {
   other: {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "black",
-    "format-detection": "telephone=no",
   },
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
-}>) {
+  children: ReactNode;
+}>): JSX.Element {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />

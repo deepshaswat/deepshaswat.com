@@ -4,7 +4,10 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core";
 import "@blocknote/mantine/style.css";
 
-import { Markdown, Youtube, Callout, Divider } from "@repo/ui";
+import { Markdown } from "../../markdown-editor";
+import { Youtube } from "../../youtube-blocknote";
+import { Callout } from "../../callout-block";
+import { Divider } from "../../divider";
 
 interface BlockNoteRendererProps {
   content: any;

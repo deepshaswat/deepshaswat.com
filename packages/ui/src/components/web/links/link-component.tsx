@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "@repo/ui";
+import { Button } from "../../ui/button";
 import {
   Github,
   Twitter,
@@ -16,7 +16,7 @@ import {
   Clapperboard,
   GraduationCap,
   Handshake,
-  ChartCandlestick,
+  CandlestickChart,
 } from "lucide-react";
 
 interface LinkData {
@@ -42,7 +42,7 @@ const LinksComponent = () => {
     {
       title: "StockBook - Stock Market Research Platform",
       url: "https://stockbook.space/",
-      icon: <ChartCandlestick className="h-5 w-5" />,
+      icon: <CandlestickChart className="h-5 w-5" />,
     },
     {
       title: "Naviya - Personalized AI Tutor for Students",
@@ -93,7 +93,7 @@ const LinksComponent = () => {
   const socialIcons = [
     {
       icon: <Twitter className="h-6 w-6" />,
-      url: "https://x.com/shaswat_X",
+      url: "https://x.com/deepshaswat",
     },
     {
       icon: <LinkedinIcon className="h-6 w-6" />,

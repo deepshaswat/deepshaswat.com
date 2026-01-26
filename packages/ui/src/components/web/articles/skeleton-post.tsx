@@ -1,6 +1,6 @@
 import React from "react";
-import { Skeleton } from "@repo/ui";
-import { Card, CardContent } from "@repo/ui";
+import { Skeleton } from "../../ui/skeleton";
+import { Card, CardContent } from "../../ui/card";
 
 const PostSkeleton = () => {
   return (

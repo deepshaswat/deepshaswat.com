@@ -9,13 +9,9 @@ import { useRecoilState } from "recoil";
 import { cn } from "@repo/ui/utils";
 import { selectDate } from "@repo/store";
 
-import {
-  Button,
-  Calendar,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui";
+import { Button } from "./ui/button";
+import { Calendar } from "./ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export function DatePicker({
   date,

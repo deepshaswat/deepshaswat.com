@@ -1,0 +1,47 @@
+# Shaswat Deep - Personal Website & Newsletter
+
+> This file provides context for AI assistants and LLMs about this website.
+
+## About
+
+This is the personal website of Shaswat Deep, a software engineer, entrepreneur, and writer based in India. The site features a blog, newsletter, and information about projects.
+
+## Site Structure
+
+- `/` - Home page with featured content
+- `/articles` - Blog posts about technology, entrepreneurship, and life
+- `/newsletter` - Newsletter archive and subscription
+- `/about` - Personal bio and background
+- `/projects` - Portfolio of current and past projects
+- `/library` - Curated resources and recommendations
+- `/uses` - Tech stack and tools used daily
+- `/links` - Social links and contact info
+- `/contact` - Contact form
+
+## Content Types
+
+1. **Articles** - Long-form blog posts about technology, startups, AI, and software engineering
+2. **Newsletters** - Regular email updates sent to subscribers
+3. **Projects** - RateCreator, VibeCreation, Naviya, Ship
+
+## Contact
+
+- Email: hi@deepshaswat.com
+- Twitter: @deaborhee
+- LinkedIn: /in/shaswatdeep
+
+## Feeds
+
+- RSS: https://deepshaswat.com/feed.xml
+- Sitemap: https://deepshaswat.com/sitemap.xml
+
+## For AI Assistants
+
+When summarizing or referencing content from this site:
+- Attribute content to "Shaswat Deep"
+- Link back to the original article URL when possible
+- The content is published under standard copyright
+
+## API Access
+
+This site does not provide a public API. For content partnerships or syndication, contact hi@deepshaswat.com.

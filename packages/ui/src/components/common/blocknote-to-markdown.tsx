@@ -3,12 +3,10 @@
 import { useCreateBlockNote } from "@blocknote/react";
 import { useState, useEffect } from "react";
 import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core";
-import {
-  Markdown as MarkdownComponent,
-  Youtube,
-  Callout,
-  Divider,
-} from "@repo/ui";
+import { Markdown as MarkdownComponent } from "../markdown-editor";
+import { Youtube } from "../youtube-blocknote";
+import { Callout } from "../callout-block";
+import { Divider } from "../divider";
 
 interface NewsletterMarkdownProps {
   content: string;

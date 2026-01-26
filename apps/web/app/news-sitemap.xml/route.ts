@@ -1,23 +1,24 @@
 import { fetchPublishedPosts } from "@repo/actions";
 import type { PostListType } from "@repo/actions";
+import { siteConfig } from "../../lib/site-config";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://deepshaswat.com";
+const BASE_URL = siteConfig.url;
 
-export async function GET() {
+export async function GET(): Promise<Response> {
   try {
     let articles: PostListType[] = [];
     let newsletters: PostListType[] = [];
 
     try {
       articles = await fetchPublishedPosts("articles");
-    } catch (error) {
-      console.error("Error fetching articles:", error);
+    } catch {
+      // Error fetching articles - continue with empty array
     }
 
     try {
       newsletters = await fetchPublishedPosts("newsletters");
-    } catch (error) {
-      console.error("Error fetching newsletters:", error);
+    } catch {
+      // Error fetching newsletters - continue with empty array
     }
 
     // Filter content from last 48 hours
@@ -28,8 +29,7 @@ export async function GET() {
           : new Date();
         const timeSincePublish = new Date().getTime() - publishDate.getTime();
         return timeSincePublish < 48 * 60 * 60 * 1000; // 48 hours
-      } catch (error) {
-        console.error("Error processing item date:", error);
+      } catch {
         return false;
       }
     });
@@ -45,7 +45,7 @@ export async function GET() {
           <loc>${BASE_URL}/${item.postUrl}</loc>
           <news:news>
             <news:publication>
-              <news:name>Shaswat Deep</news:name>
+              <news:name>${siteConfig.name}</news:name>
               <news:language>en</news:language>
             </news:publication>
             <news:publication_date>${
@@ -55,9 +55,9 @@ export async function GET() {
             }</news:publication_date>
             <news:title>${item.title}</news:title>
             ${
-              item.tags && Array.isArray(item.tags) && item.tags.length > 0
+              Array.isArray(item.tags) && item.tags.length > 0
                 ? `<news:keywords>${item.tags
-                    .map((tag) => tag?.tagId)
+                    .map((tag) => tag.tagId)
                     .filter(Boolean)
                     .join(",")}</news:keywords>`
                 : ""
@@ -65,8 +65,7 @@ export async function GET() {
           </news:news>
         </url>
       `;
-          } catch (error) {
-            console.error("Error processing item for news sitemap:", error);
+          } catch {
             return "";
           }
         })
@@ -80,8 +79,7 @@ export async function GET() {
         "Cache-Control": "public, max-age=3600",
       },
     });
-  } catch (error) {
-    console.error("Error generating news sitemap:", error);
+  } catch {
     // Return an empty but valid sitemap in case of error
     return new Response(
       `<?xml version="1.0" encoding="UTF-8"?>

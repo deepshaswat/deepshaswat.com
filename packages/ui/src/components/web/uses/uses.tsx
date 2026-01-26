@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
 import { categories } from "@repo/store";
-import { Base } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
 
 const pageConfig = {
   tagline: "Apps. Tools. Gear.",

@@ -4,6 +4,9 @@
     "build": "yarn workspace @repo/ui build && yarn prisma-generate && turbo build",
     "dev": "turbo dev",
     "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest --watch",
     "coverage": "vitest run --coverage",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
@@ -13,21 +16,40 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish",
-    "prisma-generate": " npx dotenv -e .env -- npx prisma generate --schema=packages/db/prisma/schema.prisma",
+    "prisma-generate": "dotenv -e .env -- prisma generate --schema=packages/db/prisma/schema.prisma",
     "npm-clean": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +",
     "dist-clean": "find . -name \"dist\" -type d -prune -exec rm -rf '{}' +",
-    "full-clean": "yarn npm-clean && yarn dist-clean",
-    "generate-sitemaps": "npx tsx scripts/generate-sitemaps.ts"
+    "full-clean": "yarn npm-clean && yarn dist-clean"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^5.1.2",
+    "@vitest/ui": "^3.0.5",
     "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.0",
-    "husky": "^9.0.11",
-    "prettier": "^3.2.5",
+    "husky": "^9.1.7",
+    "jsdom": "^25.0.1",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
-    "turbo": "^2.0.12",
-    "vitest": "^1.6.0"
+    "tsx": "^4.7.0",
+    "turbo": "^2.7.4",
+    "vitest": "^3.0.5"
+  },
+  "lint-staged": {
+    "apps/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "packages/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md}": [
+      "prettier --write"
+    ]
   },
   "engines": {
     "node": ">=18"
@@ -58,7 +80,6 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
-    "aws-sdk": "^2.1672.0",
     "axios": "^1.7.3",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.7",
@@ -67,8 +88,7 @@
     "fuzzy-search": "^3.2.1",
     "ioredis": "^5.4.1",
     "kbar": "^0.1.0-beta.45",
-    "posthog-js": "^1.260.1",
-    "next-sitemap": "^4.2.3",
+    "posthog-js": "^1.335.2",
     "react-color": "^2.19.3",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",

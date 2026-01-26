@@ -1,7 +1,7 @@
 "use client";
 
 import { useKBar } from "kbar";
-import { Button } from "@repo/ui";
+import { Button } from "../../ui/button";
 
 interface ShortcutButtonProps {
   children?: React.ReactNode;

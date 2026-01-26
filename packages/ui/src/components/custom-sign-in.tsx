@@ -2,15 +2,10 @@
 
 import React, { useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
-import {
-  Button,
-  Input,
-  Label,
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export const CustomSignIn: React.FC = () => {
   const { signIn, setActive, isLoaded } = useSignIn();

@@ -1,26 +1,24 @@
 "use client";
 
-import axios from "axios";
-import { useTheme } from "next-themes";
+import type { PartialBlock } from "@blocknote/core";
+import type { DefaultReactSuggestionItem } from "@blocknote/react";
 import {
-  PartialBlock,
   BlockNoteSchema,
   defaultBlockSpecs,
   insertOrUpdateBlock,
   filterSuggestionItems,
 } from "@blocknote/core";
+import "@blocknote/mantine/style.css";
+import { BlockNoteView } from "@blocknote/mantine";
 import {
-  DefaultReactSuggestionItem,
   getDefaultReactSlashMenuItems,
   SuggestionMenuController,
   useCreateBlockNote,
 } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
-
-import { FaYoutube, FaMarkdown, FaLightbulb } from "react-icons/fa";
+import axios from "axios";
 import { Minus } from "lucide-react";
-
+import { useTheme } from "next-themes";
+import { FaYoutube, FaMarkdown, FaLightbulb } from "react-icons/fa";
 import { Markdown, Youtube, Callout, Divider } from "@repo/ui";
 
 interface EditorProps {
@@ -39,7 +37,9 @@ const schema = BlockNoteSchema.create({
   },
 });
 
-const insertYoutube = (editor: typeof schema.BlockNoteEditor) => ({
+const insertYoutube = (
+  editor: typeof schema.BlockNoteEditor,
+): DefaultReactSuggestionItem => ({
   title: "Youtube",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
@@ -52,7 +52,9 @@ const insertYoutube = (editor: typeof schema.BlockNoteEditor) => ({
   subtext: "Used to embed a youtube video.",
 });
 
-const insertMarkdown = (editor: typeof schema.BlockNoteEditor) => ({
+const insertMarkdown = (
+  editor: typeof schema.BlockNoteEditor,
+): DefaultReactSuggestionItem => ({
   title: "Markdown",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
@@ -65,7 +67,9 @@ const insertMarkdown = (editor: typeof schema.BlockNoteEditor) => ({
   subtext: "Used to add a markdown editor block.",
 });
 
-const insertCallout = (editor: typeof schema.BlockNoteEditor) => ({
+const insertCallout = (
+  editor: typeof schema.BlockNoteEditor,
+): DefaultReactSuggestionItem => ({
   title: "Callout",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
@@ -78,7 +82,9 @@ const insertCallout = (editor: typeof schema.BlockNoteEditor) => ({
   subtext: "Used to add a callout block.",
 });
 
-const insertDivider = (editor: typeof schema.BlockNoteEditor) => ({
+const insertDivider = (
+  editor: typeof schema.BlockNoteEditor,
+): DefaultReactSuggestionItem => ({
   title: "Divider",
   onItemClick: () => {
     const block = editor.getTextCursorPosition().block;
@@ -100,14 +106,21 @@ const getCustomSlashMenuItems = (
   insertDivider(editor),
 ];
 
-const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
-  const { resolvedTheme } = useTheme();
-  // uncomment the initialContent to avoid the error on Markdown to Blocks
-  // const [markdown, setMarkdown] = useState<string | undefined>(initialContent);
+interface UploadResponse {
+  uploadURL: string;
+  s3URL: string;
+}
 
-  const handleUpload = async (file: File) => {
+function Editor({
+  onChange,
+  initialContent,
+  editable,
+}: EditorProps): JSX.Element {
+  const { resolvedTheme } = useTheme();
+
+  const handleUpload = async (file: File): Promise<string> => {
     try {
-      const { data } = await axios.post("/api/upload", {
+      const { data } = await axios.post<UploadResponse>("/api/upload", {
         fileType: file.type,
       });
 
@@ -120,8 +133,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
       });
 
       return s3URL;
-    } catch (error) {
-      console.error("Error uploading file:", error);
+    } catch {
       throw new Error("File upload failed");
     }
   };
@@ -139,26 +151,26 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   return (
     <div>
       <BlockNoteView
-        editor={editor}
+        data-theming-css-demo
         editable={editable}
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
+        editor={editor}
         onChange={() => {
           onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
         }}
-        // uncomment the onChange to avoid the error on Markdown to Blocks
-        // onChange={onChangeMarkdown}
         slashMenu={false}
-        data-theming-css-demo
+        theme={resolvedTheme === "dark" ? "dark" : "light"}
       >
         <SuggestionMenuController
-          triggerCharacter="/"
-          getItems={async (query) =>
-            filterSuggestionItems(getCustomSlashMenuItems(editor), query)
+          getItems={(query) =>
+            Promise.resolve(
+              filterSuggestionItems(getCustomSlashMenuItems(editor), query),
+            )
           }
+          triggerCharacter="/"
         />
       </BlockNoteView>
     </div>
   );
-};
+}
 
 export default Editor;

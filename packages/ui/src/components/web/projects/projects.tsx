@@ -7,7 +7,7 @@ import {
   Mail,
   Clipboard,
   Code,
-  ChartCandlestick,
+  CandlestickChart,
   GraduationCap,
   Clapperboard,
   Star,
@@ -15,7 +15,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 
 import { featuredProjects, allProjects } from "@repo/store";
-import { Base } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
 
 const pageConfig = {
   tagline: "Work. Hobby. Open Source.",
@@ -24,7 +24,7 @@ const pageConfig = {
 };
 
 const iconMap: Record<string, React.ReactNode> = {
-  "chart-candlestick": <ChartCandlestick className="size-8" />,
+  "chart-candlestick": <CandlestickChart className="size-8" />,
   "graduation-cap": <GraduationCap className="size-8" />,
   clapperboard: <Clapperboard className="size-8" />,
   star: <Star className="size-8" />,

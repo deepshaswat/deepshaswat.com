@@ -1,22 +1,25 @@
 import { fetchTagDetails } from "@repo/actions";
-import EditComponent from "../../_components/tags/edit-component";
 import { notFound } from "next/navigation";
+import EditComponent from "../../_components/tags/edit-component";
 
-export default async function ({ params }: { params: { slug: string } }) {
+export default async function TagSlugPage({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<JSX.Element> {
   const { slug } = params;
   const tag = await fetchTagDetails(slug);
 
-  //Handle case where blog post is not found
   if (tag === null) {
     notFound();
   }
 
   return (
     <EditComponent
-      id={tag?.id || ""}
-      slug={tag?.slug || ""}
-      description={tag?.description || ""}
-      imageUrl={tag?.imageUrl || ""}
+      description={tag.description ?? ""}
+      id={tag.id}
+      imageUrl={tag.imageUrl ?? ""}
+      slug={tag.slug}
     />
   );
 }

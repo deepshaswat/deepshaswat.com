@@ -9,7 +9,9 @@
     ".": "./src/index.ts",
     "./utils": "./lib/utils.ts",
     "./web": "./src/components/web/index.ts",
-    "./admin": "./src/components/admin/index.ts"
+    "./admin": "./src/components/admin/index.ts",
+    "./command": "./src/components/web/command/CommandBar.tsx",
+    "./custom-sign-in": "./src/components/custom-sign-in.tsx"
   },
   "license": "MIT",
   "scripts": {
@@ -58,7 +60,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
-    "cobe": "^0.6.3",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.16.0",
     "fuzzy-search": "^3.2.1",
@@ -66,7 +67,6 @@
     "next-themes": "^0.3.0",
     "react-day-picker": "8.10.1",
     "react-markdown": "^9.0.1",
-    "react-spring": "^9.7.4",
     "rehype-highlight": "^7.0.1",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
@@ -84,9 +84,9 @@
     "fuse.js": "^7.0.0",
     "kbar": "^0.1.0-beta.45",
     "next": "^14.1.1",
-    "posthog-js": "^1.260.1",
+    "posthog-js": "^1.335.2",
     "react-dom": "^18.2.0",
     "recoil": "^0.7.7",
-    "sonner": "^1.4.3"
+    "sonner": "^1.4.41"
   }
 }

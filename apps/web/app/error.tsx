@@ -1,9 +1,7 @@
 "use client";
 
+import type { Metadata } from "next";
 import { ErrorMessage } from "@repo/ui/web";
-import React from "react";
-
-import { Metadata } from "next";
 
 const title = "500 | Ooops!";
 const description = "Something isn't right.";
@@ -44,8 +42,6 @@ export const metadata: Metadata = {
   },
 };
 
-const Custom500: React.FC = () => {
+export default function Custom500(): JSX.Element {
   return <ErrorMessage />;
-};
-
-export default Custom500;
+}

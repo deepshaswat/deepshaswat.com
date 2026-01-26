@@ -1,7 +1,7 @@
 "use client";
 
 import { useKBar } from "kbar";
-import { Button } from "@repo/ui";
+import { Button } from "../../ui/button";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Navigation } from "./navigation";

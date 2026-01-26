@@ -1,5 +1,5 @@
+import type { Metadata } from "next";
 import { ArticlesListPage } from "@repo/ui/web";
-import { Metadata } from "next";
 
 export const revalidate = 31536000;
 
@@ -43,8 +43,6 @@ export const metadata: Metadata = {
   },
 };
 
-const ArticlesPage = async () => {
+export default function ArticlesPage(): JSX.Element {
   return <ArticlesListPage />;
-};
-
-export default ArticlesPage;
+}

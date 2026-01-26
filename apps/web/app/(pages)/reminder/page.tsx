@@ -1,5 +1,4 @@
-import { Metadata } from "next";
-
+import type { Metadata } from "next";
 import { Reminder } from "@repo/ui/web";
 
 export const revalidate = 31536000;
@@ -45,8 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
-const ReminderPage = () => {
+function ReminderPage(): JSX.Element {
   return <Reminder />;
-};
+}
 
 export default ReminderPage;

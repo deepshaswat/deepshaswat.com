@@ -1,48 +1,44 @@
 "use client";
 
-import { fetchTagsFromTagOnPost, PostListType, Tags } from "@repo/actions";
-import { postDataState, postIdState } from "@repo/store";
-import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
-import dynamic from "next/dynamic";
-import { useRecoilState } from "recoil";
-import { NavBarPost } from "./navbar-post";
-import { UploadComponent } from "@repo/ui";
+import type { PostListType, Tags } from "@repo/actions";
+import { fetchTagsFromTagOnPost } from "@repo/actions";
 import {
+  postDataState,
+  postIdState,
   selectDate,
   postMetadataState,
   postState,
   selectedTimeIst,
   selectedTagsState,
 } from "@repo/store";
+import axios from "axios";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
+import React, { useEffect, useState, useMemo } from "react";
+import { useRecoilState } from "recoil";
+import { UploadComponent } from "@repo/ui";
+import { NavBarPost } from "./navbar-post";
 import { MetadataSidebar } from "./metadata-sidebar";
 
-const capitalizeFirstLetter = (item: string) => {
-  return item
-    .split("-")
-    .map((word, index) =>
-      index === 0
-        ? word.charAt(0).toUpperCase() + word.slice(1)
-        : word.toLowerCase(),
-    )
-    .join(" ");
-};
+interface UploadResponse {
+  uploadURL: string;
+  s3URL: string;
+}
 
-export const EditContentPost = ({
+export function EditContentPost({
   initialPost,
 }: {
   initialPost: PostListType;
-}) => {
+}): JSX.Element {
   const pathname = usePathname();
 
   // Recoil States
-  const [postFull, setPostFull] = useRecoilState(postDataState);
+  const [, setPostFull] = useRecoilState(postDataState);
   const [post, setPost] = useRecoilState(postState);
-  const [metadata, setMetadata] = useRecoilState(postMetadataState);
-  const [postId, setPostId] = useRecoilState(postIdState);
-  const [inputDate, setInputDate] = useRecoilState(selectDate);
-  const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
+  const [, setMetadata] = useRecoilState(postMetadataState);
+  const [, setPostId] = useRecoilState(postIdState);
+  const [, setInputDate] = useRecoilState(selectDate);
+  const [, setInputTimeIst] = useRecoilState(selectedTimeIst);
 
   // Local States
   const [isOpen, setIsOpen] = useState(true);
@@ -51,9 +47,9 @@ export const EditContentPost = ({
   const [abortController, setAbortController] =
     useState<AbortController | null>(null);
   const [tags, setTags] = useState<Tags[]>([]);
-  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsState);
+  const [, setSelectedTags] = useRecoilState(selectedTagsState);
 
-  const resetState = () => {
+  const resetState = (): void => {
     setIsSubmitting(false);
     setIsFeatureFileUploadOpen(false);
     setAbortController(null);
@@ -64,12 +60,11 @@ export const EditContentPost = ({
   }, []);
 
   useEffect(() => {
-    const fetchTags = async () => {
+    const loadTags = async (): Promise<void> => {
       try {
         const tagOptions = await fetchTagsFromTagOnPost({
           postId: initialPost.id,
         });
-        // console.log("Fetched tags:", tagOptions);
         setTags(
           tagOptions.map((tag) => ({
             id: tag.tag.id,
@@ -79,62 +74,57 @@ export const EditContentPost = ({
             posts: tag.tag.posts,
           })),
         );
-      } catch (error) {
-        console.error("Error fetching tags:", error);
+      } catch {
+        // Error fetching tags
       }
     };
-
-    fetchTags();
-  }, [setTags]);
+    void loadTags();
+  }, [initialPost.id]);
 
   useEffect(() => {
     if (pathname.includes("/editor/")) {
       setPostFull(initialPost);
 
-      const initializeDateAndTime = (publishDate: Date) => {
-        // Extract the date portion
+      const initializeDateAndTime = (publishDate: Date): void => {
         setInputDate(publishDate);
-
-        // Extract the time portion in HH:mm format
 
         const istTime = new Date(publishDate.getTime() + 5.5 * 60 * 60 * 1000);
         const hours = istTime.getUTCHours().toString().padStart(2, "0");
         const minutes = istTime.getUTCMinutes().toString().padStart(2, "0");
         const formattedTime = `${hours}:${minutes}`;
         setInputTimeIst(formattedTime);
-        // console.log("formattedTime", formattedTime);
       };
 
-      initializeDateAndTime(initialPost.publishDate || new Date());
+      initializeDateAndTime(initialPost.publishDate ?? new Date());
 
       setPost({
         title: initialPost.title,
         content: initialPost.content,
-        featureImage: initialPost.featureImage || "",
+        featureImage: initialPost.featureImage ?? "",
         postUrl: initialPost.postUrl,
         publishDate: initialPost.publishDate,
         excerpt: initialPost.excerpt,
         featured: initialPost.featured,
-        tags: tags,
-        authors: initialPost.author?.id || "",
+        tags,
+        authors: initialPost.author.id,
       });
 
-      setSelectedTags(post.tags);
+      setSelectedTags(tags);
 
       setMetadata({
         title: initialPost.metadataTitle,
         description: initialPost.metadataDescription,
-        imageUrl: initialPost.metadataImageUrl || "",
-        keywords: initialPost.metadataKeywords || "",
-        authorName: initialPost.metadataAuthorName || "",
-        canonicalUrl: initialPost.metadataCanonicalUrl || "",
-        ogTitle: initialPost.metadataOgTitle || "",
-        ogDescription: initialPost.metadataOgDescription || "",
-        ogImage: initialPost.metadataOgImage || "",
-        twitterCard: initialPost.metadataTwitterCard || "",
-        twitterTitle: initialPost.metadataTwitterTitle || "",
-        twitterDescription: initialPost.metadataTwitterDescription || "",
-        twitterImage: initialPost.metadataTwitterImage || "",
+        imageUrl: initialPost.metadataImageUrl,
+        keywords: initialPost.metadataKeywords,
+        authorName: initialPost.metadataAuthorName,
+        canonicalUrl: initialPost.metadataCanonicalUrl,
+        ogTitle: initialPost.metadataOgTitle,
+        ogDescription: initialPost.metadataOgDescription,
+        ogImage: initialPost.metadataOgImage,
+        twitterCard: initialPost.metadataTwitterCard,
+        twitterTitle: initialPost.metadataTwitterTitle,
+        twitterDescription: initialPost.metadataTwitterDescription,
+        twitterImage: initialPost.metadataTwitterImage,
       });
 
       setPostId(initialPost.id);
@@ -158,27 +148,29 @@ export const EditContentPost = ({
     [],
   );
 
-  const handleEditorContentChange = (content: string) => {
+  const handleEditorContentChange = (content: string): void => {
     setPost((prev) => ({ ...prev, content }));
   };
 
-  const toggleSidebar = () => {
+  const toggleSidebar = (): void => {
     setIsOpen((prev) => !prev);
   };
 
-  const toggleFeatureImageUpload = () => {
+  const toggleFeatureImageUpload = (): void => {
     setIsFeatureFileUploadOpen((prev) => !prev);
   };
 
-  const handleMainInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     setPost((prev) => ({ ...prev, title: e.target.value }));
   };
 
-  const handleFeatureImageChange = async (file?: File) => {
+  const handleFeatureImageChange = async (file?: File): Promise<void> => {
     if (file) {
       setIsSubmitting(true);
       try {
-        const { data } = await axios.post("/api/upload", {
+        const { data } = await axios.post<UploadResponse>("/api/upload", {
           fileType: file.type,
         });
         const { uploadURL, s3URL } = data;
@@ -189,8 +181,8 @@ export const EditContentPost = ({
         setMetadata((prev) => ({ ...prev, imageUrl: s3URL }));
         setMetadata((prev) => ({ ...prev, twitterImage: s3URL }));
         setMetadata((prev) => ({ ...prev, ogImage: s3URL }));
-      } catch (error) {
-        console.error("Error uploading file:", error);
+      } catch {
+        // Error uploading file
       } finally {
         setIsSubmitting(false);
         setAbortController(null);
@@ -201,7 +193,7 @@ export const EditContentPost = ({
     }
   };
 
-  const handleCancelUpload = () => {
+  const handleCancelUpload = (): void => {
     if (abortController) {
       abortController.abort();
       setIsSubmitting(false);
@@ -209,7 +201,7 @@ export const EditContentPost = ({
     }
   };
 
-  const onCloseFeatureImage = () => {
+  const onCloseFeatureImage = (): void => {
     setPost((prev) => ({ ...prev, featureImage: "" }));
     setIsSubmitting(false);
     setIsFeatureFileUploadOpen(false);
@@ -222,36 +214,38 @@ export const EditContentPost = ({
         <div className="lg:mx-[180px]">
           <div className="ml-10 max-w-screen-md lg:max-w-screen-lg">
             <UploadComponent
-              imageUrl={post.featureImage}
-              isSubmitting={isSubmitting}
-              onChange={handleFeatureImageChange}
-              isFileUploadOpen={isFeatureFileUploadOpen}
-              toggleFileUpload={toggleFeatureImageUpload}
-              text="Add feature image"
-              className="text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10"
               buttonVariant="link"
+              className="text-neutral-400 font-light !no-underline hover:text-neutral-200 mt-10"
+              imageUrl={post.featureImage}
+              isFileUploadOpen={isFeatureFileUploadOpen}
+              isSubmitting={isSubmitting}
               onCancel={handleCancelUpload}
+              onChange={(file) => {
+                void handleFeatureImageChange(file);
+              }}
+              text="Add feature image"
+              toggleFileUpload={toggleFeatureImageUpload}
             />
           </div>
           <div>
             <input
-              value={post.title}
+              className="w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700"
               onChange={handleMainInputChange}
               placeholder="Post title"
-              className="w-full ml-12 mt-4 bg-transparent text-5xl font-semibold outline-none ring-0 placeholder:text-neutral-700"
+              value={post.title}
             />
           </div>
           <div className="mt-8">
             <Editor
-              onChange={handleEditorContentChange}
+              editable
               initialContent={post.content}
-              editable={true}
+              onChange={handleEditorContentChange}
             />
           </div>
         </div>
       </div>
 
-      {isOpen && <MetadataSidebar />}
+      {isOpen ? <MetadataSidebar /> : null}
     </div>
   );
-};
+}

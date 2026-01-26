@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
+import prisma from "@repo/db/client";
+
 const BlogContent = dynamic(
   () => import("@repo/ui/web").then((m) => m.BlogContent),
   {
@@ -6,8 +9,6 @@ const BlogContent = dynamic(
     loading: () => null,
   },
 );
-import { Metadata } from "next";
-import prisma from "@repo/db/client";
 
 export const revalidate = 31536000;
 
@@ -25,7 +26,7 @@ export async function generateMetadata({
     },
   });
 
-  const title = `${post?.title + " // Shaswat Deep"}`;
+  const title = `${post?.title ?? ""} // Shaswat Deep`;
   const description =
     post?.metadataDescription ||
     `Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.`;
@@ -43,7 +44,7 @@ export async function generateMetadata({
 
     metadataBase: new URL("https://deepshaswat.com"),
     alternates: {
-      canonical: `/${params.postUrl}` || post?.metadataCanonicalUrl,
+      canonical: post?.metadataCanonicalUrl ?? `/${params.postUrl}`,
     },
     openGraph: {
       title: post?.metadataOgTitle || title,
@@ -83,6 +84,6 @@ export default function EditorPage({
   params,
 }: {
   params: { postUrl: string };
-}) {
+}): JSX.Element {
   return <BlogContent params={{ postUrl: params.postUrl }} />;
 }

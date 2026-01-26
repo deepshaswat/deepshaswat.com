@@ -1,23 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Loader2 } from "lucide-react";
-import { useRecoilState, useResetRecoilState } from "recoil";
-
-import { Button, Label, Separator, PaginationBar } from "@repo/ui";
-import { pageNumberState } from "@repo/store";
+import type { PostListType } from "@repo/actions";
 import {
   fetchAllPosts,
   fetchAllPostsCount,
   fetchAllTagsWithPostCount,
-  PostListType,
 } from "@repo/actions";
-
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useState, useEffect, useCallback } from "react";
+import { useRecoilState, useResetRecoilState } from "recoil";
+import { Button, Label, Separator, PaginationBar } from "@repo/ui";
+import { pageNumberState } from "@repo/store";
 import PostFilterNavbar from "./post-filter-navbar";
 import PostsTableRender from "./posts-table-render";
 
-const PostsComponent = () => {
+function PostsComponent(): JSX.Element {
   const [postOption, setPostOption] = useState("all-posts");
   const [tagOption, setTagOption] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -45,54 +43,56 @@ const PostsComponent = () => {
   const [postsCount, setPostsCount] = useState(0);
 
   useEffect(() => {
-    const fetchTags = async () => {
+    const fetchTags = async (): Promise<void> => {
       const fetchedTags = await fetchAllTagsWithPostCount();
       setTags(fetchedTags.map((tag) => tag.slug));
     };
 
-    fetchTags();
+    void fetchTags();
   }, []);
 
-  const fetchPosts = async (postOption: string, tagOption: string) => {
-    try {
-      const fetchedPosts = await fetchAllPosts(
-        postOption,
-        tagOption,
-        currentPage,
-      );
+  const fetchPosts = useCallback(
+    async (postOpt: string, tagOpt: string): Promise<void> => {
+      try {
+        const fetchedPosts = await fetchAllPosts(postOpt, tagOpt, currentPage);
 
-      setPosts(fetchedPosts as PostListType[]);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setPosts(fetchedPosts);
+      } catch {
+        // Error fetching posts
+      } finally {
+        setLoading(false);
+      }
+    },
+    [currentPage],
+  );
 
-  const fetchPostsCount = async (postOption: string, tagOption: string) => {
-    try {
-      setLoading(true);
-      const fetchedPostsCount = await fetchAllPostsCount(postOption, tagOption);
-      setPostsCount(fetchedPostsCount);
-    } catch (error) {
-      console.error("Error fetching posts count:", error);
-    }
-  };
+  const fetchPostsCount = useCallback(
+    async (postOpt: string, tagOpt: string): Promise<void> => {
+      try {
+        setLoading(true);
+        const fetchedPostsCount = await fetchAllPostsCount(postOpt, tagOpt);
+        setPostsCount(fetchedPostsCount);
+      } catch {
+        // Error fetching posts count
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
-    fetchPostsCount(postOption, tagOption);
-    fetchPosts(postOption, tagOption);
-  }, [postOption, tagOption, currentPage]);
+    void fetchPostsCount(postOption, tagOption);
+    void fetchPosts(postOption, tagOption);
+  }, [postOption, tagOption, currentPage, fetchPosts, fetchPostsCount]);
 
-  const handleSelectPostOption = (item: string) => {
+  const handleSelectPostOption = (item: string): void => {
     setPostOption(item);
   };
 
-  const handleSelectTagOption = (item: string) => {
+  const handleSelectTagOption = (item: string): void => {
     setTagOption(item);
   };
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (page: number): void => {
     setCurrentPage(page);
   };
 
@@ -101,8 +101,8 @@ const PostsComponent = () => {
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center  ">
         <div className="flex items-center justify-between w-full mb-4 lg:mb-0 ">
           <Label
-            htmlFor=""
             className="text-3xl lg:text-4xl font-semibold lg:ml-10"
+            htmlFor=""
           >
             Posts
           </Label>
@@ -111,18 +111,18 @@ const PostsComponent = () => {
             <div className="flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-neutral-200 font-light text-[10px] md:text-[12px] ">
               <PostFilterNavbar
                 onSelectPostOption={handleSelectPostOption}
-                postOption={postOption}
-                postFilter={allPosts}
-                tags={tags}
                 onSelectTagOption={handleSelectTagOption}
+                postFilter={allPosts}
+                postOption={postOption}
                 tagOption={tagOption}
+                tags={tags}
               />
             </div>
-            <Link href="/new-post" className="items-center">
+            <Link className="items-center" href="/new-post">
               <Button
-                variant="default"
                 className="rounded-sm items-center"
-                size={"sm"}
+                size="sm"
+                variant="default"
               >
                 New post
               </Button>
@@ -133,11 +133,11 @@ const PostsComponent = () => {
         <div className="mt-4 ml-0 md:ml-14 mr-4 flex flex-row items-center justify-end space-x-8 overflow-hidden max-w-full lg:invisible font-light text-[11px] md:text-[12px] text-neutral-200 ">
           <PostFilterNavbar
             onSelectPostOption={handleSelectPostOption}
-            postOption={postOption}
-            tags={tags}
             onSelectTagOption={handleSelectTagOption}
-            tagOption={tagOption}
             postFilter={allPosts}
+            postOption={postOption}
+            tagOption={tagOption}
+            tags={tags}
           />
         </div>
       </div>
@@ -150,21 +150,21 @@ const PostsComponent = () => {
       ) : (
         <PostsTableRender posts={posts} />
       )}
-      {loading ? (
-        <> </>
-      ) : postsCount > 0 ? (
+      {loading ? <> </> : null}
+      {!loading && postsCount > 0 ? (
         <PaginationBar
           currentPage={currentPage}
-          totalPages={Math.ceil(postsCount / 10)}
           onPageChange={handlePageChange}
+          totalPages={Math.ceil(postsCount / 10)}
         />
-      ) : (
+      ) : null}
+      {!loading && postsCount === 0 ? (
         <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
           <p className="text-3xl text-red-700">No posts found</p>
         </div>
-      )}
+      ) : null}
     </div>
   );
-};
+}
 
 export default PostsComponent;

@@ -2,7 +2,7 @@ import "@repo/ui/styles.css";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import { Providers } from "./providers";
 

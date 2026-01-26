@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShortcutHome } from "@repo/ui/web";
+import { ShortcutHome } from "../shortcut/shortcut-home";
 
 export const Landing = () => {
   return (

@@ -8,7 +8,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@repo/ui";
+} from "../ui/pagination";
 
 interface PaginationBarProps {
   currentPage: number;
