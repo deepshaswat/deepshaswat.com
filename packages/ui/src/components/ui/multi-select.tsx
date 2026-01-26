@@ -8,7 +8,7 @@ import { Check, ChevronsUpDown, X } from "lucide-react";
 import { createPortal } from "react-dom";
 
 import { ny } from "@repo/ui/utils";
-import { Badge } from "@repo/ui";
+import { Badge } from "./badge";
 import {
   Command,
   CommandEmpty,
@@ -17,13 +17,13 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@repo/ui";
+} from "./command";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@repo/ui";
+} from "./tooltip";
 
 export interface MultiSelectOptionItem {
   value: string;
@@ -109,13 +109,13 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   const [value, setValue] = useControllableState({
     prop: valueProp,
-    defaultProp: defaultValue,
+    defaultProp: defaultValue ?? [],
     onChange: handleValueChange,
   });
 
   const [open, setOpen] = useControllableState({
     prop: openProp,
-    defaultProp: defaultOpen,
+    defaultProp: defaultOpen ?? false,
     onChange: onOpenChange,
   });
 
@@ -183,8 +183,9 @@ MultiSelect.displayName = "MultiSelect";
 
 type MultiSelectTriggerElement = React.ElementRef<typeof Primitive.div>;
 
-interface MultiSelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof Primitive.div> {}
+interface MultiSelectTriggerProps extends React.ComponentPropsWithoutRef<
+  typeof Primitive.div
+> {}
 
 function PreventClick(e: React.MouseEvent | React.TouchEvent) {
   e.preventDefault();
@@ -220,8 +221,9 @@ const MultiSelectTrigger = React.forwardRef<
 
 MultiSelectTrigger.displayName = "MultiSelectTrigger";
 
-interface MultiSelectValueProps
-  extends React.ComponentPropsWithoutRef<typeof Primitive.div> {
+interface MultiSelectValueProps extends React.ComponentPropsWithoutRef<
+  typeof Primitive.div
+> {
   placeholder?: string;
   maxDisplay?: number;
   maxItemLength?: number;
@@ -346,8 +348,9 @@ const MultiSelectList = React.forwardRef<
 
 MultiSelectList.displayName = "MultiSelectList";
 
-interface MultiSelectContentProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content> {}
+interface MultiSelectContentProps extends React.ComponentPropsWithoutRef<
+  typeof PopoverPrimitive.Content
+> {}
 
 const MultiSelectContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
@@ -454,7 +457,7 @@ const MultiSelectItem = React.forwardRef<
 
     const disabled = Boolean(
       disabledProp ||
-        (!selected && maxCount && contextValue.length >= maxCount),
+      (!selected && maxCount && contextValue.length >= maxCount),
     );
 
     const handleClick = () => {

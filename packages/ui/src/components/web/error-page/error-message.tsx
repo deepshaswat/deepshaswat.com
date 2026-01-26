@@ -1,6 +1,6 @@
 "use client";
 
-import { ShortcutErrorHome } from "@repo/ui/web";
+import { ShortcutErrorHome } from "../shortcut/shortcut-home-error";
 
 interface ErrorMessageProps {
   code?: number;

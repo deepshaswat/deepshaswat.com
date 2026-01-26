@@ -16,8 +16,9 @@ import BlockNoteRenderer from "./blocknote-render";
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import PostSkeleton from "./skeleton-post";
-import { ScrollProgress } from "@repo/ui";
-import { Base, cacheService } from "@repo/ui/web";
+import { ScrollProgress } from "../../ui/scroll-progress";
+import { Base } from "../posts/BaseStatic";
+import { cacheService } from "../indexDB";
 
 const LIGHT_COLORS = ["yellow", "pink", "turquoise", "lime", "teal", "cyan"];
 

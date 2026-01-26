@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, useScroll, useSpring } from "framer-motion";
 import { ny } from "@repo/ui/utils";
 

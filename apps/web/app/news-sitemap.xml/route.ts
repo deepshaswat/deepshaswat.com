@@ -1,7 +1,8 @@
 import { fetchPublishedPosts } from "@repo/actions";
 import type { PostListType } from "@repo/actions";
+import { siteConfig } from "../../lib/site-config";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://deepshaswat.com";
+const BASE_URL = siteConfig.url;
 
 export async function GET(): Promise<Response> {
   try {
@@ -44,7 +45,7 @@ export async function GET(): Promise<Response> {
           <loc>${BASE_URL}/${item.postUrl}</loc>
           <news:news>
             <news:publication>
-              <news:name>Shaswat Deep</news:name>
+              <news:name>${siteConfig.name}</news:name>
               <news:language>en</news:language>
             </news:publication>
             <news:publication_date>${

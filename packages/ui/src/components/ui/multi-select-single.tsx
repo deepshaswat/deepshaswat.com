@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 
 import { cn } from "@repo/ui/utils";
+import { Badge } from "./badge";
+import { Button } from "./button";
+import { Separator } from "./separator";
 import {
-  Badge,
-  Button,
-  Separator,
   Command,
   CommandEmpty,
   CommandGroup,
@@ -22,10 +22,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/ui";
+} from "./command";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -55,7 +53,8 @@ const multiSelectVariants = cva(
  * Props for MultiSelect component
  */
 interface MultiSelectSingleProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof multiSelectVariants> {
   /**
    * An array of option objects to be displayed in the multi-select component.

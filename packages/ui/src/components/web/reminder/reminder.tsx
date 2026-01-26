@@ -1,6 +1,6 @@
 "use client";
 
-import { Base } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
 import type { Metadata } from "next";
 
 const pageConfig = {

@@ -2,7 +2,7 @@
 
 import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
-import { CustomSignIn } from "@repo/ui";
+import { CustomSignIn } from "@repo/ui/custom-sign-in";
 
 export default function Page(): JSX.Element {
   return (
@@ -15,8 +15,6 @@ export default function Page(): JSX.Element {
           <Loader2 className="animate-spin text-muted-foreground" />
         </ClerkLoading>
       </div>
-      {/* </div> */}
-      {/* <div className='h-full bg-blue-600 hidden lg:flex items-center justify-center'></div> */}
     </div>
   );
 }

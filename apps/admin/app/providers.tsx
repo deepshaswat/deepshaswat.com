@@ -2,7 +2,8 @@
 
 import React from "react";
 import { RecoilRoot } from "recoil";
-import { ThemeProvider, TooltipProvider } from "@repo/ui";
+import { ThemeProvider } from "next-themes";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 export function Providers({
   children,

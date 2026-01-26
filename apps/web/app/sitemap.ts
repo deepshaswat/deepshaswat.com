@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 import { fetchPublishedPosts } from "@repo/actions";
 import type { PostListType } from "@repo/actions";
+import { siteConfig } from "../lib/site-config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Base URL of your website
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://deepshaswat.com";
+  const baseUrl = siteConfig.url;
 
   // Static routes
   const routes = [

@@ -2,7 +2,7 @@
 
 import { items } from "@repo/store";
 import { parseISO, format, intervalToDuration } from "date-fns";
-import { Base } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -32,7 +32,9 @@ function renderIntro() {
             Hey, I&apos;m Shaswat Deep
           </span>{" "}
           I started as a software engineer back in 2013, working as an{" "}
-          <strong className="text-neutral-200">Automation Engineer.</strong>{" "}
+          <strong className="text-neutral-200">
+            Automation Engineer.
+          </strong>{" "}
         </p>
         <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
           Now as a <strong className="text-neutral-200">Solo-Founder,</strong>{" "}

@@ -5,14 +5,9 @@ import { Plus, X } from "lucide-react";
 
 import { cn } from "@repo/ui/utils";
 
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  SingleImageDropzone,
-} from "@repo/ui";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { SingleImageDropzone } from "./single-image-dropzone";
 
 interface UploadComponentProps {
   imageUrl: string;

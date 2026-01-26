@@ -10,7 +10,13 @@ const withMDX = require("@next/mdx")({
 
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@repo/ui"],
+  transpilePackages: [
+    "@repo/ui",
+    "@repo/store",
+    "@repo/actions",
+    "@repo/schema",
+    "@repo/db",
+  ],
   images: {
     remotePatterns: [
       {

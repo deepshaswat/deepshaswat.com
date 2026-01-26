@@ -1,6 +1,7 @@
 "use client";
 
-import { Base, cacheService } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
+import { cacheService } from "../indexDB";
 import { useState } from "react";
 import { useEffect } from "react";
 import { pageNumberState } from "@repo/store";
@@ -14,7 +15,7 @@ import {
   setArticlesPosts,
 } from "@repo/actions";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { PaginationBar } from "@repo/ui";
+import { PaginationBar } from "../../common/pagination-bar";
 import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import ArticlesListingSkeleton from "./skeleton-blog-listing";

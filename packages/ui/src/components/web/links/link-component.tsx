@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "@repo/ui";
+import { Button } from "../../ui/button";
 import {
   Github,
   Twitter,
@@ -93,7 +93,7 @@ const LinksComponent = () => {
   const socialIcons = [
     {
       icon: <Twitter className="h-6 w-6" />,
-      url: "https://x.com/shaswat_X",
+      url: "https://x.com/deepshaswat",
     },
     {
       icon: <LinkedinIcon className="h-6 w-6" />,

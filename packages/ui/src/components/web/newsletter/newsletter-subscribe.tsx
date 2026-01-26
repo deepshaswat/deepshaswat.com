@@ -2,20 +2,18 @@
 "use client";
 import { createMember, Member } from "@repo/actions";
 import Image from "next/image";
+import { Button } from "../../ui/button";
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-  Input,
-  Label,
-} from "@repo/ui";
+} from "../../ui/dialog";
+import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 
 import { Loader2, Mail } from "lucide-react";
 import { useState } from "react";

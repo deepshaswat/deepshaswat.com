@@ -1,4 +1,5 @@
 import { fetchPublishedPosts } from "@repo/actions";
+import { siteConfig } from "../../lib/site-config";
 
 export async function GET(): Promise<Response> {
   const articles = await fetchPublishedPosts("articles");
@@ -13,32 +14,34 @@ export async function GET(): Promise<Response> {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
       <channel>
-        <title>Shaswat Deep</title>
-        <link>https://deepshaswat.com</link>
-        <description>Shaswat Deep is a software engineer, entrepreneur, and writer. He is the Founder &amp; CEO of Orbizza.</description>
+        <title>${siteConfig.name}</title>
+        <link>${siteConfig.url}</link>
+        <description>${siteConfig.description}</description>
         <language>en</language>
-        <atom:link href="https://deepshaswat.com/feed.xml" rel="self" type="application/rss+xml"/>
+        <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+        <atom:link href="${siteConfig.url}/feed.xml" rel="self" type="application/rss+xml"/>
+        <image>
+          <url>${siteConfig.ogImage}</url>
+          <title>${siteConfig.name}</title>
+          <link>${siteConfig.url}</link>
+        </image>
         ${allContent
           .map(
             (item) => `
           <item>
             <title><![CDATA[${item.title}]]></title>
-            <link>https://deepshaswat.com/${item.postUrl}</link>
-            <guid>https://deepshaswat.com/${item.postUrl}</guid>
+            <link>${siteConfig.url}/${item.postUrl}</link>
+            <guid isPermaLink="true">${siteConfig.url}/${item.postUrl}</guid>
             <pubDate>${
               item.publishDate?.toUTCString() ?? new Date().toUTCString()
             }</pubDate>
             <description><![CDATA[${item.excerpt}]]></description>
             ${
               item.featureImage
-                ? `<image>
-                    <url>${item.featureImage}</url>
-                    <title>${item.title}</title>
-                    <link>https://deepshaswat.com/${item.postUrl}</link>
-                  </image>`
+                ? `<enclosure url="${item.featureImage}" type="image/jpeg" />`
                 : ""
             }
-            <author>hi@deepshaswat.com (${item.author.name})</author>
+            <author>${siteConfig.author.email} (${item.author.name})</author>
             ${item.tags
               .filter((tag) => tag.tagId)
               .map((tag) => `<category>${tag.tagId}</category>`)

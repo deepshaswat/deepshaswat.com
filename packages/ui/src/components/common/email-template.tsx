@@ -166,7 +166,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                 }}
               >
                 <Link
-                  href="https://x.com/shaswat_X"
+                  href="https://x.com/deepshaswat"
                   style={{
                     display: "inline-flex",
                     height: "12px",

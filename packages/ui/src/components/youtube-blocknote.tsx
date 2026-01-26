@@ -11,9 +11,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-  Button,
-  Input,
-} from "@repo/ui";
+} from "./ui/alert-dialog";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import { FaYoutube } from "react-icons/fa";
 import { cn } from "@repo/ui/utils";
 

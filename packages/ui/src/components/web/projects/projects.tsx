@@ -15,7 +15,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 
 import { featuredProjects, allProjects } from "@repo/store";
-import { Base } from "@repo/ui/web";
+import { Base } from "../posts/BaseStatic";
 
 const pageConfig = {
   tagline: "Work. Hobby. Open Source.",

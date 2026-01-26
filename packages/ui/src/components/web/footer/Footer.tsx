@@ -47,7 +47,7 @@ export function Footer() {
     },
     {
       title: "X (Twitter)",
-      url: "https://twitter.com/shaswat_X",
+      url: "https://twitter.com/deepshaswat",
       icon: <Twitter size={size} />,
     },
   ];

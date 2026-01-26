@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { createReactBlockSpec } from "@blocknote/react";
-import { Button, Textarea } from "@repo/ui";
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
 import {
   FaBold,
   FaItalic,

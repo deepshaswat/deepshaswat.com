@@ -8,13 +8,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-} from "@repo/ui";
-import { Button } from "@repo/ui";
-import { Input } from "@repo/ui";
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui";
+} from "../../ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
 import { Loader2, Mail, CheckCircle2, XCircle } from "lucide-react";
 import { unsubscribeMember } from "@repo/actions";
 
