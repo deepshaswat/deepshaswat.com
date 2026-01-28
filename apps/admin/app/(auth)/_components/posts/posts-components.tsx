@@ -10,19 +10,17 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { Button, Label, Separator, PaginationBar } from "@repo/ui";
+import { Button, Separator, PaginationBar } from "@repo/ui";
 import { pageNumberState } from "@repo/store";
 import PostFilterNavbar from "./post-filter-navbar";
 import PostsTableRender from "./posts-table-render";
 
 interface PostsComponentProps {
   defaultFilter?: string;
-  pageTitle?: string;
 }
 
 function PostsComponent({
   defaultFilter = "all-posts",
-  pageTitle = "Posts",
 }: PostsComponentProps): JSX.Element {
   const [postOption, setPostOption] = useState(defaultFilter);
   const [tagOption, setTagOption] = useState("");
@@ -105,40 +103,10 @@ function PostsComponent({
   };
 
   return (
-    <div className="m-8 ml-10 lg:ml-[156px] lg:mr-[156px]">
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center  ">
-        <div className="flex items-center justify-between w-full mb-4 lg:mb-0 ">
-          <Label
-            className="text-3xl lg:text-4xl font-semibold lg:ml-10"
-            htmlFor=""
-          >
-            {pageTitle}
-          </Label>
-
-          <div className="flex flex-row gap-20 justify-end items-center ">
-            <div className="flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-foreground font-light text-[10px] md:text-[12px] ">
-              <PostFilterNavbar
-                onSelectPostOption={handleSelectPostOption}
-                onSelectTagOption={handleSelectTagOption}
-                postFilter={allPosts}
-                postOption={postOption}
-                tagOption={tagOption}
-                tags={tags}
-              />
-            </div>
-            <Link className="items-center" href="/new-post">
-              <Button
-                className="rounded-sm items-center"
-                size="sm"
-                variant="default"
-              >
-                New post
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        <div className="mt-4 ml-0 md:ml-14 mr-4 flex flex-row items-center justify-end space-x-8 overflow-hidden max-w-full lg:invisible font-light text-[11px] md:text-[12px] text-foreground ">
+    <div className="m-8 ml-10 lg:ml-[80px] lg:mr-[80px]">
+      <div className="flex items-center justify-between w-full mb-4">
+        {/* Filters on the left */}
+        <div className="flex flex-row items-center space-x-4 text-foreground font-light text-[11px] md:text-[12px]">
           <PostFilterNavbar
             onSelectPostOption={handleSelectPostOption}
             onSelectTagOption={handleSelectTagOption}
@@ -148,6 +116,17 @@ function PostsComponent({
             tags={tags}
           />
         </div>
+
+        {/* New post button on the right */}
+        <Link className="items-center" href="/new-post">
+          <Button
+            className="rounded-sm items-center"
+            size="sm"
+            variant="default"
+          >
+            New post
+          </Button>
+        </Link>
       </div>
 
       <Separator className="bg-border h-[1px] mb-4" />
