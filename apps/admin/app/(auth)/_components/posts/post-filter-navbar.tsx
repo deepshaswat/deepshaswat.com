@@ -82,22 +82,22 @@ function SelectComponent({
 
   const displayClassName =
     selectedItem && selectedItem !== placeholder
-      ? "text-green-500 bg-neutral-800 rounded-sm"
-      : "text-neutral-200";
+      ? "text-green-500 bg-accent rounded-sm"
+      : "text-foreground";
 
   return (
     <Select onValueChange={handleSelect}>
       <div className={displayClassName}>
-        <SelectTrigger className="ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none  text-[11px] md:text-[12px]">
+        <SelectTrigger className="ml-2 bg-transparent border-transparent ring-0 outline-none focus:ring-0 focus:outline-none text-[11px] md:text-[12px]">
           {capitalizeFirstLetter(selectedItem) ||
             capitalizeFirstLetter(placeholder)}
         </SelectTrigger>{" "}
       </div>
-      <SelectContent className="pl-0 bg-neutral-800 border-transparent ring-0 outline-none focus:ring-0 focus:outline-none">
-        <SelectGroup className="pl-0 bg-neutral-800 ">
+      <SelectContent className="pl-0 bg-popover border-border ring-0 outline-none focus:ring-0 focus:outline-none">
+        <SelectGroup className="pl-0 bg-popover">
           {items.map((item) => (
             <SelectItem
-              className="text-neutral-200 border-transparent hover:bg-neutral-950 hover:text-neutral-200 text-[11px] md:text-[12px] font-light !justify-start focus:ring-0 focus:outline-none focus:bg-neutral-950 focus:text-neutral-200 pr-5 "
+              className="text-foreground border-transparent hover:bg-accent hover:text-accent-foreground text-[11px] md:text-[12px] font-light !justify-start focus:ring-0 focus:outline-none focus:bg-accent focus:text-accent-foreground pr-5"
               key={item}
               onClick={() => {
                 handleSelect(item);

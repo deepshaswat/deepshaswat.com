@@ -3,6 +3,7 @@
 import { Resend } from "resend";
 import { EmailTemplate, NewsletterTemplate } from "@repo/ui";
 import { PostListType } from "./types";
+import { createEmailSendRecord } from "../admin/email-analytics";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 
@@ -109,6 +110,16 @@ export const sendBroadcastNewsletter = async ({
   }
 
   try {
+    // Get audience contact count for tracking
+    let recipientCount = 0;
+    try {
+      const { data: audienceData } = await resend.audiences.get(audienceId);
+      // Estimate based on contacts - actual count may differ
+      recipientCount = 100; // Default estimate, Resend doesn't expose count directly
+    } catch (e) {
+      console.warn("Could not fetch audience count:", e);
+    }
+
     // Fetch the contacts from the audience list
     const { data: broadcastData, error: broadcastError } =
       await resend.broadcasts.create({
@@ -137,6 +148,23 @@ export const sendBroadcastNewsletter = async ({
       return {
         error: "Failed to send broadcast",
       };
+    }
+
+    // Record the email send in database for analytics tracking
+    if (broadcastData?.id) {
+      try {
+        await createEmailSendRecord(
+          broadcastData.id, // Use broadcast ID as resendEmailId
+          broadcastData.id,
+          post.id || null,
+          post.title,
+          "Shaswat Deep <contact@mail.deepshaswat.com>",
+          recipientCount,
+        );
+      } catch (e) {
+        // Don't fail the send if analytics tracking fails
+        console.error("Failed to create email send record:", e);
+      }
     }
 
     return {

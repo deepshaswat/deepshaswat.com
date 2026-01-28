@@ -1,3 +1,9 @@
+import PostsComponent from "../../_components/posts/posts-components";
+
+export const dynamic = "force-dynamic";
+
 export default function Published(): JSX.Element {
-  return <div>Published Post</div>;
+  return (
+    <PostsComponent defaultFilter="published-posts" pageTitle="Published" />
+  );
 }

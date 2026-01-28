@@ -4,8 +4,8 @@ import { Nunito } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { Appbar, Footer, NewsletterButton } from "@repo/ui/web";
-import { Providers } from "./providers";
 import { siteConfig } from "../lib/site-config";
+import { Providers } from "./providers";
 
 const inter = Nunito({ subsets: ["latin"] });
 

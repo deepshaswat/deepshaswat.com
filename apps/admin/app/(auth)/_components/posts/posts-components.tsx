@@ -15,8 +15,16 @@ import { pageNumberState } from "@repo/store";
 import PostFilterNavbar from "./post-filter-navbar";
 import PostsTableRender from "./posts-table-render";
 
-function PostsComponent(): JSX.Element {
-  const [postOption, setPostOption] = useState("all-posts");
+interface PostsComponentProps {
+  defaultFilter?: string;
+  pageTitle?: string;
+}
+
+function PostsComponent({
+  defaultFilter = "all-posts",
+  pageTitle = "Posts",
+}: PostsComponentProps): JSX.Element {
+  const [postOption, setPostOption] = useState(defaultFilter);
   const [tagOption, setTagOption] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [posts, setPosts] = useState<PostListType[]>([]);
@@ -104,11 +112,11 @@ function PostsComponent(): JSX.Element {
             className="text-3xl lg:text-4xl font-semibold lg:ml-10"
             htmlFor=""
           >
-            Posts
+            {pageTitle}
           </Label>
 
           <div className="flex flex-row gap-20 justify-end items-center ">
-            <div className="flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-neutral-200 font-light text-[10px] md:text-[12px] ">
+            <div className="flex flex-row items-center space-x-8  ml-10 max-w-0 lg:max-w-full overflow-hidden text-foreground font-light text-[10px] md:text-[12px] ">
               <PostFilterNavbar
                 onSelectPostOption={handleSelectPostOption}
                 onSelectTagOption={handleSelectTagOption}
@@ -130,7 +138,7 @@ function PostsComponent(): JSX.Element {
           </div>
         </div>
 
-        <div className="mt-4 ml-0 md:ml-14 mr-4 flex flex-row items-center justify-end space-x-8 overflow-hidden max-w-full lg:invisible font-light text-[11px] md:text-[12px] text-neutral-200 ">
+        <div className="mt-4 ml-0 md:ml-14 mr-4 flex flex-row items-center justify-end space-x-8 overflow-hidden max-w-full lg:invisible font-light text-[11px] md:text-[12px] text-foreground ">
           <PostFilterNavbar
             onSelectPostOption={handleSelectPostOption}
             onSelectTagOption={handleSelectTagOption}
@@ -142,7 +150,7 @@ function PostsComponent(): JSX.Element {
         </div>
       </div>
 
-      <Separator className="bg-neutral-600 h-[1px] mb-4" />
+      <Separator className="bg-border h-[1px] mb-4" />
       {loading ? (
         <div className="flex flex-row items-center justify-center h-screen-1/2">
           <Loader2 className="size-10 animate-spin" />

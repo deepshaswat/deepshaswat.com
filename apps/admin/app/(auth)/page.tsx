@@ -1,3 +1,8 @@
+import { DashboardComponent } from "./_components/dashboard/dashboard-component";
+
+// Force dynamic rendering to prevent build-time prerendering
+export const dynamic = "force-dynamic";
+
 export default function Page(): JSX.Element {
-  return <div className="text-green-300 text-5xl">Home</div>;
+  return <DashboardComponent />;
 }

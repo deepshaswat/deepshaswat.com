@@ -35,7 +35,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
           <span className={`${baseClasses} text-green-600`}>
             Published and Sent
           </span>
-          <span className="text-[10px] text-neutral-400">
+          <span className="text-[10px] text-muted-foreground">
             at{" "}
             {post.publishDate
               ? new Date(post.publishDate).toLocaleDateString("en-US", {
@@ -45,7 +45,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
                 })
               : ""}
           </span>
-          <div className="flex items-center text-xs text-neutral-400">
+          <div className="flex items-center text-xs text-muted-foreground">
             {/* <span className='mr-4'>{post.openRate || "71"}% opened</span>
               <span>{post.clickRate || "4"}% clicked</span> */}
           </div>
@@ -57,7 +57,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
           <span className={`${baseClasses} text-blue-600`}>
             Scheduled to be sent
           </span>
-          <span className="text-[10px] text-neutral-400">
+          <span className="text-[10px] text-muted-foreground">
             at{" "}
             {post.publishDate
               ? new Date(post.publishDate).toLocaleDateString("en-US", {
@@ -67,7 +67,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
                 })
               : ""}
           </span>
-          <div className="flex items-center text-xs text-neutral-400">
+          <div className="flex items-center text-xs text-muted-foreground">
             {/* <span className='mr-4'>{post.openRate || "71"}% opened</span>
               <span>{post.clickRate || "4"}% clicked</span> */}
           </div>
@@ -80,7 +80,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
         return (
           <div className="flex flex-row gap-x-2">
             <span className={`${baseClasses} text-pink-600`}>Draft</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className="text-[10px] text-muted-foreground">
               {" "}
               - Last saved at{" "}
               {new Date(post.updatedAt).toLocaleDateString("en-US", {
@@ -95,7 +95,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
         return (
           <div className="flex items-center gap-2">
             <span className={`${baseClasses} text-green-600`}>Sent</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className="text-[10px] text-muted-foreground">
               {" "}
               - Sent at{" "}
               {post.publishDate
@@ -106,7 +106,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
                   })
                 : ""}
             </span>
-            <div className="flex items-center text-xs text-neutral-400">
+            <div className="flex items-center text-xs text-muted-foreground">
               {/* <span className='mr-4'>{post.openRate || "71"}% opened</span>
               <span>{post.clickRate || "4"}% clicked</span> */}
             </div>
@@ -116,7 +116,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
         return (
           <div className="flex flex-row gap-x-2">
             <span className={`${baseClasses} text-green-600`}>Published</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className="text-[10px] text-muted-foreground">
               {" "}
               at{" "}
               {post.publishDate
@@ -133,7 +133,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
         return (
           <div className="flex flex-row gap-x-2">
             <span className={`${baseClasses} text-blue-600`}>Scheduled</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className="text-[10px] text-muted-foreground">
               {" "}
               at{" "}
               {post.publishDate
@@ -150,7 +150,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
         return (
           <div className="flex flex-row gap-x-2">
             <span className={`${baseClasses} text-orange-600`}>Archived</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className="text-[10px] text-muted-foreground">
               {" "}
               - Archived at{" "}
               {new Date(post.updatedAt).toLocaleDateString("en-US", {
@@ -165,7 +165,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
         return (
           <div className="flex flex-row gap-x-2">
             <span className={`${baseClasses} text-red-600`}>Deleted</span>
-            <span className="text-[10px] text-neutral-400">
+            <span className="text-[10px] text-muted-foreground">
               {" "}
               - Deleted at{" "}
               {new Date(post.updatedAt).toLocaleDateString("en-US", {
@@ -187,7 +187,7 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
         <TableBody>
           {posts.map((post) => (
             <TableRow
-              className="hover:bg-neutral-700/50 cursor-pointer border-b border-neutral-600"
+              className="hover:bg-muted/50 cursor-pointer border-b border-border"
               key={post.id}
               onClick={() => {
                 router.push(`/editor/${post.id}`);
@@ -196,17 +196,17 @@ function PostsTableRender({ posts }: PostsTableRenderProps): JSX.Element {
               <TableCell>
                 <div className="flex flex-row items-center justify-between">
                   <div className="flex flex-col gap-y-2">
-                    <div className="font-medium text-neutral-200">
+                    <div className="font-medium text-foreground">
                       {capitalizeFirstLetter(post.title)}
                     </div>
-                    <div className="text-sm text-neutral-600 mt-2">
+                    <div className="text-sm text-muted-foreground mt-2">
                       By {post.metadataAuthorName}
                     </div>
                     <div className="">{getStatusBadge(post.status, post)}</div>
                   </div>
 
                   <Button
-                    className="text-neutral-600"
+                    className="text-muted-foreground"
                     size="icon"
                     variant="ghost"
                   >

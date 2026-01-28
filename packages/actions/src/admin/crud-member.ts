@@ -181,13 +181,16 @@ export async function fetchMembers({
   }
 }
 
-export async function fetchMemberDetails(id: string) {
+export async function fetchMemberDetails(id: string): Promise<Member | null> {
   await authenticateUser();
   try {
     const member = await prisma.member.findUnique({
       where: { id },
     });
-    return member as Member;
+    if (!member) {
+      return null;
+    }
+    return member as unknown as Member;
   } catch (error) {
     console.error("Error fetching member details:", error);
     throw error;

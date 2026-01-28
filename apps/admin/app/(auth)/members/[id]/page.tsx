@@ -27,14 +27,25 @@ export default function MemberEditPage({
   const [member, setMember] = useRecoilState(memberState);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
     const loadMember = async (): Promise<void> => {
-      const fetchedMember = await fetchMemberDetails(id);
-      setMember(fetchedMember);
+      try {
+        const fetchedMember = await fetchMemberDetails(id);
+        if (fetchedMember === null) {
+          router.replace("/members");
+          return;
+        }
+        setMember(fetchedMember);
+      } catch {
+        router.replace("/members");
+      } finally {
+        setPageLoading(false);
+      }
     };
     void loadMember();
-  }, [id, setMember]);
+  }, [id, setMember, router]);
 
   const handleSave = async (): Promise<void> => {
     if (!member) return;
@@ -54,6 +65,22 @@ export default function MemberEditPage({
       router.push("/members");
     }, 1000);
   };
+
+  if (pageLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!member) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="m-8  lg:ml-[156px] lg:mr-[156px]">
