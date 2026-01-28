@@ -19,7 +19,7 @@
     "kbar": "^0.1.0-beta.45",
     "next": "^14.1.1",
     "next-themes": "^0.3.0",
-    "posthog-js": "^1.335.2",
+    "posthog-js": "^1.335.5",
     "prisma": "5.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

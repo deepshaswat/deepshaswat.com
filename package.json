@@ -94,7 +94,7 @@
     "fuzzy-search": "^3.2.1",
     "ioredis": "^5.4.1",
     "kbar": "^0.1.0-beta.45",
-    "posthog-js": "^1.335.2",
+    "posthog-js": "^1.335.5",
     "react-color": "^2.19.3",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
