@@ -12,8 +12,10 @@ import {
   Users,
   BarChart3,
   Home,
+  LayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   Sidebar,
@@ -24,6 +26,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarGroup,
 } from "../../ui/sidebar";
 import { NavMain, type NavMainItem } from "./nav-main";
 import { NavProjects, type NavProjectItem } from "./nav-projects";
@@ -44,6 +47,8 @@ const navProjectItems: NavProjectItem[] = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -64,6 +69,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === "/"}
+                tooltip="Dashboard"
+              >
+                <Link href="/">
+                  <LayoutDashboard className="size-4" />
+                  <span>Dashboard</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
         <NavMain items={navMainItems} />
         <NavProjects projects={navProjectItems} />
       </SidebarContent>

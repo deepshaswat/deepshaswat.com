@@ -13,6 +13,7 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
+  SidebarGroup,
   Separator,
   NavMain,
   NavProjects,
@@ -26,6 +27,7 @@ import {
   BarChart3,
   Lightbulb,
   Calendar,
+  LayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -140,6 +142,22 @@ export default function AuthLayout({
           </SidebarMenu>
         </SidebarHeader>
         <SidebarContent>
+          <SidebarGroup>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === "/"}
+                  tooltip="Dashboard"
+                >
+                  <Link href="/">
+                    <LayoutDashboard className="size-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
           <NavMain items={navMainItems} />
           <NavProjects projects={navProjectItems} />
         </SidebarContent>
