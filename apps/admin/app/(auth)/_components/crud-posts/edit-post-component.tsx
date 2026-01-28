@@ -1,5 +1,6 @@
 import type { PostListType } from "@repo/actions";
 import { fetchPostById } from "@repo/actions";
+import { redirect } from "next/navigation";
 import { EditContentPost } from "./edit-content-post";
 
 async function EditPostComponent({
@@ -10,7 +11,7 @@ async function EditPostComponent({
   const post = await fetchPostById(params.id);
 
   if (!post) {
-    return <div>Post not found</div>;
+    redirect("/posts");
   }
 
   return <EditContentPost initialPost={post as PostListType} />;

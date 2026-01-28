@@ -1,5 +1,49 @@
 import { atom } from "recoil";
-import { Member, MemberInput, PostListType, Tags } from "@repo/actions";
+import {
+  Member,
+  MemberInput,
+  PostListType,
+  Tags,
+  PostStatus,
+} from "@repo/actions";
+
+// Content filtering
+export const contentTypeState = atom<"blog" | "newsletter">({
+  key: "contentTypeState",
+  default: "blog",
+});
+
+export const postStatusFilterState = atom<PostStatus | "all">({
+  key: "postStatusFilterState",
+  default: "all",
+});
+
+export const selectedTagsFilterState = atom<string[]>({
+  key: "selectedTagsFilterState",
+  default: [],
+});
+
+// Editor state
+export const metadataSidebarOpenState = atom<boolean>({
+  key: "metadataSidebarOpenState",
+  default: true,
+});
+
+// SEO fields (separate from postMetadataState for more granular control)
+export const metaTitleState = atom<string>({
+  key: "metaTitleState",
+  default: "",
+});
+
+export const metaDescriptionState = atom<string>({
+  key: "metaDescriptionState",
+  default: "",
+});
+
+export const metaKeywordsState = atom<string[]>({
+  key: "metaKeywordsState",
+  default: [],
+});
 
 export const postMetadataState = atom({
   key: "postMetadataState",

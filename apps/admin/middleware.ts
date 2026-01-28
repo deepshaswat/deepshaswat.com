@@ -1,26 +1,15 @@
-import { NextResponse } from "next/server";
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// Create a matcher for the sign-in page
-const publicRoutes = createRouteMatcher([
-  "/sign-in",
+// Public routes that don't require authentication
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
   "/api/cron/publish-scheduled",
 ]);
 
-export default clerkMiddleware((auth, request) => {
-  if (publicRoutes(request)) {
-    return NextResponse.next();
+export default clerkMiddleware(async (auth, request) => {
+  if (!isPublicRoute(request)) {
+    await auth.protect();
   }
-
-  // For all other routes, protect and redirect to sign-in if unauthenticated
-  const { userId } = auth();
-  if (!userId) {
-    const signInUrl = new URL("/sign-in", request.url);
-    signInUrl.searchParams.set("redirect_url", request.url);
-    return NextResponse.redirect(signInUrl);
-  }
-
-  return NextResponse.next();
 });
 
 export const config = {

@@ -6,7 +6,13 @@ import {
   fetchAllTagsWithPostCount,
   PostStatus,
 } from "@repo/actions";
-import { Link as LinkIcon, Trash2, Star } from "lucide-react";
+import {
+  Link as LinkIcon,
+  Trash2,
+  Star,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
@@ -37,6 +43,9 @@ import {
   UploadComponent,
   Switch,
   Separator,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
 } from "@repo/ui";
 
 interface UploadResponse {
@@ -44,9 +53,30 @@ interface UploadResponse {
   s3URL: string;
 }
 
-function getCharCountClass(length: number, limit: number): string {
-  if (length === 0) return "";
-  return length <= limit ? "text-green-500" : "text-red-500";
+interface CharacterCounterProps {
+  value: string;
+  recommended: number;
+  max: number;
+}
+
+function CharacterCounter({
+  value,
+  recommended,
+  max,
+}: CharacterCounterProps): JSX.Element {
+  const count = value ? value.length : 0;
+  const getColor = (): string => {
+    if (count === 0) return "text-muted-foreground";
+    if (count > max) return "text-red-500";
+    if (count > recommended) return "text-yellow-500";
+    return "text-green-500";
+  };
+
+  return (
+    <span className={`text-[12px] ${getColor()}`}>
+      {count}/{recommended} (max {max})
+    </span>
+  );
 }
 
 export function MetadataSidebar(): JSX.Element {
@@ -68,6 +98,8 @@ export function MetadataSidebar(): JSX.Element {
     useState(false);
   const [abortController, setAbortController] =
     useState<AbortController | null>(null);
+  const [isSeoOpen, setIsSeoOpen] = useState(false);
+  const [isSocialOpen, setIsSocialOpen] = useState(false);
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const url = reverseAndHyphenate(e.target.value);
@@ -305,355 +337,402 @@ export function MetadataSidebar(): JSX.Element {
   };
 
   return (
-    <div className="border-l-[1px] border-neutral-700 w-[400px] fixed right-0 top-0 bottom-0 z-40 shadow-lg p-6 overflow-y-auto">
-      <h2 className="text-2xl font-semibold mb-4">Post settings</h2>
+    <div className="border-l border-border w-[400px] fixed right-0 top-0 bottom-0 z-40 shadow-lg p-6 overflow-y-auto bg-card">
+      <h2 className="text-2xl font-semibold mb-6 text-card-foreground">
+        Post settings
+      </h2>
 
-      <div className="space-y-4 mt-8">
+      {/* Basic Info Section */}
+      <div className="space-y-5">
+        {/* Post URL */}
         <div className="space-y-2">
-          <Label className="text-[13px] text-neutral-200" htmlFor="PostUrl">
+          <Label className="text-[13px] text-foreground" htmlFor="PostUrl">
             Post URL
           </Label>
-          <div className="flex items-center bg-neutral-700 border-2 border-transparent focus-within:border-green-500 rounded-md">
-            <LinkIcon className="text-neutral-400 ml-2 size-4" />
+          <div className="flex items-center bg-muted border-2 border-transparent focus-within:border-green-500 rounded-md">
+            <LinkIcon className="text-muted-foreground ml-3 size-4" />
             <input
-              className="flex h-8 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none bg-muted px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
               id="PostUrl"
               onChange={handleUrlChange}
-              placeholder="Post URL"
+              placeholder="your-post-url"
               type="text"
               value={post.postUrl}
             />
           </div>
-
-          {post.postUrl === "" && (
-            <span className="text-[12px] text-neutral-500">
-              www.deepshaswat.com/
-            </span>
-          )}
-          {!errorDuplicateUrl && post.postUrl !== "" && (
-            <span className="text-[12px] text-neutral-500">
-              www.deepshaswat.com/{post.postUrl}/
-            </span>
-          )}
+          <span className="text-[12px] text-muted-foreground block">
+            {post.postUrl
+              ? `www.deepshaswat.com/${post.postUrl}/`
+              : "www.deepshaswat.com/"}
+          </span>
           {errorDuplicateUrl !== null && (
-            <span className="text-red-500 text-sm mt-1">
+            <span className="text-red-500 text-sm block">
               {errorDuplicateUrl}
             </span>
           )}
         </div>
-        <div className="flex flex-col gap-2 mb-4">
-          <Label className="text-[13px] text-neutral-200" htmlFor="PublishDate">
-            Publish Date
+
+        {/* Publish Date & Time */}
+        <div className="space-y-2">
+          <Label className="text-[13px] text-foreground" htmlFor="PublishDate">
+            Publish Date & Time
           </Label>
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center gap-2">
             <DatePicker date={inputDate} setDate={setInputDate} />
-            <div className="flex flex-row items-center group">
-              <div className="ml-2 flex items-center bg-neutral-700 group-hover:bg-neutral-900 border-none rounded-md">
-                <input
-                  className="flex h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none bg-neutral-700 group-hover:bg-neutral-900 px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                  id="publishTime"
-                  onChange={handleTimeIstChange}
-                  placeholder="17:00"
-                  type="time"
-                  value={inputTimeIst}
-                />
-                <span className="text-neutral-400 items-center mr-4 text-[10px]">
-                  IST
-                </span>
-              </div>
+            <div className="flex items-center bg-muted border-none rounded-md">
+              <input
+                className="flex h-10 w-24 rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none bg-muted px-3 py-2 text-sm"
+                id="publishTime"
+                onChange={handleTimeIstChange}
+                placeholder="17:00"
+                type="time"
+                value={inputTimeIst}
+              />
+              <span className="text-muted-foreground mr-3 text-[10px]">
+                IST
+              </span>
             </div>
           </div>
           {validationError ? (
-            <span className="text-red-500 text-sm mt-1">{validationError}</span>
+            <span className="text-red-500 text-sm">{validationError}</span>
           ) : null}
         </div>
 
-        <div>
-          <Label className="text-[13px] text-neutral-200" htmlFor="Excerpt">
-            Excerpt
-          </Label>
+        {/* Excerpt */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label className="text-[13px] text-foreground" htmlFor="Excerpt">
+              Excerpt
+            </Label>
+            <CharacterCounter
+              max={250}
+              recommended={150}
+              value={post.excerpt}
+            />
+          </div>
           <Textarea
-            className="flex mt-4 h-8 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
+            className="h-24 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm placeholder:text-muted-foreground bg-muted border-2 border-transparent focus-within:border-green-500 resize-none"
             id="Excerpt"
             onChange={handleExcerptChange}
-            placeholder="Write a short description of your post"
+            placeholder="Write a short description of your post..."
             value={post.excerpt}
           />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 150 characters. You&apos;ve used{" "}
-            <span className={getCharCountClass(post.excerpt.length, 250)}>
-              {post.excerpt.length}
-            </span>
-            .
-          </div>
         </div>
-        {/* <div className='mt-4'> */}
+
+        {/* Tags */}
         <TagsComponent
           newSelectedTags={handleTagsChange}
           oldSelectedTags={selectedTags}
         />
-        {/* </div> */}
-        <div className="flex items-center justify-between space-x-2 bg-neutral-700 p-4 rounded-md ">
-          <div className="flex flex-row items-center gap-2">
+
+        {/* Featured Post Toggle */}
+        <div className="flex items-center justify-between bg-muted p-4 rounded-lg">
+          <div className="flex flex-row items-center gap-3">
             <Star
               className="size-5"
-              fill={post.featured ? "green" : "transparent"}
-              stroke={post.featured ? "green" : "white"}
+              fill={post.featured ? "#22c55e" : "transparent"}
+              stroke={post.featured ? "#22c55e" : "currentColor"}
             />
-            <Label htmlFor="feature-post">Feature this post</Label>
+            <Label className="text-sm cursor-pointer" htmlFor="feature-post">
+              Feature this post
+            </Label>
           </div>
           <Switch
             checked={post.featured}
-            className="data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500 data-[state=unchecked]:bg-neutral-200 data-[state=unchecked]:border-neutral-200"
+            className="data-[state=checked]:bg-green-500"
             id="feature-post"
             onCheckedChange={toggleFeaturePost}
           />
         </div>
-        <div className="mt-4">
-          <Label className="text-2xl font-semibold text-neutral-200 ">
-            SEO & Social
-          </Label>
-        </div>
-        <Separator />
-        <div>
-          <Label className="text-[13px] text-neutral-200" htmlFor="SEOKeywords">
-            SEO Keywords
-          </Label>
-          <Textarea
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
-            id="SEOKeywords"
-            onChange={(e) => {
-              setMetadata((prev) => ({ ...prev, keywords: e.target.value }));
-            }}
-            placeholder="SEO Keywords"
-            value={metadata.keywords}
-          />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 10 words (Max: 500 characters). <br /> You&apos;ve used{" "}
-            <span className={getCharCountClass(keywordCount, 100)}>
-              {keywordCount}
-            </span>
-            .
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label
-            className="text-[13px] text-neutral-200"
-            htmlFor="MetaDataTitle"
-          >
-            Meta Data Title
-          </Label>
-          <input
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
-            id="MetaDataTitle"
-            onChange={handleMetaTitleChange}
-            placeholder="Meta Data Title"
-            type="text"
-            value={metadata.title}
-          />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 50 characters. You&apos;ve used{" "}
-            <span className={getCharCountClass(metadata.title.length, 100)}>
-              {metadata.title.length}
-            </span>
-            .
-          </div>
-        </div>
-        <div>
-          <Label
-            className="text-[13px] text-neutral-200"
-            htmlFor="MetaDataDescription"
-          >
-            Meta Data Description
-          </Label>
-          <Textarea
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
-            id="MetaDataDescription"
-            onChange={handleMetaDescriptionChange}
-            placeholder="Meta Data Description"
-            value={metadata.description}
-          />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 160 characters. You&apos;ve used{" "}
-            <span
-              className={getCharCountClass(metadata.description.length, 500)}
-            >
-              {metadata.description.length}
-            </span>
-            .
-          </div>
-        </div>
-        <div className="flex flex-col gap-4">
-          <Label
-            className="text-[13px] text-neutral-200 mt-4"
-            htmlFor="MetaDataImage"
-          >
-            Meta Data Image Upload
-          </Label>
-          <UploadComponent
-            buttonVariant="metadata"
-            imageUrl={metadata.imageUrl}
-            isFileUploadOpen={isMetaImageUploadOpen}
-            isSubmitting={isSubmitting}
-            onCancel={handleCancelUpload}
-            onChange={(file) => {
-              void handleMetaDataImageChange(file);
-            }}
-            text="Add an image"
-            toggleFileUpload={() => {
-              setIsMetaImageUploadOpen((prev) => !prev);
-            }}
-          />
-        </div>
 
-        <div className="space-y-2">
-          <Label className="text-[13px] text-neutral-200" htmlFor="OgTitle">
-            OG Title
-          </Label>
-          <input
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
-            id="OgTitle"
-            onChange={handleOgTitleChange}
-            placeholder="OG Title"
-            type="text"
-            value={metadata.ogTitle}
-          />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 50 characters. You&apos;ve used{" "}
-            <span className={getCharCountClass(metadata.ogTitle.length, 100)}>
-              {metadata.ogTitle.length}
+        <Separator className="my-6" />
+
+        {/* SEO Section - Collapsible */}
+        <Collapsible onOpenChange={setIsSeoOpen} open={isSeoOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full py-2 hover:bg-muted/50 rounded-md px-2 -mx-2">
+            <span className="text-lg font-semibold text-foreground">
+              SEO Settings
             </span>
-            .
-          </div>
-        </div>
+            {isSeoOpen ? (
+              <ChevronUp className="size-5 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="size-5 text-muted-foreground" />
+            )}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 mt-4">
+            {/* Meta Title */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label
+                  className="text-[13px] text-foreground"
+                  htmlFor="MetaDataTitle"
+                >
+                  Meta Title
+                </Label>
+                <CharacterCounter
+                  max={70}
+                  recommended={50}
+                  value={metadata.title}
+                />
+              </div>
+              <input
+                className="flex h-10 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm bg-muted border-2 border-transparent focus-within:border-green-500"
+                id="MetaDataTitle"
+                onChange={handleMetaTitleChange}
+                placeholder="SEO title for search engines"
+                type="text"
+                value={metadata.title}
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label
-            className="text-[13px] text-neutral-200"
-            htmlFor="OgDescription"
-          >
-            OG Description
-          </Label>
-          <Textarea
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
-            id="OgDescription"
-            onChange={handleOgDescriptionChange}
-            placeholder="OG Description"
-            value={metadata.ogDescription}
-          />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 160 characters. You&apos;ve used{" "}
-            <span
-              className={getCharCountClass(metadata.ogDescription.length, 500)}
-            >
-              {metadata.ogDescription.length}
+            {/* Meta Description */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label
+                  className="text-[13px] text-foreground"
+                  htmlFor="MetaDataDescription"
+                >
+                  Meta Description
+                </Label>
+                <CharacterCounter
+                  max={200}
+                  recommended={160}
+                  value={metadata.description}
+                />
+              </div>
+              <Textarea
+                className="h-20 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm bg-muted border-2 border-transparent focus-within:border-green-500 resize-none"
+                id="MetaDataDescription"
+                onChange={handleMetaDescriptionChange}
+                placeholder="Brief description for search results..."
+                value={metadata.description}
+              />
+            </div>
+
+            {/* SEO Keywords */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label
+                  className="text-[13px] text-foreground"
+                  htmlFor="SEOKeywords"
+                >
+                  Keywords
+                </Label>
+                <span
+                  className={`text-[12px] ${keywordCount > 10 ? "text-yellow-500" : "text-green-500"}`}
+                >
+                  {keywordCount} words
+                </span>
+              </div>
+              <Textarea
+                className="h-16 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm bg-muted border-2 border-transparent focus-within:border-green-500 resize-none"
+                id="SEOKeywords"
+                onChange={(e) => {
+                  setMetadata((prev) => ({
+                    ...prev,
+                    keywords: e.target.value,
+                  }));
+                }}
+                placeholder="keyword1, keyword2, keyword3..."
+                value={metadata.keywords}
+              />
+            </div>
+
+            {/* Meta Image */}
+            <div className="space-y-2">
+              <Label className="text-[13px] text-foreground">
+                Featured Image
+              </Label>
+              <UploadComponent
+                buttonVariant="metadata"
+                imageUrl={metadata.imageUrl}
+                isFileUploadOpen={isMetaImageUploadOpen}
+                isSubmitting={isSubmitting}
+                onCancel={handleCancelUpload}
+                onChange={(file) => {
+                  void handleMetaDataImageChange(file);
+                }}
+                text="Add an image"
+                toggleFileUpload={() => {
+                  setIsMetaImageUploadOpen((prev) => !prev);
+                }}
+              />
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Separator className="my-4" />
+
+        {/* Social Sharing Section - Collapsible */}
+        <Collapsible onOpenChange={setIsSocialOpen} open={isSocialOpen}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full py-2 hover:bg-muted/50 rounded-md px-2 -mx-2">
+            <span className="text-lg font-semibold text-foreground">
+              Social Sharing
             </span>
-            .
-          </div>
-        </div>
+            {isSocialOpen ? (
+              <ChevronUp className="size-5 text-muted-foreground" />
+            ) : (
+              <ChevronDown className="size-5 text-muted-foreground" />
+            )}
+          </CollapsibleTrigger>
+          <CollapsibleContent className="space-y-4 mt-4">
+            {/* Open Graph Section */}
+            <div className="space-y-4">
+              <Label className="text-sm font-medium text-foreground">
+                Open Graph (Facebook, LinkedIn)
+              </Label>
 
-        <div className="flex flex-col gap-4">
-          <Label
-            className="text-[13px] text-neutral-200 mt-4"
-            htmlFor="OgImage"
-          >
-            OG Image URL
-          </Label>
-          <UploadComponent
-            buttonVariant="metadata"
-            imageUrl={metadata.ogImage}
-            isFileUploadOpen={isOgImageUploadOpen}
-            isSubmitting={isSubmitting}
-            onCancel={handleCancelUpload}
-            onChange={(file) => {
-              void handleOgImageChange(file);
-            }}
-            text="Add an image"
-            toggleFileUpload={() => {
-              setIsOgImageUploadOpen((prev) => !prev);
-            }}
-          />
-        </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label
+                    className="text-[13px] text-muted-foreground"
+                    htmlFor="OgTitle"
+                  >
+                    OG Title
+                  </Label>
+                  <CharacterCounter
+                    max={70}
+                    recommended={50}
+                    value={metadata.ogTitle}
+                  />
+                </div>
+                <input
+                  className="flex h-10 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm bg-muted border-2 border-transparent focus-within:border-green-500"
+                  id="OgTitle"
+                  onChange={handleOgTitleChange}
+                  placeholder="Title for social sharing"
+                  type="text"
+                  value={metadata.ogTitle}
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label
-            className="text-[13px] text-neutral-200"
-            htmlFor="TwitterTitle"
-          >
-            Twitter Title
-          </Label>
-          <input
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
-            id="TwitterTitle"
-            onChange={handleTwitterTitleChange}
-            placeholder="Twitter Title"
-            type="text"
-            value={metadata.twitterTitle}
-          />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 50 characters. You&apos;ve used{" "}
-            <span
-              className={getCharCountClass(metadata.twitterTitle.length, 60)}
-            >
-              {metadata.twitterTitle.length}
-            </span>
-            .
-          </div>
-        </div>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label
+                    className="text-[13px] text-muted-foreground"
+                    htmlFor="OgDescription"
+                  >
+                    OG Description
+                  </Label>
+                  <CharacterCounter
+                    max={200}
+                    recommended={160}
+                    value={metadata.ogDescription}
+                  />
+                </div>
+                <Textarea
+                  className="h-20 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm bg-muted border-2 border-transparent focus-within:border-green-500 resize-none"
+                  id="OgDescription"
+                  onChange={handleOgDescriptionChange}
+                  placeholder="Description for social sharing..."
+                  value={metadata.ogDescription}
+                />
+              </div>
 
-        <div className="space-y-2">
-          <Label
-            className="text-[13px] text-neutral-200"
-            htmlFor="TwitterDescription"
-          >
-            Twitter Description
-          </Label>
-          <Textarea
-            className="flex mt-4 h-10 w-full rounded-md text-neutral-300 ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 bg-neutral-700 border-2 border-transparent focus-within:border-green-500"
-            id="TwitterDescription"
-            onChange={handleTwitterDescriptionChange}
-            placeholder="Twitter Description"
-            value={metadata.twitterDescription}
-          />
-          <div className="text-neutral-500 text-[12px]">
-            Recommended: 160 characters. You&apos;ve used{" "}
-            <span
-              className={getCharCountClass(
-                metadata.twitterDescription.length,
-                200,
-              )}
-            >
-              {metadata.twitterDescription.length}
-            </span>
-            .
-          </div>
-        </div>
+              <div className="space-y-2">
+                <Label className="text-[13px] text-muted-foreground">
+                  OG Image
+                </Label>
+                <UploadComponent
+                  buttonVariant="metadata"
+                  imageUrl={metadata.ogImage}
+                  isFileUploadOpen={isOgImageUploadOpen}
+                  isSubmitting={isSubmitting}
+                  onCancel={handleCancelUpload}
+                  onChange={(file) => {
+                    void handleOgImageChange(file);
+                  }}
+                  text="Add an image"
+                  toggleFileUpload={() => {
+                    setIsOgImageUploadOpen((prev) => !prev);
+                  }}
+                />
+              </div>
+            </div>
 
-        <div className="flex flex-col gap-4">
-          <Label
-            className="text-[13px] text-neutral-200 mt-4"
-            htmlFor="TwitterImage"
-          >
-            Twitter Image URL
-          </Label>
-          <UploadComponent
-            buttonVariant="metadata"
-            imageUrl={metadata.twitterImage}
-            isFileUploadOpen={isTwitterImageUploadOpen}
-            isSubmitting={isSubmitting}
-            onCancel={handleCancelUpload}
-            onChange={(file) => {
-              void handleTwitterImageChange(file);
-            }}
-            text="Add an image"
-            toggleFileUpload={() => {
-              setIsTwitterImageUploadOpen((prev) => !prev);
-            }}
-          />
-        </div>
+            <Separator className="my-4" />
 
-        <div>
-          <Button className="w-full mt-4" variant="destructive-outline">
+            {/* Twitter Card Section */}
+            <div className="space-y-4">
+              <Label className="text-sm font-medium text-foreground">
+                Twitter Card
+              </Label>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label
+                    className="text-[13px] text-muted-foreground"
+                    htmlFor="TwitterTitle"
+                  >
+                    Twitter Title
+                  </Label>
+                  <CharacterCounter
+                    max={70}
+                    recommended={50}
+                    value={metadata.twitterTitle}
+                  />
+                </div>
+                <input
+                  className="flex h-10 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm bg-muted border-2 border-transparent focus-within:border-green-500"
+                  id="TwitterTitle"
+                  onChange={handleTwitterTitleChange}
+                  placeholder="Title for Twitter"
+                  type="text"
+                  value={metadata.twitterTitle}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label
+                    className="text-[13px] text-muted-foreground"
+                    htmlFor="TwitterDescription"
+                  >
+                    Twitter Description
+                  </Label>
+                  <CharacterCounter
+                    max={200}
+                    recommended={160}
+                    value={metadata.twitterDescription}
+                  />
+                </div>
+                <Textarea
+                  className="h-20 w-full rounded-md text-foreground ring-0 focus:ring-0 focus:outline-none px-3 py-2 text-sm bg-muted border-2 border-transparent focus-within:border-green-500 resize-none"
+                  id="TwitterDescription"
+                  onChange={handleTwitterDescriptionChange}
+                  placeholder="Description for Twitter..."
+                  value={metadata.twitterDescription}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-[13px] text-muted-foreground">
+                  Twitter Image
+                </Label>
+                <UploadComponent
+                  buttonVariant="metadata"
+                  imageUrl={metadata.twitterImage}
+                  isFileUploadOpen={isTwitterImageUploadOpen}
+                  isSubmitting={isSubmitting}
+                  onCancel={handleCancelUpload}
+                  onChange={(file) => {
+                    void handleTwitterImageChange(file);
+                  }}
+                  text="Add an image"
+                  toggleFileUpload={() => {
+                    setIsTwitterImageUploadOpen((prev) => !prev);
+                  }}
+                />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Separator className="my-6" />
+
+        {/* Actions */}
+        <div className="pt-2">
+          <Button className="w-full" variant="destructive-outline">
             <Trash2 className="mr-2 size-4" /> Delete Post
           </Button>
         </div>
@@ -661,6 +740,7 @@ export function MetadataSidebar(): JSX.Element {
     </div>
   );
 }
+
 interface TagsProps {
   oldSelectedTags: Tags[];
   newSelectedTags: (value: Tags[]) => void;
@@ -724,26 +804,26 @@ export function TagsComponent({
   const selectedTagIds = currentSelectedTags.map((tag) => tag.id);
 
   return (
-    <div className="space-y-4">
-      <Label className="text-[13px] mb-4 block">Tags</Label>
+    <div className="space-y-2">
+      <Label className="text-[13px] text-foreground">Tags</Label>
       <MultiSelect onValueChange={handleTagChange} value={selectedTagIds}>
-        <MultiSelectTrigger className="bg-neutral-700 border-2 border-transparent text-neutral-200">
+        <MultiSelectTrigger className="bg-muted border-2 border-transparent text-foreground hover:border-border focus:border-green-500">
           <MultiSelectValue
-            className="text-neutral-200"
-            maxDisplay={2}
-            placeholder="Select tags"
+            className="text-foreground"
+            maxDisplay={3}
+            placeholder="Select tags..."
           />
         </MultiSelectTrigger>
 
-        <MultiSelectContent className="">
+        <MultiSelectContent>
           <MultiSelectSearch
-            className="border-neutral-700"
+            className="border-border"
             placeholder="Search tags..."
           />
           <MultiSelectList>
             <MultiSelectGroup>
               {tags.map((tag) => (
-                <MultiSelectItem className="" key={tag.id} value={tag.id}>
+                <MultiSelectItem key={tag.id} value={tag.id}>
                   {capitalizeFirstLetter(tag.slug)}
                 </MultiSelectItem>
               ))}

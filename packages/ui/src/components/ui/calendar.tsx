@@ -1,23 +1,110 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
+import { DayPicker, CaptionProps, useNavigation } from "react-day-picker";
+import { format, addYears, subYears } from "date-fns";
 
 import { cn } from "@repo/ui/utils";
 import { buttonVariants } from "./button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
+function CustomCaption({ displayMonth }: CaptionProps): JSX.Element {
+  const { goToMonth, nextMonth, previousMonth } = useNavigation();
+
+  const handlePreviousYear = (): void => {
+    goToMonth(subYears(displayMonth, 1));
+  };
+
+  const handleNextYear = (): void => {
+    goToMonth(addYears(displayMonth, 1));
+  };
+
+  const handlePreviousMonth = (): void => {
+    if (previousMonth) {
+      goToMonth(previousMonth);
+    }
+  };
+
+  const handleNextMonth = (): void => {
+    if (nextMonth) {
+      goToMonth(nextMonth);
+    }
+  };
+
+  return (
+    <div className="flex justify-between items-center px-1">
+      <div className="flex items-center gap-1">
+        <button
+          aria-label="Go to previous year"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          )}
+          onClick={handlePreviousYear}
+          type="button"
+        >
+          <ChevronsLeft className="h-4 w-4" />
+        </button>
+        <button
+          aria-label="Go to previous month"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          )}
+          disabled={!previousMonth}
+          onClick={handlePreviousMonth}
+          type="button"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="text-sm font-medium">
+        {format(displayMonth, "MMMM yyyy")}
+      </div>
+      <div className="flex items-center gap-1">
+        <button
+          aria-label="Go to next month"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          )}
+          disabled={!nextMonth}
+          onClick={handleNextMonth}
+          type="button"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+        <button
+          aria-label="Go to next year"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
+          )}
+          onClick={handleNextYear}
+          type="button"
+        >
+          <ChevronsRight className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
   ...props
-}: CalendarProps) {
+}: CalendarProps): JSX.Element {
   return (
     <DayPicker
-      showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -54,9 +141,9 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        Caption: CustomCaption,
       }}
+      showOutsideDays={showOutsideDays}
       {...props}
     />
   );

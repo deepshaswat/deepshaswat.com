@@ -27,34 +27,39 @@ model ContactForm {
 }
 
 model Post {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  content       String
-  featureImage  String?
-  postUrl       String   @unique
-  publishDate   DateTime?
-  tags          TagOnPost[]
-  excerpt       String?
-  authorId      String   @db.ObjectId
-  author        Author   @relation(fields: [authorId], references: [id])
-  featured      Boolean  @default(false)
-  metadataTitle        String?
-  metadataDescription  String?
-  metadataImageUrl     String?
-  metadataKeywords     String?
-  metadataAuthorName   String?
-  metadataCanonicalUrl String?
-  metadataOgTitle      String?
-  metadataOgDescription String?
-  metadataOgImage      String?
-  metadataTwitterCard  String?
-  metadataTwitterTitle String?
+  id                         String      @id @default(auto()) @map("_id") @db.ObjectId
+  title                      String
+  content                    String
+  featureImage               String?
+  postUrl                    String      @unique
+  publishDate                DateTime?
+  tags                       TagOnPost[]
+  excerpt                    String?
+  authorId                   String      @db.ObjectId
+  author                     Author      @relation(fields: [authorId], references: [id])
+  featured                   Boolean     @default(false)
+  metadataTitle              String?
+  metadataDescription        String?
+  metadataImageUrl           String?
+  metadataKeywords           String?
+  metadataAuthorName         String?
+  metadataCanonicalUrl       String?
+  metadataOgTitle            String?
+  metadataOgDescription      String?
+  metadataOgImage            String?
+  metadataTwitterCard        String?
+  metadataTwitterTitle       String?
   metadataTwitterDescription String?
-  metadataTwitterImage String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  status        PostStatus @default(DRAFT)
-  isNewsletter  Boolean @default(false)
+  metadataTwitterImage       String?
+  createdAt                  DateTime    @default(now())
+  updatedAt                  DateTime    @updatedAt
+  status                     PostStatus  @default(DRAFT)
+  isNewsletter               Boolean     @default(false)
+  emailsSent                 Int         @default(0)
+  emailsDelivered            Int         @default(0)
+  emailsOpened               Int         @default(0)
+  uniqueOpens                Int         @default(0)
+  emailSends                 EmailSend[]
 
   @@index([featured])
   @@index([publishDate])
@@ -99,6 +104,7 @@ model Author {
   email   String @unique
   imageUrl String?
   posts   Post[]
+  ideas   Idea[]
   role    Role
 
   @@index([name])
@@ -112,22 +118,141 @@ enum Role {
 }
 
 model Member {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  firstName      String?
-  lastName      String?
-  email     String  @unique
-  note      String?
-  unsubscribed Boolean @default(false)
-  openRate      String?
-  location      String?
-  imageUrl      String?
-  resendContactId String? @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  String           @id @default(auto()) @map("_id") @db.ObjectId
+  firstName           String?
+  lastName            String?
+  email               String           @unique
+  note                String?
+  unsubscribed        Boolean          @default(false)
+  openRate            String?
+  location            String?
+  imageUrl            String?
+  resendContactId     String?          @unique
+  totalEmailsReceived Int              @default(0)
+  totalEmailsOpened   Int              @default(0)
+  totalEmailsClicked  Int              @default(0)
+  totalBounces        Int              @default(0)
+  lastEmailOpenedAt   DateTime?
+  engagementScore     Float?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  emailRecipients     EmailRecipient[]
 
   @@index([firstName])
   @@index([lastName])
   @@index([createdAt])
   @@index([updatedAt])
+  @@index([engagementScore])
+}
+
+model Idea {
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  description      String?
+  topics           String[]
+  status           IdeaStatus  @default(NEW)
+  currentStage     IdeaStage   @default(ROUGH_IDEA)
+  generatedOutline String?
+  outlineContent   String?     // BlockNote JSON for outline
+  scriptContent    String?     // BlockNote JSON for script/draft
+  targetDate       DateTime?
+  createdPostId    String?     @db.ObjectId
+  authorId         String      @db.ObjectId
+  author           Author      @relation(fields: [authorId], references: [id])
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([status])
+  @@index([currentStage])
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([targetDate])
+}
+
+enum IdeaStage {
+  ROUGH_IDEA
+  OUTLINE
+  SCRIPT
+  READY
+}
+
+enum IdeaStatus {
+  NEW
+  IN_PROGRESS
+  DRAFT_CREATED
+  ARCHIVED
+}
+
+// Email Analytics Models
+model EmailSend {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  resendEmailId   String          @unique
+  broadcastId     String?
+  postId          String?         @db.ObjectId
+  post            Post?           @relation(fields: [postId], references: [id])
+  subject         String
+  fromEmail       String
+  sentAt          DateTime
+  status          EmailSendStatus @default(SENT)
+  deliveredAt     DateTime?
+  openedAt        DateTime?
+  clickedAt       DateTime?
+  bouncedAt       DateTime?
+  lastEventAt     DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  events          EmailEvent[]
+  recipients      EmailRecipient[]
+
+  @@index([postId])
+  @@index([status])
+  @@index([sentAt])
+  @@index([broadcastId])
+}
+
+model EmailRecipient {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  emailSendId   String      @db.ObjectId
+  emailSend     EmailSend   @relation(fields: [emailSendId], references: [id])
+  memberId      String?     @db.ObjectId
+  member        Member?     @relation(fields: [memberId], references: [id])
+  email         String
+  delivered     Boolean     @default(false)
+  opened        Boolean     @default(false)
+  openCount     Int         @default(0)
+  clicked       Boolean     @default(false)
+  clickCount    Int         @default(0)
+  bounced       Boolean     @default(false)
+  firstOpenedAt DateTime?
+  lastOpenedAt  DateTime?
+
+  @@unique([emailSendId, email])
+  @@index([memberId])
+  @@index([email])
+}
+
+model EmailEvent {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  emailSendId    String    @db.ObjectId
+  emailSend      EmailSend @relation(fields: [emailSendId], references: [id])
+  eventType      String
+  eventId        String    @unique
+  recipientEmail String?
+  linkUrl        String?
+  rawPayload     String
+  processedAt    DateTime  @default(now())
+
+  @@index([emailSendId])
+  @@index([eventType])
+}
+
+enum EmailSendStatus {
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  BOUNCED
+  COMPLAINED
+  FAILED
 }
 

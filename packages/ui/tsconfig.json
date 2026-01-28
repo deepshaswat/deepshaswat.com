@@ -8,5 +8,12 @@
     "./lib/**/*",
     "../../apps/admin/app/(auth)/_components/posts/editor.tsx"
   ],
-  "exclude": ["dist", "build", "node_modules"]
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

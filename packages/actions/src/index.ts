@@ -5,6 +5,11 @@ export * from "./admin/crud-member";
 export * from "./admin/crud-tags";
 export * from "./admin/author";
 export * from "./admin/fetch-posts";
+export * from "./admin/dashboard-stats";
+export * from "./admin/analytics";
+export * from "./admin/crud-ideas";
+export * from "./admin/calendar";
+export * from "./admin/email-analytics";
 
 // Web
 export { contact } from "./web/contact";

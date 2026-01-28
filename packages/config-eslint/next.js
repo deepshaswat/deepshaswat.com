@@ -50,7 +50,20 @@ module.exports = {
         packageDir: [__dirname, process.cwd()],
       },
     ],
-    "turbo/no-undeclared-env-vars": "warn",
+    "turbo/no-undeclared-env-vars": [
+      "warn",
+      {
+        allowList: [
+          "GCP_PROJECT_ID",
+          "GCP_LOCATION",
+          "AWS_REGION",
+          "AWS_ACCESS_KEY_ID",
+          "AWS_SECRET_ACCESS_KEY",
+          "AWS_S3_BUCKET_NAME",
+          "NODE_ENV",
+        ],
+      },
+    ],
     // Remaining relaxed rules
     "@typescript-eslint/require-await": "warn",
     "@typescript-eslint/no-shadow": "warn",

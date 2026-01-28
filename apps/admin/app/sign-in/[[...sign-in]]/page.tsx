@@ -1,20 +1,41 @@
 "use client";
 
-import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import { SignIn } from "@clerk/nextjs";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
 import { Loader2 } from "lucide-react";
-import { CustomSignIn } from "@repo/ui/custom-sign-in";
+
+function SignInContent(): JSX.Element {
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect_url") || "/";
+
+  return <SignIn fallbackRedirectUrl={redirectUrl} signUpUrl={undefined} />;
+}
 
 export default function Page(): JSX.Element {
-  return (
-    <div className="min-h-screen grid grid-cols-1">
-      <div className="flex items-center justify-center mt-8">
-        <ClerkLoaded>
-          <CustomSignIn />
-        </ClerkLoaded>
-        <ClerkLoading>
-          <Loader2 className="animate-spin text-muted-foreground" />
-        </ClerkLoading>
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <Suspense
+        fallback={
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        }
+      >
+        <SignInContent />
+      </Suspense>
     </div>
   );
 }

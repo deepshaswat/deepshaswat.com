@@ -2,6 +2,8 @@ import { fetchTagDetails } from "@repo/actions";
 import { notFound } from "next/navigation";
 import EditComponent from "../../_components/tags/edit-component";
 
+export const dynamic = "force-dynamic";
+
 export default async function TagSlugPage({
   params,
 }: {

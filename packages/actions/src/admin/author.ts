@@ -3,18 +3,7 @@
 import prisma from "@repo/db/client";
 import { currentUser } from "@clerk/nextjs/server";
 
-import { SignedIn } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-
-async function authenticateUser() {
-  const sign = await SignedIn;
-  if (!sign) {
-    redirect("/sign-in");
-  }
-}
-
 export async function createAuthor() {
-  await authenticateUser();
   const user = await currentUser();
 
   if (!user) {

@@ -1,0 +1,147 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [main, develop, "feature/**", "fix/**"]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # Unit and Integration Tests
+  unit-tests:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: yarn prisma-generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'mongodb://localhost:27017/test' }}
+
+      - name: Run unit tests
+        run: yarn test:run
+        env:
+          RESEND_API_KEY: test-api-key
+          RESEND_AUDIENCE_ID: test-audience-id
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          fail_ci_if_error: false
+
+  # TypeScript type checking
+  type-check:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: yarn prisma-generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'mongodb://localhost:27017/test' }}
+
+      - name: Run type check
+        run: yarn type-check
+
+  # ESLint check
+  lint:
+    name: Lint Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run ESLint
+        run: yarn lint
+
+  # Build check
+  build:
+    name: Build Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [unit-tests, type-check]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build packages
+        run: yarn build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'mongodb://localhost:27017/test' }}
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_placeholder' }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'sk_test_placeholder' }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY || 'test-api-key' }}
+          RESEND_AUDIENCE_ID: ${{ secrets.RESEND_AUDIENCE_ID || 'test-audience-id' }}
+
+  # Summary job
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [unit-tests, type-check, lint, build]
+    if: always()
+
+    steps:
+      - name: Check status
+        run: |
+          if [ "${{ needs.unit-tests.result }}" == "failure" ] || \
+             [ "${{ needs.type-check.result }}" == "failure" ] || \
+             [ "${{ needs.lint.result }}" == "failure" ] || \
+             [ "${{ needs.build.result }}" == "failure" ]; then
+            echo "One or more jobs failed"
+            exit 1
+          fi
+          echo "All checks passed!"
