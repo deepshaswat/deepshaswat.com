@@ -162,7 +162,7 @@ export function EventListSidebar({
   };
 
   return (
-    <Card className="w-full lg:w-80 flex-shrink-0">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calendar className="h-5 w-5" />

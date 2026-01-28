@@ -34,14 +34,6 @@ const navMainItems: NavMainItem[] = [
     title: "Posts",
     url: "/posts",
     icon: FileText,
-    items: [
-      { title: "All Posts", url: "/posts" },
-      { title: "New Post", url: "/new-post" },
-      { title: "Drafts", url: "/drafts" },
-      { title: "Scheduled", url: "/scheduled-posts" },
-      { title: "Published", url: "/published" },
-      { title: "Newsletters", url: "/newsletters" },
-    ],
   },
 ];
 

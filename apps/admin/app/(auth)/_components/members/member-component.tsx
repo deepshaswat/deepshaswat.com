@@ -1,7 +1,7 @@
 "use client";
 
-import type { Member } from "@repo/actions";
-import { fetchMembers, totalMembers } from "@repo/actions";
+import type { Member, MemberFilters } from "@repo/actions";
+import { fetchMembers, countFilteredMembers } from "@repo/actions";
 import { pageNumberState, totalMembersState } from "@repo/store";
 import {
   Button,
@@ -36,9 +36,13 @@ import { Settings, Search, ListFilter, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import FilterListComponent from "./filter-list-components";
+import FilterListComponent, {
+  type Filter,
+  convertFiltersToQuery,
+  createInitialFilter,
+} from "./filter-list-components";
 import ImportMembersComponent from "./import-members-components";
 
 function capitalizeWords(input: string): string {
@@ -79,36 +83,70 @@ function MemberComponent(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [isImportOpen, setIsImportOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // Filter state
+  const [filters, setFilters] = useState<Filter[]>([createInitialFilter()]);
+  const [appliedFilters, setAppliedFilters] = useState<
+    MemberFilters | undefined
+  >(undefined);
+  const [activeFilterCount, setActiveFilterCount] = useState(0);
 
   useEffect(() => {
     resetPageNumber();
   }, [resetPageNumber]);
 
-  useEffect(() => {
-    const getTotalMembers = async (): Promise<void> => {
-      const total = await totalMembers();
-      if (total > 0) {
-        setTotalMembersCount(total);
-      }
-    };
-    void getTotalMembers();
-  }, [setTotalMembersCount]);
+  // Load total members count (respecting filters)
+  const loadMemberCount = useCallback(async (): Promise<void> => {
+    const total = await countFilteredMembers({
+      search,
+      filters: appliedFilters,
+    });
+    setTotalMembersCount(total);
+  }, [search, appliedFilters, setTotalMembersCount]);
 
   useEffect(() => {
-    const loadMembers = async (): Promise<void> => {
-      const members = await fetchMembers({
-        pageNumber: currentPage,
-        pageSize: 30,
-        search,
-      });
-      setMembersList(members);
-      setLoading(false);
-    };
+    void loadMemberCount();
+  }, [loadMemberCount]);
+
+  // Load members with filters
+  const loadMembers = useCallback(async (): Promise<void> => {
+    setLoading(true);
+    const members = await fetchMembers({
+      pageNumber: currentPage,
+      pageSize: 30,
+      search,
+      filters: appliedFilters,
+    });
+    setMembersList(members);
+    setLoading(false);
+  }, [currentPage, search, appliedFilters]);
+
+  useEffect(() => {
     void loadMembers();
-  }, [currentPage, search]);
+  }, [loadMembers]);
 
   const handlePageChange = (page: number): void => {
     setCurrentPage(page);
+  };
+
+  const handleApplyFilters = (): void => {
+    const queryFilters = convertFiltersToQuery(filters);
+    // Count how many filters have values
+    const activeCount = filters.filter((f) => f.value).length;
+    setActiveFilterCount(activeCount);
+    setAppliedFilters(
+      Object.keys(queryFilters).length > 0 ? queryFilters : undefined,
+    );
+    setCurrentPage(0); // Reset to first page when applying filters
+    setIsFilterOpen(false);
+  };
+
+  const handleResetFilters = (): void => {
+    setFilters([createInitialFilter()]);
+    setAppliedFilters(undefined);
+    setActiveFilterCount(0);
+    setCurrentPage(0);
   };
 
   const handleExportMembers = (): void => {
@@ -139,21 +177,34 @@ function MemberComponent(): JSX.Element {
             </div>
           </div>
           <div className="flex gap-2 relative">
-            <Popover>
+            <Popover onOpenChange={setIsFilterOpen} open={isFilterOpen}>
               <PopoverTrigger asChild>
-                <Button variant="icon">
-                  <ListFilter className="mr-2" /> Filter
+                <Button className="relative pr-6" variant="icon">
+                  <ListFilter className="mr-2 size-4" /> Filter
+                  {activeFilterCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-medium rounded-full h-5 w-5 flex items-center justify-center shadow-sm">
+                      {activeFilterCount}
+                    </span>
+                  )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="absolute -right-10 mt-2 w-[720px] lg:w-[820px] bg-neutral-800 border-none">
                 <div className="grid gap-4">
                   <div className="space-y-2">
                     <h4 className="font-medium leading-none text-neutral-100">
-                      Filter Lists
+                      Filter Members
                     </h4>
+                    <p className="text-sm text-neutral-400">
+                      Add filters to narrow down your member list
+                    </p>
                   </div>
                   <div className="grid gap-2">
-                    <FilterListComponent />
+                    <FilterListComponent
+                      filters={filters}
+                      onApply={handleApplyFilters}
+                      onFiltersChange={setFilters}
+                      onReset={handleResetFilters}
+                    />
                   </div>
                 </div>
               </PopoverContent>
