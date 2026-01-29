@@ -1,8 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronsUpDown, LogOut, Moon, Sun, Monitor } from "lucide-react";
-import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
+import {
+  ChevronsUpDown,
+  LogOut,
+  Moon,
+  Sun,
+  Monitor,
+  UserCog,
+} from "lucide-react";
+import { SignedIn, UserButton, useUser, useClerk } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
@@ -64,6 +71,7 @@ function NavUserContent({
   theme: string | undefined;
 }) {
   const { user, isLoaded } = useUser();
+  const { openUserProfile } = useClerk();
 
   // Handle loading state
   if (!isLoaded) {
@@ -132,6 +140,14 @@ function NavUserContent({
                 </div>
               </div>
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={() => openUserProfile()}
+            >
+              <UserCog className="mr-2 h-4 w-4" />
+              Profile
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuLabel className="text-xs text-muted-foreground">
