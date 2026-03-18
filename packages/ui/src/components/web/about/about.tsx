@@ -52,7 +52,7 @@ function renderIntro() {
           </strong>{" "}
           for students and{" "}
           <strong className="text-neutral-200">
-            StockBook - Smart Portfolio Tracker
+            UseMoney - Smart Portfolio Tracker
           </strong>{" "}
           for investors &amp; financial learners.
         </p>

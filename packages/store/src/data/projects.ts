@@ -18,10 +18,10 @@ export interface ProjectsByYear {
 
 const featuredProjects: FeaturedProject[] = [
   {
-    name: "StockBook",
+    name: "UseMoney",
     description: "Stock Market Research Platform",
-    url: "https://stockbook.space",
-    stats: "100+ STOCKS RESEARCHED",
+    url: "https://usemoney.ai",
+    stats: "10,000+ STOCKS, MFS & ETFS LISTED",
     icon: "chart-candlestick",
   },
   {
@@ -59,9 +59,9 @@ const allProjects: ProjectsByYear[] = [
     year: "2025 - Present",
     projects: [
       {
-        name: "StockBook",
+        name: "UseMoney",
         description: "Stock Market Research Platform",
-        url: "https://stockbook.space",
+        url: "https://usemoney.ai",
       },
       {
         name: "Naviya.school",

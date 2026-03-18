@@ -40,8 +40,8 @@ const LinksComponent = () => {
   ];
   const links: LinkData[] = [
     {
-      title: "StockBook - Stock Market Research Platform",
-      url: "https://stockbook.space/",
+      title: "UseMoney - Stock Market Research Platform",
+      url: "https://usemoney.ai/",
       icon: <CandlestickChart className="h-5 w-5" />,
     },
     {
@@ -160,7 +160,7 @@ const LinksComponent = () => {
                 </strong>{" "}
                 for students and{" "}
                 <strong className="text-neutral-200">
-                  StockBook - Smart Portfolio Tracker
+                  UseMoney - Smart Portfolio Tracker
                 </strong>{" "}
                 for investors &amp; financial learners.
               </p>
