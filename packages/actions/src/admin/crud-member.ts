@@ -417,6 +417,42 @@ export async function fetchMemberDetails(id: string): Promise<Member | null> {
   }
 }
 
+export async function searchSubscribersForSend(query: string) {
+  await authenticateUser();
+
+  if (!query || query.length < 2) {
+    return [];
+  }
+
+  try {
+    const members = await prisma.member.findMany({
+      where: {
+        unsubscribed: false,
+        OR: [
+          { email: { contains: query, mode: "insensitive" } },
+          { firstName: { contains: query, mode: "insensitive" } },
+          { lastName: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      select: {
+        email: true,
+        firstName: true,
+        lastName: true,
+      },
+      take: 50,
+      orderBy: { email: "asc" },
+    });
+
+    return members.map((m) => ({
+      email: m.email,
+      name: [m.firstName, m.lastName].filter(Boolean).join(" ") || m.email,
+    }));
+  } catch (error) {
+    console.error("Error searching subscribers:", error);
+    return [];
+  }
+}
+
 export async function updateMember(id: string, member: Member) {
   await authenticateUser();
   try {

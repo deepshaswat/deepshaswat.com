@@ -10,18 +10,25 @@ export * from "./admin/analytics";
 export * from "./admin/crud-ideas";
 export * from "./admin/calendar";
 export * from "./admin/email-analytics";
+export * from "./admin/resend-newsletter";
 
 // Web
 export { contact } from "./web/contact";
 export * from "./web/redis-client";
+export { verifyAndUnsubscribe } from "./web/unsubscribe";
 
 // Common
 export * from "./common/types";
 export {
   sendEmail,
-  sendNewsletter,
   sendBroadcastNewsletter,
+  sendNewsletterToIndividuals,
   addContactToAudience,
   updateContactAudience,
   deleteContactAudience,
 } from "./common/resend";
+export { blocknoteToEmailHtml } from "./common/blocknote-to-email";
+export {
+  generateUnsubscribeToken,
+  verifyUnsubscribeToken,
+} from "./common/unsubscribe-tokens";

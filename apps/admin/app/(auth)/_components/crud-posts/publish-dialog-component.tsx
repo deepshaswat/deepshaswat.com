@@ -1,6 +1,11 @@
 "use client";
 
-import { dateTimeValidation, publishPost } from "@repo/actions";
+import {
+  dateTimeValidation,
+  publishPost,
+  searchSubscribersForSend,
+  resendNewsletter,
+} from "@repo/actions";
 import {
   selectDate,
   postDataState,
@@ -22,6 +27,8 @@ import {
   RadioGroupItem,
   useNewsletterMarkdown,
   BlockNoteRenderer,
+  Input,
+  Badge,
 } from "@repo/ui";
 import {
   ChevronLeft,
@@ -32,31 +39,54 @@ import {
   Mail,
   Check,
   Eye,
+  Users,
+  User,
+  X,
+  Search,
+  Loader2,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 interface PublishDialogProps {
   value: boolean;
   onOpenChange: (value: boolean) => void;
+  mode?: "publish" | "resend";
 }
 
 function PublishDialog({
   value,
   onOpenChange,
+  mode = "publish",
 }: PublishDialogProps): JSX.Element {
   const router = useRouter();
 
-  const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(value);
+  const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(
+    mode === "resend" ? false : value,
+  );
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
-  const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
+  const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(
+    mode === "resend" ? value : false,
+  );
   const [finalTime, setFinalTime] = useState<Date | null>(null);
   const [scheduleType, setScheduleType] = useState<"now" | "later">("now");
-  const [publishType, setPublishType] = useState<"blog" | "newsletter">("blog");
+  const [publishType, setPublishType] = useState<"blog" | "newsletter">(
+    mode === "resend" ? "newsletter" : "blog",
+  );
   const [isPublishing, setIsPublishing] = useState(false);
   const [_error, setError] = useRecoilState(savePostErrorState);
+
+  // Individual sending state
+  const [sendMode, setSendMode] = useState<"all" | "individual">("all");
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<
+    { email: string; name: string }[]
+  >([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [inputDate, setInputDate] = useRecoilState(selectDate);
   const [inputTimeIst, setInputTimeIst] = useRecoilState(selectedTimeIst);
@@ -140,6 +170,21 @@ function PublishDialog({
     setIsPublishing(true);
 
     try {
+      // Resend mode: use resendNewsletter action
+      if (mode === "resend") {
+        const emails = sendMode === "individual" ? selectedEmails : undefined;
+        const result = await resendNewsletter(postId, emails);
+
+        if (result.success) {
+          setIsSecondDialogOpen(false);
+          onOpenChange(false);
+        } else {
+          setError(result.error || "Failed to resend newsletter");
+        }
+        return;
+      }
+
+      // Publish mode
       const markdown = publishType === "newsletter" ? newsletterMarkdown : "";
 
       let publishTime = finalTime;
@@ -153,6 +198,11 @@ function PublishDialog({
         return;
       }
 
+      const individualEmails =
+        publishType === "newsletter" && sendMode === "individual"
+          ? selectedEmails
+          : undefined;
+
       const result = await publishPost(
         postId,
         publishTime,
@@ -160,6 +210,7 @@ function PublishDialog({
         publishType,
         post,
         markdown,
+        individualEmails,
       );
 
       if (result.success) {
@@ -177,31 +228,106 @@ function PublishDialog({
   };
 
   useEffect(() => {
-    setIsFirstDialogOpen(value);
-  }, [value]);
+    if (mode === "resend") {
+      setIsSecondDialogOpen(value);
+    } else {
+      setIsFirstDialogOpen(value);
+    }
+  }, [value, mode]);
 
   useEffect(() => {
-    onOpenChange(isFirstDialogOpen);
-  }, [isFirstDialogOpen, onOpenChange]);
+    if (mode === "resend") {
+      onOpenChange(isSecondDialogOpen);
+    } else {
+      onOpenChange(isFirstDialogOpen);
+    }
+  }, [isFirstDialogOpen, isSecondDialogOpen, onOpenChange, mode]);
+
+  // Reset individual send state when dialog closes
+  useEffect(() => {
+    if (!value) {
+      setSendMode("all");
+      setSelectedEmails([]);
+      setSearchQuery("");
+      setSearchResults([]);
+    }
+  }, [value]);
+
+  // Debounced subscriber search
+  useEffect(() => {
+    if (searchTimerRef.current) {
+      clearTimeout(searchTimerRef.current);
+    }
+
+    if (searchQuery.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    setIsSearching(true);
+    searchTimerRef.current = setTimeout(() => {
+      searchSubscribersForSend(searchQuery)
+        .then((results) => {
+          setSearchResults(results);
+        })
+        .catch(() => {
+          setSearchResults([]);
+        })
+        .finally(() => {
+          setIsSearching(false);
+        });
+    }, 300);
+
+    return () => {
+      if (searchTimerRef.current) {
+        clearTimeout(searchTimerRef.current);
+      }
+    };
+  }, [searchQuery]);
 
   const getPublishSummary = (): string => {
+    if (mode === "resend") {
+      if (sendMode === "individual") {
+        return `Re-sending newsletter to ${selectedEmails.length} selected recipient${selectedEmails.length !== 1 ? "s" : ""}.`;
+      }
+      return `Re-sending newsletter to ${totalMembers || "all"} subscribers.`;
+    }
+
     const timeStr =
       scheduleType === "now"
         ? "immediately"
         : `on ${formatDayAndDate(inputDate)} at ${inputTimeIst} IST`;
 
     if (publishType === "newsletter") {
+      if (sendMode === "individual") {
+        return `Your post will be published ${timeStr} and sent to ${selectedEmails.length} selected recipient${selectedEmails.length !== 1 ? "s" : ""}.`;
+      }
       return `Your post will be published ${timeStr} and sent to ${totalMembers || "all"} subscribers.`;
     }
     return `Your post will be published ${timeStr} on your blog.`;
   };
 
   const getPublishButtonText = (): string => {
-    if (isPublishing) return "Publishing...";
+    if (isPublishing) {
+      return mode === "resend" ? "Resending..." : "Publishing...";
+    }
+    if (mode === "resend") {
+      return "Resend Newsletter";
+    }
     if (scheduleType === "now") {
       return publishType === "newsletter" ? "Publish & Send" : "Publish Now";
     }
     return `Schedule for ${formatDayAndDate(inputDate)}`;
+  };
+
+  const toggleEmailSelection = (email: string): void => {
+    setSelectedEmails((prev) =>
+      prev.includes(email) ? prev.filter((e) => e !== email) : [...prev, email],
+    );
+  };
+
+  const removeEmail = (email: string): void => {
+    setSelectedEmails((prev) => prev.filter((e) => e !== email));
   };
 
   return (
@@ -423,8 +549,142 @@ function PublishDialog({
                   </RadioGroup>
                 </div>
 
+                {/* Send Mode Selection - only for newsletters */}
+                {publishType === "newsletter" && (
+                  <div className="space-y-4">
+                    <Label className="text-lg font-medium text-neutral-200">
+                      Who should receive this?
+                    </Label>
+                    <div className="flex gap-3">
+                      <Button
+                        className={`flex-1 py-4 rounded-lg border-2 transition-all ${
+                          sendMode === "all"
+                            ? "border-green-500 bg-green-500/10 text-white"
+                            : "border-neutral-700 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600"
+                        }`}
+                        onClick={() => {
+                          setSendMode("all");
+                        }}
+                        variant="ghost"
+                      >
+                        <Users className="size-4 mr-2" />
+                        All Subscribers ({totalMembers || 0})
+                      </Button>
+                      <Button
+                        className={`flex-1 py-4 rounded-lg border-2 transition-all ${
+                          sendMode === "individual"
+                            ? "border-green-500 bg-green-500/10 text-white"
+                            : "border-neutral-700 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600"
+                        }`}
+                        onClick={() => {
+                          setSendMode("individual");
+                        }}
+                        variant="ghost"
+                      >
+                        <User className="size-4 mr-2" />
+                        Individual Emails
+                      </Button>
+                    </div>
+
+                    {/* Individual Email Search & Selection */}
+                    {sendMode === "individual" && (
+                      <div className="space-y-3 p-4 bg-neutral-800/50 rounded-lg">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
+                          <Input
+                            className="pl-10 bg-neutral-700 border-neutral-600 text-white placeholder:text-neutral-500"
+                            onChange={(e) => {
+                              setSearchQuery(e.target.value);
+                            }}
+                            placeholder="Search subscribers by name or email..."
+                            value={searchQuery}
+                          />
+                          {isSearching && (
+                            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500 animate-spin" />
+                          )}
+                        </div>
+
+                        {/* Search Results */}
+                        {searchResults.length > 0 && (
+                          <div className="max-h-48 overflow-y-auto rounded-md border border-neutral-700 bg-neutral-800">
+                            {searchResults.map((result) => (
+                              <button
+                                className={`w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-neutral-700 transition-colors text-left ${
+                                  selectedEmails.includes(result.email)
+                                    ? "bg-green-500/10"
+                                    : ""
+                                }`}
+                                key={result.email}
+                                onClick={() => {
+                                  toggleEmailSelection(result.email);
+                                }}
+                                type="button"
+                              >
+                                <div
+                                  className={`size-4 rounded border flex items-center justify-center ${
+                                    selectedEmails.includes(result.email)
+                                      ? "bg-green-500 border-green-500"
+                                      : "border-neutral-500"
+                                  }`}
+                                >
+                                  {selectedEmails.includes(result.email) && (
+                                    <Check className="size-3 text-white" />
+                                  )}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-white truncate">
+                                    {result.name}
+                                  </div>
+                                  <div className="text-neutral-400 text-xs truncate">
+                                    {result.email}
+                                  </div>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Selected emails badges */}
+                        {selectedEmails.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {selectedEmails.map((email) => (
+                              <Badge
+                                className="bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30"
+                                key={email}
+                                variant="outline"
+                              >
+                                {email}
+                                <button
+                                  className="ml-1 hover:text-white"
+                                  onClick={() => {
+                                    removeEmail(email);
+                                  }}
+                                  type="button"
+                                >
+                                  <X className="size-3" />
+                                </button>
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+
+                        {selectedEmails.length === 0 && (
+                          <p className="text-sm text-neutral-500">
+                            Search and select at least one recipient.
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <Button
                   className="w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg"
+                  disabled={
+                    publishType === "newsletter" &&
+                    sendMode === "individual" &&
+                    selectedEmails.length === 0
+                  }
                   onClick={handleContinueToPreview}
                 >
                   <Eye className="mr-2 size-5" />
@@ -543,11 +803,18 @@ function PublishDialog({
           <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800">
             <Button
               className="text-neutral-400 hover:text-white"
-              onClick={handleBackToSettings}
+              onClick={
+                mode === "resend"
+                  ? () => {
+                      setIsSecondDialogOpen(false);
+                      onOpenChange(false);
+                    }
+                  : handleBackToSettings
+              }
               variant="ghost"
             >
               <ChevronLeft className="h-4 w-4 mr-1" />
-              Back to preview
+              {mode === "resend" ? "Cancel" : "Back to preview"}
             </Button>
           </div>
 
@@ -556,57 +823,193 @@ function PublishDialog({
               <DialogHeader className="mb-8">
                 <div className="flex justify-center mb-6">
                   <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center">
-                    <Check className="size-10 text-green-500" />
+                    {mode === "resend" ? (
+                      <Mail className="size-10 text-green-500" />
+                    ) : (
+                      <Check className="size-10 text-green-500" />
+                    )}
                   </div>
                 </div>
                 <DialogTitle>
                   <div className="text-4xl md:text-5xl font-bold text-green-500 mb-3">
-                    Almost there!
+                    {mode === "resend" ? "Resend Newsletter" : "Almost there!"}
                   </div>
                   <div className="text-xl md:text-2xl font-medium text-neutral-300">
-                    Review your publish settings
+                    {mode === "resend"
+                      ? "Choose who receives this newsletter"
+                      : "Review your publish settings"}
                   </div>
                 </DialogTitle>
               </DialogHeader>
 
-              <div className="bg-neutral-800/50 rounded-xl p-6 mb-8 text-left">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Publish Summary
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-neutral-300">
-                    {scheduleType === "now" ? (
-                      <Zap className="size-5 text-green-500" />
-                    ) : (
-                      <Calendar className="size-5 text-green-500" />
-                    )}
-                    <span>
-                      {scheduleType === "now"
-                        ? "Publishing immediately"
-                        : `Scheduled for ${formatDayAndDate(inputDate)} at ${inputTimeIst} IST`}
-                    </span>
+              {/* Resend mode: show recipient selection in confirmation dialog */}
+              {mode === "resend" && (
+                <div className="bg-neutral-800/50 rounded-xl p-6 mb-6 text-left">
+                  <Label className="text-base font-medium text-neutral-200 mb-3 block">
+                    Send to:
+                  </Label>
+                  <div className="flex gap-3 mb-4">
+                    <Button
+                      className={`flex-1 py-3 rounded-lg border-2 transition-all ${
+                        sendMode === "all"
+                          ? "border-green-500 bg-green-500/10 text-white"
+                          : "border-neutral-700 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600"
+                      }`}
+                      onClick={() => {
+                        setSendMode("all");
+                      }}
+                      variant="ghost"
+                    >
+                      <Users className="size-4 mr-2" />
+                      All ({totalMembers || 0})
+                    </Button>
+                    <Button
+                      className={`flex-1 py-3 rounded-lg border-2 transition-all ${
+                        sendMode === "individual"
+                          ? "border-green-500 bg-green-500/10 text-white"
+                          : "border-neutral-700 bg-neutral-800/50 text-neutral-400 hover:border-neutral-600"
+                      }`}
+                      onClick={() => {
+                        setSendMode("individual");
+                      }}
+                      variant="ghost"
+                    >
+                      <User className="size-4 mr-2" />
+                      Individual
+                    </Button>
                   </div>
-                  <div className="flex items-center gap-3 text-neutral-300">
-                    {publishType === "newsletter" ? (
-                      <Mail className="size-5 text-green-500" />
-                    ) : (
-                      <FileText className="size-5 text-green-500" />
-                    )}
-                    <span>
-                      {publishType === "newsletter"
-                        ? `Blog + Newsletter to ${totalMembers || "all"} subscribers`
-                        : "Blog only"}
-                    </span>
+
+                  {sendMode === "individual" && (
+                    <div className="space-y-3">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
+                        <Input
+                          className="pl-10 bg-neutral-700 border-neutral-600 text-white placeholder:text-neutral-500"
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                          }}
+                          placeholder="Search subscribers..."
+                          value={searchQuery}
+                        />
+                        {isSearching && (
+                          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500 animate-spin" />
+                        )}
+                      </div>
+
+                      {searchResults.length > 0 && (
+                        <div className="max-h-36 overflow-y-auto rounded-md border border-neutral-700 bg-neutral-800">
+                          {searchResults.map((result) => (
+                            <button
+                              className={`w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-neutral-700 transition-colors text-left ${
+                                selectedEmails.includes(result.email)
+                                  ? "bg-green-500/10"
+                                  : ""
+                              }`}
+                              key={result.email}
+                              onClick={() => {
+                                toggleEmailSelection(result.email);
+                              }}
+                              type="button"
+                            >
+                              <div
+                                className={`size-4 rounded border flex items-center justify-center ${
+                                  selectedEmails.includes(result.email)
+                                    ? "bg-green-500 border-green-500"
+                                    : "border-neutral-500"
+                                }`}
+                              >
+                                {selectedEmails.includes(result.email) && (
+                                  <Check className="size-3 text-white" />
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <span className="text-white text-sm">
+                                  {result.name}
+                                </span>
+                                <span className="text-neutral-400 text-xs ml-2">
+                                  {result.email}
+                                </span>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      {selectedEmails.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {selectedEmails.map((email) => (
+                            <Badge
+                              className="bg-green-500/20 text-green-400 border-green-500/30"
+                              key={email}
+                              variant="outline"
+                            >
+                              {email}
+                              <button
+                                className="ml-1 hover:text-white"
+                                onClick={() => {
+                                  removeEmail(email);
+                                }}
+                                type="button"
+                              >
+                                <X className="size-3" />
+                              </button>
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Publish mode summary */}
+              {mode !== "resend" && (
+                <div className="bg-neutral-800/50 rounded-xl p-6 mb-8 text-left">
+                  <h3 className="text-lg font-semibold text-white mb-4">
+                    Publish Summary
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-neutral-300">
+                      {scheduleType === "now" ? (
+                        <Zap className="size-5 text-green-500" />
+                      ) : (
+                        <Calendar className="size-5 text-green-500" />
+                      )}
+                      <span>
+                        {scheduleType === "now"
+                          ? "Publishing immediately"
+                          : `Scheduled for ${formatDayAndDate(inputDate)} at ${inputTimeIst} IST`}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-neutral-300">
+                      {publishType === "newsletter" ? (
+                        <Mail className="size-5 text-green-500" />
+                      ) : (
+                        <FileText className="size-5 text-green-500" />
+                      )}
+                      <span>
+                        {(() => {
+                          if (publishType !== "newsletter") return "Blog only";
+                          if (sendMode === "individual") {
+                            return `Newsletter to ${selectedEmails.length} recipient${selectedEmails.length !== 1 ? "s" : ""}`;
+                          }
+                          return `Blog + Newsletter to ${totalMembers || "all"} subscribers`;
+                        })()}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               <p className="text-neutral-400 mb-8">{getPublishSummary()}</p>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white py-6 text-lg"
-                  disabled={isPublishing}
+                  disabled={
+                    isPublishing ||
+                    (sendMode === "individual" && selectedEmails.length === 0)
+                  }
                   onClick={() => {
                     void handlePublish();
                   }}
@@ -616,10 +1019,17 @@ function PublishDialog({
                 <Button
                   className="flex-1 py-6 text-lg bg-neutral-700 hover:bg-neutral-600 text-white"
                   disabled={isPublishing}
-                  onClick={handleBackToSettings}
+                  onClick={
+                    mode === "resend"
+                      ? () => {
+                          setIsSecondDialogOpen(false);
+                          onOpenChange(false);
+                        }
+                      : handleBackToSettings
+                  }
                   variant="ghost"
                 >
-                  Back to preview
+                  {mode === "resend" ? "Cancel" : "Back to preview"}
                 </Button>
               </div>
             </div>

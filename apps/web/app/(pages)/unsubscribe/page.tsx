@@ -43,6 +43,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NewsletterUnsubscribePage(): JSX.Element {
-  return <NewsletterUnsubscribe />;
+export default async function NewsletterUnsubscribePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ email?: string; token?: string }>;
+}): Promise<JSX.Element> {
+  const params = await searchParams;
+  return <NewsletterUnsubscribe email={params.email} token={params.token} />;
 }

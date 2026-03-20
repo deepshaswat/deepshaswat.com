@@ -6,7 +6,11 @@ import { revalidatePath } from "next/cache";
 
 import prisma from "@repo/db/client";
 import { PostListType, PostType } from "../common/types";
-import { sendBroadcastNewsletter, sendNewsletter } from "../common/resend";
+import {
+  sendBroadcastNewsletter,
+  sendNewsletterToIndividuals,
+} from "../common/resend";
+import { blocknoteToEmailHtml } from "../common/blocknote-to-email";
 import { cacheService } from "@repo/ui/web";
 import {
   invalidatePostCache,
@@ -229,6 +233,7 @@ async function publishPost(
   publishType: string,
   post: PostListType,
   markdown: string,
+  individualEmails?: string[],
 ) {
   await authenticateUser();
 
@@ -264,7 +269,16 @@ async function publishPost(
     });
 
     if (publishType === "newsletter") {
-      await sendBroadcastNewsletter({ post, sendData: data, markdown });
+      if (individualEmails && individualEmails.length > 0) {
+        const emailHtml = blocknoteToEmailHtml(post.content);
+        await sendNewsletterToIndividuals({
+          post,
+          emails: individualEmails,
+          emailHtml,
+        });
+      } else {
+        await sendBroadcastNewsletter({ post, sendData: data, markdown });
+      }
     }
 
     if (updatedPost.status === "PUBLISHED") {
