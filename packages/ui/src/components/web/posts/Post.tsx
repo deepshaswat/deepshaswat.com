@@ -1,6 +1,6 @@
 // components/PostMain.tsx
-import { cn } from "@repo/ui/utils";
 import React from "react";
+import { cn } from "@repo/ui/utils";
 
 interface PostMainProps {
   children: React.ReactNode;

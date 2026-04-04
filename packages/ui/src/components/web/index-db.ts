@@ -1,4 +1,4 @@
-import { PostListType } from "@repo/actions";
+import type { PostListType } from "@repo/actions";
 
 const DB_NAME = "DeepShaswatDB";
 const STORE_NAMES = {
@@ -16,6 +16,24 @@ const CACHE_KEYS = {
 const CACHE_EXPIRATION = 1000 * 60 * 60 * 24; // 24 hours
 // const CACHE_EXPIRATION_1_WEEK = 1000 * 60 * 60 * 24 * 7; // 1 week
 
+interface CachedCountData {
+  id: string;
+  value: number;
+  timestamp: number;
+}
+
+interface CachedItemsData {
+  id: string;
+  posts: PostListType[];
+  timestamp: number;
+}
+
+interface CachedBlogContentData {
+  id: string;
+  post: PostListType;
+  timestamp: number;
+}
+
 class CacheService {
   private db: IDBDatabase | null = null;
   private initPromise: Promise<boolean> | null = null;
@@ -31,11 +49,14 @@ class CacheService {
 
   private async initDB(): Promise<boolean> {
     if (typeof window === "undefined") {
+      // eslint-disable-next-line no-console -- intentional logging for SSR environment detection
       console.log("InitDB: Running in SSR environment");
       return false;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- runtime guard for older browsers where indexedDB may be undefined
     if (!window.indexedDB) {
+      // eslint-disable-next-line no-console -- intentional error logging for missing IndexedDB support
       console.error("InitDB: IndexedDB not supported");
       return false;
     }
@@ -72,14 +93,16 @@ class CacheService {
           resolve(db);
         };
 
-        openRequest.onerror = (event) => {
+        openRequest.onerror = (_event) => {
+          // eslint-disable-next-line no-console -- intentional error logging for IndexedDB open failure
           console.error("InitDB: Error opening database:", openRequest.error);
-          reject(openRequest.error);
+          reject(new Error(String(openRequest.error)));
         };
       });
 
       return true;
     } catch (error) {
+      // eslint-disable-next-line no-console -- intentional error logging for database initialization failure
       console.error("InitDB: Failed to initialize database:", error);
       return false;
     }
@@ -88,7 +111,7 @@ class CacheService {
   private async ensureInitialized(): Promise<boolean> {
     if (this.db) return true;
     if (!this.initPromise) this.initPromise = this.initDB();
-    return await this.initPromise;
+    return this.initPromise;
   }
 
   async getCachedCount(
@@ -107,7 +130,8 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
-        const transaction = this.db!.transaction(
+        if (!this.db) throw new Error("Database not initialized");
+        const transaction = this.db.transaction(
           [STORE_NAMES.COUNTS],
           "readonly",
         );
@@ -115,7 +139,7 @@ class CacheService {
         const request = store.get(cacheKey);
 
         request.onsuccess = () => {
-          const data = request.result;
+          const data = request.result as CachedCountData | undefined;
           if (!data || Date.now() - data.timestamp > CACHE_EXPIRATION) {
             // console.log(`GetCachedCount: No valid cache found for ${type}`);
             resolve(null);
@@ -129,6 +153,7 @@ class CacheService {
         };
 
         request.onerror = () => {
+          // eslint-disable-next-line no-console -- intentional error logging for IndexedDB read failure
           console.error(
             `GetCachedCount: Error reading from store for ${type}:`,
             request.error,
@@ -136,6 +161,7 @@ class CacheService {
           resolve(null);
         };
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for IndexedDB store access failure
         console.error(
           `GetCachedCount: Error accessing store for ${type}:`,
           error,
@@ -159,7 +185,8 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
-        const transaction = this.db!.transaction(
+        if (!this.db) throw new Error("Database not initialized");
+        const transaction = this.db.transaction(
           [STORE_NAMES.COUNTS],
           "readwrite",
         );
@@ -182,6 +209,7 @@ class CacheService {
         };
 
         request.onerror = () => {
+          // eslint-disable-next-line no-console -- intentional error logging for IndexedDB write failure
           console.error(
             `SetCachedCount: Error writing to store for ${type}:`,
             request.error,
@@ -189,6 +217,7 @@ class CacheService {
           resolve();
         };
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for IndexedDB store access failure
         console.error(
           `SetCachedCount: Error accessing store for ${type}:`,
           error,
@@ -208,29 +237,26 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
-        const transaction = this.db!.transaction([storeName], "readonly");
+        if (!this.db) throw new Error("Database not initialized");
+        const transaction = this.db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
         const request = store.get(type);
 
         request.onsuccess = () => {
-          const data = request.result;
-          if (
-            !data ||
-            !data.posts ||
-            Date.now() - data.timestamp > CACHE_EXPIRATION
-          ) {
+          const data = request.result as CachedItemsData | undefined;
+          if (!data?.posts || Date.now() - data.timestamp > CACHE_EXPIRATION) {
             // console.log(`GetCachedItems: No valid cache found for ${type}`);
             resolve(null);
           } else {
-            const postsLength = data.posts?.length || 0;
             // console.log(
-            //   `GetCachedItems: Found valid cache for ${type} with ${postsLength} items`
+            //   `GetCachedItems: Found valid cache for ${type} with ${data.posts.length} items`
             // );
             resolve(data.posts);
           }
         };
 
         request.onerror = () => {
+          // eslint-disable-next-line no-console -- intentional error logging for IndexedDB read failure
           console.error(
             `GetCachedItems: Error reading from store for ${type}:`,
             request.error,
@@ -238,6 +264,7 @@ class CacheService {
           resolve(null);
         };
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for IndexedDB store access failure
         console.error(
           `GetCachedItems: Error accessing store for ${type}:`,
           error,
@@ -261,12 +288,13 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
-        const transaction = this.db!.transaction([storeName], "readwrite");
+        if (!this.db) throw new Error("Database not initialized");
+        const transaction = this.db.transaction([storeName], "readwrite");
         const store = transaction.objectStore(storeName);
 
         const data = {
           id: type,
-          posts: posts,
+          posts,
           timestamp: Date.now(),
         };
 
@@ -280,6 +308,7 @@ class CacheService {
         };
 
         request.onerror = () => {
+          // eslint-disable-next-line no-console -- intentional error logging for IndexedDB write failure
           console.error(
             `SetCachedItems: Error writing to store for ${type}:`,
             request.error,
@@ -287,6 +316,7 @@ class CacheService {
           resolve();
         };
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for IndexedDB store access failure
         console.error(
           `SetCachedItems: Error accessing store for ${type}:`,
           error,
@@ -303,7 +333,8 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
-        const transaction = this.db!.transaction(
+        if (!this.db) throw new Error("Database not initialized");
+        const transaction = this.db.transaction(
           [STORE_NAMES.BLOG_CONTENT],
           "readonly",
         );
@@ -311,7 +342,7 @@ class CacheService {
         const request = store.get(postUrl);
 
         request.onsuccess = () => {
-          const data = request.result;
+          const data = request.result as CachedBlogContentData | undefined;
           if (!data || Date.now() - data.timestamp > CACHE_EXPIRATION) {
             // console.log(
             //   `GetCachedBlogContent: No valid cache found for ${postUrl}`
@@ -326,6 +357,7 @@ class CacheService {
         };
 
         request.onerror = () => {
+          // eslint-disable-next-line no-console -- intentional error logging for IndexedDB read failure
           console.error(
             `GetCachedBlogContent: Error reading from store for ${postUrl}:`,
             request.error,
@@ -333,6 +365,7 @@ class CacheService {
           resolve(null);
         };
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for IndexedDB store access failure
         console.error(
           `GetCachedBlogContent: Error accessing store for ${postUrl}:`,
           error,
@@ -353,7 +386,8 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
-        const transaction = this.db!.transaction(
+        if (!this.db) throw new Error("Database not initialized");
+        const transaction = this.db.transaction(
           [STORE_NAMES.BLOG_CONTENT],
           "readwrite",
         );
@@ -375,6 +409,7 @@ class CacheService {
         };
 
         request.onerror = () => {
+          // eslint-disable-next-line no-console -- intentional error logging for IndexedDB write failure
           console.error(
             `SetCachedBlogContent: Error writing to store for ${postUrl}:`,
             request.error,
@@ -382,6 +417,7 @@ class CacheService {
           resolve();
         };
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for IndexedDB store access failure
         console.error(
           `SetCachedBlogContent: Error accessing store for ${postUrl}:`,
           error,
@@ -396,8 +432,9 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
+        if (!this.db) throw new Error("Database not initialized");
         // Clear articles count cache
-        const countsTransaction = this.db!.transaction(
+        const countsTransaction = this.db.transaction(
           [STORE_NAMES.COUNTS],
           "readwrite",
         );
@@ -405,7 +442,7 @@ class CacheService {
         countsStore.delete(CACHE_KEYS.ARTICLES_COUNT);
 
         // Clear articles and featured posts cache
-        const blogsTransaction = this.db!.transaction(
+        const blogsTransaction = this.db.transaction(
           [STORE_NAMES.BLOGS],
           "readwrite",
         );
@@ -415,6 +452,7 @@ class CacheService {
 
         resolve();
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for cache clearing failure
         console.error("ClearArticlesCache: Error clearing caches:", error);
         resolve();
       }
@@ -426,8 +464,9 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
+        if (!this.db) throw new Error("Database not initialized");
         // Clear newsletters count cache
-        const countsTransaction = this.db!.transaction(
+        const countsTransaction = this.db.transaction(
           [STORE_NAMES.COUNTS],
           "readwrite",
         );
@@ -435,7 +474,7 @@ class CacheService {
         countsStore.delete(CACHE_KEYS.NEWSLETTER_COUNT);
 
         // Clear newsletters cache
-        const newslettersTransaction = this.db!.transaction(
+        const newslettersTransaction = this.db.transaction(
           [STORE_NAMES.NEWSLETTERS],
           "readwrite",
         );
@@ -446,6 +485,7 @@ class CacheService {
 
         resolve();
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for cache clearing failure
         console.error("ClearNewslettersCache: Error clearing caches:", error);
         resolve();
       }
@@ -458,8 +498,9 @@ class CacheService {
 
     return new Promise((resolve) => {
       try {
+        if (!this.db) throw new Error("Database not initialized");
         // Clear all counts
-        const countsTransaction = this.db!.transaction(
+        const countsTransaction = this.db.transaction(
           [STORE_NAMES.COUNTS],
           "readwrite",
         );
@@ -467,7 +508,7 @@ class CacheService {
         countsStore.clear();
 
         // Clear all blogs
-        const blogsTransaction = this.db!.transaction(
+        const blogsTransaction = this.db.transaction(
           [STORE_NAMES.BLOGS],
           "readwrite",
         );
@@ -475,7 +516,7 @@ class CacheService {
         blogsStore.clear();
 
         // Clear all newsletters
-        const newslettersTransaction = this.db!.transaction(
+        const newslettersTransaction = this.db.transaction(
           [STORE_NAMES.NEWSLETTERS],
           "readwrite",
         );
@@ -485,7 +526,7 @@ class CacheService {
         newslettersStore.clear();
 
         // Clear all blog content
-        const blogContentTransaction = this.db!.transaction(
+        const blogContentTransaction = this.db.transaction(
           [STORE_NAMES.BLOG_CONTENT],
           "readwrite",
         );
@@ -496,6 +537,7 @@ class CacheService {
 
         resolve();
       } catch (error) {
+        // eslint-disable-next-line no-console -- intentional error logging for cache clearing failure
         console.error("ClearAllCaches: Error clearing all caches:", error);
         resolve();
       }

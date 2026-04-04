@@ -1,11 +1,13 @@
+import { cacheService } from "./index-db";
+
 export * from "./shortcut/shortcut-button";
 export * from "./shortcut/shortcut-home";
 export * from "./shortcut/shortcut-home-error";
-export * from "./posts/BaseStatic";
-export * from "./posts/GradientText";
-export * from "./posts/Post";
+export * from "./posts/base-static";
+export * from "./posts/gradient-text";
+export * from "./posts/post";
 export * from "./library/library";
-export * from "./navbar/Appbar";
+export * from "./navbar/appbar";
 export * from "./navbar/navigation";
 export * from "./navbar/nav-button";
 export * from "./reminder/reminder";
@@ -14,7 +16,7 @@ export * from "./reminder/reminder";
 // - PostHog: import directly from "posthog-js" and "posthog-js/react"
 // - CommandBar: import from "@repo/ui/command"
 export * from "./landing/landing";
-export * from "./footer/Footer";
+export * from "./footer/footer";
 export * from "./error-page/error-message";
 export * from "./error-page/form-error";
 export * from "./error-page/form-success";
@@ -29,6 +31,5 @@ export * from "./articles/newsletter-list-page";
 export * from "./newsletter/newsletter-subscribe";
 export * from "./newsletter/newsletter-unsubscribe";
 export * from "./links/link-component";
-export * from "./indexDB";
-import { cacheService } from "./indexDB";
+export * from "./index-db";
 export { cacheService };

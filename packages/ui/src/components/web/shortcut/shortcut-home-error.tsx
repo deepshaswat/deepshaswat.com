@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
 import { Button } from "../../ui/button";
 import { Kbd } from "../../ui/kbd";
-import { useRouter } from "next/navigation";
 
-export const ShortcutErrorHome = () => {
+export function ShortcutErrorHome() {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
@@ -38,8 +37,8 @@ export const ShortcutErrorHome = () => {
     </span>
   );
   return (
-    <Button variant={"ghost"} onClick={onClick} className="font-normal mb-10">
+    <Button className="font-normal mb-10" onClick={onClick} variant="ghost">
       <div className="grid grid-flow-col gap-1 mx-[0] text-lg ">{message}</div>
     </Button>
   );
-};
+}

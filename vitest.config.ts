@@ -17,6 +17,7 @@ export default defineConfig({
       "**/dist/**",
       "**/.next/**",
       "**/coverage/**",
+      "**/e2e/**",
     ],
     coverage: {
       provider: "v8",
@@ -35,6 +36,7 @@ export default defineConfig({
     alias: {
       "@repo/ui/utils": path.resolve(__dirname, "./packages/ui/lib/utils"),
       "@repo/ui/blocknote": path.resolve(__dirname, "./packages/ui/src/components/common/blocknote-editor"),
+      "@repo/ui/web": path.resolve(__dirname, "./packages/ui/src/components/web/index.ts"),
       "@repo/ui": path.resolve(__dirname, "./packages/ui/src"),
       "@repo/actions": path.resolve(__dirname, "./packages/actions/src"),
       "@repo/db/client": path.resolve(__dirname, "./packages/db/src/index.ts"),

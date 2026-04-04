@@ -2,10 +2,10 @@
 
 import { items } from "@repo/store";
 import { parseISO, format, intervalToDuration } from "date-fns";
-import { Base } from "../posts/BaseStatic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Base } from "../posts/base-static";
 
 const pageConfig = {
   tagline: "Learn. Build. Repeat.",
@@ -20,10 +20,10 @@ function renderIntro() {
       <div className="flex-1 pt-3 size-1048">
         <Image
           alt="Shaswat"
+          className="rounded-lg"
+          height={size}
           src="/static/images/headShot.png"
           width={size}
-          height={size}
-          className="rounded-lg"
         />
       </div>
       <div className="flex-1 md:pl-12  text-lg md:text-sm">
@@ -76,14 +76,14 @@ function getDuration(startDate: string, endDate: string): string {
 
   let durationStr = "";
 
-  if (durationObj.years ?? 0 > 0) {
+  if ((durationObj.years ?? 0) > 0) {
     durationStr +=
       durationObj.years === 1
         ? `${durationObj.years} yr `
         : `${durationObj.years} yrs `;
   }
 
-  if (durationObj.months ?? 0 > 0) {
+  if ((durationObj.months ?? 0) > 0) {
     durationStr +=
       durationObj.months === 1
         ? `${durationObj.months} mo`
@@ -96,13 +96,14 @@ function getDuration(startDate: string, endDate: string): string {
 function renderCareer() {
   return items.map((item, index) => {
     return (
-      <div key={index} className="mb-12 gap-y-2">
+      <div className="mb-12 gap-y-2" key={index}>
         <h3 className="text-primary font-bold text-xl">{item.jobTitle}</h3>
-        <p style={{ margin: 0 }} className=" text-neutral-400">
+        <p className=" text-neutral-400" style={{ margin: 0 }}>
           <a
-            href={item.companyUrl}
-            target="_blank"
             className="text-neutral-200 hover:text-neutral-300 text-sm underline underline-offset-4"
+            href={item.companyUrl}
+            rel="noopener"
+            target="_blank"
           >
             {item.company}
           </a>
@@ -128,7 +129,7 @@ function renderCareer() {
   });
 }
 
-export const About = () => {
+export function About() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -143,15 +144,15 @@ export const About = () => {
     </div>
   ) : (
     <Base
-      title="About // Shaswat Deep"
       description=""
-      tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
+      tagline={pageConfig.tagline}
+      title="About // Shaswat Deep"
     >
       {renderIntro()}
       <h2 className="text-2xl font-bold text-primary mt-12 mb-6">Career</h2>
       {renderCareer()}
     </Base>
   );
-};
+}

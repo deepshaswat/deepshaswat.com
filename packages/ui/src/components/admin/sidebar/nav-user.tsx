@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { SignedIn, UserButton, useUser, useClerk } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
-
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import {
   DropdownMenu,
@@ -43,7 +42,7 @@ export function NavUser() {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton size="lg" className="animate-pulse">
+          <SidebarMenuButton className="animate-pulse" size="lg">
             <div className="h-8 w-8 rounded-lg bg-muted" />
             <div className="grid flex-1 gap-1">
               <div className="h-4 w-20 rounded bg-muted" />
@@ -78,7 +77,7 @@ function NavUserContent({
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton size="lg" className="animate-pulse">
+          <SidebarMenuButton className="animate-pulse" size="lg">
             <div className="h-8 w-8 rounded-lg bg-muted" />
             <div className="grid flex-1 gap-1">
               <div className="h-4 w-20 rounded bg-muted" />
@@ -104,11 +103,11 @@ function NavUserContent({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              size="lg"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={userImage} alt={userName} />
+                <AvatarImage alt={userName} src={userImage} />
                 <AvatarFallback className="rounded-lg">
                   {userInitials}
                 </AvatarFallback>
@@ -121,15 +120,15 @@ function NavUserContent({
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
+            align="end"
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
-            align="end"
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={userImage} alt={userName} />
+                  <AvatarImage alt={userName} src={userImage} />
                   <AvatarFallback className="rounded-lg">
                     {userInitials}
                   </AvatarFallback>
@@ -143,7 +142,9 @@ function NavUserContent({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => openUserProfile()}
+              onClick={() => {
+                openUserProfile();
+              }}
             >
               <UserCog className="mr-2 h-4 w-4" />
               Profile
@@ -153,21 +154,33 @@ function NavUserContent({
               <DropdownMenuLabel className="text-xs text-muted-foreground">
                 Theme
               </DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => setTheme("light")}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setTheme("light");
+                }}
+              >
                 <Sun className="mr-2 h-4 w-4" />
                 Light
                 {theme === "light" && (
                   <span className="ml-auto text-xs text-green-500">Active</span>
                 )}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setTheme("dark");
+                }}
+              >
                 <Moon className="mr-2 h-4 w-4" />
                 Dark
                 {theme === "dark" && (
                   <span className="ml-auto text-xs text-green-500">Active</span>
                 )}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setTheme("system");
+                }}
+              >
                 <Monitor className="mr-2 h-4 w-4" />
                 System
                 {theme === "system" && (

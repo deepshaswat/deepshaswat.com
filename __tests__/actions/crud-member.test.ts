@@ -164,14 +164,8 @@ describe("Member CRUD Actions", () => {
       expect(mockPrisma.member.findMany).toHaveBeenCalledWith({
         skip: 0,
         take: 10,
-        where: {
-          OR: [
-            { firstName: { contains: "" } },
-            { lastName: { contains: "" } },
-            { email: { contains: "" } },
-          ],
-          unsubscribed: undefined,
-        },
+        where: undefined,
+        orderBy: { createdAt: "desc" },
       });
     });
 
@@ -187,11 +181,17 @@ describe("Member CRUD Actions", () => {
 
       expect(mockPrisma.member.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: expect.objectContaining({
-            OR: expect.arrayContaining([
-              { firstName: { contains: "John" } },
-            ]),
-          }),
+          where: {
+            AND: [
+              {
+                OR: [
+                  { firstName: { contains: "John", mode: "insensitive" } },
+                  { lastName: { contains: "John", mode: "insensitive" } },
+                  { email: { contains: "John", mode: "insensitive" } },
+                ],
+              },
+            ],
+          },
         })
       );
     });
@@ -204,14 +204,14 @@ describe("Member CRUD Actions", () => {
         pageNumber: 0,
         pageSize: 10,
         search: "",
-        isSubscribed: false,
+        filters: { subscriptionStatus: "subscribed" },
       });
 
       expect(mockPrisma.member.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: expect.objectContaining({
-            unsubscribed: false,
-          }),
+          where: {
+            AND: [{ unsubscribed: false }],
+          },
         })
       );
     });

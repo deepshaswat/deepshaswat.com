@@ -24,14 +24,12 @@ const GradientText: React.FC<GradientTextProps> = ({
   } as React.CSSProperties;
 
   return (
-    <>
-      <h1
-        className={`gradient-text text-5xl font-bold mb-10 ${className}`}
-        style={style}
-      >
-        {children}
-      </h1>
-    </>
+    <h1
+      className={`gradient-text text-5xl font-bold mb-10 ${className}`}
+      style={style}
+    >
+      {children}
+    </h1>
   );
 };
 

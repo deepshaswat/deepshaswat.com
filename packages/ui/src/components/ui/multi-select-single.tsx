@@ -9,7 +9,6 @@ import {
   XIcon,
   WandSparkles,
 } from "lucide-react";
-
 import { cn } from "@repo/ui/utils";
 import { Badge } from "./badge";
 import { Button } from "./button";
@@ -130,7 +129,7 @@ export const MultiSelectSingle = React.forwardRef<
       animation = 0,
       maxCount = 3,
       modalPopover = false,
-      asChild = false,
+      asChild: _asChild = false,
       className,
       ...props
     },
@@ -195,19 +194,19 @@ export const MultiSelectSingle = React.forwardRef<
 
     return (
       <Popover
-        open={isPopoverOpen}
-        onOpenChange={setIsPopoverOpen}
         modal={modalPopover}
+        onOpenChange={setIsPopoverOpen}
+        open={isPopoverOpen}
       >
         <PopoverTrigger asChild>
           <Button
             ref={ref}
             {...props}
-            onClick={handleTogglePopover}
             className={cn(
               "flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit ",
               className,
             )}
+            onClick={handleTogglePopover}
           >
             {selectedValues.length > 0 ? (
               <div className="flex justify-between items-center w-full">
@@ -217,11 +216,11 @@ export const MultiSelectSingle = React.forwardRef<
                     // const IconComponent = option?.icon;
                     return (
                       <Badge
-                        key={value}
                         className={cn(
                           isAnimating ? "animate-bounce" : "",
                           multiSelectVariants({ variant }),
                         )}
+                        key={value}
                         style={{ animationDuration: `${animation}s` }}
                       >
                         {/* {IconComponent && (
@@ -267,8 +266,8 @@ export const MultiSelectSingle = React.forwardRef<
                     }}
                   />
                   <Separator
-                    orientation="vertical"
                     className="flex min-h-6 h-full "
+                    orientation="vertical"
                   />
                   <ChevronDown className="h-4 mx-2 cursor-pointer text-muted-foreground" />
                 </div>
@@ -284,23 +283,25 @@ export const MultiSelectSingle = React.forwardRef<
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto p-0"
           align="start"
-          onEscapeKeyDown={() => setIsPopoverOpen(false)}
+          className="w-auto p-0"
+          onEscapeKeyDown={() => {
+            setIsPopoverOpen(false);
+          }}
         >
           <Command className="bg-neutral-700 text-neutral-400">
             <CommandInput
               className="bg-neutral-700 text-neutral-400"
-              placeholder="Search..."
               onKeyDown={handleInputKeyDown}
+              placeholder="Search..."
             />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
                 <CommandItem
+                  className="cursor-pointer  text-neutral-400"
                   key="all"
                   onSelect={toggleAll}
-                  className="cursor-pointer  text-neutral-400"
                 >
                   <div
                     className={cn(
@@ -318,9 +319,11 @@ export const MultiSelectSingle = React.forwardRef<
                   const isSelected = selectedValues.includes(option.value);
                   return (
                     <CommandItem
-                      key={option.value}
-                      onSelect={() => toggleOption(option.value)}
                       className="cursor-pointer text-neutral-400"
+                      key={option.value}
+                      onSelect={() => {
+                        toggleOption(option.value);
+                      }}
                     >
                       <div
                         className={cn(
@@ -346,20 +349,22 @@ export const MultiSelectSingle = React.forwardRef<
                   {selectedValues.length > 0 && (
                     <>
                       <CommandItem
-                        onSelect={handleClear}
                         className="flex-1 justify-center cursor-pointer text-neutral-200"
+                        onSelect={handleClear}
                       >
                         Clear
                       </CommandItem>
                       <Separator
-                        orientation="vertical"
                         className="flex min-h-6 h-full text-neutral-200"
+                        orientation="vertical"
                       />
                     </>
                   )}
                   <CommandItem
-                    onSelect={() => setIsPopoverOpen(false)}
                     className="flex-1 justify-center cursor-pointer max-w-full text-neutral-200"
+                    onSelect={() => {
+                      setIsPopoverOpen(false);
+                    }}
                   >
                     Close
                   </CommandItem>
@@ -374,7 +379,9 @@ export const MultiSelectSingle = React.forwardRef<
               "cursor-pointer my-2 text-foreground bg-background w-3 h-3",
               isAnimating ? "" : "text-muted-foreground",
             )}
-            onClick={() => setIsAnimating(!isAnimating)}
+            onClick={() => {
+              setIsAnimating(!isAnimating);
+            }}
           />
         )}
       </Popover>

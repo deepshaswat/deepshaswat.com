@@ -25,8 +25,11 @@ export const CustomSignIn: React.FC = () => {
       });
       await setActive({ session: result.createdSessionId });
       window.location.href = "/"; // Redirect to the dashboard or any protected route
-    } catch (err: any) {
-      setError(err.errors ? err.errors[0].message : "Sign-in failed");
+    } catch (err: unknown) {
+      const clerkError = err as { errors?: { message: string }[] };
+      setError(
+        clerkError.errors ? clerkError.errors[0].message : "Sign-in failed",
+      );
     }
   };
 
@@ -36,28 +39,36 @@ export const CustomSignIn: React.FC = () => {
         <CardTitle className="text-2xl">Sign in to blog-admin</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <form onSubmit={handleSignIn}>
+        <form
+          onSubmit={(e) => {
+            void handleSignIn(e);
+          }}
+        >
           <div className="mb-4 grid gap-2">
             <Label htmlFor="email">Email address</Label>
             <Input
               id="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              required
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
             />
           </div>
           <div className="mb-4 grid gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              required
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
             />
           </div>
-          {error && <p className="text-red-600">User Not Allowed</p>}
+          {error ? <p className="text-red-600">User Not Allowed</p> : null}
           <Button className="w-full" type="submit">
             Sign in
           </Button>

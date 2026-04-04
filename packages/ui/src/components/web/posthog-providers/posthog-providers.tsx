@@ -10,8 +10,8 @@ if (typeof window !== "undefined") {
   if (apiKey && apiHost) {
     posthog.init(apiKey, {
       api_host: apiHost,
-      loaded: (posthog) => {
-        if (process.env.NODE_ENV === "development") posthog.debug();
+      loaded: (client) => {
+        if (process.env.NODE_ENV === "development") client.debug();
       },
       persistence: "localStorage+cookie",
       bootstrap: {

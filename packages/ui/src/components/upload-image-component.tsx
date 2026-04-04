@@ -2,9 +2,7 @@
 
 import React from "react";
 import { Plus, X } from "lucide-react";
-
 import { cn } from "@repo/ui/utils";
-
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { SingleImageDropzone } from "./single-image-dropzone";
@@ -51,21 +49,23 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
         <SingleImageDropzone
           className={cn("w-full outline-none", className)}
           disabled={isSubmitting}
-          value={imageUrl}
           onChange={onChange}
+          value={imageUrl}
         />
       ) : (
         <Button
-          variant={buttonVariant}
           className={cn("", className)}
-          onClick={() => toggleFileUpload(true)}
+          onClick={() => {
+            toggleFileUpload(true);
+          }}
+          variant={buttonVariant}
         >
           <Plus className="mr-2 size-4" />
           {text}
         </Button>
       )}
 
-      <Dialog open={isFileUploadOpen} onOpenChange={toggleFileUpload}>
+      <Dialog onOpenChange={toggleFileUpload} open={isFileUploadOpen}>
         <DialogContent className="dark:bg-neutral-700">
           <DialogHeader>
             <DialogTitle>Select file to upload</DialogTitle>
@@ -73,15 +73,15 @@ export const UploadComponent: React.FC<UploadComponentProps> = ({
           <SingleImageDropzone
             className="w-full outline-none"
             disabled={isSubmitting}
-            value={imageUrl}
             onChange={onChange}
+            value={imageUrl}
           />
-          {isSubmitting && (
-            <Button variant="destructive" onClick={onCancel} className="mt-2">
+          {isSubmitting ? (
+            <Button className="mt-2" onClick={onCancel} variant="destructive">
               <X className="mr-2 size-4" />
               Cancel Upload
             </Button>
-          )}
+          ) : null}
         </DialogContent>
       </Dialog>
     </>

@@ -4,7 +4,6 @@ import { UploadCloudIcon, X } from "lucide-react";
 import * as React from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";
 import { twMerge } from "tailwind-merge";
-
 import { Spinner } from "./spinner";
 
 const variants = {
@@ -18,7 +17,7 @@ const variants = {
   reject: "border border-red-700 bg-red-700 bg-opacity-10",
 };
 
-type InputProps = {
+interface InputProps {
   width?: number;
   height?: number;
   className?: string;
@@ -26,7 +25,7 @@ type InputProps = {
   onChange?: (file?: File) => void | Promise<void>;
   disabled?: boolean;
   dropzoneOptions?: Omit<DropzoneOptions, "disabled">;
-};
+}
 
 const ERROR_MESSAGES = {
   fileTooLarge(maxSize: number) {
@@ -72,10 +71,9 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
       accept: { "image/*": [] },
       multiple: false,
       disabled,
-      onDrop: (acceptedFiles) => {
-        const file = acceptedFiles[0];
-        if (file) {
-          void onChange?.(file);
+      onDrop: (droppedFiles) => {
+        if (droppedFiles.length > 0) {
+          void onChange?.(droppedFiles[0]);
         }
       },
       ...dropzoneOptions,
@@ -89,7 +87,7 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           isFocused && variants.active,
           disabled && variants.disabled,
           imageUrl && variants.image,
-          (isDragReject ?? fileRejections[0]) && variants.reject,
+          (isDragReject || fileRejections[0]) && variants.reject,
           isDragAccept && variants.accept,
           className,
         ).trim(),
@@ -114,20 +112,19 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           return ERROR_MESSAGES.fileInvalidType();
         } else if (errors[0]?.code === "too-many-files") {
           return ERROR_MESSAGES.tooManyFiles(dropzoneOptions?.maxFiles ?? 0);
-        } else {
-          return ERROR_MESSAGES.fileNotSupported();
         }
+        return ERROR_MESSAGES.fileNotSupported();
       }
       return undefined;
     }, [fileRejections, dropzoneOptions]);
 
     return (
       <div className="relative">
-        {disabled && (
+        {disabled ? (
           <div className="flex items-center justify-center absolute inset-y-0 h-full w-full bg-background/80 z-50">
             <Spinner size="lg" />
           </div>
-        )}
+        ) : null}
         <div
           {...getRootProps({
             className: dropZoneClassName,
@@ -143,9 +140,9 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           {imageUrl ? (
             // Image Preview
             <img
+              alt={acceptedFiles[0]?.name}
               className="h-full w-full rounded-md object-cover"
               src={imageUrl}
-              alt={acceptedFiles[0]?.name}
             />
           ) : (
             // Upload Icon
@@ -158,23 +155,31 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           )}
 
           {/* Remove Image Icon */}
-          {imageUrl && !disabled && (
+          {imageUrl && !disabled ? (
             <div
               className="group absolute right-0 top-0 -translate-y-1/4 translate-x-1/4 transform"
               onClick={(e) => {
                 e.stopPropagation();
                 void onChange?.(undefined);
               }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.stopPropagation();
+                  void onChange?.(undefined);
+                }
+              }}
+              role="button"
+              tabIndex={0}
             >
               <div className="flex h-5 w-5 items-center justify-center rounded-md border border-solid border-gray-500 bg-white transition-all duration-300 hover:h-6 hover:w-6 dark:border-gray-400 dark:bg-black">
                 <X
                   className="text-gray-500 dark:text-gray-400"
-                  width={16}
                   height={16}
+                  width={16}
                 />
               </div>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Error Text */}
@@ -211,15 +216,15 @@ function formatFileSize(bytes?: number) {
   if (!bytes) {
     return "0 Bytes";
   }
-  bytes = Number(bytes);
-  if (bytes === 0) {
+  const numBytes = Number(bytes);
+  if (numBytes === 0) {
     return "0 Bytes";
   }
   const k = 1024;
   const dm = 2;
   const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+  const i = Math.floor(Math.log(numBytes) / Math.log(k));
+  return `${parseFloat((numBytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
 export { SingleImageDropzone };

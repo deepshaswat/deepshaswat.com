@@ -7,7 +7,6 @@ import {
   Home,
   CircleUserRound,
   PenLine,
-  CircleDollarSign,
   Laptop,
   Hourglass,
   Library,
@@ -17,7 +16,7 @@ import {
   FolderRoot,
   Globe,
 } from "lucide-react";
-
+import type { ActionImpl } from "kbar";
 import {
   KBarAnimator,
   KBarProvider,
@@ -27,10 +26,8 @@ import {
   KBarResults,
   useMatches,
 } from "kbar";
-
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
-
 import { showToastState } from "@repo/store";
 import { toast } from "sonner";
 import { useEffect } from "react";
@@ -42,7 +39,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
   const copyLink = async () => {
     await navigator.clipboard.writeText(window.location.href);
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -51,7 +50,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
         {toast("Link copied to clipboard!", {
           action: {
             label: "Close",
-            onClick: () => setShowToast(false),
+            onClick: () => {
+              setShowToast(false);
+            },
           },
         })}
       </div>;
@@ -70,7 +71,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "h"],
       keywords: "go-home",
       section: "Go To",
-      perform: () => router.push("/"),
+      perform: () => {
+        router.push("/");
+      },
       icon: <Home size={20} />,
     },
     {
@@ -79,7 +82,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "a"],
       keywords: "go-about",
       section: "Go To",
-      perform: () => router.push("/about"),
+      perform: () => {
+        router.push("/about");
+      },
       icon: <CircleUserRound size={20} />,
     },
     {
@@ -88,7 +93,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "b"],
       keywords: "go-articles",
       section: "Go To",
-      perform: () => router.push("/articles"),
+      perform: () => {
+        router.push("/articles");
+      },
       icon: <PenLine size={20} />,
     },
     {
@@ -97,7 +104,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "p"],
       keywords: "go-projects",
       section: "Go To",
-      perform: () => router.push("/projects"),
+      perform: () => {
+        router.push("/projects");
+      },
       icon: <FolderRoot size={20} />,
     },
     // {
@@ -124,7 +133,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "l"],
       keywords: "go-library",
       section: "Go To",
-      perform: () => router.push("/library"),
+      perform: () => {
+        router.push("/library");
+      },
       icon: <Library size={20} />,
     },
     {
@@ -133,7 +144,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "u"],
       keywords: "go-uses",
       section: "Go To",
-      perform: () => router.push("/uses"),
+      perform: () => {
+        router.push("/uses");
+      },
       icon: <Laptop size={20} />,
     },
 
@@ -143,7 +156,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "n"],
       keywords: "go-newsletter",
       section: "Go To",
-      perform: () => router.push("/newsletter"),
+      perform: () => {
+        router.push("/newsletter");
+      },
       icon: <Newspaper size={20} />,
     },
 
@@ -153,7 +168,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["g", "r"],
       keywords: "go-reminder",
       section: "Go To",
-      perform: () => router.push("/reminder"),
+      perform: () => {
+        router.push("/reminder");
+      },
       icon: <Hourglass size={20} />,
     },
     {
@@ -162,7 +179,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["l"],
       keywords: "all-links",
       section: "General",
-      perform: () => router.push("/links"),
+      perform: () => {
+        router.push("/links");
+      },
       icon: <Link size={20} />,
     },
     {
@@ -180,7 +199,9 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
       shortcut: ["e"],
       keywords: "send-email",
       section: "General",
-      perform: () => router.push("/contact"),
+      perform: () => {
+        router.push("/contact");
+      },
       icon: <MailOpen size={20} />,
     },
     {
@@ -196,31 +217,47 @@ export function CommandBar({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <>
-      <KBarProvider actions={actions}>
-        <KBarPortal>
-          <KBarPositioner className="fixed flex items-start justify-center w-full inset-0 py-[14vh] px-4 bg-black bg-opacity-80 box-border">
-            <KBarAnimator className="bg-[#1a1c1e] max-w-[600px] w-full text-primary rounded-lg overflow-hidden support:backdrop-blur support:backdrop-saturate-300 support:backdrop-filter-blur-25 ">
-              <div className="overflow-hidden scrollbar-hide">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <Search className="w-5 h-5 text-gray-400" />{" "}
-                  </div>
-
-                  <KBarSearch
-                    placeholder="Type a command or search…"
-                    className="pl-10 pr-4 py-2 w-full outline-none border-none m-0 text-primary bg-[#1a1c1e]"
-                  />
+    <KBarProvider actions={actions}>
+      <KBarPortal>
+        <KBarPositioner className="fixed flex items-start justify-center w-full inset-0 py-[14vh] px-4 bg-black bg-opacity-80 box-border">
+          <KBarAnimator className="bg-[#1a1c1e] max-w-[600px] w-full text-primary rounded-lg overflow-hidden support:backdrop-blur support:backdrop-saturate-300 support:backdrop-filter-blur-25 ">
+            <div className="overflow-hidden scrollbar-hide">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Search className="w-5 h-5 text-gray-400" />{" "}
                 </div>
-                <RenderResults />
+
+                <KBarSearch
+                  className="pl-10 pr-4 py-2 w-full outline-none border-none m-0 text-primary bg-[#1a1c1e]"
+                  placeholder="Type a command or search…"
+                />
               </div>
-            </KBarAnimator>
-          </KBarPositioner>
-        </KBarPortal>
-        {children}
-      </KBarProvider>
-    </>
+              <RenderResults />
+            </div>
+          </KBarAnimator>
+        </KBarPositioner>
+      </KBarPortal>
+      {children}
+    </KBarProvider>
   );
+}
+
+interface ResultItemProps {
+  action: ActionImpl;
+  active: boolean;
+}
+
+function renderResult({
+  item,
+  active,
+}: {
+  item: ActionImpl | string;
+  active: boolean;
+}) {
+  if (typeof item === "string") {
+    return <div className="p-4 text-xs uppercase tracking-wider ">{item}</div>;
+  }
+  return <ResultItem action={item} active={active} />;
 }
 
 function RenderResults() {
@@ -232,26 +269,10 @@ function RenderResults() {
     );
   }
 
-  return (
-    <KBarResults
-      items={results}
-      onRender={({ item, active }) =>
-        typeof item === "string" ? (
-          <div className="p-4 text-xs uppercase tracking-wider ">{item}</div>
-        ) : (
-          <ResultItem action={item} active={active} />
-        )
-      }
-    />
-  );
+  return <KBarResults items={results} onRender={renderResult} />;
 }
 
-interface ResultItemProps {
-  action: any;
-  active: boolean;
-}
-
-const ResultItem: React.FC<ResultItemProps> = ({ action, active }) => {
+const ResultItem = ({ action, active }: ResultItemProps) => {
   return (
     <div
       className={`p-4 z-10 flex justify-between items-center   cursor-pointer transition-colors duration-200 ease-in-out text-neutral-400  ${

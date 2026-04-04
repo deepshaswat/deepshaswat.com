@@ -7,9 +7,9 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import { DayPicker, CaptionProps, useNavigation } from "react-day-picker";
+import type { CaptionProps } from "react-day-picker";
+import { DayPicker, useNavigation } from "react-day-picker";
 import { format, addYears, subYears } from "date-fns";
-
 import { cn } from "@repo/ui/utils";
 import { buttonVariants } from "./button";
 

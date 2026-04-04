@@ -2,7 +2,7 @@ import React from "react";
 import { Skeleton } from "../../ui/skeleton";
 import { Card, CardContent } from "../../ui/card";
 
-const NewsletterListingSkeleton = () => {
+function NewsletterListingSkeleton() {
   return (
     <div className="w-full  max-w-4xl mx-auto space-y-8 sm:space-y-12 p-2 sm:p-4 bg-background ">
       {/* Header */}
@@ -70,8 +70,8 @@ const NewsletterListingSkeleton = () => {
         <div className="space-y-4">
           {[1, 2, 3, 4].map((i) => (
             <div
-              key={i}
               className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 p-4 rounded-lg hover:bg-neutral-800/20"
+              key={i}
             >
               <div className="space-y-2 flex-1">
                 <Skeleton className="h-6 w-3/4 bg-neutral-800/50" />
@@ -93,6 +93,6 @@ const NewsletterListingSkeleton = () => {
       </section>
     </div>
   );
-};
+}
 
 export default NewsletterListingSkeleton;

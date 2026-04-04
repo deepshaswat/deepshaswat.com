@@ -1,10 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import type { PostListType } from "@repo/actions";
 import { cn } from "@repo/ui/utils";
-import { PostListType, Tags, fetchAllTagsFromTagOnPost } from "@repo/actions";
-import { Loader2 } from "lucide-react";
 
 export function SimpleBlogWithGrid({ blogs }: { blogs: PostListType[] }) {
   return (
@@ -39,11 +38,11 @@ export function SimpleBlogWithGrid({ blogs }: { blogs: PostListType[] }) {
   );
 }
 
-const Logo = () => {
+function Logo() {
   return (
     <Link
-      href="/"
       className="font-normal flex space-x-2 items-center text-sm mr-4  text-black px-2 py-1  relative"
+      href="/"
     >
       <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm" />
       <span className="font-medium text-black dark:text-white">
@@ -51,11 +50,11 @@ const Logo = () => {
       </span>
     </Link>
   );
-};
+}
 
-export const BlogCard = ({ blog }: { blog: PostListType }) => {
+export function BlogCard({ blog }: { blog: PostListType }) {
   const truncate = (text: string, length: number) => {
-    return text.length > length ? text.slice(0, length) + "..." : text;
+    return text.length > length ? `${text.slice(0, length)}...` : text;
   };
 
   return (
@@ -65,11 +64,11 @@ export const BlogCard = ({ blog }: { blog: PostListType }) => {
     >
       {blog.featureImage ? (
         <BlurImage
-          src={blog.featureImage || ""}
           alt={blog.title}
-          height="800"
-          width="800"
           className="h-52 object-cover object-top w-full"
+          height="800"
+          src={blog.featureImage || ""}
+          width="800"
         />
       ) : (
         <div className="h-52 flex items-center justify-center bg-white dark:bg-neutral-900">
@@ -79,11 +78,11 @@ export const BlogCard = ({ blog }: { blog: PostListType }) => {
       <div className="p-4 md:p-8 bg-white dark:bg-neutral-900">
         <div className="flex space-x-2 items-center mb-2">
           <Image
-            src={blog.author.imageUrl || ""}
             alt={blog.author.name}
-            width={20}
-            height={20}
             className="rounded-full h-5 w-5"
+            height={20}
+            src={blog.author.imageUrl || ""}
+            width={20}
           />
           <p className="text-sm font-normal text-neutral-600 dark:text-neutral-400">
             {blog.author.name}
@@ -98,47 +97,44 @@ export const BlogCard = ({ blog }: { blog: PostListType }) => {
       </div>
     </Link>
   );
-};
-
-interface IBlurImage {
-  height?: any;
-  width?: any;
-  src?: string | any;
-  objectFit?: any;
-  className?: string | any;
-  alt?: string | undefined;
-  layout?: any;
-  [x: string]: any;
 }
 
-export const BlurImage = ({
+interface BlurImageProps {
+  height?: string | number;
+  width?: string | number;
+  src?: string;
+  className?: string;
+  alt?: string;
+  [x: string]: unknown;
+}
+
+export function BlurImage({
   height,
   width,
   src,
   className,
-  objectFit,
   alt,
-  layout,
   ...rest
-}: IBlurImage) => {
+}: BlurImageProps) {
   const [isLoading, setLoading] = useState(true);
   return (
     <Image
+      alt={alt ?? "Avatar"}
+      blurDataURL={src}
       className={cn(
         "transition duration-300 transform",
         isLoading ? "blur-sm scale-105" : "blur-0 scale-100",
         className,
       )}
-      src={src}
-      width={width}
-      height={height}
-      loading="lazy"
       decoding="async"
-      blurDataURL={src}
-      layout={layout}
-      alt={alt ? alt : "Avatar"}
+      height={typeof height === "number" ? height : Number(height)}
+      loading="lazy"
+      src={src ?? ""}
+      width={typeof width === "number" ? width : Number(width)}
       {...rest}
-      onLoad={() => setLoading(false)}
+      onLoad={() => {
+        setLoading(false);
+      }}
     />
   );
-};
+}

@@ -77,6 +77,7 @@ describe("Ideas CRUD Actions", () => {
           title: "Test Idea",
           description: null,
           topics: [],
+          targetDate: null,
           authorId: "author-1",
           status: "NEW",
         },
@@ -114,6 +115,7 @@ describe("Ideas CRUD Actions", () => {
           title: "Full Idea",
           description: "A detailed description",
           topics: ["javascript", "react"],
+          targetDate: null,
           authorId: "author-1",
           status: "NEW",
         },
@@ -140,13 +142,6 @@ describe("Ideas CRUD Actions", () => {
         where: {},
         include: {
           author: true,
-          createdPost: {
-            select: {
-              id: true,
-              title: true,
-              status: true,
-            },
-          },
         },
         orderBy: { createdAt: "desc" },
       });
@@ -164,13 +159,6 @@ describe("Ideas CRUD Actions", () => {
         where: { status: "NEW" },
         include: {
           author: true,
-          createdPost: {
-            select: {
-              id: true,
-              title: true,
-              status: true,
-            },
-          },
         },
         orderBy: { createdAt: "desc" },
       });
@@ -204,13 +192,6 @@ describe("Ideas CRUD Actions", () => {
         where: { id: "idea-1" },
         include: {
           author: true,
-          createdPost: {
-            select: {
-              id: true,
-              title: true,
-              status: true,
-            },
-          },
         },
       });
       expect(result).toEqual(mockIdea);
@@ -242,13 +223,6 @@ describe("Ideas CRUD Actions", () => {
         data: { title: "Updated Title" },
         include: {
           author: true,
-          createdPost: {
-            select: {
-              id: true,
-              title: true,
-              status: true,
-            },
-          },
         },
       });
       expect(result.title).toBe("Updated Title");

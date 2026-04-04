@@ -20,11 +20,11 @@ export function Base({
 }: BaseProps) {
   return (
     <BaseClient
-      title={title}
-      tagline={tagline}
       description={description}
       primaryColor={primaryColor}
       secondaryColor={secondaryColor}
+      tagline={tagline}
+      title={title}
     >
       {children}
     </BaseClient>
