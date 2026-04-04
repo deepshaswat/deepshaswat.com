@@ -105,7 +105,7 @@ function parseInitialContent(
   if (!content) return undefined;
 
   try {
-    const parsed = JSON.parse(content);
+    const parsed: unknown = JSON.parse(content);
     // Verify it's an array (BlockNote expects array of blocks)
     if (Array.isArray(parsed)) {
       return parsed as PartialBlock[];

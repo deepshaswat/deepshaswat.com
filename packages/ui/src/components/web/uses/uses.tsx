@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
-
 import { categories } from "@repo/store";
-import { Base } from "../posts/BaseStatic";
+import { Base } from "../posts/base-static";
 
 const pageConfig = {
   tagline: "Apps. Tools. Gear.",
@@ -23,15 +22,16 @@ export function Uses() {
 
   function renderAll() {
     return categories.map((category, index) => (
-      <div key={index} className="mb-2">
+      <div className="mb-2" key={index}>
         <h2 className="text-primary font-bold text-2xl">{category.name}</h2>
         <ul className="list-disc mb-12">
           {category.items.map((item, iIndex) => (
-            <li key={iIndex} className="ml-10">
+            <li className="ml-10" key={iIndex}>
               <a
-                href={item.url}
-                target="_blank"
                 className="text-neutral-200 hover:text-neutral-300 text-sm underline underline-offset-4"
+                href={item.url}
+                rel="noopener"
+                target="_blank"
               >
                 {item.title}
               </a>
@@ -53,18 +53,18 @@ export function Uses() {
     </div>
   ) : (
     <Base
-      title="Uses // Shaswat Deep"
       description=""
-      tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
+      tagline={pageConfig.tagline}
+      title="Uses // Shaswat Deep"
     >
       <p className="text-neutral-400 text-md mb-12 mt-12 font-thin">
         I often get messages asking about specific pieces of{" "}
         <strong className="text-neutral-200">software or hardware</strong> I
-        use. This not a static page, it's a{" "}
+        use. This not a static page, it&apos;s a{" "}
         <strong className="text-neutral-200">living document</strong> with
-        everything that I'm using nowadays.
+        everything that I&apos;m using nowadays.
       </p>
       {renderAll()}
     </Base>

@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "../../ui/button";
 import {
   Github,
   Twitter,
@@ -18,6 +17,7 @@ import {
   Handshake,
   CandlestickChart,
 } from "lucide-react";
+import { Button } from "../../ui/button";
 
 interface LinkData {
   title: string;
@@ -25,7 +25,7 @@ interface LinkData {
   icon?: React.ReactNode;
 }
 
-const LinksComponent = () => {
+function LinksComponent() {
   const companyLinks: LinkData[] = [
     {
       title: "Orbizza, Inc. - Company Registered in US",
@@ -123,10 +123,10 @@ const LinksComponent = () => {
             <div className="flex flex-col items-center justify-center md:items-start">
               <Image
                 alt="Shaswat Deep"
+                className="rounded-full md:rounded-lg mb-4 items-center justify-center md:w-full"
+                height={156}
                 src="/static/images/headShot.png"
                 width={156}
-                height={156}
-                className="rounded-full md:rounded-lg mb-4 items-center justify-center md:w-full"
               />
               <h1 className="text-2xl font-bold text-center md:text-left">
                 Shaswat Deep
@@ -170,11 +170,11 @@ const LinksComponent = () => {
             <div className="flex space-x-4 mt-4">
               {socialIcons.map((social, index) => (
                 <a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="text-gray-400 hover:text-white transition-colors duration-200"
+                  href={social.url}
+                  key={index}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   {social.icon}
                 </a>
@@ -190,15 +190,15 @@ const LinksComponent = () => {
             <div className="space-y-4">
               {links.map((link, index) => (
                 <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="block transform transition-transform duration-200 hover:scale-105"
+                  href={link.url}
+                  key={index}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <Button
-                    variant="secondary"
                     className="w-full bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 h-12"
+                    variant="secondary"
                   >
                     <div className="flex items-center justify-center space-x-2">
                       {link.icon}
@@ -215,15 +215,15 @@ const LinksComponent = () => {
             <div className="space-y-4">
               {companyLinks.map((link, index) => (
                 <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="block transform transition-transform duration-200 hover:scale-105"
+                  href={link.url}
+                  key={index}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <Button
-                    variant="secondary"
                     className="w-full bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 h-12"
+                    variant="secondary"
                   >
                     <div className="flex items-center justify-center space-x-2">
                       {link.icon}
@@ -239,15 +239,15 @@ const LinksComponent = () => {
             <div className="space-y-4">
               {contactLinks.map((link, index) => (
                 <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="block transform transition-transform duration-200 hover:scale-105"
+                  href={link.url}
+                  key={index}
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <Button
-                    variant="secondary"
                     className="w-full bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 h-12"
+                    variant="secondary"
                   >
                     <div className="flex items-center justify-center space-x-2">
                       {link.icon}
@@ -258,11 +258,11 @@ const LinksComponent = () => {
               ))}
             </div>
           </div>
-          <div className="md:col-span-8"></div>
+          <div className="md:col-span-8" />
         </div>
       </div>
     </div>
   );
-};
+}
 
 export { LinksComponent };

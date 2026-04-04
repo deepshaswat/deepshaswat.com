@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GradientText } from "./GradientText";
+import { GradientText } from "./gradient-text";
 import { PostContainer, PostContent, PostMain } from "./Post";
 
 interface BaseClientProps {
@@ -43,16 +43,16 @@ export function BaseClient({
      `}</style>
       <PostContent className="">
         <PostContainer>
-          <GradientText startColor={primaryColor} endColor={secondaryColor}>
+          <GradientText endColor={secondaryColor} startColor={primaryColor}>
             {tagline ? tagline : title}
           </GradientText>
 
-          {description && (
+          {description ? (
             <p
-              dangerouslySetInnerHTML={{ __html: description || "" }}
               className="text-md mb-12 mt-12 font-thin text-neutral-300"
+              dangerouslySetInnerHTML={{ __html: description || "" }}
             />
-          )}
+          ) : null}
           {children}
         </PostContainer>
       </PostContent>

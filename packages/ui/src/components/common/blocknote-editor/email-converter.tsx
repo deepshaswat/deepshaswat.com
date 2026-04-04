@@ -16,20 +16,24 @@ export interface NewsletterMarkdownProps {
 export function NewsletterMarkdown({
   content,
   onMarkdownChange,
-}: NewsletterMarkdownProps) {
-  const [markdown, setMarkdown] = useState<string>("");
-
+}: NewsletterMarkdownProps): JSX.Element | null {
   // Parse the content
-  let parsedContent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BlockNote content type is dynamic
+  let parsedContent: any[];
   try {
-    parsedContent = typeof content === "string" ? JSON.parse(content) : content;
+    const raw: unknown =
+      typeof content === "string" ? JSON.parse(content) : content;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote expects loosely typed content from JSON
+    parsedContent = Array.isArray(raw) ? raw : [];
   } catch (error) {
-    console.error("Failed to parse content:", error);
+    // eslint-disable-next-line no-console -- intentional error logging for content parse failure
+    console.error("Failed to parse BlockNote content:", error);
     parsedContent = [];
   }
 
   // Initialize editor
   const editor = useCreateBlockNote({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote content from JSON parse
     initialContent: parsedContent,
     schema: blocknoteSchema,
     domAttributes: {
@@ -43,20 +47,19 @@ export function NewsletterMarkdown({
   });
 
   useEffect(() => {
-    const getMarkdown = async () => {
-      if (editor) {
-        const blocks = editor.topLevelBlocks;
-        let markdownContent = "";
+    const getMarkdown = async (): Promise<void> => {
+      const blocks = editor.topLevelBlocks;
+      let markdownContent = "";
 
-        for (const block of blocks) {
-          let blockMarkdown = "";
+      for (const block of blocks) {
+        let blockMarkdown = "";
 
-          switch (block.type) {
-            case "youtube":
-              // Extract video ID from URL
-              const videoId = block.props.url.split("/embed/")[1];
-              const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-              blockMarkdown = `
+        switch (block.type) {
+          case "youtube": {
+            // Extract video ID from URL
+            const videoId = block.props.url.split("/embed/")[1];
+            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+            blockMarkdown = `
 <table style="width: 100%; border-spacing: 0; margin: 16px 0;">
   <tr>
     <td style="text-align: center;">
@@ -69,9 +72,10 @@ export function NewsletterMarkdown({
     </td>
   </tr>
 </table>`;
-              break;
-            case "video":
-              blockMarkdown = `
+            break;
+          }
+          case "video": {
+            blockMarkdown = `
 <table style="width: 100%; border-spacing: 0; margin: 16px 0;">
   <tr>
     <td style="text-align: center;">
@@ -97,9 +101,10 @@ export function NewsletterMarkdown({
     </td>
   </tr>
 </table>`;
-              break;
-            case "callout":
-              blockMarkdown = `
+            break;
+          }
+          case "callout": {
+            blockMarkdown = `
 <table style="width: 100%; border-spacing: 0; margin: 16px 0;">
   <tr>
     <td style="background-color: ${block.props.bgColor}; color: ${
@@ -113,36 +118,37 @@ export function NewsletterMarkdown({
     </td>
   </tr>
 </table>`;
-              break;
-            case "divider":
-              blockMarkdown = `<hr style="border: none; border-top: 1px solid #333333; margin: 24px 0;" />`;
-              break;
-            case "markdown":
-              blockMarkdown = `\n\`\`\`markdown\n${
-                block.props.content || ""
-              }\n\`\`\`\n`;
-              break;
-            case "table":
-              const tableContent = await editor.blocksToMarkdownLossy([block]);
-              // Convert markdown table to HTML table with proper styling
-              const rows = tableContent
-                .split("\n")
-                .filter(
-                  (row) =>
-                    row.trim() && !row.includes("---") && !row.includes("---"),
-                )
-                .map((row) => row.trim());
+            break;
+          }
+          case "divider": {
+            blockMarkdown = `<hr style="border: none; border-top: 1px solid #333333; margin: 24px 0;" />`;
+            break;
+          }
+          case "markdown": {
+            blockMarkdown = `\n\`\`\`markdown\n${
+              block.props.content || ""
+            }\n\`\`\`\n`;
+            break;
+          }
+          case "table": {
+            // eslint-disable-next-line no-await-in-loop -- blocks must be processed sequentially for correct ordering
+            const tableContent = await editor.blocksToMarkdownLossy([block]);
+            // Convert markdown table to HTML table with proper styling
+            const rows = tableContent
+              .split("\n")
+              .filter((row) => row.trim() && !row.includes("---"))
+              .map((row) => row.trim());
 
-              const tableRows = rows
-                .map((row) => {
-                  const cells = row
-                    .split("|")
-                    .filter((cell) => cell.trim())
-                    .map((cell) => cell.trim());
+            const tableRows = rows
+              .map((row) => {
+                const cells = row
+                  .split("|")
+                  .filter((cell) => cell.trim())
+                  .map((cell) => cell.trim());
 
-                  if (cells.length === 0) return "";
+                if (cells.length === 0) return "";
 
-                  return `<tr>
+                return `<tr>
                     ${cells
                       .map(
                         (cell) =>
@@ -150,45 +156,45 @@ export function NewsletterMarkdown({
                       )
                       .join("")}
                   </tr>`;
-                })
-                .filter((row) => row)
-                .join("\n");
+              })
+              .filter((row) => row)
+              .join("\n");
 
-              blockMarkdown = `
+            blockMarkdown = `
 <table style="width: 100%; border-collapse: collapse; margin: 16px 0; background-color: #111111; border: 1px solid #333333;">
   ${tableRows}
 </table>`;
-              break;
-            default:
-              // Handle default blocks with their alignment and formatting
-              const defaultMarkdown = await editor.blocksToMarkdownLossy([
-                block,
-              ]);
+            break;
+          }
+          default: {
+            // Handle default blocks with their alignment and formatting
+            // eslint-disable-next-line no-await-in-loop -- blocks must be processed sequentially for correct ordering
+            const defaultMarkdown = await editor.blocksToMarkdownLossy([block]);
 
-              // Type assertion for block props
-              type BlockProps = {
-                textAlignment?: "left" | "center" | "right" | "justify";
-                backgroundColor?: string;
-                textColor?: string;
-              };
-              const props = block.props as BlockProps;
-              const alignment = props.textAlignment || "left";
-              const bgColor =
-                props.backgroundColor === "default"
-                  ? "#111111"
-                  : props.backgroundColor;
-              const textColor =
-                props.textColor === "default" ? "#ffffff" : props.textColor;
+            // Type assertion for block props
+            interface BlockProps {
+              textAlignment?: "left" | "center" | "right" | "justify";
+              backgroundColor?: string;
+              textColor?: string;
+            }
+            const props = block.props as BlockProps;
+            const alignment = props.textAlignment || "left";
+            const bgColor =
+              props.backgroundColor === "default"
+                ? "#111111"
+                : props.backgroundColor;
+            const textColor =
+              props.textColor === "default" ? "#ffffff" : props.textColor;
 
-              // Convert markdown to HTML with proper styling
-              let processedMarkdown = defaultMarkdown;
+            // Convert markdown to HTML with proper styling
+            let processedMarkdown = defaultMarkdown;
 
-              // Handle quotes (they come as > prefixed text in default markdown)
-              if (
-                block.type === "paragraph" &&
-                defaultMarkdown.trim().startsWith(">")
-              ) {
-                processedMarkdown = `
+            // Handle quotes (they come as > prefixed text in default markdown)
+            if (
+              block.type === "paragraph" &&
+              defaultMarkdown.trim().startsWith(">")
+            ) {
+              processedMarkdown = `
 <table style="width: 100%; border-spacing: 0; margin: 16px 0;">
   <tr>
     <td style="padding: 16px 24px; background-color: ${
@@ -202,44 +208,44 @@ export function NewsletterMarkdown({
     </td>
   </tr>
 </table>`;
-              }
+            }
 
-              // Handle code blocks
-              else if (defaultMarkdown.includes("```")) {
-                processedMarkdown = defaultMarkdown.replace(
-                  /```(.*?)\n([\s\S]*?)```/g,
-                  `<pre style="background-color: ${
-                    bgColor || "#111111"
-                  }; padding: 16px; border-radius: 8px; overflow-x: auto; color: ${
-                    textColor || "#d4d4d4"
-                  }; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$2</pre>`,
-                );
-              }
+            // Handle code blocks
+            else if (defaultMarkdown.includes("```")) {
+              processedMarkdown = defaultMarkdown.replace(
+                // eslint-disable-next-line prefer-named-capture-group -- ES6 target does not support named capture groups
+                /```(?:.*?)\n([\s\S]*?)```/g,
+                `<pre style="background-color: ${
+                  bgColor || "#111111"
+                }; padding: 16px; border-radius: 8px; overflow-x: auto; color: ${
+                  textColor || "#d4d4d4"
+                }; font-family: monospace; font-size: 14px; line-height: 1.5; margin: 16px 0;">$1</pre>`,
+              );
+            }
 
-              // Apply alignment and colors if needed
-              if (alignment !== "left" || bgColor || textColor) {
-                blockMarkdown = `<div style="text-align: ${alignment}; ${
-                  bgColor ? `background-color: ${bgColor};` : ""
-                } ${
-                  textColor ? `color: ${textColor};` : "color: #ffffff;"
-                } border-radius: 4px;">\n\n${processedMarkdown}\n</div>`;
-              } else {
-                blockMarkdown = `<div style="color: #ffffff;">${processedMarkdown}</div>`;
-              }
+            // Apply alignment and colors if needed
+            if (alignment !== "left" || bgColor || textColor) {
+              blockMarkdown = `<div style="text-align: ${alignment}; ${
+                bgColor ? `background-color: ${bgColor};` : ""
+              } ${
+                textColor ? `color: ${textColor};` : "color: #ffffff;"
+              } border-radius: 4px;">\n\n${processedMarkdown}\n</div>`;
+            } else {
+              blockMarkdown = `<div style="color: #ffffff;">${processedMarkdown}</div>`;
+            }
           }
-
-          markdownContent += blockMarkdown + "\n";
         }
 
-        // Clean up extra newlines
-        markdownContent = markdownContent.replace(/\n{3,}/g, "\n\n").trim();
-
-        setMarkdown(markdownContent);
-        onMarkdownChange?.(markdownContent);
+        markdownContent += `${blockMarkdown}\n`;
       }
+
+      // Clean up extra newlines
+      markdownContent = markdownContent.replace(/\n{3,}/g, "\n\n").trim();
+
+      onMarkdownChange?.(markdownContent);
     };
 
-    getMarkdown();
+    void getMarkdown();
   }, [editor, content, onMarkdownChange]);
 
   return null;
@@ -249,7 +255,12 @@ export function NewsletterMarkdown({
  * Hook for converting BlockNote content to newsletter markdown.
  * @deprecated Use NewsletterMarkdown component with onMarkdownChange callback instead.
  */
-export const useNewsletterMarkdown = (content: string) => {
+export const useNewsletterMarkdown = (
+  content: string,
+): {
+  markdown: string;
+  NewsletterMarkdown: () => JSX.Element;
+} => {
   const [markdown, setMarkdown] = useState<string>("");
 
   return {

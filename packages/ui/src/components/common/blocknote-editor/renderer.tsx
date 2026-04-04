@@ -12,21 +12,78 @@ export interface BlockNoteRendererProps {
   className?: string;
 }
 
+const globalStyles = `
+  .bn-container {
+    background-color: transparent !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .bn-editor {
+    background-color: transparent !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .bn-editor > div {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  [data-node-type="bulletListItem"],
+  [data-node-type="numberedListItem"] {
+    margin-left: 0 !important;
+    padding-left: 1.5rem !important;
+    border-left: none !important;
+    position: relative !important;
+  }
+  [data-node-type="bulletListItem"] [data-node-type="bulletListItem"],
+  [data-node-type="numberedListItem"]
+    [data-node-type="numberedListItem"] {
+    margin-left: 1rem !important;
+    border-left: none !important;
+    position: relative !important;
+  }
+  [data-node-type="bulletListItem"]::before {
+    content: "\\2022" !important;
+    position: absolute !important;
+    left: 0.5rem !important;
+  }
+  [data-node-type="numberedListItem"]::before {
+    position: absolute !important;
+    left: 0.5rem !important;
+  }
+  [data-node-type="callout"] {
+    background-color: rgb(34 197 94 / 0.2) !important;
+    border-radius: 0.5rem !important;
+    padding: 1rem !important;
+  }
+  [data-node-type="callout"] [data-content="true"] {
+    color: rgb(209 213 219) !important;
+  }
+`;
+
 export function BlockNoteRenderer({
   content,
   className = "",
 }: BlockNoteRendererProps): JSX.Element {
   const { resolvedTheme } = useTheme();
 
-  let parsedContent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BlockNote content type is dynamic
+  let parsedContent: any[];
   try {
-    parsedContent = typeof content === "string" ? JSON.parse(content) : content;
+    const raw: unknown =
+      typeof content === "string" ? JSON.parse(content) : content;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote expects loosely typed content from JSON
+    parsedContent = Array.isArray(raw) ? raw : [];
   } catch (error) {
-    console.error("Failed to parse content:", error);
+    // eslint-disable-next-line no-console -- intentional error logging for content parse failure
+    console.error("Failed to parse BlockNote content:", error);
     parsedContent = [];
   }
 
   const editor = useCreateBlockNote({
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote content from JSON parse
     initialContent: parsedContent,
     schema: blocknoteSchema,
     domAttributes: {
@@ -73,63 +130,14 @@ export function BlockNoteRenderer({
           "
         >
           <BlockNoteView
-            editor={editor}
-            editable={false}
-            theme={resolvedTheme === "dark" ? "dark" : "light"}
             className="min-h-[200px] w-full [&_*]:ml-0 [&_*]:pl-0"
+            editable={false}
+            editor={editor}
+            theme={resolvedTheme === "dark" ? "dark" : "light"}
           />
         </div>
       </div>
-      <style jsx global>{`
-        .bn-container {
-          background-color: transparent !important;
-          margin-left: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-        }
-        .bn-editor {
-          background-color: transparent !important;
-          margin-left: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-        }
-        .bn-editor > div {
-          margin-left: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-        }
-        [data-node-type="bulletListItem"],
-        [data-node-type="numberedListItem"] {
-          margin-left: 0 !important;
-          padding-left: 1.5rem !important;
-          border-left: none !important;
-          position: relative !important;
-        }
-        [data-node-type="bulletListItem"] [data-node-type="bulletListItem"],
-        [data-node-type="numberedListItem"]
-          [data-node-type="numberedListItem"] {
-          margin-left: 1rem !important;
-          border-left: none !important;
-          position: relative !important;
-        }
-        [data-node-type="bulletListItem"]::before {
-          content: "•" !important;
-          position: absolute !important;
-          left: 0.5rem !important;
-        }
-        [data-node-type="numberedListItem"]::before {
-          position: absolute !important;
-          left: 0.5rem !important;
-        }
-        [data-node-type="callout"] {
-          background-color: rgb(34 197 94 / 0.2) !important;
-          border-radius: 0.5rem !important;
-          padding: 1rem !important;
-        }
-        [data-node-type="callout"] [data-content="true"] {
-          color: rgb(209 213 219) !important;
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
     </div>
   );
 }

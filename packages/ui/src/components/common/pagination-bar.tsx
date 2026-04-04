@@ -31,97 +31,113 @@ export const PaginationBar: React.FC<PaginationBarProps> = ({
   };
 
   return (
-    <>
-      <Pagination className="mt-4">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={() => currentPage > 0 && onPageChange(currentPage - 1)}
-              className={
-                currentPage === 0
-                  ? "pointer-events-none opacity-50"
-                  : "cursor-pointer"
-              }
-            />
-          </PaginationItem>
+    <Pagination className="mt-4">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            className={
+              currentPage === 0
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
+            }
+            href="#"
+            onClick={() => {
+              if (currentPage > 0) onPageChange(currentPage - 1);
+            }}
+          />
+        </PaginationItem>
 
-          {displayPage > 2 && (
-            <PaginationItem>
-              <PaginationLink href="#" onClick={() => handlePageClick(0)}>
-                1
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
-          {displayPage > 3 && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
-
-          {displayPage > 1 && (
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                onClick={() => handlePageClick(displayPage - 2)}
-              >
-                {displayPage - 1}
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
+        {displayPage > 2 && (
           <PaginationItem>
             <PaginationLink
               href="#"
-              isActive
-              onClick={() => handlePageClick(displayPage - 1)}
-              className="bg-neutral-600"
+              onClick={() => {
+                handlePageClick(0);
+              }}
             >
-              {displayPage}
+              1
             </PaginationLink>
           </PaginationItem>
+        )}
 
-          {displayPage < maxPage + 1 && (
-            <PaginationItem>
-              <PaginationLink
-                href="#"
-                onClick={() => handlePageClick(displayPage)}
-              >
-                {displayPage + 1}
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
-          {displayPage < maxPage && (
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-          )}
-
-          {displayPage < maxPage && (
-            <PaginationItem>
-              <PaginationLink href="#" onClick={() => handlePageClick(maxPage)}>
-                {maxPage + 1}
-              </PaginationLink>
-            </PaginationItem>
-          )}
-
+        {displayPage > 3 && (
           <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={() =>
-                currentPage < maxPage && onPageChange(currentPage + 1)
-              }
-              className={
-                currentPage === maxPage
-                  ? "pointer-events-none opacity-50"
-                  : "cursor-pointer"
-              }
-            />
+            <PaginationEllipsis />
           </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    </>
+        )}
+
+        {displayPage > 1 && (
+          <PaginationItem>
+            <PaginationLink
+              href="#"
+              onClick={() => {
+                handlePageClick(displayPage - 2);
+              }}
+            >
+              {displayPage - 1}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        <PaginationItem>
+          <PaginationLink
+            className="bg-neutral-600"
+            href="#"
+            isActive
+            onClick={() => {
+              handlePageClick(displayPage - 1);
+            }}
+          >
+            {displayPage}
+          </PaginationLink>
+        </PaginationItem>
+
+        {displayPage < maxPage + 1 && (
+          <PaginationItem>
+            <PaginationLink
+              href="#"
+              onClick={() => {
+                handlePageClick(displayPage);
+              }}
+            >
+              {displayPage + 1}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        {displayPage < maxPage && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        {displayPage < maxPage && (
+          <PaginationItem>
+            <PaginationLink
+              href="#"
+              onClick={() => {
+                handlePageClick(maxPage);
+              }}
+            >
+              {maxPage + 1}
+            </PaginationLink>
+          </PaginationItem>
+        )}
+
+        <PaginationItem>
+          <PaginationNext
+            className={
+              currentPage === maxPage
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
+            }
+            href="#"
+            onClick={() => {
+              if (currentPage < maxPage) onPageChange(currentPage + 1);
+            }}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 };

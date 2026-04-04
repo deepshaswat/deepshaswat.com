@@ -3,11 +3,6 @@
 import * as React from "react";
 import {
   FileText,
-  Plus,
-  PencilLine,
-  CalendarCheck2,
-  BookCheck,
-  Newspaper,
   Tag,
   Users,
   BarChart3,
@@ -16,7 +11,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import {
   Sidebar,
   SidebarContent,
@@ -54,7 +48,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton asChild size="lg">
               <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Home className="size-4" />

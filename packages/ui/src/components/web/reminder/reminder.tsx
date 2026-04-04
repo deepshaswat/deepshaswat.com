@@ -1,7 +1,6 @@
 "use client";
 
-import { Base } from "../posts/BaseStatic";
-import type { Metadata } from "next";
+import { Base } from "../posts/base-static";
 
 const pageConfig = {
   tagline: "Tick-tock. Tick-tock.",
@@ -12,11 +11,11 @@ const pageConfig = {
 export function Reminder() {
   return (
     <Base
-      title="Reminder // Shaswat Deep"
       description=""
-      tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
+      tagline={pageConfig.tagline}
+      title="Reminder // Shaswat Deep"
     >
       <div className="justify-start gap-x-2">
         <p className="font-light text-neutral-400 text-justify">

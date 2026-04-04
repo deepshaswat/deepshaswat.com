@@ -1,6 +1,8 @@
 "use client";
 
 import { createReactBlockSpec } from "@blocknote/react";
+import { FaYoutube } from "react-icons/fa";
+import { cn } from "@repo/ui/utils";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +16,6 @@ import {
 } from "../../../ui/alert-dialog";
 import { Button } from "../../../ui/button";
 import { Input } from "../../../ui/input";
-import { FaYoutube } from "react-icons/fa";
-import { cn } from "@repo/ui/utils";
 
 export const Youtube = createReactBlockSpec(
   {
@@ -40,19 +40,19 @@ export const Youtube = createReactBlockSpec(
         >
           {props.block.props.url ? (
             <iframe
-              src={props.block.props.url}
-              title="YouTube video player"
-              className="absolute top-0 left-0 w-full h-full rounded-md shadow-md"
               allow="accelerometer; clipboard-write; encrypted-media; gyroscope;"
               allowFullScreen
+              className="absolute top-0 left-0 w-full h-full rounded-md shadow-md"
+              src={props.block.props.url}
+              title="YouTube video player"
             />
           ) : (
             <AlertDialog>
               <AlertDialogTrigger className="w-full">
                 <Button
-                  variant="secondary"
-                  size="lg"
                   className="w-full justify-start gap-x-2 bg-neutral-300 dark:bg-neutral-700 hover:bg-neutral-400 dark:hover:bg-neutral-950 text-neutral-700 dark:text-neutral-300"
+                  size="lg"
+                  variant="secondary"
                 >
                   <FaYoutube />
                   Add Video
@@ -65,12 +65,12 @@ export const Youtube = createReactBlockSpec(
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     <Input
-                      type="text"
-                      placeholder="URL"
                       className="bg-neutral-100 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-300 placeholder-neutral-500 focus:border-green-500 focus:ring-0"
                       onChange={(e) => {
                         url = e.currentTarget.value;
                       }}
+                      placeholder="URL"
+                      type="text"
                     />
                   </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -79,6 +79,7 @@ export const Youtube = createReactBlockSpec(
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
+                    className="hover:bg-neutral-200 dark:hover:bg-neutral-800 bg-neutral-100 dark:bg-neutral-950"
                     onClick={() =>
                       props.editor.updateBlock(props.block, {
                         type: "youtube",
@@ -87,7 +88,6 @@ export const Youtube = createReactBlockSpec(
                         },
                       })
                     }
-                    className="hover:bg-neutral-200 dark:hover:bg-neutral-800 bg-neutral-100 dark:bg-neutral-950"
                   >
                     Embed
                   </AlertDialogAction>

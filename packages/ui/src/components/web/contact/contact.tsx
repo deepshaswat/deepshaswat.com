@@ -4,16 +4,14 @@ import { useEffect, useState, useTransition } from "react";
 import Head from "next/head";
 import { useRecoilState } from "recoil";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import type { z } from "zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
 import { showToastEmailState } from "@repo/store";
 import { ContactSchema } from "@repo/schema";
 import { contact } from "@repo/actions";
-import { Base } from "../posts/BaseStatic";
+import { Base } from "../posts/base-static";
 import { FormError } from "../error-page/form-error";
-
 import {
   FormProvider as Form,
   FormControl,
@@ -27,7 +25,7 @@ import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 
-export const Contact = () => {
+export function Contact() {
   const meta = {
     title: "Contact // Shaswat Deep",
     description: "",
@@ -55,13 +53,14 @@ export const Contact = () => {
     setError("");
 
     startTransition(() => {
-      contact(values).then((response) => {
-        console.log(response);
+      void contact(values).then((response) => {
         if (response.error) {
           setError(response.error);
         } else if (response.success) {
           setShowToast(true);
-          setTimeout(() => setShowToast(false), 3000);
+          setTimeout(() => {
+            setShowToast(false);
+          }, 3000);
           form.reset();
         }
       });
@@ -74,7 +73,9 @@ export const Contact = () => {
         {toast("Email Sent!", {
           action: {
             label: "Close",
-            onClick: () => setShowToast(false),
+            onClick: () => {
+              setShowToast(false);
+            },
           },
         })}
       </div>;
@@ -95,7 +96,12 @@ export const Contact = () => {
           </CardTitle>
         </CardHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            className="space-y-6"
+            onSubmit={(e) => {
+              void form.handleSubmit(onSubmit)(e);
+            }}
+          >
             <div className="space-y-0 px-4">
               <FormField
                 control={form.control}
@@ -142,8 +148,8 @@ export const Contact = () => {
                       <Textarea
                         {...field}
                         className="min-h-[100px] "
-                        id="message"
                         disabled={isPending}
+                        id="message"
                         placeholder="Enter your message"
                       />
                     </FormControl>
@@ -158,9 +164,9 @@ export const Contact = () => {
 
             <CardFooter>
               <Button
+                className="w-full"
                 disabled={isPending}
                 type="submit"
-                className="w-full"
                 variant="outline"
               >
                 Send
@@ -183,14 +189,14 @@ export const Contact = () => {
       </Head>
 
       <Base
-        title={title}
         description=""
-        tagline={tagline}
         primaryColor={primaryColor}
         secondaryColor={secondaryColor}
+        tagline={tagline}
+        title={title}
       >
         {renderForm()}
       </Base>
     </>
   );
-};
+}

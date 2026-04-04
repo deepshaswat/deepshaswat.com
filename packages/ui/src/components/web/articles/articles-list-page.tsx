@@ -1,21 +1,17 @@
 "use client";
 
-import { Base } from "../posts/BaseStatic";
-import { cacheService } from "../indexDB";
-import { useState } from "react";
-import { useEffect } from "react";
-import { pageNumberState } from "@repo/store";
+import { useState, useEffect } from "react";
+import type { PostListType } from "@repo/actions";
 import {
   fetchPublishedPosts,
   fetchPublishedPostsCount,
-  PostListType,
   getArticlesCount,
   setArticlesCount,
   getArticlesPosts,
   setArticlesPosts,
 } from "@repo/actions";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { PaginationBar } from "../../common/pagination-bar";
+import { cacheService } from "../index-db";
+import { Base } from "../posts/base-static";
 import { BlogWithSearch } from "./all-blogs-list";
 import { SimpleBlogWithGrid } from "./featured-blogs-grid";
 import ArticlesListingSkeleton from "./skeleton-blog-listing";
@@ -26,13 +22,10 @@ const pageConfig = {
   secondaryColor: "lime" as const,
 };
 
-export const ArticlesListPage = () => {
+export function ArticlesListPage() {
   const [posts, setPosts] = useState<PostListType[]>([]);
   const [featuredPosts, setFeaturedPosts] = useState<PostListType[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
-  const resetPageNumber = useResetRecoilState(pageNumberState);
   const [postsCount, setPostsCount] = useState(0);
 
   const fetchPostsCount = async () => {
@@ -60,14 +53,14 @@ export const ArticlesListPage = () => {
         await setArticlesCount(freshCount);
         await cacheService.setCachedCount("articles", freshCount);
       }
-    } catch (error) {
-      console.error("ArticlesListPage: Error in fetchPostsCount:", error);
+    } catch (_error) {
+      // Post count fetch failed - will show 0 posts
     }
   };
 
   const fetchPosts = async ({
     option,
-    setPosts,
+    setPosts: updatePosts,
   }: {
     option: string;
     setPosts: (posts: PostListType[]) => void;
@@ -78,7 +71,7 @@ export const ArticlesListPage = () => {
       );
 
       if (cachedPosts && cachedPosts.length > 0) {
-        setPosts(cachedPosts);
+        updatePosts(cachedPosts);
         return;
       }
 
@@ -86,7 +79,7 @@ export const ArticlesListPage = () => {
       const redisCachedPosts = await getArticlesPosts(option);
 
       if (redisCachedPosts !== null) {
-        setPosts(redisCachedPosts);
+        updatePosts(redisCachedPosts);
         await cacheService.setCachedItems(
           option as "articles" | "featured-posts",
           redisCachedPosts,
@@ -97,18 +90,15 @@ export const ArticlesListPage = () => {
       const freshPosts = await fetchPublishedPosts(option);
 
       if (Array.isArray(freshPosts) && freshPosts.length > 0) {
-        setPosts(freshPosts);
+        updatePosts(freshPosts);
         await setArticlesPosts(option, freshPosts);
         await cacheService.setCachedItems(
           option as "articles" | "featured-posts",
           freshPosts,
         );
       }
-    } catch (error) {
-      console.error(
-        `ArticlesListPage: Error in fetchPosts for ${option}:`,
-        error,
-      );
+    } catch (_error) {
+      // Post fetch failed - posts will remain empty
     }
   };
 
@@ -118,13 +108,13 @@ export const ArticlesListPage = () => {
     try {
       await fetchPostsCount();
 
-      await fetchPosts({ option: "articles", setPosts: setPosts });
+      await fetchPosts({ option: "articles", setPosts });
       await fetchPosts({
         option: "featured-posts",
         setPosts: setFeaturedPosts,
       });
-    } catch (error) {
-      console.error("Error in fetchAllPosts:", error);
+    } catch (_error) {
+      // fetchAllPosts failed - loading state will be cleared
     } finally {
       setLoading(false);
     }
@@ -132,27 +122,23 @@ export const ArticlesListPage = () => {
 
   // Ensure the effect only runs once
   useEffect(() => {
-    fetchAllPosts();
+    void fetchAllPosts();
   }, []);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
       description=""
-      tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
+      tagline={pageConfig.tagline}
+      title="Articles // Shaswat Deep"
     >
-      {loading ? (
+      {loading && (
         <div className="flex flex-row mt-10 items-center justify-center ">
-          {/* <Loader2 className="size-16 animate-spin" /> */}
           <ArticlesListingSkeleton />
         </div>
-      ) : postsCount > 0 ? (
+      )}
+      {!loading && postsCount > 0 && (
         <>
           <p className="text-neutral-500">
             Here you can find all the{" "}
@@ -164,18 +150,13 @@ export const ArticlesListPage = () => {
           </p>
           <SimpleBlogWithGrid blogs={featuredPosts} />
           <BlogWithSearch blogs={posts} />
-          {/* ToDo: Enable pagination when a lot of blogs are added and algolia search is added */}
-          {/* <PaginationBar
-            currentPage={currentPage}
-            totalPages={Math.ceil(postsCount / 10)}
-            onPageChange={handlePageChange}
-          /> */}
         </>
-      ) : (
+      )}
+      {!loading && postsCount <= 0 && (
         <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
           <p className="text-3xl text-red-700">No posts found</p>
         </div>
       )}
     </Base>
   );
-};
+}

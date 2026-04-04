@@ -1,7 +1,9 @@
 // NewsletterButton.tsx
 "use client";
-import { createMember, Member } from "@repo/actions";
-import Image from "next/image";
+import type { Member } from "@repo/actions";
+import { createMember } from "@repo/actions";
+import { Loader2, Mail } from "lucide-react";
+import { useState } from "react";
 import { Button } from "../../ui/button";
 import {
   Dialog,
@@ -15,9 +17,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 
-import { Loader2, Mail } from "lucide-react";
-import { useState } from "react";
-
 interface FormData {
   firstName?: string;
   lastName?: string;
@@ -30,7 +29,7 @@ interface FormData {
   resendContactId: string;
 }
 
-export const NewsletterButton = () => {
+export function NewsletterButton() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,19 +55,16 @@ export const NewsletterButton = () => {
     setLoading(true);
     setError(null);
     try {
-      // Add your submission logic here
-      console.log("Form submitted:", formData);
-      const member = await createMember({
+      await createMember({
         ...formData,
         createdAt: new Date(),
         updatedAt: new Date(),
       } as Member);
-      console.log("Member created:", member);
       setIsSubscribed(true);
 
       setIsSubscribed(false);
       setIsOpen(false);
-    } catch (error) {
+    } catch (_err) {
       setError("Something went wrong");
 
       setLoading(false);
@@ -94,11 +90,11 @@ export const NewsletterButton = () => {
 
   return (
     <div className="fixed bottom-12 right-4  sm:right-10 z-50">
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog onOpenChange={setIsOpen} open={isOpen}>
         <DialogTrigger asChild>
           <Button
-            variant="default"
             className="bg-neutral-700/70 hover:bg-neutral-600 text-white rounded-full px-4 py-4 sm:px-6 sm:py-6 shadow-lg flex items-center gap-2"
+            variant="default"
           >
             <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="">Subscribe</span>
@@ -128,16 +124,21 @@ export const NewsletterButton = () => {
               {/* Stay updated with my latest blog posts and news. */}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form
+            className="space-y-4"
+            onSubmit={(e: React.FormEvent) => {
+              void handleSubmit(e);
+            }}
+          >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
                   name="firstName"
-                  value={formData.firstName}
                   onChange={handleChange}
                   placeholder="John"
+                  value={formData.firstName}
                 />
               </div>
               <div className="space-y-2">
@@ -145,9 +146,9 @@ export const NewsletterButton = () => {
                 <Input
                   id="lastName"
                   name="lastName"
-                  value={formData.lastName}
                   onChange={handleChange}
                   placeholder="Doe"
+                  value={formData.lastName}
                 />
               </div>
             </div>
@@ -158,33 +159,37 @@ export const NewsletterButton = () => {
               <Input
                 id="email"
                 name="email"
-                type="email"
-                value={formData.email}
                 onChange={handleChange}
                 placeholder="john.doe@example.com"
                 required
+                type="email"
+                value={formData.email}
               />
             </div>
             <Button
-              type="submit"
               className="w-full bg-neutral-700 hover:bg-neutral-600"
               disabled={disabled}
+              type="submit"
             >
-              {loading ? (
-                <div className="flex items-center gap-2 justify-center w-full text-green-500">
-                  <Loader2 className="w-4 h-4 animate-spin " />
-                  <span>Subscribing...</span>
-                </div>
-              ) : isSubscribed ? (
-                "Subscribed"
-              ) : (
-                "Subscribe"
-              )}
+              {(() => {
+                if (loading) {
+                  return (
+                    <div className="flex items-center gap-2 justify-center w-full text-green-500">
+                      <Loader2 className="w-4 h-4 animate-spin " />
+                      <span>Subscribing...</span>
+                    </div>
+                  );
+                }
+                if (isSubscribed) {
+                  return "Subscribed";
+                }
+                return "Subscribe";
+              })()}
             </Button>
-            {error && <div className="text-red-500">{error}</div>}
+            {error ? <div className="text-red-500">{error}</div> : null}
           </form>
         </DialogContent>
       </Dialog>
     </div>
   );
-};
+}

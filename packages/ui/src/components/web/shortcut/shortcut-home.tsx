@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ShortcutButton } from "./shortcut-button";
 import { Kbd } from "../../ui/kbd";
+import { ShortcutButton } from "./shortcut-button";
 
-export const ShortcutHome = () => {
+export function ShortcutHome() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export const ShortcutHome = () => {
     return null;
   }
 
-  const isMac = /(Mac)/i.test(navigator.userAgent);
+  const isMac = /Mac/i.test(navigator.userAgent);
   //const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
   const isMobile =
     /iPhone|iPad|Android/i.test(navigator.userAgent) ||
@@ -31,11 +31,10 @@ export const ShortcutHome = () => {
         Press <Kbd>⌘</Kbd> <Kbd>K</Kbd> to start →
       </ShortcutButton>
     );
-  } else {
-    return (
-      <ShortcutButton>
-        Press <Kbd>Ctrl</Kbd> <Kbd>K</Kbd> to start →
-      </ShortcutButton>
-    );
   }
-};
+  return (
+    <ShortcutButton>
+      Press <Kbd>Ctrl</Kbd> <Kbd>K</Kbd> to start →
+    </ShortcutButton>
+  );
+}

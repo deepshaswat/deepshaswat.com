@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ShortcutHome } from "../shortcut/shortcut-home";
 
-export const Landing = () => {
+export function Landing() {
   return (
     <div className="min-h-[calc(100vh-20vh)] sm:min-h-[calc(100vh-12vh)] flex items-center justify-start max-w-screen-sm mx-auto">
       <div className="flex flex-col justify-center items-start ml-6 ">
@@ -26,16 +26,16 @@ export const Landing = () => {
         <h4 className="text-lg font-normal text-neutral-400 px-4 mb-8 mt-8">
           Check out the list of{" "}
           <Link
-            href="/projects"
             className="underline underline-offset-4 text-neutral-200 hover:text-neutral-400 "
+            href="/projects"
           >
             featured projects
           </Link>{" "}
           that I&apos;m working on.
           <br /> <br /> You can read my{" "}
           <Link
-            href="/articles"
             className="underline underline-offset-4 text-neutral-200 hover:text-neutral-400 "
+            href="/articles"
           >
             articles
           </Link>{" "}
@@ -45,4 +45,4 @@ export const Landing = () => {
       </div>
     </div>
   );
-};
+}

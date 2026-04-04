@@ -1,16 +1,17 @@
 "use client";
 
-import { cn } from "@repo/ui/utils";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import FuzzySearch from "fuzzy-search";
-import { fetchAllTagsFromTagOnPost, PostListType, Tags } from "@repo/actions";
+import type { PostListType, Tags } from "@repo/actions";
+import { fetchAllTagsFromTagOnPost } from "@repo/actions";
 import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@repo/ui/utils";
 
 export function NewsletterWithSearch({ blogs }: { blogs: PostListType[] }) {
-  const [allTags, setAllTags] = useState<Record<string, Tags[]>>({});
+  const [allTags, setAllTags] = useState<Partial<Record<string, Tags[]>>>({});
 
   useEffect(() => {
     const fetchAllTags = async () => {
@@ -19,25 +20,24 @@ export function NewsletterWithSearch({ blogs }: { blogs: PostListType[] }) {
         const tagsByPost: Record<string, Tags[]> = {};
 
         allTagsData.forEach((tagOnPost) => {
-          if (!tagsByPost[tagOnPost.postId]) {
-            tagsByPost[tagOnPost.postId] = [];
-          }
-          tagsByPost[tagOnPost.postId].push({
+          const existing: Tags[] = tagsByPost[tagOnPost.postId] ?? [];
+          existing.push({
             id: tagOnPost.tag.id,
             slug: tagOnPost.tag.slug,
             description: tagOnPost.tag.description ?? "",
             imageUrl: tagOnPost.tag.imageUrl ?? "",
             posts: [],
           });
+          tagsByPost[tagOnPost.postId] = existing;
         });
 
         setAllTags(tagsByPost);
-      } catch (error) {
-        console.error("Failed to fetch tags:", error);
+      } catch (_error) {
+        // Tag fetching failed silently - tags will remain empty
       }
     };
 
-    fetchAllTags();
+    void fetchAllTags();
   }, []);
 
   return (
@@ -53,22 +53,22 @@ export function NewsletterWithSearch({ blogs }: { blogs: PostListType[] }) {
           <NewsletterCard
             blog={blog}
             key={blog.title + index}
-            tags={allTags[blog.id] || []}
+            tags={allTags[blog.id] ?? []}
           />
         ))}
-        <NewsletterPostRows blogs={blogs} allTags={allTags} />
+        <NewsletterPostRows allTags={allTags} blogs={blogs} />
       </div>
     </div>
   );
 }
 
-export const NewsletterPostRows = ({
+export function NewsletterPostRows({
   blogs,
   allTags,
 }: {
   blogs: PostListType[];
-  allTags: Record<string, Tags[]>;
-}) => {
+  allTags: Partial<Record<string, Tags[]>>;
+}) {
   const [search, setSearch] = useState("");
 
   const searcher = new FuzzySearch(blogs, ["title", "excerpt", "keywords"], {
@@ -77,19 +77,21 @@ export const NewsletterPostRows = ({
 
   const [results, setResults] = useState(blogs);
   useEffect(() => {
-    const results = searcher.search(search);
-    setResults(results);
+    const searchResults = searcher.search(search);
+    setResults(searchResults);
   }, [search]);
   return (
     <div className="w-full py-20">
       <div className="flex md:flex-row flex-col justify-between gap-4 md:items-center mb-4">
         <p className="text-3xl font-bold md:w-2/5">More Newsletters</p>
         <input
+          className="text-sm w-full md:w-3/5 border dark:border-transparent border-yellow-200 p-2 rounded-md dark:bg-neutral-800 bg-white shadow-sm focus:border-yellow-400 focus:ring-0 focus:outline-none outline-none text-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400 placeholder:neutral-700"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Search newsletters"
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search newsletters"
-          className="text-sm w-full md:w-3/5 border dark:border-transparent border-yellow-200 p-2 rounded-md dark:bg-neutral-800 bg-white shadow-sm focus:border-yellow-400 focus:ring-0 focus:outline-none outline-none text-neutral-700 dark:text-neutral-200 dark:placeholder-neutral-400 placeholder:neutral-700"
         />
       </div>
 
@@ -103,22 +105,22 @@ export const NewsletterPostRows = ({
               <NewsletterPostRow
                 blog={blog}
                 key={blog.postUrl + index}
-                tags={allTags[blog.id] || []}
+                tags={allTags[blog.id] ?? []}
               />
             ))
         )}
       </div>
     </div>
   );
-};
+}
 
-export const NewsletterPostRow = ({
+export function NewsletterPostRow({
   blog,
   tags,
 }: {
   blog: PostListType;
   tags: Tags[];
-}) => {
+}) {
   const [isHovered, setIsHovered] = useState(false);
 
   const capitalizeFirstLetter = (item: string) => {
@@ -134,53 +136,55 @@ export const NewsletterPostRow = ({
 
   return (
     <Link
-      href={`/${blog.postUrl}`}
-      key={`${blog.postUrl}`}
       className="relative block"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      href={`/${blog.postUrl}`}
+      key={blog.postUrl}
+      onMouseEnter={() => {
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+      }}
     >
       <AnimatePresence>
-        {isHovered && (
+        {isHovered ? (
           <motion.span
-            className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block rounded-lg"
-            layoutId="hoverBackground"
-            initial={{ opacity: 0 }}
             animate={{
               opacity: 1,
               transition: { duration: 0.15 },
             }}
+            className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block rounded-lg"
             exit={{
               opacity: 0,
               transition: { duration: 0.15, delay: 0.2 },
             }}
+            initial={{ opacity: 0 }}
+            layoutId="hoverBackground"
           />
-        )}
+        ) : null}
       </AnimatePresence>
       <div className="flex md:flex-row flex-col items-start justify-between md:items-center group/blog-row py-4 px-4 relative ">
         <div>
           <p className="text-neutral-100 text-lg font-medium transition duration-200">
             {blog.title}
           </p>
-          {blog.excerpt && (
+          {blog.excerpt ? (
             <p className="text-neutral-400 text-sm mt-2 max-w-xl transition duration-200">
               {truncate(blog.excerpt, 100)}
             </p>
-          )}
+          ) : null}
 
           <div className="flex flex-col sm:flex-row-reverse gap-2 justify-between">
-            {
-              <div className="flex flex-wrap gap-2 my-2 sm:my-4">
-                {tags.map((tag) => (
-                  <span
-                    key={tag.id}
-                    className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
-                  >
-                    {capitalizeFirstLetter(tag.slug)}
-                  </span>
-                ))}
-              </div>
-            }
+            <div className="flex flex-wrap gap-2 my-2 sm:my-4">
+              {tags.map((tag) => (
+                <span
+                  className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
+                  key={tag.id}
+                >
+                  {capitalizeFirstLetter(tag.slug)}
+                </span>
+              ))}
+            </div>
 
             <div className="flex gap-2 items-center my-2 sm:my-4">
               <p className="text-neutral-400 text-xs max-w-xl transition duration-200">
@@ -192,22 +196,22 @@ export const NewsletterPostRow = ({
           </div>
         </div>
         <Image
-          src={blog.author.imageUrl}
           alt={blog.author.name}
-          width={40}
-          height={40}
           className="rounded-full md:h-10 md:w-10 h-6 w-6 mt-2 md:mt-0 object-cover"
+          height={40}
+          src={blog.author.imageUrl}
+          width={40}
         />
       </div>
     </Link>
   );
-};
+}
 
-const Logo = () => {
+function Logo() {
   return (
     <Link
-      href="/"
       className="font-normal flex space-x-2 items-center text-sm mr-4  text-black px-2 py-1  relative "
+      href="/"
     >
       <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm" />
       <span className="font-medium text-black dark:text-white">
@@ -215,17 +219,17 @@ const Logo = () => {
       </span>
     </Link>
   );
-};
+}
 
-export const NewsletterCard = ({
+export function NewsletterCard({
   blog,
   tags,
 }: {
   blog: PostListType;
   tags: Tags[];
-}) => {
+}) {
   const truncate = (text: string, length: number) => {
-    return text.length > length ? text.slice(0, length) + "..." : text;
+    return text.length > length ? `${text.slice(0, length)}...` : text;
   };
 
   const capitalizeFirstLetter = (item: string) => {
@@ -247,11 +251,11 @@ export const NewsletterCard = ({
       <div className="">
         {blog.featureImage ? (
           <BlurImage
-            src={blog.featureImage || ""}
             alt={blog.title}
-            height="800"
-            width="800"
             className="h-full max-h-96 object-cover object-top w-full rounded-3xl"
+            height="800"
+            src={blog.featureImage || ""}
+            width="800"
           />
         ) : (
           <div className="h-full flex items-center justify-center dark:group-hover/blog:bg-neutral-900 group-hover/blog:bg-neutral-100">
@@ -270,8 +274,8 @@ export const NewsletterCard = ({
           <div className="flex flex-wrap gap-2 mt-4">
             {tags.map((tag) => (
               <span
-                key={tag.id}
                 className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
+                key={tag.id}
               >
                 {capitalizeFirstLetter(tag.slug)}
               </span>
@@ -280,16 +284,16 @@ export const NewsletterCard = ({
         </div>
         <div className="flex space-x-2 items-center mt-6">
           <Image
-            src={blog.author.imageUrl}
             alt={blog.author.name}
-            width={20}
-            height={20}
             className="rounded-full h-5 w-5"
+            height={20}
+            src={blog.author.imageUrl}
+            width={20}
           />
           <p className="text-sm font-normal text-black dark:text-white">
             {blog.author.name}
           </p>
-          <div className="h-1 w-1 bg-neutral-300 rounded-full"></div>
+          <div className="h-1 w-1 bg-neutral-300 rounded-full" />
           <p className="text-neutral-600 dark:text-neutral-300 text-sm max-w-xl transition duration-200">
             {blog.publishDate
               ? format(new Date(blog.publishDate), "MMMM dd, yyyy")
@@ -299,51 +303,48 @@ export const NewsletterCard = ({
       </div>
     </Link>
   );
-};
-
-interface IBlurImage {
-  height?: any;
-  width?: any;
-  src?: string | any;
-  objectFit?: any;
-  className?: string | any;
-  alt?: string | undefined;
-  layout?: any;
-  [x: string]: any;
 }
 
-export const BlurImage = ({
+interface BlurImageProps {
+  height?: string | number;
+  width?: string | number;
+  src?: string;
+  className?: string;
+  alt?: string;
+  [x: string]: unknown;
+}
+
+export function BlurImage({
   height,
   width,
   src,
   className,
-  objectFit,
   alt,
-  layout,
   ...rest
-}: IBlurImage) => {
+}: BlurImageProps) {
   const [isLoading, setLoading] = useState(true);
   return (
     <Image
+      alt={alt ?? "Avatar"}
+      blurDataURL={src}
       className={cn(
         "transition duration-300",
         isLoading ? "blur-sm" : "blur-0",
         className,
       )}
-      onLoad={() => setLoading(false)}
-      src={src}
-      width={width}
-      height={height}
-      loading="lazy"
       decoding="async"
-      blurDataURL={src}
-      layout={layout}
-      alt={alt ? alt : "Avatar"}
+      height={typeof height === "number" ? height : Number(height)}
+      loading="lazy"
+      onLoad={() => {
+        setLoading(false);
+      }}
+      src={src ?? ""}
+      width={typeof width === "number" ? width : Number(width)}
       {...rest}
     />
   );
-};
+}
 
 export const truncate = (text: string, length: number) => {
-  return text.length > length ? text.slice(0, length) + "..." : text;
+  return text.length > length ? `${text.slice(0, length)}...` : text;
 };

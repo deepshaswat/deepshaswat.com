@@ -2,7 +2,7 @@ import React from "react";
 import { Skeleton } from "../../ui/skeleton";
 import { Card, CardContent } from "../../ui/card";
 
-const PostSkeleton = () => {
+function PostSkeleton() {
   return (
     <div className="w-full max-w-3xl mx-auto space-y-4 sm:space-y-6 p-2 sm:p-4 bg-background min-h-screen">
       {/* Title skeleton */}
@@ -63,6 +63,6 @@ const PostSkeleton = () => {
       </div>
     </div>
   );
-};
+}
 
 export default PostSkeleton;

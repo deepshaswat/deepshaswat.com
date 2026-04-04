@@ -11,7 +11,7 @@ import {
   Heading,
   Link,
 } from "@react-email/components";
-import { PostListType } from "@repo/actions";
+import type { PostListType } from "@repo/actions";
 
 interface EmailTemplateProps {
   name: string;
@@ -71,20 +71,20 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
         >
           {/* Feature Image Section */}
           <Section style={{ padding: "20px", borderRadius: "8px" }}>
-            {post.featureImage && (
+            {post.featureImage ? (
               <div style={{ textAlign: "center", marginBottom: "20px" }}>
                 <Img
-                  src={post.featureImage}
                   alt={post.title}
-                  width="600"
                   height="auto"
+                  src={post.featureImage}
                   style={{
                     borderRadius: "8px",
                     maxWidth: "100%",
                   }}
+                  width="600"
                 />
               </div>
-            )}
+            ) : null}
           </Section>
 
           {/* Title Section */}
@@ -114,9 +114,9 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
               }}
             >
               <Img
-                alt={post.author?.name || ""}
+                alt={post.author.name || ""}
                 height={48}
-                src={post.author?.imageUrl || ""}
+                src={post.author.imageUrl || ""}
                 style={{
                   borderRadius: "9999px",
                   display: "block",
@@ -147,7 +147,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                   margin: "0px",
                 }}
               >
-                {post.author?.name || ""}
+                {post.author.name || ""}
               </Heading>
               <Text
                 style={{

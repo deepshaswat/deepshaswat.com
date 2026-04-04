@@ -56,8 +56,8 @@ export function Footer() {
     return (
       <Link
         className="group flex items-center ml-5 text-[16px]  text-neutral-500 border-0 no-underline  transition-color duration-200 ease-in-out hover:text-neutral-100 focus:text-primary"
-        key={index}
         href={link.url}
+        key={index}
         passHref
         target={link.title === "Email" ? "_self" : "_blank"}
       >
@@ -86,8 +86,6 @@ export function Footer() {
     </div>
   );
 }
-{
-  /* <div className='bg-background flex gap-x-3 items-center justify-center py-5'>
+/* <div className='bg-background flex gap-x-3 items-center justify-center py-5'>
   {links.map(renderAnchor)}
 </div>; */
-}

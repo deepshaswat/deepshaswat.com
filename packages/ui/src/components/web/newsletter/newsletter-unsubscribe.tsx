@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2, Mail, CheckCircle2, XCircle } from "lucide-react";
+import { unsubscribeMember } from "@repo/actions";
 import {
   Card,
   CardContent,
@@ -13,10 +15,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
-import { Loader2, Mail, CheckCircle2, XCircle } from "lucide-react";
-import { unsubscribeMember } from "@repo/actions";
 
-export const NewsletterUnsubscribe = () => {
+export function NewsletterUnsubscribe() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<
@@ -33,7 +33,7 @@ export const NewsletterUnsubscribe = () => {
       await unsubscribeMember(email);
 
       // Email validation
-      if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.exec(email)) {
         throw new Error("Please enter a valid email address");
       }
 
@@ -65,55 +65,70 @@ export const NewsletterUnsubscribe = () => {
             </div>
           </CardTitle>
           <CardDescription className="text-neutral-400 pt-5">
-            We're sorry to see you go. <br /> Please enter your email to
+            We&apos;re sorry to see you go. <br /> Please enter your email to
             unsubscribe from our newsletter.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {status === "idle" || status === "loading" ? (
-            <form onSubmit={handleUnsubscribe} className="space-y-4">
-              <Input
-                type="email"
-                placeholder="Enter your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={status === "loading"}
-                required
-              />
-              <Button
-                type="submit"
-                className="w-full bg-neutral-700 hover:bg-neutral-600"
-                disabled={status === "loading"}
-                variant="default"
-              >
-                {status === "loading" ? (
-                  <div className="flex items-center justify-center text-red-500">
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin " />
-                    Unsubscribing...
-                  </div>
-                ) : (
-                  "Unsubscribe"
-                )}
-              </Button>
-            </form>
-          ) : status === "success" ? (
-            <Alert variant="default" className=" border-green-200">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              <AlertTitle>Successfully Unsubscribed</AlertTitle>
-              <AlertDescription>
-                You have been successfully unsubscribed from our newsletter. You
-                won't receive any more emails from us.
-              </AlertDescription>
-            </Alert>
-          ) : (
-            <Alert variant="destructive">
-              <XCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{errorMessage}</AlertDescription>
-            </Alert>
-          )}
+          {(() => {
+            if (status === "idle" || status === "loading") {
+              return (
+                <form
+                  className="space-y-4"
+                  onSubmit={(e) => {
+                    void handleUnsubscribe(e);
+                  }}
+                >
+                  <Input
+                    disabled={status === "loading"}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                    placeholder="Enter your email address"
+                    required
+                    type="email"
+                    value={email}
+                  />
+                  <Button
+                    className="w-full bg-neutral-700 hover:bg-neutral-600"
+                    disabled={status === "loading"}
+                    type="submit"
+                    variant="default"
+                  >
+                    {status === "loading" ? (
+                      <div className="flex items-center justify-center text-red-500">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin " />
+                        Unsubscribing...
+                      </div>
+                    ) : (
+                      "Unsubscribe"
+                    )}
+                  </Button>
+                </form>
+              );
+            }
+            if (status === "success") {
+              return (
+                <Alert className=" border-green-200" variant="default">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <AlertTitle>Successfully Unsubscribed</AlertTitle>
+                  <AlertDescription>
+                    You have been successfully unsubscribed from our newsletter.
+                    You won&apos;t receive any more emails from us.
+                  </AlertDescription>
+                </Alert>
+              );
+            }
+            return (
+              <Alert variant="destructive">
+                <XCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
+            );
+          })()}
         </CardContent>
       </Card>
     </div>
   );
-};
+}

@@ -2,23 +2,19 @@
 
 import { format } from "date-fns";
 import Image from "next/image";
-
+import type { PostListType, Tags } from "@repo/actions";
 import {
   fetchPostByPostUrl,
   fetchTagsFromTagOnPost,
-  PostListType,
-  Tags,
   getBlogContent,
   setBlogContent,
 } from "@repo/actions";
-import BlockNoteRenderer from "./blocknote-render";
-
 import { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
-import PostSkeleton from "./skeleton-post";
 import { ScrollProgress } from "../../ui/scroll-progress";
-import { Base } from "../posts/BaseStatic";
-import { cacheService } from "../indexDB";
+import { Base } from "../posts/base-static";
+import { cacheService } from "../index-db";
+import PostSkeleton from "./skeleton-post";
+import BlockNoteRenderer from "./blocknote-render";
 
 const LIGHT_COLORS = ["yellow", "pink", "turquoise", "lime", "teal", "cyan"];
 
@@ -32,7 +28,7 @@ const DARK_COLORS = [
   "violet",
 ];
 
-type ColorType = (typeof LIGHT_COLORS | typeof DARK_COLORS)[number];
+type ColorType = (typeof LIGHT_COLORS)[number];
 
 export function BlogContent({ params }: { params: { postUrl: string } }) {
   const [post, setPost] = useState<PostListType | null>(null);
@@ -57,7 +53,7 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
   };
 
   const pageConfig = {
-    tagline: tagline,
+    tagline,
     primaryColor,
     secondaryColor,
   };
@@ -163,15 +159,15 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
       }
 
       generateRandomColors();
-    } catch (error) {
-      console.error("Error fetching blog post:", error);
+    } catch (_error) {
+      // Blog post fetch failed - post will remain null
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getPost();
+    void getPost();
   }, []);
 
   if (!post) {
@@ -186,30 +182,30 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
         </div>
       ) : (
         <Base
-          title={`${post?.title} // Shaswat Deep`}
-          description={""}
-          tagline={tagline}
+          description=""
           primaryColor={pageConfig.primaryColor}
           secondaryColor={pageConfig.secondaryColor}
+          tagline={tagline}
+          title={`${post.title} // Shaswat Deep`}
         >
           <div className="w-full px-1 sm:px-4 md:px-8">
-            {post?.featureImage && (
+            {post.featureImage ? (
               <Image
-                src={post?.featureImage || ""}
-                alt={post?.title || ""}
+                alt={post.title || ""}
                 className="mb-5 h-60 md:h-full w-full rounded-3xl object-cover "
                 height={720}
+                src={post.featureImage || ""}
                 width={1024}
               />
-            )}
+            ) : null}
 
             <div className="flex flex-col sm:flex-row gap-2 justify-between mb-2 sm:mb-4">
               {tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 my-2 sm:my-4">
                   {tags.slice(0, 4).map((tag) => (
                     <span
-                      key={tag.slug}
                       className="px-2 py-1 text-xs font-medium bg-neutral-200 text-neutral-800 rounded-md"
+                      key={tag.slug}
                     >
                       {capitalizeFirstLetter(tag.slug)}
                     </span>
@@ -220,20 +216,20 @@ export function BlogContent({ params }: { params: { postUrl: string } }) {
             <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-y-2 sm:gap-y-0 ">
               <div className="flex flex-row items-center ">
                 <Image
-                  src={post?.author?.imageUrl || ""}
-                  alt={post?.author?.name || ""}
+                  alt={post.author.name || ""}
                   className="h-5 w-5 rounded-full"
                   height={20}
+                  src={post.author.imageUrl || ""}
                   width={20}
                 />
                 <p className="pl-2 text-sm text-neutral-600 dark:text-neutral-400">
-                  {post?.author?.name || ""}
+                  {post.author.name || ""}
                 </p>
               </div>
               <div className="hidden sm:block mx-2 h-1 w-1 rounded-full bg-neutral-200 dark:bg-neutral-700" />
               <p className="pl-0 sm:pl-1 text-sm text-neutral-600 dark:text-neutral-400">
-                {post?.publishDate
-                  ? format(new Date(post?.publishDate), "MMMM dd, yyyy")
+                {post.publishDate
+                  ? format(new Date(post.publishDate), "MMMM dd, yyyy")
                   : ""}
               </p>
             </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-const TimePicker = ({
+function TimePicker({
   selectedHour,
   selectedMinute,
   setSelectedHour,
@@ -12,7 +12,7 @@ const TimePicker = ({
   selectedMinute: string;
   setSelectedHour: (hour: string) => void;
   setSelectedMinute: (minute: string) => void;
-}) => {
+}) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   const hours = Array.from({ length: 24 }, (_, i) =>
@@ -27,29 +27,46 @@ const TimePicker = ({
       {/* Time Input Box */}
       <div
         className="flex items-center bg-neutral-700 hover:bg-neutral-900 border-none rounded-md px-4 py-2 cursor-pointer text-neutral-300"
-        onClick={() => setDropdownOpen(!isDropdownOpen)}
+        onClick={() => {
+          setDropdownOpen(!isDropdownOpen);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ")
+            setDropdownOpen(!isDropdownOpen);
+        }}
+        role="button"
+        tabIndex={0}
       >
         <span>{`${selectedHour}:${selectedMinute}`}</span>
         <span className="ml-2 text-neutral-400">IST</span>
       </div>
 
       {/* Dropdown */}
-      {isDropdownOpen && (
+      {isDropdownOpen ? (
         <div className="absolute mt-2 flex bg-neutral-900 rounded-lg shadow-lg">
           {/* Hours Dropdown */}
           <div className="flex flex-col overflow-y-auto max-h-40">
             {hours.map((hour) => (
               <div
-                key={hour}
                 className={`px-4 py-2 hover:bg-neutral-700 cursor-pointer ${
                   hour === selectedHour
                     ? "bg-green-500 text-white"
                     : "text-neutral-300"
                 }`}
+                key={hour}
                 onClick={() => {
                   setSelectedHour(hour);
                   setDropdownOpen(false);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setSelectedHour(hour);
+                    setDropdownOpen(false);
+                  }
+                }}
+                role="option"
+                aria-selected={hour === selectedHour}
+                tabIndex={0}
               >
                 {hour}
               </div>
@@ -60,25 +77,34 @@ const TimePicker = ({
           <div className="flex flex-col overflow-y-auto max-h-40 border-l border-neutral-700">
             {minutes.map((minute) => (
               <div
-                key={minute}
                 className={`px-4 py-2 hover:bg-neutral-700 cursor-pointer ${
                   minute === selectedMinute
                     ? "bg-green-500 text-white"
                     : "text-neutral-300"
                 }`}
+                key={minute}
                 onClick={() => {
                   setSelectedMinute(minute);
                   setDropdownOpen(false);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setSelectedMinute(minute);
+                    setDropdownOpen(false);
+                  }
+                }}
+                role="option"
+                aria-selected={minute === selectedMinute}
+                tabIndex={0}
               >
                 {minute}
               </div>
             ))}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
-};
+}
 
 export { TimePicker };

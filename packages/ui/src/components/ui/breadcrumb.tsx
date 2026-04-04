@@ -3,7 +3,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
-
 import { ny } from "@repo/ui/utils";
 
 const Breadcrumb = React.forwardRef<
@@ -11,7 +10,7 @@ const Breadcrumb = React.forwardRef<
   React.ComponentPropsWithoutRef<"nav"> & {
     separator?: React.ReactNode;
   }
->(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
+>(({ ...props }, ref) => <nav aria-label="breadcrumb" ref={ref} {...props} />);
 Breadcrumb.displayName = "Breadcrumb";
 
 const BreadcrumbList = React.forwardRef<
@@ -19,11 +18,11 @@ const BreadcrumbList = React.forwardRef<
   React.ComponentPropsWithoutRef<"ol">
 >(({ className, ...props }, ref) => (
   <ol
-    ref={ref}
     className={ny(
       "text-muted-foreground flex flex-wrap items-center gap-1.5 break-words text-sm sm:gap-2.5",
       className,
     )}
+    ref={ref}
     {...props}
   />
 ));
@@ -34,8 +33,8 @@ const BreadcrumbItem = React.forwardRef<
   React.ComponentPropsWithoutRef<"li">
 >(({ className, ...props }, ref) => (
   <li
-    ref={ref}
     className={ny("inline-flex items-center gap-1.5", className)}
+    ref={ref}
     {...props}
   />
 ));
@@ -51,8 +50,8 @@ const BreadcrumbLink = React.forwardRef<
 
   return (
     <Comp
-      ref={ref}
       className={ny("hover:text-foreground transition-colors", className)}
+      ref={ref}
       {...props}
     />
   );
@@ -64,11 +63,11 @@ const BreadcrumbPage = React.forwardRef<
   React.ComponentPropsWithoutRef<"span">
 >(({ className, ...props }, ref) => (
   <span
+    aria-current="page"
+    aria-disabled="true"
+    className={ny("text-foreground font-normal", className)}
     ref={ref}
     role="link"
-    aria-disabled="true"
-    aria-current="page"
-    className={ny("text-foreground font-normal", className)}
     {...props}
   />
 ));
@@ -81,9 +80,9 @@ function BreadcrumbSeparator({
 }: React.ComponentProps<"li">) {
   return (
     <li
-      role="presentation"
       aria-hidden="true"
       className={ny("[&>svg]:size-3.5", className)}
+      role="presentation"
       {...props}
     >
       {children ?? <ChevronRight />}
@@ -98,9 +97,9 @@ function BreadcrumbEllipsis({
 }: React.ComponentProps<"span">) {
   return (
     <span
-      role="presentation"
       aria-hidden="true"
       className={ny("flex size-9 items-center justify-center", className)}
+      role="presentation"
       {...props}
     >
       <MoreHorizontal className="size-4" />

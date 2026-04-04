@@ -1,22 +1,17 @@
 "use client";
 
-import { Base } from "../posts/BaseStatic";
-import { cacheService } from "../indexDB";
-import { useState } from "react";
-import { useEffect } from "react";
-import { pageNumberState } from "@repo/store";
+import { useState, useEffect } from "react";
+import type { PostListType } from "@repo/actions";
 import {
   fetchPublishedPosts,
   fetchPublishedPostsCount,
-  PostListType,
   getNewslettersCount,
   setNewslettersCount,
   getNewslettersPosts,
   setNewslettersPosts,
 } from "@repo/actions";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { PaginationBar } from "../../common/pagination-bar";
-
+import { cacheService } from "../index-db";
+import { Base } from "../posts/base-static";
 import { NewsletterWithSearch } from "./all-newletter-list";
 import NewsletterListingSkeleton from "./skeleton-newletter-listing";
 
@@ -26,17 +21,10 @@ const pageConfig = {
   secondaryColor: "orange" as const,
 };
 
-export const NewsletterListPage = () => {
+export function NewsletterListPage() {
   const [posts, setPosts] = useState<PostListType[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [currentPage, setCurrentPage] = useRecoilState(pageNumberState);
-  const resetPageNumber = useResetRecoilState(pageNumberState);
   const [postsCount, setPostsCount] = useState(0);
-
-  //   useEffect(() => {
-  //     resetPageNumber();
-  //   }, [resetPageNumber]);
 
   const fetchPostsCount = async () => {
     try {
@@ -63,8 +51,8 @@ export const NewsletterListPage = () => {
         await setNewslettersCount(freshCount);
         await cacheService.setCachedCount("newsletters", freshCount);
       }
-    } catch (error) {
-      console.error("NewsletterListPage: Error in fetchPostsCount:", error);
+    } catch (_error) {
+      // Count fetch failed - will show 0 posts
     }
   };
 
@@ -93,36 +81,32 @@ export const NewsletterListPage = () => {
         await setNewslettersPosts(freshPosts);
         await cacheService.setCachedItems("newsletters", freshPosts);
       }
-    } catch (error) {
-      console.error("NewsletterListPage: Error in fetchPosts:", error);
+    } catch (_error) {
+      // Post fetch failed - posts will remain empty
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPostsCount();
-    fetchPosts();
+    void fetchPostsCount();
+    void fetchPosts();
   }, []);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
 
   return (
     <Base
-      title="Articles // Shaswat Deep"
       description=""
-      tagline={pageConfig.tagline}
       primaryColor={pageConfig.primaryColor}
       secondaryColor={pageConfig.secondaryColor}
+      tagline={pageConfig.tagline}
+      title="Articles // Shaswat Deep"
     >
-      {loading ? (
+      {loading && (
         <div className="flex flex-row mt-10 items-center justify-center">
-          {/* <Loader2 className="size-16 animate-spin" /> */}
           <NewsletterListingSkeleton />
         </div>
-      ) : postsCount > 0 ? (
+      )}
+      {!loading && postsCount > 0 && (
         <>
           <p className="text-neutral-500">
             Here you can find all the{" "}
@@ -130,20 +114,14 @@ export const NewsletterListPage = () => {
             send out. I usually write about my entrepreneurship journey,
             personal finance, tech career, and more in English.
           </p>
-          {/* <SimpleBlogWithGrid blogs={featuredPosts} /> */}
           <NewsletterWithSearch blogs={posts} />
-          {/* ToDo: Enable pagination when a lot of blogs are added and algolia search is added */}
-          {/* <PaginationBar
-            currentPage={currentPage}
-            totalPages={Math.ceil(postsCount / 10)}
-            onPageChange={handlePageChange}
-          /> */}
         </>
-      ) : (
+      )}
+      {!loading && postsCount <= 0 && (
         <div className="flex flex-row mt-10 items-start justify-center h-screen-1/2">
           <p className="text-3xl text-red-700">No posts found</p>
         </div>
       )}
     </Base>
   );
-};
+}
