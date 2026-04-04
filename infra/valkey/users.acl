@@ -1,0 +1,2 @@
+user default on #REPLACE_WITH_SHA256_OF_PASSWORD ~* &* +@all
+user deepshaswat on #REPLACE_WITH_SHA256_OF_PASSWORD ~* &* +@all

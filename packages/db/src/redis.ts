@@ -4,12 +4,14 @@ let redisClient: Redis | null = null;
 
 export const getRedisClient = (): Redis => {
   if (!redisClient) {
+    const useTls = process.env.REDIS_TLS !== "false";
+
     redisClient = new Redis({
       host: process.env.REDIS_HOST || "",
       port: parseInt(process.env.REDIS_PORT || "6379", 10),
       username: process.env.REDIS_USERNAME || "",
       password: process.env.REDIS_PASSWORD || "",
-      tls: {},
+      ...(useTls ? { tls: {} } : {}),
     });
 
     redisClient.on("error", (err) => {

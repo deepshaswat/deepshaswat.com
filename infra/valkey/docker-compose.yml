@@ -1,0 +1,33 @@
+services:
+  valkey:
+    image: valkey/valkey:8
+    container_name: deepshaswat-valkey
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: >
+      valkey-server
+        --requirepass CHANGE_ME_GENERATE_WITH_OPENSSL
+        --maxmemory 256mb
+        --maxmemory-policy allkeys-lru
+        --save ""
+        --appendonly no
+        --protected-mode no
+        --tcp-backlog 128
+        --timeout 300
+        --tcp-keepalive 60
+        --maxclients 1000
+        --aclfile /data/users.acl
+    volumes:
+      - ./users.acl:/data/users.acl
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1"
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-a", "CHANGE_ME_GENERATE_WITH_OPENSSL", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
