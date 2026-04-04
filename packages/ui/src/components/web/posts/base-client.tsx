@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { GradientText } from "./gradient-text";
-import { PostContainer, PostContent, PostMain } from "./post";
+import { PostContainer, PostContent, PostMain } from "./Post";
 
 interface BaseClientProps {
   title: string;

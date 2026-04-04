@@ -5,9 +5,9 @@ export * from "./shortcut/shortcut-home";
 export * from "./shortcut/shortcut-home-error";
 export * from "./posts/base-static";
 export * from "./posts/gradient-text";
-export * from "./posts/post";
+export * from "./posts/Post";
 export * from "./library/library";
-export * from "./navbar/appbar";
+export * from "./navbar/Appbar";
 export * from "./navbar/navigation";
 export * from "./navbar/nav-button";
 export * from "./reminder/reminder";
@@ -16,7 +16,7 @@ export * from "./reminder/reminder";
 // - PostHog: import directly from "posthog-js" and "posthog-js/react"
 // - CommandBar: import from "@repo/ui/command"
 export * from "./landing/landing";
-export * from "./footer/footer";
+export * from "./footer/Footer";
 export * from "./error-page/error-message";
 export * from "./error-page/form-error";
 export * from "./error-page/form-success";
