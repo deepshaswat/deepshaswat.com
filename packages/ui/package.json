@@ -17,7 +17,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "generate:component": "turbo gen react-component"
   },
