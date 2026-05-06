@@ -37,10 +37,16 @@ function renderIntro() {
           </strong>{" "}
         </p>
         <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
-          I&apos;m the <strong className="text-neutral-200">Founder,</strong> at
-          UseMoney AI. Before that, I was a Senior Staff Software Engineer at
-          Harness.io and AppDynamics, a Cisco company.
-        </p>{" "}
+          I&apos;m the <strong className="text-neutral-200">Founder,</strong> at{" "}
+          <strong className="text-neutral-200">UseMoney AI.</strong> Before
+          that, I was a{" "}
+          <strong className="text-neutral-200">
+            Senior Staff Software Engineer
+          </strong>{" "}
+          at <strong className="text-neutral-200">Harness.io</strong> and{" "}
+          <strong className="text-neutral-200">AppDynamics</strong>, a Cisco
+          company.
+        </p>
         <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
           Outside of work, I love{" "}
           <strong className="text-neutral-200">dark mode</strong>, the stock

@@ -40,7 +40,7 @@ function LinksComponent() {
   ];
   const links: LinkData[] = [
     {
-      title: "UseMoney - Stock Market Research Platform",
+      title: "UseMoney AI - Copilot for Retail Investors",
       url: "https://usemoney.ai/",
       icon: <CandlestickChart className="h-5 w-5" />,
     },
@@ -48,11 +48,6 @@ function LinksComponent() {
       title: "Naviya - Personalized AI Tutor for Students",
       url: "https://naviya.school/",
       icon: <GraduationCap className="h-5 w-5" />,
-    },
-    {
-      title: "VibeCreation - Content Engine for Creators & Brands",
-      url: "https://vibecreation.ai/",
-      icon: <Clapperboard className="h-5 w-5" />,
     },
     {
       title: "Ship.build - AI DevOps for Everything after Code",
@@ -63,6 +58,11 @@ function LinksComponent() {
       title: "RateCreator - Discover & Review Content Creators",
       url: "https://ratecreator.com/",
       icon: <Star className="h-5 w-5" />,
+    },
+    {
+      title: "VibeCreation - Content Engine for Creators & Brands",
+      url: "https://vibecreation.ai/",
+      icon: <Clapperboard className="h-5 w-5" />,
     },
   ];
 
@@ -144,25 +144,24 @@ function LinksComponent() {
                 </strong>{" "}
               </p>
               <p className="pb-4 text-neutral-400 leading-relaxed tracking-wide">
-                Now as a{" "}
-                <strong className="text-neutral-200">Solo-Founder,</strong>{" "}
-                I&apos;m building products for{" "}
-                <strong className="text-neutral-200">Creator Economy</strong> as
-                part of Orbizza, Inc. called{" "}
+                I&apos;m the{" "}
+                <strong className="text-neutral-200">Founder,</strong> at{" "}
+                <strong className="text-neutral-200">UseMoney AI.</strong>{" "}
+                Before that, I was a{" "}
                 <strong className="text-neutral-200">
-                  RateCreator &amp; VibeCreation.
-                </strong>
+                  Senior Staff Software Engineer
+                </strong>{" "}
+                at <strong className="text-neutral-200">Harness.io</strong> and{" "}
+                <strong className="text-neutral-200">AppDynamics</strong>, a
+                Cisco company.
               </p>
               <p className="pb-4 text-neutral-400 leading-relaxed tracking-wide">
-                I&apos;m also tinkering with two side projects:{" "}
-                <strong className="text-neutral-200">
-                  Naviya - A personalized AI Tutor
-                </strong>{" "}
-                for students and{" "}
-                <strong className="text-neutral-200">
-                  UseMoney - Smart Portfolio Tracker
-                </strong>{" "}
-                for investors &amp; financial learners.
+                Outside of work, I love{" "}
+                <strong className="text-neutral-200">dark mode</strong>, the
+                stock market, and ideating side projects. I like{" "}
+                <strong className="text-neutral-200">cooking</strong>, reading
+                books, watching animes, and thinking about{" "}
+                <strong className="text-neutral-200">What If</strong> scenarios.
               </p>
             </div>
 
