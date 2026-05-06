@@ -37,33 +37,18 @@ function renderIntro() {
           </strong>{" "}
         </p>
         <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
-          Now as a <strong className="text-neutral-200">Solo-Founder,</strong>{" "}
-          I&apos;m building products for{" "}
-          <strong className="text-neutral-200">Creator Economy</strong> as part
-          of Orbizza, Inc. called{" "}
-          <strong className="text-neutral-200">
-            RateCreator &amp; VibeCreation.
-          </strong>
-        </p>
+          I&apos;m the <strong className="text-neutral-200">Founder,</strong> at
+          UseMoney AI. Before that, I was a Senior Staff Software Engineer at
+          Harness.io and AppDynamics, a Cisco company.
+        </p>{" "}
         <p className="p-4 text-neutral-400 leading-relaxed tracking-wide">
-          I&apos;m also tinkering with two side projects:{" "}
-          <strong className="text-neutral-200">
-            Naviya - A personalized AI Tutor
-          </strong>{" "}
-          for students and{" "}
-          <strong className="text-neutral-200">
-            UseMoney - Smart Portfolio Tracker
-          </strong>{" "}
-          for investors &amp; financial learners.
-        </p>
-        {/* <p className='p-4 text-neutral-400 leading-relaxed tracking-wide'>
           Outside of work, I love{" "}
-          <strong className='text-neutral-200'>dark mode</strong>, the stock
+          <strong className="text-neutral-200">dark mode</strong>, the stock
           market, and ideating side projects. I like{" "}
-          <strong className='text-neutral-200'>cooking</strong>, reading books,
+          <strong className="text-neutral-200">cooking</strong>, reading books,
           watching animes, and thinking about{" "}
-          <strong className='text-neutral-200'>What If </strong> scenarios.
-        </p> */}
+          <strong className="text-neutral-200">What If </strong> scenarios.
+        </p>
       </div>
     </div>
   );

@@ -1,13 +1,24 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
-import { Nunito } from "next/font/google";
+import { Nunito, JetBrains_Mono as JetBrainsMono } from "next/font/google";
 import { Toaster } from "sonner";
+import "@repo/ui/styles.css";
 import "./globals.css";
 import { Appbar, Footer, NewsletterButton } from "@repo/ui/web";
 import { siteConfig } from "../lib/site-config";
 import { Providers } from "./providers";
 
-const inter = Nunito({ subsets: ["latin"] });
+const fontSans = Nunito({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const fontMono = JetBrainsMono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   themeColor: "black",
@@ -86,10 +97,14 @@ export default function RootLayout({
   children: ReactNode;
 }>): JSX.Element {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${fontSans.variable} ${fontMono.variable}`}
+      suppressHydrationWarning
+    >
       <head />
       <body
-        className={`${inter.className} bg-background text-foreground`}
+        className="font-sans bg-background text-foreground antialiased"
         suppressHydrationWarning
       >
         <Providers>

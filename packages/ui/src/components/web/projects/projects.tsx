@@ -7,6 +7,7 @@ import {
   GraduationCap,
   Clapperboard,
   Star,
+  Ship,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { featuredProjects, allProjects } from "@repo/store";
@@ -23,6 +24,7 @@ const iconMap: Record<string, React.ReactNode> = {
   "graduation-cap": <GraduationCap className="size-8" />,
   clapperboard: <Clapperboard className="size-8" />,
   star: <Star className="size-8" />,
+  ship: <Ship className="size-8" />,
 };
 
 interface FeaturedProjectCardProps {

@@ -18,10 +18,10 @@ export interface ProjectsByYear {
 
 const featuredProjects: FeaturedProject[] = [
   {
-    name: "UseMoney",
-    description: "Stock Market Research Platform",
+    name: "UseMoney AI",
+    description: "AI copilot for retail investors",
     url: "https://usemoney.ai",
-    stats: "10,000+ STOCKS, MFS & ETFS LISTED",
+    stats: "20,000+ STOCKS, MFS & ETFS LISTED",
     icon: "chart-candlestick",
   },
   {
@@ -31,20 +31,20 @@ const featuredProjects: FeaturedProject[] = [
     stats: "1000+ COURSES CREATED",
     icon: "graduation-cap",
   },
-  {
-    name: "VibeCreation",
-    description: "Content Engine for Creators & Brands",
-    url: "https://vibecreation.ai",
-    stats: "100+ CONTENT CREATED",
-    icon: "clapperboard",
-  },
   // {
-  //   name: "Ship.build",
-  //   description: "AI DevOps for Everything after Code",
-  //   url: "https://ship.build",
-  //   stats: "100+ PROJECTS",
-  //   icon: "sailboat",
+  //   name: "VibeCreation",
+  //   description: "Content Engine for Creators & Brands",
+  //   url: "https://vibecreation.ai",
+  //   stats: "100+ CONTENT CREATED",
+  //   icon: "clapperboard",
   // },
+  {
+    name: "Ship.build",
+    description: "AI DevOps for Everything after Code",
+    url: "https://ship.build",
+    stats: "100+ PROJECTS",
+    icon: "ship",
+  },
   {
     name: "RateCreator",
     description: "Discover & Review Content Creators",
@@ -56,12 +56,22 @@ const featuredProjects: FeaturedProject[] = [
 
 const allProjects: ProjectsByYear[] = [
   {
-    year: "2025 - Present",
+    year: "2026",
     projects: [
       {
-        name: "UseMoney",
-        description: "Stock Market Research Platform",
+        name: "UseMoney AI",
+        description: "AI copilot for Retail Investors",
         url: "https://usemoney.ai",
+      },
+    ],
+  },
+  {
+    year: "2025",
+    projects: [
+      {
+        name: "Ship.build",
+        description: "AI DevOps for Everything after Code",
+        url: "https://ship.build",
       },
       {
         name: "Naviya.school",
@@ -94,8 +104,8 @@ const allProjects: ProjectsByYear[] = [
         url: "https://github.com/deepshaswat/deepshaswat.com",
       },
       {
-        name: "Portfolio - Deep Shaswat",
-        description: "Personal Portfolio Website with Newsletter and Blog",
+        name: "Personal Website - Shaswat Deep",
+        description: "Personal Website with Blog and Newsletter",
         url: "https://github.com/deepshaswat/deepshaswat.com",
       },
     ],

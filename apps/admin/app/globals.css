@@ -3,20 +3,37 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.01em;
+    text-wrap: balance;
   }
 
   /* BlockNote dark mode background matching */
   .dark .bn-container,
   .dark .bn-editor,
   .dark [data-theming-css-demo] {
-    --bn-colors-editor-background: hsl(240 10% 3.9%) !important;
-    --bn-colors-menu-background: hsl(240 10% 3.9%) !important;
+    --bn-colors-editor-background: hsl(255 13% 5%) !important;
+    --bn-colors-menu-background: hsl(255 13% 5%) !important;
     --bn-colors-hovered-background: hsl(240 3.7% 15.9%) !important;
     --bn-colors-selected-background: hsl(240 3.7% 15.9%) !important;
-    --bn-colors-side-menu-background: hsl(240 10% 3.9%) !important;
-    background-color: hsl(240 10% 3.9%) !important;
+    --bn-colors-side-menu-background: hsl(255 13% 5%) !important;
+    background-color: hsl(255 13% 5%) !important;
   }
 
   .dark .bn-block-outer,
@@ -27,7 +44,7 @@
 
   /* Remove default BlockNote shadows in dark mode */
   .dark .bn-container [class*="mantine"] {
-    --mantine-color-body: hsl(240 10% 3.9%) !important;
+    --mantine-color-body: hsl(255 13% 5%) !important;
   }
 
   :root {
@@ -62,11 +79,11 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 255 13% 5%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 255 13% 5%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 255 13% 5%;
     --popover-foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;

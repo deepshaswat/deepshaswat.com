@@ -10,7 +10,20 @@ export function Landing() {
         <h1 className="text-2xl sm:text-5xl font-bold mb-12 px-4">
           Shaswat Deep
         </h1>
-        <h3 className="text-lg font-normal px-4 mb-2 ">
+        <h3 className="text-lg font-normal px-4 mb-4 ">
+          Builder. Founder & CEO at{" "}
+          <Link
+            href={"https://usemoney.ai"}
+            className="underline underline-offset-4 hover:text-neutral-400 "
+            target="_blank"
+          >
+            UseMoney AI
+          </Link>{" "}
+        </h3>
+        <p className="text-lg font-normal px-4 mb-4 text-neutral-400 leading-relaxed tracking-wide">
+          Obsessed with building consumer products.
+        </p>
+        {/* <h3 className="text-lg font-normal px-4 mb-2 ">
           Builder.
           <br /> Entrepreneur.
           <br /> Conspiracy Theorist.
@@ -21,7 +34,7 @@ export function Landing() {
             target="_blank"
           >
             Rate Creator
-          </Link> */}
+          </Link> 
         </h3>
         <h4 className="text-lg font-normal text-neutral-400 px-4 mb-8 mt-8">
           Check out the list of{" "}
@@ -40,7 +53,7 @@ export function Landing() {
             articles
           </Link>{" "}
           about tech, stocks and conspiracy theories.
-        </h4>
+        </h4> */}
         <ShortcutHome />
       </div>
     </div>

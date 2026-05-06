@@ -1,5 +1,12 @@
 const items = [
   {
+    jobTitle: "Founder",
+    company: "UseMoney AI",
+    companyUrl: "https://usemoney.ai",
+    startDate: "2026-01-18",
+    location: "Remote, India",
+  },
+  {
     jobTitle: "Entrepreneur in Residence",
     company: "Antler",
     companyUrl: "https://antler.co",
@@ -12,6 +19,7 @@ const items = [
     company: "Orbizza, Inc.",
     companyUrl: "https://orbizza.com",
     startDate: "2024-03-22",
+    endDate: "2025-12-31",
     location: "Remote, US",
   },
   {
