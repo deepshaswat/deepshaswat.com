@@ -21,7 +21,7 @@ export function Landing() {
           </Link>{" "}
         </h3>
         <p className="text-lg font-normal px-4 mb-4 text-neutral-400 leading-relaxed tracking-wide">
-          Obsessed with building consumer products.
+          Obsessed with financial markets.
         </p>
         {/* <h3 className="text-lg font-normal px-4 mb-2 ">
           Builder.

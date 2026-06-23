@@ -61,6 +61,28 @@ const globalStyles = `
   [data-node-type="callout"] [data-content="true"] {
     color: rgb(209 213 219) !important;
   }
+  /* Use the site font (Nunito via --font-sans) for article content, overriding
+     BlockNote's hardcoded Inter stack on .bn-default-styles. Most visible on titles. */
+  .bn-container .bn-editor,
+  .bn-container .bn-default-styles,
+  .bn-container [data-content-type="heading"],
+  .bn-container [data-content-type="paragraph"] {
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif !important;
+  }
+  .bn-container code,
+  .bn-container pre,
+  .bn-container [data-content-type="codeBlock"] {
+    font-family: var(--font-mono), ui-monospace, monospace !important;
+  }
+  /* Titles use the theme foreground colour in both light and dark, matching the
+     rest of the site instead of BlockNote's muted grey / un-inverted prose colour.
+     BlockNote renders the visible text in an inner h1/h2/h3 that "prose" colours
+     directly, so we must target those tags (not the outer wrapper div). */
+  .bn-container h1,
+  .bn-container h2,
+  .bn-container h3 {
+    color: hsl(var(--foreground)) !important;
+  }
 `;
 
 export function BlockNoteRenderer({

@@ -28,22 +28,17 @@ interface LinkData {
 function LinksComponent() {
   const companyLinks: LinkData[] = [
     {
-      title: "Orbizza, Inc. - Company Registered in US",
-      url: "https://orbizza.com/",
-      icon: <BriefcaseBusiness className="h-5 w-5" />,
-    },
-    {
-      title: "DIS Digital LLP - Company Registered in India",
-      url: "https://disdigital.in/",
-      icon: <Handshake className="h-5 w-5" />,
-    },
-  ];
-  const links: LinkData[] = [
-    {
       title: "UseMoney AI - Copilot for Retail Investors",
       url: "https://usemoney.ai/",
       icon: <CandlestickChart className="h-5 w-5" />,
     },
+    // {
+    //   title: "DIS Digital LLP - Company Registered in India",
+    //   url: "https://disdigital.in/",
+    //   icon: <Handshake className='h-5 w-5' />,
+    // },
+  ];
+  const links: LinkData[] = [
     {
       title: "Naviya - Personalized AI Tutor for Students",
       url: "https://naviya.school/",
@@ -183,8 +178,32 @@ function LinksComponent() {
 
           {/* Links Section - Right Side */}
           <div className="md:col-span-8">
+            <h2 className="text-2xl font-bold text-center md:text-left mb-4 mt-8">
+              Currently Building
+            </h2>
+            <div className="space-y-4 mb-4">
+              {companyLinks.map((link, index) => (
+                <a
+                  className="block transform transition-transform duration-200 hover:scale-105"
+                  href={link.url}
+                  key={index}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <Button
+                    className="w-full bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 h-12"
+                    variant="secondary"
+                  >
+                    <div className="flex items-center justify-center space-x-2">
+                      {link.icon}
+                      <span>{link.title}</span>
+                    </div>
+                  </Button>
+                </a>
+              ))}
+            </div>
             <h2 className="text-2xl font-bold text-center md:text-left mb-4">
-              Individual Startups
+              Ideas & Products
             </h2>
             <div className="space-y-4">
               {links.map((link, index) => (
@@ -208,30 +227,7 @@ function LinksComponent() {
               ))}
             </div>
             {/* <Separator className='my-4 bg-gray-700' /> */}
-            <h2 className="text-2xl font-bold text-center md:text-left mb-4 mt-8">
-              Registered Companies
-            </h2>
-            <div className="space-y-4">
-              {companyLinks.map((link, index) => (
-                <a
-                  className="block transform transition-transform duration-200 hover:scale-105"
-                  href={link.url}
-                  key={index}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Button
-                    className="w-full bg-gray-800 hover:bg-gray-700 text-white border border-gray-700 h-12"
-                    variant="secondary"
-                  >
-                    <div className="flex items-center justify-center space-x-2">
-                      {link.icon}
-                      <span>{link.title}</span>
-                    </div>
-                  </Button>
-                </a>
-              ))}
-            </div>
+
             <h2 className="text-2xl font-bold text-center md:text-left mb-4 mt-8">
               Contact Me
             </h2>
