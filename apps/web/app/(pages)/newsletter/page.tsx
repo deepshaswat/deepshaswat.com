@@ -6,8 +6,8 @@ export const revalidate = 31536000;
 const title = "Newsletter // Shaswat Deep";
 const description =
   "Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He writes about stock market, investing, entrepreneurship, personal finance and conspiracy theories.";
-const link = "https://deepshaswat.com/newsletter";
-const image = "https://deepshaswat.com/static/images/newsletter.jpeg";
+const link = "https://www.deepshaswat.com/newsletter";
+const image = "https://www.deepshaswat.com/static/images/newsletters.jpeg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

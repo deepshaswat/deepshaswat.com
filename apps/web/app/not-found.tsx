@@ -5,8 +5,8 @@ import { ErrorMessage } from "@repo/ui/web";
 
 const title = "404 | Not Found";
 const description = "This page doesn't exist.";
-const link = "https://deepshaswat.com/not-found";
-const image = "https://deepshaswat.com/static/images/headShot.png";
+const link = "https://www.deepshaswat.com/not-found";
+const image = "https://www.deepshaswat.com/static/images/headShot.png";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

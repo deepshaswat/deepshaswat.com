@@ -5,8 +5,8 @@ import { ErrorMessage } from "@repo/ui/web";
 
 const title = "500 | Ooops!";
 const description = "Something isn't right.";
-const link = "https://deepshaswat.com/error";
-const image = "https://deepshaswat.com/static/images/headShot.png";
+const link = "https://www.deepshaswat.com/error";
+const image = "https://www.deepshaswat.com/static/images/headShot.png";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

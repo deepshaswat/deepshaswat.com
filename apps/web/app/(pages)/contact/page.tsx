@@ -6,8 +6,8 @@ export const revalidate = 31536000;
 const title = "Contact // Shaswat Deep";
 const description =
   "Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.";
-const link = "https://deepshaswat.com/contact";
-const image = "https://deepshaswat.com/static/images/links.jpeg";
+const link = "https://www.deepshaswat.com/contact";
+const image = "https://www.deepshaswat.com/static/images/links.jpeg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

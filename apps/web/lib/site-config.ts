@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Shaswat Deep",
-  url: "https://deepshaswat.com",
+  url: "https://www.deepshaswat.com",
   description:
     "Shaswat Deep is a builder, entrepreneur, and conspiracy theorist. He is building products called RateCreator & VibeCreation for Creator Economy and Naviya & Ship for AI Native solutions.",
   author: {
@@ -29,7 +29,7 @@ export const siteConfig = {
     linkedin: "https://linkedin.com/in/shaswatdeep",
     github: "https://github.com/deepshaswat",
   },
-  ogImage: "https://deepshaswat.com/static/images/headShot.png",
+  ogImage: "https://www.deepshaswat.com/static/images/headShot.png",
 };
 
 export type SiteConfig = typeof siteConfig;

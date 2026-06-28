@@ -7,8 +7,8 @@ const title = "Reminder // Shaswat Deep";
 const description =
   "Time is the only thing that is finite. Rest all things can be bought, sold, or created. So, make the most of it.";
 
-const link = "https://deepshaswat.com/reminder";
-const image = "https://deepshaswat.com/static/images/reminder-bw.jpg";
+const link = "https://www.deepshaswat.com/reminder";
+const image = "https://www.deepshaswat.com/static/images/reminder-bw.jpg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

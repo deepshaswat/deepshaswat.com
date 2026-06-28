@@ -38,11 +38,11 @@ export async function generateMetadata({
     title,
     description,
     keywords,
-    authors: [{ name: "Shaswat Deep", url: "https://deepshaswat.com" }],
+    authors: [{ name: "Shaswat Deep", url: "https://www.deepshaswat.com" }],
     creator: "Shaswat Deep",
     publisher: "Shaswat Deep",
 
-    metadataBase: new URL("https://deepshaswat.com"),
+    metadataBase: new URL("https://www.deepshaswat.com"),
     alternates: {
       canonical: post?.metadataCanonicalUrl ?? `/${params.postUrl}`,
     },
@@ -50,7 +50,7 @@ export async function generateMetadata({
       title: post?.metadataOgTitle || title,
       description: post?.metadataOgDescription || description,
       siteName: "Shaswat Deep",
-      url: `https://deepshaswat.com/${params.postUrl}`,
+      url: `https://www.deepshaswat.com/${params.postUrl}`,
       locale: "en_US",
       type: "website",
       images: [
@@ -59,7 +59,7 @@ export async function generateMetadata({
             post?.metadataOgImage ||
             post?.metadataImageUrl ||
             post?.featureImage ||
-            "https://deepshaswat.com/static/images/headShot.png",
+            "https://www.deepshaswat.com/static/images/headShot.png",
           width: 1200,
           height: 630,
           alt: title,
@@ -74,7 +74,7 @@ export async function generateMetadata({
         post?.metadataTwitterImage ||
           post?.metadataImageUrl ||
           post?.featureImage ||
-          "https://deepshaswat.com/static/images/headShot.png",
+          "https://www.deepshaswat.com/static/images/headShot.png",
       ],
     },
   };

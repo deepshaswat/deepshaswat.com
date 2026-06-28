@@ -72,7 +72,7 @@ export const sendNewsletter = async ({
       subject: post.title,
       react: NewsletterTemplate({ post, markdown }),
       headers: {
-        "List-Unsubscribe": "<https://deepshaswat.com/unsubscribe>",
+        "List-Unsubscribe": "<https://www.deepshaswat.com/unsubscribe>",
       },
       scheduledAt: sendDate,
     });

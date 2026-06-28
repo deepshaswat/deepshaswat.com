@@ -214,7 +214,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
               })}
               {" · "}
               <Link
-                href={`https://deepshaswat.com/${post.postUrl}`}
+                href={`https://www.deepshaswat.com/${post.postUrl}`}
                 style={{
                   color: "#d4d4d4",
                   textDecoration: "underline",
@@ -285,7 +285,7 @@ export function NewsletterTemplate(props: NewsletterTemplateProps) {
                 newsletter.
               </Text>
               <Link
-                href="https://deepshaswat.com/unsubscribe"
+                href="https://www.deepshaswat.com/unsubscribe"
                 style={footerLink}
               >
                 Unsubscribe from emails like this

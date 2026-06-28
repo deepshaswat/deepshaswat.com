@@ -6,8 +6,8 @@ export const revalidate = 31536000;
 const title = "Uses // Shaswat Deep";
 const description =
   "I often get messages asking about specific pieces of <strong>software or hardware I use</strong>. This not a static page, it's a <strong>living document</strong> with everything that I'm using nowadays.";
-const link = "https://deepshaswat.com/uses";
-const image = "https://deepshaswat.com/static/images/uses.jpeg";
+const link = "https://www.deepshaswat.com/uses";
+const image = "https://www.deepshaswat.com/static/images/uses.jpeg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

@@ -30,7 +30,7 @@ export function Contact() {
     title: "Contact // Shaswat Deep",
     description: "",
     tagline: "Email me. Like in the old days.",
-    image: "https://deepshaswat.com/static/images/reminder-bw.jpg",
+    image: "https://www.deepshaswat.com/static/images/reminder-bw.jpg",
     primaryColor: "cyan",
     secondaryColor: "green",
   };
@@ -184,8 +184,11 @@ export function Contact() {
         <title>{title}</title>
         <meta content={description} name="description" />
         <meta content={description} property="og:description" />
-        <meta content="https://deepshaswat.com/reminder" property="og:url" />
-        <meta content={`https://deepshaswat.com${image}`} property="og:image" />
+        <meta
+          content="https://www.deepshaswat.com/reminder"
+          property="og:url"
+        />
+        <meta content={image} property="og:image" />
       </Head>
 
       <Base

@@ -7,8 +7,8 @@ const title = "Links // Shaswat Deep";
 const description =
   "Links to social media profiles, companies, projects and other websites of Shaswat Deep.";
 
-const link = "https://deepshaswat.com/links";
-const image = "https://deepshaswat.com/static/images/links.jpeg";
+const link = "https://www.deepshaswat.com/links";
+const image = "https://www.deepshaswat.com/static/images/links.jpeg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

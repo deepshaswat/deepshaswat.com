@@ -6,8 +6,8 @@ export const revalidate = 31536000;
 const title = "Unsubscribe from Newsletter // Shaswat Deep";
 const description =
   "We're sorry to see you go. Please enter your email to unsubscribe from our newsletter.";
-const link = "https://deepshaswat.com/unsubscribe";
-const image = "https://deepshaswat.com/static/images/unsubscribe.jpg";
+const link = "https://www.deepshaswat.com/unsubscribe";
+const image = "https://www.deepshaswat.com/static/images/unsubscribe.jpg";
 const siteName = "Shaswat Deep";
 const locale = "en_US";
 const type = "website";

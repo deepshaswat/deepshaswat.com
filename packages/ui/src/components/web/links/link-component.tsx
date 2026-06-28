@@ -80,7 +80,7 @@ function LinksComponent() {
     },
     {
       title: "Visit my Portfolio",
-      url: "https://deepshaswat.com",
+      url: "https://www.deepshaswat.com",
       icon: <ExternalLink className="h-5 w-5" />,
     },
   ];
