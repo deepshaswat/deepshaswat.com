@@ -6,7 +6,6 @@ import { useCreateBlockNote } from "@blocknote/react";
 import "@blocknote/mantine/style.css";
 import { useTheme } from "next-themes";
 import { blocknoteSchema } from "./schema";
-import { parseBlockNoteContent } from "./content-utils";
 
 export interface BlockNoteRendererProps {
   content: string | object;
@@ -115,9 +114,21 @@ export function BlockNoteRenderer({
 }: BlockNoteRendererProps): JSX.Element {
   const { resolvedTheme } = useTheme();
 
-  // Parses JSON, strips ids, converts legacy callout blocks to paragraphs, and
-  // returns undefined for empty content (BlockNote throws on an empty array).
-  const parsedContent = parseBlockNoteContent(content);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BlockNote content type is dynamic
+  let parsedContent: any[] | undefined;
+  try {
+    const raw: unknown =
+      typeof content === "string" ? JSON.parse(content) : content;
+    // BlockNote throws "initialContent must be a non-empty array" on an empty
+    // array — only `undefined` is safe. Collapse empty/invalid/non-array content
+    // to `undefined` so empty posts render blank instead of crashing.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote expects loosely typed content from JSON
+    parsedContent = Array.isArray(raw) && raw.length > 0 ? raw : undefined;
+  } catch (error) {
+    // eslint-disable-next-line no-console -- intentional error logging for content parse failure
+    console.error("Failed to parse BlockNote content:", error);
+    parsedContent = undefined;
+  }
 
   const editor = useCreateBlockNote({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote content from JSON parse

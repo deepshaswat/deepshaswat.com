@@ -215,6 +215,70 @@ describe("Block Type Conversion", () => {
     });
   });
 
+  describe("callout block", () => {
+    it("should convert callout block with emoji", async () => {
+      const calloutBlock = [
+        {
+          type: "callout",
+          props: {
+            text: "Important note",
+            emoji: "⚠️",
+            bgColor: "#FF0000",
+            textColor: "#FFFFFF",
+            showEmoji: true,
+          },
+        },
+      ];
+      mockEditor.topLevelBlocks = calloutBlock;
+
+      let capturedMarkdown = "";
+      render(
+        <NewsletterMarkdown
+          content={JSON.stringify(calloutBlock)}
+          onMarkdownChange={(md) => {
+            capturedMarkdown = md;
+          }}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(capturedMarkdown).toContain("Important note");
+        expect(capturedMarkdown).toContain("⚠️");
+      });
+    });
+
+    it("should convert callout block without emoji", async () => {
+      const calloutBlock = [
+        {
+          type: "callout",
+          props: {
+            text: "No emoji note",
+            emoji: "",
+            bgColor: "#333",
+            textColor: "#FFF",
+            showEmoji: false,
+          },
+        },
+      ];
+      mockEditor.topLevelBlocks = calloutBlock;
+
+      let capturedMarkdown = "";
+      render(
+        <NewsletterMarkdown
+          content={JSON.stringify(calloutBlock)}
+          onMarkdownChange={(md) => {
+            capturedMarkdown = md;
+          }}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(capturedMarkdown).toContain("No emoji note");
+        expect(capturedMarkdown).not.toContain("margin-right: 8px");
+      });
+    });
+  });
+
   describe("divider block", () => {
     it("should convert divider to hr tag", async () => {
       const dividerBlock = [{ type: "divider", props: {} }];

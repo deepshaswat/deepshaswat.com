@@ -1,7 +1,7 @@
 "use client";
 
 import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core";
-import { Divider, Youtube, Markdown } from "./blocks";
+import { Divider, Youtube, Callout, Markdown } from "./blocks";
 
 /**
  * Shared BlockNote schema with custom block specifications.
@@ -12,6 +12,7 @@ export const blocknoteSchema = BlockNoteSchema.create({
     ...defaultBlockSpecs,
     youtube: Youtube,
     markdown: Markdown,
+    callout: Callout,
     divider: Divider,
   },
 });
