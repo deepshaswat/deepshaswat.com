@@ -376,13 +376,25 @@ const MultiSelectContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   const context = useMultiSelect();
 
+  // Defer the detached-fragment portal until after mount. During SSR and the
+  // first client (hydration) render this must return the same output as the
+  // server (null); otherwise React tries to hydrate the portalled <Command>
+  // into an empty detached fragment and throws "Hydration failed... Expected
+  // server HTML to contain a matching <div>". After mount we portal the closed
+  // content into a detached fragment so cmdk keeps its list state alive while
+  // the popover is shut.
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const fragmentRef = React.useRef<DocumentFragment>();
 
   if (!fragmentRef.current && typeof window !== "undefined")
     fragmentRef.current = document.createDocumentFragment();
 
   if (!context.open) {
-    return fragmentRef.current
+    return mounted && fragmentRef.current
       ? createPortal(<Command>{children}</Command>, fragmentRef.current)
       : null;
   }

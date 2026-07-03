@@ -43,7 +43,6 @@ export * from "./components/ui/form";
 
 // export * from "./components/web/command/CommandBar";
 
-export * from "./components/common/email-template";
 export * from "./components/common/pagination-bar";
 export * from "./components/common/blocknote-editor";
 

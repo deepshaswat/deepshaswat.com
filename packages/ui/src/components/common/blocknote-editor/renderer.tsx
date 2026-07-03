@@ -83,6 +83,15 @@ const globalStyles = `
   .bn-container h3 {
     color: hsl(var(--foreground)) !important;
   }
+  /* Bold text: Tailwind Typography's "prose" sets a dark --tw-prose-bold colour
+     on <strong>/<b> that is not inverted for the dark theme, so every bold run
+     (e.g. "Pro Annual:", "PRO is ₹249/month") renders near-invisible on the
+     dark background. Inherit the surrounding text colour so bold matches the
+     body text (or the link colour when bold sits inside a link). */
+  .bn-container strong,
+  .bn-container b {
+    color: inherit !important;
+  }
   /* Links: BlockNote's default renders a low-contrast slate that is nearly
      invisible on the dark theme (the pricing/roadmap/sign-up links in
      newsletters and articles). Use the site's green accent — readable in both
@@ -106,16 +115,19 @@ export function BlockNoteRenderer({
   const { resolvedTheme } = useTheme();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BlockNote content type is dynamic
-  let parsedContent: any[];
+  let parsedContent: any[] | undefined;
   try {
     const raw: unknown =
       typeof content === "string" ? JSON.parse(content) : content;
+    // BlockNote throws "initialContent must be a non-empty array" on an empty
+    // array — only `undefined` is safe. Collapse empty/invalid/non-array content
+    // to `undefined` so empty posts render blank instead of crashing.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote expects loosely typed content from JSON
-    parsedContent = Array.isArray(raw) ? raw : [];
+    parsedContent = Array.isArray(raw) && raw.length > 0 ? raw : undefined;
   } catch (error) {
     // eslint-disable-next-line no-console -- intentional error logging for content parse failure
     console.error("Failed to parse BlockNote content:", error);
-    parsedContent = [];
+    parsedContent = undefined;
   }
 
   const editor = useCreateBlockNote({

@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 import prisma from "@repo/db/client";
 import { PostListType, PostType } from "../common/types";
 import { sendBroadcastNewsletter, sendNewsletter } from "../common/resend";
-import { cacheService } from "@repo/ui/web";
 import {
   invalidatePostCache,
   invalidateBlogContentCache,
@@ -95,11 +94,9 @@ async function createPost(data: PostType) {
     if (updatedPost?.status === "PUBLISHED") {
       if (updatedPost.isNewsletter) {
         revalidatePath("/newsletter");
-        await cacheService.clearNewslettersCache();
         await invalidatePostCache("newsletters");
       } else {
         revalidatePath("/articles");
-        await cacheService.clearArticlesCache();
         await invalidatePostCache("articles");
       }
       await invalidateBlogContentCache(updatedPost.postUrl);
@@ -215,11 +212,9 @@ async function updatePost(data: PostType, postId: string) {
     if (finalUpdatedPost?.status === "PUBLISHED") {
       if (finalUpdatedPost.isNewsletter) {
         revalidatePath("/newsletter");
-        await cacheService.clearNewslettersCache();
         await invalidatePostCache("newsletters");
       } else {
         revalidatePath("/articles");
-        await cacheService.clearArticlesCache();
         await invalidatePostCache("articles");
       }
       revalidatePath(`/${finalUpdatedPost.postUrl}`);
@@ -281,11 +276,9 @@ async function publishPost(
     if (updatedPost.status === "PUBLISHED") {
       if (publishType === "newsletter") {
         revalidatePath("/newsletter");
-        await cacheService.clearNewslettersCache();
         await invalidatePostCache("newsletters");
       } else {
         revalidatePath("/articles");
-        await cacheService.clearArticlesCache();
         await invalidatePostCache("articles");
       }
       revalidatePath(`/${updatedPost.postUrl}`);

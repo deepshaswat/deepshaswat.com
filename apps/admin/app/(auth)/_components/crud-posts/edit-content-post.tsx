@@ -237,9 +237,19 @@ export function EditContentPost({
             />
           </div>
           <div className="mt-8">
+            {/*
+              Use the server-loaded `initialPost.content` (correct on first
+              render), NOT the Recoil `post.content` which starts empty and is
+              filled by a useEffect after mount. On fast client-side navigation
+              the editor mounts before that effect and would initialize empty,
+              then its onChange writes the empty doc back and a save overwrites
+              the real content. `key` forces a fresh, correctly-seeded editor
+              per post.
+            */}
             <Editor
+              key={initialPost.id}
               editable
-              initialContent={post.content}
+              initialContent={initialPost.content}
               onChange={handleEditorContentChange}
             />
           </div>
