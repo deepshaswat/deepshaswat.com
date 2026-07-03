@@ -1,7 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
-import { EmailTemplate, NewsletterTemplate } from "@repo/ui";
+import { EmailTemplate, NewsletterTemplate } from "./email-template";
 import { PostListType } from "./types";
 import { createEmailSendRecord } from "../admin/email-analytics";
 

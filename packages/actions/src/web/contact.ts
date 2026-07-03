@@ -4,7 +4,7 @@ import * as z from "zod";
 
 import { ContactSchema } from "@repo/schema";
 import prisma from "@repo/db/client";
-import { sendEmail } from "@repo/actions";
+import { sendEmail } from "../common/resend";
 
 export const contact = async (values: z.infer<typeof ContactSchema>) => {
   const validatedFields = ContactSchema.safeParse(values);

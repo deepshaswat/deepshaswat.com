@@ -11,7 +11,7 @@ import {
   Heading,
   Link,
 } from "@react-email/components";
-import type { PostListType } from "@repo/actions";
+import type { PostListType } from "./types";
 
 interface EmailTemplateProps {
   name: string;
