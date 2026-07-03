@@ -120,6 +120,11 @@ export const sendBroadcastNewsletter = async ({
       console.warn("Could not fetch audience count:", e);
     }
 
+    // Resend limits the broadcast `name` field to 70 characters, so cap it.
+    // The name is only an internal label in the Resend dashboard, not shown to
+    // subscribers, so a hard truncation is safe.
+    const broadcastName = `Newsletter: ${post.title}`.slice(0, 70);
+
     // Fetch the contacts from the audience list
     const { data: broadcastData, error: broadcastError } =
       await resend.broadcasts.create({
@@ -128,7 +133,7 @@ export const sendBroadcastNewsletter = async ({
         replyTo: "hi@deepshaswat.com",
         subject: post.title,
         react: NewsletterTemplate({ post, markdown }),
-        name: "Newsletter: " + post.title,
+        name: broadcastName,
       });
 
     if (broadcastError) {

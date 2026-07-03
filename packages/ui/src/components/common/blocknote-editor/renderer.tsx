@@ -83,6 +83,20 @@ const globalStyles = `
   .bn-container h3 {
     color: hsl(var(--foreground)) !important;
   }
+  /* Links: BlockNote's default renders a low-contrast slate that is nearly
+     invisible on the dark theme (the pricing/roadmap/sign-up links in
+     newsletters and articles). Use the site's green accent — readable in both
+     themes — with an underline so links stay clearly distinguishable. */
+  .bn-container a,
+  .bn-container a * {
+    color: #15803d !important; /* green-700 for the light theme */
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .dark .bn-container a,
+  .dark .bn-container a * {
+    color: #4ade80 !important; /* green-400 for the dark theme */
+  }
 `;
 
 export function BlockNoteRenderer({

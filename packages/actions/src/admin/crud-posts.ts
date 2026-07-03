@@ -20,6 +20,17 @@ async function authenticateUser() {
   }
 }
 
+// Normalize a comma-separated SEO keywords string: trim whitespace around each
+// keyword and drop empty entries, so values like "a ,  b ," persist as "a, b".
+function normalizeKeywords(keywords: string | undefined | null): string {
+  if (!keywords) return "";
+  return keywords
+    .split(",")
+    .map((keyword) => keyword.trim())
+    .filter((keyword) => keyword.length > 0)
+    .join(", ");
+}
+
 async function createPost(data: PostType) {
   await authenticateUser();
   try {
@@ -47,7 +58,7 @@ async function createPost(data: PostType) {
         metadataTitle: data.metaData.title,
         metadataDescription: data.metaData.description,
         metadataImageUrl: data.metaData.imageUrl,
-        metadataKeywords: data.metaData.keywords,
+        metadataKeywords: normalizeKeywords(data.metaData.keywords),
         metadataAuthorName: data.metaData.authorName,
         metadataCanonicalUrl: data.metaData.canonicalUrl,
         metadataOgTitle: data.metaData.ogTitle,
@@ -167,7 +178,7 @@ async function updatePost(data: PostType, postId: string) {
         metadataTitle: post.metaData.title,
         metadataDescription: post.metaData.description,
         metadataImageUrl: post.metaData.imageUrl,
-        metadataKeywords: post.metaData.keywords,
+        metadataKeywords: normalizeKeywords(post.metaData.keywords),
         metadataAuthorName: post.metaData.authorName,
         metadataCanonicalUrl: post.metaData.canonicalUrl,
         metadataOgTitle: post.metaData.ogTitle,

@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { UploadComponent } from "@repo/ui";
 import { NavBarPost } from "./navbar-post";
@@ -24,6 +24,12 @@ interface UploadResponse {
   uploadURL: string;
   s3URL: string;
 }
+
+// `next/dynamic` must be called at module scope, not inside a component/useMemo.
+// A render-time dynamic() import is not registered in the build's client
+// manifest, so in production the lazy chunk resolves to `undefined` and the
+// page 500s with "Element type is invalid ... at Timeout._onTimeout".
+const Editor = dynamic(() => import("./editor"), { ssr: false });
 
 export function EditContentPost({
   initialPost,
@@ -142,11 +148,6 @@ export function EditContentPost({
     setInputDate,
     setInputTimeIst,
   ]);
-
-  const Editor = useMemo(
-    () => dynamic(() => import("./editor"), { ssr: false }),
-    [],
-  );
 
   const handleEditorContentChange = (content: string): void => {
     setPost((prev) => ({ ...prev, content }));
