@@ -115,16 +115,19 @@ export function BlockNoteRenderer({
   const { resolvedTheme } = useTheme();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- BlockNote content type is dynamic
-  let parsedContent: any[];
+  let parsedContent: any[] | undefined;
   try {
     const raw: unknown =
       typeof content === "string" ? JSON.parse(content) : content;
+    // BlockNote throws "initialContent must be a non-empty array" on an empty
+    // array — only `undefined` is safe. Collapse empty/invalid/non-array content
+    // to `undefined` so empty posts render blank instead of crashing.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- BlockNote expects loosely typed content from JSON
-    parsedContent = Array.isArray(raw) ? raw : [];
+    parsedContent = Array.isArray(raw) && raw.length > 0 ? raw : undefined;
   } catch (error) {
     // eslint-disable-next-line no-console -- intentional error logging for content parse failure
     console.error("Failed to parse BlockNote content:", error);
-    parsedContent = [];
+    parsedContent = undefined;
   }
 
   const editor = useCreateBlockNote({
