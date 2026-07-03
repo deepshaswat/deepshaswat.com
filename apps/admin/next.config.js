@@ -8,6 +8,9 @@ module.exports = {
   // post is reloaded into the editor. Disabling StrictMode is BlockNote's
   // documented workaround; it only affects dev-mode double-invocation.
   reactStrictMode: false,
+  experimental: {
+    optimizePackageImports: ["@repo/ui", "@repo/store", "@repo/actions"],
+  },
   transpilePackages: [
     "@repo/ui",
     "@repo/store",
