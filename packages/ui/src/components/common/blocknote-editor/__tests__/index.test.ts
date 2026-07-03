@@ -26,7 +26,6 @@ vi.mock("../email-converter", () => ({
 vi.mock("../blocks", () => ({
   Divider: { type: "divider" },
   Youtube: { type: "youtube" },
-  Callout: { type: "callout" },
   Markdown: { type: "markdown" },
 }));
 
@@ -69,11 +68,6 @@ describe("BlockNote Editor Index Exports", () => {
   it("should export Youtube block", async () => {
     const module = await import("../index");
     expect(module.Youtube).toBeDefined();
-  });
-
-  it("should export Callout block", async () => {
-    const module = await import("../index");
-    expect(module.Callout).toBeDefined();
   });
 
   it("should export Markdown block", async () => {

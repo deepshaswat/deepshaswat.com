@@ -19,4 +19,4 @@ export {
 } from "./email-converter";
 
 // Custom block specifications
-export { Divider, Youtube, Callout, Markdown } from "./blocks";
+export { Divider, Youtube, Markdown } from "./blocks";

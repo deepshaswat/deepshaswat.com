@@ -27,7 +27,6 @@ vi.mock("@blocknote/core", () => ({
 vi.mock("../blocks", () => ({
   Divider: { type: "divider" },
   Youtube: { type: "youtube" },
-  Callout: { type: "callout" },
   Markdown: { type: "markdown" },
 }));
 
@@ -55,11 +54,6 @@ describe("BlockNote Schema", () => {
     it("should include custom markdown block", () => {
       const createCall = vi.mocked(BlockNoteSchema.create).mock.calls[0][0];
       expect(createCall.blockSpecs).toHaveProperty("markdown");
-    });
-
-    it("should include custom callout block", () => {
-      const createCall = vi.mocked(BlockNoteSchema.create).mock.calls[0][0];
-      expect(createCall.blockSpecs).toHaveProperty("callout");
     });
 
     it("should include custom divider block", () => {
