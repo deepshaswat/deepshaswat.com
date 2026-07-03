@@ -892,10 +892,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-1.0.2.tgz#bbe12dca5b4ef983a0d0af4b07b9bc90ea0ababa"
   integrity sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==
 
-"@blocknote/core@^0.23.1", "@blocknote/core@^0.23.6":
-  version "0.23.6"
-  resolved "https://registry.yarnpkg.com/@blocknote/core/-/core-0.23.6.tgz#3cffea4549b77a6d6a9406ad9bb3e56e8c76d3ab"
-  integrity sha512-X5bxzFCgAG42lT2NhKJQdEQp0DEWaY4DJdGo76d2o3xef+bNGCLRe4i2XkGty2B9B3uYElgHqz6GYGeF0Hfn5g==
+"@blocknote/core@0.23.1", "@blocknote/core@^0.23.1":
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/@blocknote/core/-/core-0.23.1.tgz#c91a45e4d66b03f8b11a3d33c2824c30e6509440"
+  integrity sha512-yKVlolFFfUWyC48QPQqPuWEYnmkfGeBaXd9ZS7fRxh9z1dNOWTYdrKutIyyEVRjgCx8nUihC0DikZxTFVhbmxQ==
   dependencies:
     "@emoji-mart/data" "^1.2.1"
     "@tiptap/core" "^2.7.1"
@@ -925,7 +925,7 @@
     prosemirror-state "^1.4.3"
     prosemirror-tables "^1.6.1"
     prosemirror-transform "^1.10.2"
-    prosemirror-view "^1.38.0"
+    prosemirror-view "^1.33.7"
     rehype-format "^5.0.0"
     rehype-parse "^8.0.4"
     rehype-remark "^9.1.2"
@@ -941,24 +941,24 @@
     y-protocols "^1.0.6"
     yjs "^13.6.15"
 
-"@blocknote/mantine@^0.23.1":
-  version "0.23.6"
-  resolved "https://registry.yarnpkg.com/@blocknote/mantine/-/mantine-0.23.6.tgz#dd0ca8bf5eb6ff298f0f53400e2c14e908d2501c"
-  integrity sha512-svyNM7kxMCULTQ+0f8uaIxZFdAEYethkXG4INSTTfyY1Omu/6wPsKRoll12R3FAExU+i4e0A1SQqDN6hxrcG/g==
+"@blocknote/mantine@0.23.1", "@blocknote/mantine@^0.23.1":
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/@blocknote/mantine/-/mantine-0.23.1.tgz#ceb44f01d6057017798e2267cf34932686549f32"
+  integrity sha512-JWFck2itM41vZ+RlY62pm3dhKhF80IIgEVw4BT3utALVIbBxteJ6hOX9kFxdB3UU+xu42WR91YiLI+eX0CoG8Q==
   dependencies:
-    "@blocknote/core" "^0.23.6"
-    "@blocknote/react" "^0.23.6"
+    "@blocknote/core" "^0.23.1"
+    "@blocknote/react" "^0.23.1"
     "@mantine/core" "^7.10.1"
     "@mantine/hooks" "^7.10.1"
     "@mantine/utils" "^6.0.21"
     react-icons "^5.2.1"
 
-"@blocknote/react@^0.23.1", "@blocknote/react@^0.23.6":
-  version "0.23.6"
-  resolved "https://registry.yarnpkg.com/@blocknote/react/-/react-0.23.6.tgz#359272d4a7116822254c32710ec889f6ae503a72"
-  integrity sha512-HHlutNtgDNuSLYPyDjbyAGSimSY+CTG3Uvga5J8E4aky2XvxDQhrp1w2iPdOX5IAcLbpuqTOpDbdRj5pfTvveA==
+"@blocknote/react@0.23.1", "@blocknote/react@^0.23.1":
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/@blocknote/react/-/react-0.23.1.tgz#d8c55562a3edfe2faffcea03d83213f2da3a5e09"
+  integrity sha512-c8SwYYLui1FIXaOuOSNWemvZRsvSxpWZjcbtbf8NefOrwBJUoAiKtylIXKoPuR58kz/SNasfOAYZNzwcOc6uMg==
   dependencies:
-    "@blocknote/core" "^0.23.6"
+    "@blocknote/core" "^0.23.1"
     "@floating-ui/react" "^0.26.4"
     "@tiptap/core" "^2.7.1"
     "@tiptap/react" "^2.7.1"
@@ -10598,6 +10598,13 @@ prosemirror-model@^1.0.0, prosemirror-model@^1.20.0, prosemirror-model@^1.21.0, 
   dependencies:
     orderedmap "^2.0.0"
 
+prosemirror-model@^1.25.8:
+  version "1.25.9"
+  resolved "https://registry.yarnpkg.com/prosemirror-model/-/prosemirror-model-1.25.9.tgz#1e9f2faa5d824d65c5265f01768fcfa70bfc39dd"
+  integrity sha512-pRTklkDDMMRopyoAcrr9wV/8g/RYgrLHBuJAb5hlEuYZRdm5yqmPjWId83fpBwPpSFqEdja0H7Dfd7z1X/npcA==
+  dependencies:
+    orderedmap "^2.0.0"
+
 prosemirror-schema-basic@^1.2.3:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/prosemirror-schema-basic/-/prosemirror-schema-basic-1.2.4.tgz#389ce1ec09b8a30ea9bbb92c58569cb690c2d695"
@@ -10649,12 +10656,21 @@ prosemirror-transform@^1.0.0, prosemirror-transform@^1.1.0, prosemirror-transfor
   dependencies:
     prosemirror-model "^1.21.0"
 
-prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.27.0, prosemirror-view@^1.31.0, prosemirror-view@^1.37.0, prosemirror-view@^1.38.0, prosemirror-view@^1.41.4:
+prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.27.0, prosemirror-view@^1.31.0, prosemirror-view@^1.37.0, prosemirror-view@^1.41.4:
   version "1.41.5"
   resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.41.5.tgz#3e152d14af633f2f5a73aba24e6130c63f643b2b"
   integrity sha512-UDQbIPnDrjE8tqUBbPmCOZgtd75htE6W3r0JCmY9bL6W1iemDM37MZEKC49d+tdQ0v/CKx4gjxLoLsfkD2NiZA==
   dependencies:
     prosemirror-model "^1.20.0"
+    prosemirror-state "^1.0.0"
+    prosemirror-transform "^1.1.0"
+
+prosemirror-view@^1.33.7:
+  version "1.42.0"
+  resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.42.0.tgz#82ed0823a1bf971d27cb647f3a23d5e005d04c00"
+  integrity sha512-N54DF3OXNWDuP81G1kbfCys8ZzIjuL1VnvJ2mk5STSu/fNxWIcX/EutQLA3s9KR/2wVhgDi4hzBB/1fINVxk0A==
+  dependencies:
+    prosemirror-model "^1.25.8"
     prosemirror-state "^1.0.0"
     prosemirror-transform "^1.1.0"
 

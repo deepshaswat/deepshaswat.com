@@ -46,6 +46,11 @@
     "turbo": "^2.7.4",
     "vitest": "^3.2.4"
   },
+  "resolutions": {
+    "@blocknote/core": "0.23.1",
+    "@blocknote/react": "0.23.1",
+    "@blocknote/mantine": "0.23.1"
+  },
   "lint-staged": {
     "apps/**/*.{js,jsx,ts,tsx}": [
       "prettier --write"
@@ -68,9 +73,9 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.633.0",
     "@aws-sdk/s3-request-presigner": "^3.633.0",
-    "@blocknote/core": "^0.23.1",
-    "@blocknote/mantine": "^0.23.1",
-    "@blocknote/react": "^0.23.1",
+    "@blocknote/core": "0.23.1",
+    "@blocknote/mantine": "0.23.1",
+    "@blocknote/react": "0.23.1",
     "@changesets/cli": "^2.27.6",
     "@clerk/themes": "^2.4.50",
     "@headlessui/react": "^2.1.2",
