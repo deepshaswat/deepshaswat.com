@@ -123,7 +123,7 @@ function CalloutRenderer({ block, editor }: CalloutBlockProps): JSX.Element {
       {showEmoji ? <span className="mr-2 text-2xl">{emoji}</span> : null}
       {isEditing && canEdit ? (
         <input
-          className="bg-transparent border-none w-full text-lg font-semibold focus:outline-none"
+          className="bg-transparent border-none w-full text-lg font-normal focus:outline-none"
           onBlur={() => {
             updateCallout({ text });
           }}
@@ -135,7 +135,7 @@ function CalloutRenderer({ block, editor }: CalloutBlockProps): JSX.Element {
           value={text}
         />
       ) : (
-        <span className="w-full text-lg font-semibold">{text}</span>
+        <span className="w-full text-lg font-normal">{text}</span>
       )}
       {isEditing && canEdit ? (
         <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2">

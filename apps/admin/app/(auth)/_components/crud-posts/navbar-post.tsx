@@ -186,13 +186,17 @@ export function NavBarPost({
         {/* Right-aligned section */}
         <div className="flex flex-row items-center gap-2 mr-2">
           <div className="flex flex-row gap-4 items-center">
-            <Link
-              className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
-              href="/preview"
-              passHref
-            >
-              Preview
-            </Link>
+            {postId ? (
+              <Link
+                className="flex flex-row items-center text-sm rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
+                href={`/preview/${postId}`}
+                passHref
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Preview
+              </Link>
+            ) : null}
             <Button
               className="flex flex-row items-center text-sm text-green-500 rounded-sm hover:bg-neutral-700 active:bg-gray-200 p-2"
               disabled={isDisabled}
