@@ -2,7 +2,10 @@
 
 import type { PartialBlock } from "@blocknote/core";
 import type { DefaultReactSuggestionItem } from "@blocknote/react";
-import { insertOrUpdateBlock, filterSuggestionItems } from "@blocknote/core";
+import {
+  insertOrUpdateBlockForSlashMenu,
+  filterSuggestionItems,
+} from "@blocknote/core/extensions";
 import "@blocknote/mantine/style.css";
 import { BlockNoteView } from "@blocknote/mantine";
 import {
@@ -29,7 +32,7 @@ const insertYoutube = (
 ): DefaultReactSuggestionItem => ({
   title: "Youtube",
   onItemClick: () => {
-    insertOrUpdateBlock(editor, {
+    insertOrUpdateBlockForSlashMenu(editor, {
       type: "youtube",
     });
   },
@@ -44,7 +47,7 @@ const insertMarkdown = (
 ): DefaultReactSuggestionItem => ({
   title: "Markdown",
   onItemClick: () => {
-    insertOrUpdateBlock(editor, {
+    insertOrUpdateBlockForSlashMenu(editor, {
       type: "markdown",
     });
   },
@@ -59,7 +62,7 @@ const insertCallout = (
 ): DefaultReactSuggestionItem => ({
   title: "Callout",
   onItemClick: () => {
-    insertOrUpdateBlock(editor, {
+    insertOrUpdateBlockForSlashMenu(editor, {
       type: "callout",
     });
   },

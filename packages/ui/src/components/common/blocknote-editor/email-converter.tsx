@@ -51,7 +51,8 @@ export function NewsletterMarkdown({
 
   useEffect(() => {
     const getMarkdown = async (): Promise<void> => {
-      const blocks = editor.topLevelBlocks;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- custom block props aren't narrowed by the 0.47 block union
+      const blocks = editor.topLevelBlocks as any[];
       let markdownContent = "";
 
       for (const block of blocks) {

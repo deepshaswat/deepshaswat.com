@@ -10,10 +10,10 @@ import { Divider, Youtube, Callout, Markdown } from "./blocks";
 export const blocknoteSchema = BlockNoteSchema.create({
   blockSpecs: {
     ...defaultBlockSpecs,
-    youtube: Youtube,
-    markdown: Markdown,
-    callout: Callout,
-    divider: Divider,
+    youtube: Youtube(),
+    markdown: Markdown(),
+    callout: Callout(),
+    divider: Divider(),
   },
 });
 
